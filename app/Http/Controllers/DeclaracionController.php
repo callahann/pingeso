@@ -14,7 +14,7 @@ class DeclaracionController extends Controller
      */
     public function index()
     {
-        //
+        return Declaracion::paginate();
     }
 
     /**
@@ -35,7 +35,22 @@ class DeclaracionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'periodo' => 'required',
+            'docencia_comp' => 'required',
+            'investigacion_comp' => 'required',
+            'asistencia_comp' => 'required',
+            'perfeccionamiento_comp' => 'required',
+            'administracion_comp' => 'required',
+            'extension_comp' => 'required',
+            'educacion_continua_comp' => 'required',
+        ]);
+
+        $data->merge(['id_usuario' => Auth::user()->id]);
+
+        $declaracion = Declaracion::create($data);
+
+        return response()->json(['Creación Correctamente']);
     }
 
     /**
