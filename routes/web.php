@@ -18,3 +18,5 @@ Route::get('/', function () {
 Route::get('/formulario', function () {
     return view('formulario');
 });
+
+Route::resource('declaraciones', 'DeclaracionController');

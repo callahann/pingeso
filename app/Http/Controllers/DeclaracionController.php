@@ -37,20 +37,27 @@ class DeclaracionController extends Controller
     {
         $data = $request->validate([
             'periodo' => 'required',
-            'docencia_comp' => 'required',
-            'investigacion_comp' => 'required',
-            'asistencia_comp' => 'required',
-            'perfeccionamiento_comp' => 'required',
-            'administracion_comp' => 'required',
-            'extension_comp' => 'required',
-            'educacion_continua_comp' => 'required',
+            'docencia_comp' => 'required|json',
+            'docencia_real' => 'json',
+            'investigacion_comp' => 'required|json',
+            'investigacion_real' => 'json',
+            'asistencia_comp' => 'required|json',
+            'asistencia_real' => 'json',
+            'perfeccionamiento_comp' => 'required|json',
+            'perfeccionamiento_real' => 'json',
+            'administracion_comp' => 'required|json',
+            'administracion_real' => 'json',
+            'extension_comp' => 'required|json',
+            'extension_real' => 'json',
+            'educacion_continua_comp' => 'required|json',
+            'educacion_continua_real' => 'json',
         ]);
 
         $data->merge(['id_usuario' => Auth::user()->id]);
 
         $declaracion = Declaracion::create($data);
 
-        return response()->json(['Creación Correctamente']);
+        return response()->json($this->storeMessage());
     }
 
     /**
@@ -61,7 +68,7 @@ class DeclaracionController extends Controller
      */
     public function show(Declaracion $declaracion)
     {
-        //
+        return $declaracion;
     }
 
     /**
@@ -84,7 +91,30 @@ class DeclaracionController extends Controller
      */
     public function update(Request $request, Declaracion $declaracion)
     {
-        //
+        $data = $request->validate([
+            'periodo' => 'required',
+            'docencia_comp' => 'required|json',
+            'docencia_real' => 'required|json',
+            'investigacion_comp' => 'required|json',
+            'investigacion_real' => 'required|json',
+            'asistencia_comp' => 'required|json',
+            'asistencia_real' => 'required|json',
+            'perfeccionamiento_comp' => 'required|json',
+            'perfeccionamiento_real' => 'required|json',
+            'administracion_comp' => 'required|json',
+            'administracion_real' => 'required|json',
+            'extension_comp' => 'required|json',
+            'extension_real' => 'required|json',
+            'educacion_continua_comp' => 'required|json',
+            'educacion_continua_real' => 'required|json',
+        ]);
+
+        $data->merge(['id_usuario' => Auth::user()->id]);
+
+        $declaracion = Declaracion::fill($data);
+        $declaracion->save();
+
+        return response()->json($this->updateMessage());
     }
 
     /**
@@ -95,6 +125,8 @@ class DeclaracionController extends Controller
      */
     public function destroy(Declaracion $declaracion)
     {
-        //
+        $declaracion->delete();
+
+        return response()->json($this->deleteMessage());
     }
 }
