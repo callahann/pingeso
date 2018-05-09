@@ -17,20 +17,20 @@
     - [x] Rol: ok
     - [x] User: ok
 - Modelos:
-    - [] Apelación: filler
-    - [] Declaracion: filler, mutator
-    - [] Departamento: filler
-    - [] Facultad: filler
-    - [] Formula: filler
-    - [] Rol: filler
-    - [] User: filler
+    - [x] Apelación: filler
+    - [x] Declaracion: filler, mutator
+    - [x] Departamento: filler
+    - [x] Facultad: filler
+    - [x] Formula: filler
+    - [x] Rol: filler
+    - [x] User: filler
 - Controladores: 
-    - [] Apelación: 
+    - [x] Apelación: 
     - [x] Declaracion: ok
-    - [] Departamento: 
-    - [] Facultad: 
-    - [] Formula: 
-    - [] Rol: 
+    - [x] Departamento: 
+    - [x] Facultad: 
+    - [x] Formula: 
+    - [x] Rol: 
     - [] User: 
 
     
