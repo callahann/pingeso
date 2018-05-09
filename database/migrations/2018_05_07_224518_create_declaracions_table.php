@@ -15,7 +15,7 @@ class CreateDeclaracionsTable extends Migration
     {
         Schema::create('declaracions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_formulas');
+            $table->unsignedInteger('id_formula');
             $table->unsignedInteger('id_usuario');
             $table->integer('periodo');
             $table->json('docencia_comp');
