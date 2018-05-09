@@ -14,7 +14,7 @@ class FormulaController extends Controller
      */
     public function index()
     {
-        //
+        return Formula::paginate();
     }
 
     /**
@@ -24,7 +24,7 @@ class FormulaController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -35,7 +35,14 @@ class FormulaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nombre' => 'required',
+            'detalle' => 'required',
+        ]);
+
+        $formula = Formula::create($date);
+
+        return $this->creationMessage();
     }
 
     /**
@@ -46,7 +53,7 @@ class FormulaController extends Controller
      */
     public function show(Formula $formula)
     {
-        //
+        return $formula;
     }
 
     /**
@@ -57,7 +64,7 @@ class FormulaController extends Controller
      */
     public function edit(Formula $formula)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -80,6 +87,8 @@ class FormulaController extends Controller
      */
     public function destroy(Formula $formula)
     {
-        //
+        $formula->delete();
+
+        return $this->deletedMessage();
     }
 }

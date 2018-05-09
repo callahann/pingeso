@@ -57,7 +57,7 @@ class DeclaracionController extends Controller
 
         $declaracion = Declaracion::create($data);
 
-        return response()->json($this->storeMessage());
+        return $this->storeMessage();
     }
 
     /**
@@ -79,7 +79,7 @@ class DeclaracionController extends Controller
      */
     public function edit(Declaracion $declaracion)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -114,7 +114,7 @@ class DeclaracionController extends Controller
         $declaracion->fill($data);
         $declaracion->save();
 
-        return response()->json($this->updateMessage());
+        return $this->updateMessage();
     }
 
     /**
@@ -127,6 +127,6 @@ class DeclaracionController extends Controller
     {
         $declaracion->delete();
 
-        return response()->json($this->deleteMessage());
+        return $this->deleteMessage();
     }
 }

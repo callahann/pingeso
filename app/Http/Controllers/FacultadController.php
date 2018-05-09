@@ -14,7 +14,7 @@ class FacultadController extends Controller
      */
     public function index()
     {
-        //
+        return Facultad::paginate();
     }
 
     /**
@@ -24,7 +24,7 @@ class FacultadController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -46,7 +46,7 @@ class FacultadController extends Controller
      */
     public function show(Facultad $facultad)
     {
-        //
+        return $facultad;
     }
 
     /**
@@ -57,7 +57,7 @@ class FacultadController extends Controller
      */
     public function edit(Facultad $facultad)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -80,6 +80,8 @@ class FacultadController extends Controller
      */
     public function destroy(Facultad $facultad)
     {
-        //
+        $facultad->deleted();
+
+        return $this->notDefined();
     }
 }

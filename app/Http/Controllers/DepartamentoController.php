@@ -14,7 +14,7 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        //
+        return Departamento::paginate();
     }
 
     /**
@@ -35,7 +35,16 @@ class DepartamentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'id_facultad',
+            'nombre',
+            'codigo',
+            'nombre_corto',
+        ]);
+
+        $departamento = Departamento::create($data);
+
+        return $this->creationMessage();
     }
 
     /**
@@ -46,7 +55,7 @@ class DepartamentoController extends Controller
      */
     public function show(Departamento $departamento)
     {
-        //
+        return $departamento;
     }
 
     /**
@@ -57,7 +66,7 @@ class DepartamentoController extends Controller
      */
     public function edit(Departamento $departamento)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -69,7 +78,17 @@ class DepartamentoController extends Controller
      */
     public function update(Request $request, Departamento $departamento)
     {
-        //
+        $data = $request->validate([
+            'id_facultad',
+            'nombre',
+            'codigo',
+            'nombre_corto',
+        ]);
+
+        $departamento->fill($data);
+        $departamento->save();
+
+        return $this->creationMessage();
     }
 
     /**
@@ -80,6 +99,8 @@ class DepartamentoController extends Controller
      */
     public function destroy(Departamento $departamento)
     {
-        //
+        $departamento->deleted();
+
+        return $this->deleteMessage();
     }
 }

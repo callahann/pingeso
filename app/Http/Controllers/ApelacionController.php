@@ -65,16 +65,7 @@ class ApelacionController extends Controller
      */
     public function edit(Apelacion $apelacion)
     {
-        $data = $request->validate([
-            'id_declaracion' => 'required',
-            'comentario' => 'required',
-            'nombre_archivo' => 'file',
-        ]);
-
-        $apelacion->fill($data);
-        $apelacion->save();
-
-        return $this->updateMessage();
+        return $this->notDefined();
     }
 
     /**
@@ -86,7 +77,16 @@ class ApelacionController extends Controller
      */
     public function update(Request $request, Apelacion $apelacion)
     {
-        //
+        $data = $request->validate([
+            'id_declaracion' => 'required',
+            'comentario' => 'required',
+            'nombre_archivo' => 'file',
+        ]);
+
+        $apelacion->fill($data);
+        $apelacion->save();
+
+        return $this->updateMessage();
     }
 
     /**
