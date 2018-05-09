@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Declaracion;
+use App\User;
+use App\Formula;
 use Illuminate\Http\Request;
 
 class DeclaracionController extends Controller
@@ -53,8 +55,11 @@ class DeclaracionController extends Controller
             'educacion_continua_real' => 'json',
         ]);
 
-        $data->merge(['id_usuario' => Auth::user()->id]);
-
+        /*$data->merge([
+            'id_usuario' => User::first()->id,
+            'id_formula' => Formula::first()->id
+        ]);
+        */
 
         $declaracion = Declaracion::create($data);
 
@@ -110,7 +115,7 @@ class DeclaracionController extends Controller
             'educacion_continua_real' => 'required|json',
         ]);
 
-        $data->merge(['id_usuario' => Auth::user()->id]);
+        //$data->merge(['id_usuario' => Auth::user()->id]);
 
         $declaracion->fill($data);
         $declaracion->save();

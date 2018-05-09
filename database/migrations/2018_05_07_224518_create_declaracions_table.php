@@ -15,8 +15,8 @@ class CreateDeclaracionsTable extends Migration
     {
         Schema::create('declaracions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_formula');
-            $table->unsignedInteger('id_usuario');
+            $table->unsignedInteger('id_formula')->nullable();
+            $table->unsignedInteger('id_usuario')->nullable();
             $table->integer('periodo');
             $table->json('docencia_comp');
             $table->json('docencia_real')->nullable();
@@ -34,7 +34,7 @@ class CreateDeclaracionsTable extends Migration
             $table->json('educacion_continua_real')->nullable();
             $table->integer('estado')->default(0);
             $table->timestamps();
-
+            /*
             $table->foreign('id_formula')
                 ->references('id')
                 ->on('formulas');
@@ -42,7 +42,7 @@ class CreateDeclaracionsTable extends Migration
             $table->foreign('id_usuario')
                 ->references('id')
                 ->on('users');
-
+            */
 
         });
     }
