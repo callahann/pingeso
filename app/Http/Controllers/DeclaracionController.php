@@ -24,7 +24,7 @@ class DeclaracionController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -54,6 +54,7 @@ class DeclaracionController extends Controller
         ]);
 
         $data->merge(['id_usuario' => Auth::user()->id]);
+
 
         $declaracion = Declaracion::create($data);
 
