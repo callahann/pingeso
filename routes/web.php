@@ -20,3 +20,8 @@ Route::get('/formulario', function () {
 });
 
 Route::resource('declaraciones', 'DeclaracionController');
+Route::resource('apelaciones', 'ApelacionController');
+Route::resource('despartamentos', 'DepartamentoController');
+Route::resource('facultades', 'FacultadController');
+Route::resource('formulas', 'FormulaController');
+Route::resource('roles', 'RolController');
