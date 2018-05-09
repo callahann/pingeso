@@ -10,29 +10,29 @@
 ## Estado Actual Proyecto:
 - Vista Formulario de Declaraciones
 - Migraciones:
-    ⋅⋅* Apelación: ok
-    ⋅⋅* Declaracion: ok
-    ⋅⋅* Departamento: ok
-    ⋅⋅* Facultad: ok
-    ⋅⋅* Formula: ok
-    ⋅⋅* Rol: ok
-    ⋅⋅* User: ok
+    - [x] Apelación
+    - [x] Declaracion: ok
+    - [x] Departamento: ok
+    - [x] Facultad: ok
+    - [x] Formula: ok
+    - [x] Rol: ok
+    - [x] User: ok
 - Modelos:
-    ⋅⋅* Apelación: filler
-    ⋅⋅* Declaracion: filler, mutator
-    ⋅⋅* Departamento: filler
-    ⋅⋅* Facultad: filler
-    ⋅⋅* Formula: filler
-    ⋅⋅* Rol: filler
-    ⋅⋅* User: filler
+    - [] Apelación: filler
+    - [] Declaracion: filler, mutator
+    - [] Departamento: filler
+    - [] Facultad: filler
+    - [] Formula: filler
+    - [] Rol: filler
+    - [] User: filler
 - Controladores: 
-    ⋅⋅* Apelación: 
-    ⋅⋅* Declaracion: ok
-    ⋅⋅* Departamento: 
-    ⋅⋅* Facultad: 
-    ⋅⋅* Formula: 
-    ⋅⋅* Rol: 
-    ⋅⋅* User: 
+    - [] Apelación: 
+    - [x] Declaracion: ok
+    - [] Departamento: 
+    - [] Facultad: 
+    - [] Formula: 
+    - [] Rol: 
+    - [] User: 
 
     
 
