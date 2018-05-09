@@ -1,14 +1,76 @@
-
-// Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
 // Variables
 @import "variables";
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import url("https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css");
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+$naranjo: #EA7600;
+$azul: #002F6C;
+$celeste: #007FC6;
+$gris: #B1B1B1;
+$gris-oscuro: #404040;
+
+.navbar {
+  background-color: $azul !important;
+  border-bottom: 3px solid $naranjo !important;
+  margin-bottom: 2em !important;
+
+  &-brand {
+    padding: 0.25em !important;
+  }
+
+  &-btn {
+    color: white;
+  }
+
+  &-btn:hover {
+    background-color: $gris;
+    color: white;
+  }
+
+  &-btn.active {
+    background-color: $celeste;
+    color: white;
+    box-shadow: none;
+  }
+}
+
+.panel {
+  &-title {
+    font-size: 1.5em !important;
+  }
+
+  &-heading {
+    background-color: $azul !important;
+    color: white !important;
+    font-weight: bold;
+  }
+
+  &-tabs {
+    padding-bottom: 0 !important;
+    padding-top: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    .nav-tabs {
+      border: 0 !important;
+    }
+
+    a {
+      background-color: transparent;
+      color: white;
+      border: 0 !important;
+    }
+  
+    a:hover {
+      background-color: $celeste !important;
+      color: white !important;
+    }
+  
+    a.active {
+      background-color: white;
+      color: $gris-oscuro;
+      box-shadow: none;
+    }
+  }
 }
