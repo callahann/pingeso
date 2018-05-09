@@ -14,7 +14,7 @@ class ApelacionController extends Controller
      */
     public function index()
     {
-        //
+        return Apelacion::paginate();
     }
 
     /**
@@ -24,7 +24,7 @@ class ApelacionController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -35,7 +35,15 @@ class ApelacionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'id_declaracion' => 'required',
+            'comentario' => 'required',
+            'nombre_archivo' => 'file',
+        ]);
+
+        $apelacion = Apelacion::create($data);
+
+        return $this->creationMessage();
     }
 
     /**
@@ -46,7 +54,7 @@ class ApelacionController extends Controller
      */
     public function show(Apelacion $apelacion)
     {
-        //
+        return $apelacion;
     }
 
     /**
@@ -57,7 +65,16 @@ class ApelacionController extends Controller
      */
     public function edit(Apelacion $apelacion)
     {
-        //
+        $data = $request->validate([
+            'id_declaracion' => 'required',
+            'comentario' => 'required',
+            'nombre_archivo' => 'file',
+        ]);
+
+        $apelacion->fill($data);
+        $apelacion->save();
+
+        return $this->updateMessage();
     }
 
     /**
@@ -80,6 +97,8 @@ class ApelacionController extends Controller
      */
     public function destroy(Apelacion $apelacion)
     {
-        //
+        $apelacion->delete();
+
+        return $this->deleteMessage();
     }
 }

@@ -26,4 +26,9 @@ class Controller extends BaseController
     {
         return 'Se ha borrado correctamente';
     }
+
+    protected function notDefined()
+    {
+        return 'Función no definida';
+    }
 }

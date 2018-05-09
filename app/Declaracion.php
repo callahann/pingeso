@@ -45,4 +45,9 @@ class Declaracion extends Model
         'educacion_continua_comp'=> 'array',
         'educacion_continua_real'=> 'array',
     ];
+
+    public function apelaciones()
+    {
+        return $this->hasMany(Apelacion::class,'id_declaracion');
+    }
 }

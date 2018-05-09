@@ -111,7 +111,7 @@ class DeclaracionController extends Controller
 
         $data->merge(['id_usuario' => Auth::user()->id]);
 
-        $declaracion = Declaracion::fill($data);
+        $declaracion->fill($data);
         $declaracion->save();
 
         return response()->json($this->updateMessage());

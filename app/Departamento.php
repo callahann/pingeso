@@ -12,4 +12,9 @@ class Departamento extends Model
         'codigo',
         'nombre_corto',
     ];
+
+    protected function facultad()
+    {
+        return $this->belongsTo(Facultad::class,'id_facultad');
+    }
 }
