@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/listado', 'DeclaracionController@indexDec');
+
 Route::get('/formulario', function () {
     return view('formulario');
 });
@@ -25,3 +27,4 @@ Route::resource('despartamentos', 'DepartamentoController');
 Route::resource('facultades', 'FacultadController');
 Route::resource('formulas', 'FormulaController');
 Route::resource('roles', 'RolController');
+

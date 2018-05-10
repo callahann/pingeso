@@ -19,6 +19,14 @@ class DeclaracionController extends Controller
         return Declaracion::paginate();
     }
 
+    public function indexDec(){
+        //$declaraciones = Declaracion::all();
+        //$users = User::all();
+        //return view('listado', compact('declaraciones','users'));
+        return view('listado');
+    }
+
+    
     /**
      * Show the form for creating a new resource.
      *
