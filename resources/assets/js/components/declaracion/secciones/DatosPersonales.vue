@@ -67,13 +67,13 @@
         data: function() {
             return {
                 datosPersonales: {
-                    apellidoPaterno: '',
-                    apellidoMaterno: '',
-                    nombres: '',
-                    facultad: '',
-                    departamento: '',
-                    jerarquia: '',
-                    jornada: ''
+                    apellidoPaterno: 'Álvarez',
+                    apellidoMaterno: 'Molina',
+                    nombres: 'Mario Francisco',
+                    facultad: 'Ingeniería',
+                    departamento: 'Informática',
+                    jerarquia: 'Cargo',
+                    jornada: 'Jornada'
                 }
             }
         },

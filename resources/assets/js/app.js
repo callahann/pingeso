@@ -17,22 +17,27 @@ window.Vue = require('vue');
 
 Vue.component(
     'formulario',
-    require('./components/formulario/Formulario.vue').default
+    require('./components/declaracion/Formulario.vue').default
 );
 
 Vue.component(
     'datos-personales',
-    require('./components/formulario/secciones/DatosPersonales.vue').default
+    require('./components/declaracion/secciones/DatosPersonales.vue').default
 );
 
 Vue.component(
     'lista-items',
-    require('./components/formulario/secciones/ListaItems.vue').default
+    require('./components/declaracion/secciones/ListaItems.vue').default
 );
 
 Vue.component(
     'resumen-declaraciones',
-    require('./components/formulario/secciones/ResumenDeclaraciones.vue').default
+    require('./components/declaracion/secciones/Resumen.vue').default
+);
+
+Vue.component(
+    'lista-declaraciones',
+    require('./components/declaracion/Lista.vue').default
 );
 
 const app = new Vue({

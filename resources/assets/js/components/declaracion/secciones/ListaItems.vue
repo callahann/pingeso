@@ -68,11 +68,15 @@
 </template>
 <script>
     export default {
+        props: ['inicial', 'cargando'],
         data: function () {
             return {
                 id: 1,
                 items: []
             }
+        },
+        mounted: function() {
+            this.items = this.inicial;
         },
         methods: {
             nuevoItem: function() {
@@ -96,6 +100,9 @@
             }
         },
         watch: {
+            cargando: function(newValue) {
+                if(!newValue) this.items = this.inicial;
+            },
             items: function(newItems) {
                 this.$emit('actualizar', newItems);
             }

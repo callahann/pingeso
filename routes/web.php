@@ -15,11 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/listado', 'DeclaracionController@indexDec');
+Route::get('/declaraciones', 'DeclaracionController@index');
 
-Route::get('/formulario', function () {
-    return view('formulario');
+Route::get('/declaraciones/formulario', function () {
+    return view('declaracion.formulario')->with(['id' => null]);
 });
+
+Route::name('formulario')->get('/declaraciones/{declaracion}/formulario', 'DeclaracionController@edit');
 
 Route::resource('declaraciones', 'DeclaracionController');
 Route::resource('apelaciones', 'ApelacionController');

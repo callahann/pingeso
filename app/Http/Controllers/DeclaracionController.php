@@ -16,7 +16,8 @@ class DeclaracionController extends Controller
      */
     public function index()
     {
-        return Declaracion::paginate();
+        $declaraciones = Declaracion::simplePaginate(5);
+        return view('declaracion.lista')->with(['declaraciones' => $declaraciones]);
     }
 
     public function indexDec(){
@@ -45,17 +46,11 @@ class DeclaracionController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        /*$data = $request->validate([
             'periodo' => 'required',
-        ]);
+        ]);*/
 
-        /*$data->merge([
-            'id_usuario' => User::first()->id,
-            'id_formula' => Formula::first()->id
-        ]);
-        */
-
-        $declaracion = Declaracion::create($data);
+        $declaracion = Declaracion::create($request->all());
 
         return $this->creationMessage();
     }
@@ -80,7 +75,7 @@ class DeclaracionController extends Controller
      */
     public function edit(Declaracion $declaracion)
     {
-        return $this->notDefined();
+        return view('declaracion.formulario')->with(['id' => $declaracion->id]);
     }
 
     /**
@@ -92,13 +87,13 @@ class DeclaracionController extends Controller
      */
     public function update(Request $request, Declaracion $declaracion)
     {
-        $data = $request->validate([
+        /*$data = $request->validate([
             'periodo' => 'required',
-        ]);
+        ]);*/
 
         //$data->merge(['id_usuario' => Auth::user()->id]);
 
-        $declaracion->fill($data);
+        $declaracion->fill($request->all());
         $declaracion->save();
 
         return $this->updateMessage();

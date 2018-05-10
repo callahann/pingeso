@@ -25,25 +25,32 @@
                     </div>
                     <div class="tab-content">
                         <div id="docencia" class="tab-pane fade in active">
-                            <lista-items v-on:actualizar="declaraciones[0] = $event"></lista-items>
+                            <lista-items :inicial="declaraciones[0]" :cargando="cargando"
+                                v-on:actualizar="declaraciones[0] = $event"></lista-items>
                         </div>
                         <div id="invdes" class="tab-pane fade">
-                            <lista-items v-on:actualizar="declaraciones[1] = $event"></lista-items>
+                            <lista-items :inicial="declaraciones[1]" :cargando="cargando"
+                                 v-on:actualizar="declaraciones[1] = $event"></lista-items>
                         </div>
                         <div id="asistec" class="tab-pane fade">
-                            <lista-items v-on:actualizar="declaraciones[2] = $event"></lista-items>
+                            <lista-items :inicial="declaraciones[2]" :cargando="cargando"
+                                 v-on:actualizar="declaraciones[2] = $event"></lista-items>
                         </div>
                         <div id="perf" class="tab-pane fade">
-                            <lista-items v-on:actualizar="declaraciones[3] = $event"></lista-items>
+                            <lista-items :inicial="declaraciones[3]" :cargando="cargando"
+                                 v-on:actualizar="declaraciones[3] = $event"></lista-items>
                         </div>
                         <div id="adminacad" class="tab-pane fade">
-                            <lista-items v-on:actualizar="declaraciones[4] = $event"></lista-items>
+                            <lista-items :inicial="declaraciones[4]" :cargando="cargando"
+                                 v-on:actualizar="declaraciones[4] = $event"></lista-items>
                         </div>
                         <div id="extension" class="tab-pane fade">
-                            <lista-items v-on:actualizar="declaraciones[5] = $event"></lista-items>
+                            <lista-items :inicial="declaraciones[5]" :cargando="cargando"
+                                 v-on:actualizar="declaraciones[5] = $event"></lista-items>
                         </div>
                         <div id="educont" class="tab-pane fade">
-                            <lista-items v-on:actualizar="declaraciones[6] = $event"></lista-items>
+                            <lista-items :inicial="declaraciones[6]" :cargando="cargando"
+                                 v-on:actualizar="declaraciones[6] = $event"></lista-items>
                         </div>
                     </div>
                 </div>
@@ -53,7 +60,8 @@
                     <div class="panel-footer">
                         <button type="button" class="btn btn-default" data-toggle="modal"
                             data-target="#resumen" v-on:click="resumenAbierto = true">Ver resumen</button>
-                        <button type="button" class="btn btn-success" v-on:click="enviarDeclaracion">Enviar</button>
+                        <button v-if="nuevo" type="button" class="btn btn-success" v-on:click="enviarDeclaracion">Enviar</button>
+                        <button v-else type="button" class="btn btn-success" v-on:click="actualizarDeclaracion">Guardar cambios</button>
                     </div>
                 </div>
             </div>
@@ -84,17 +92,46 @@
 <script>
     import axios from 'axios';
     export default {
+        props: ['id'],
         data: function() {
             return {
                 resumenAbierto: false,
-                datosPersonales: {},
+                datosPersonales: {
+                    apellidoPaterno: 'Álvarez',
+                    apellidoMaterno: 'Molina',
+                    nombres: 'Mario Francisco',
+                    facultad: 'Ingeniería',
+                    departamento: 'Informática',
+                    jerarquia: 'Cargo',
+                    jornada: 'Jornada'
+                },
+                cargando: true,
+                nuevo: true,
                 declaraciones: [[], [], [], [], [], [], []]
             }
         },
+        created: function() {
+            axios.get('/declaraciones/' + this.id)
+            .then(response => {
+                let declaracion = response.data;
+                this.declaraciones[0] = declaracion.docencia_comp || [];
+                this.declaraciones[1] = declaracion.investigacion_comp || [];
+                this.declaraciones[2] = declaracion.asistencia_comp || [];
+                this.declaraciones[3] = declaracion.perfeccionamiento_comp || [];
+                this.declaraciones[4] = declaracion.administracion_comp || [];
+                this.declaraciones[5] = declaracion.extension_comp || [];
+                this.declaraciones[6] = declaracion.educacion_continua_comp || [];
+                this.cargando = false;
+                this.nuevo = false;
+                console.log(this.inicial);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+        },
         methods: {
-            enviarDeclaracion: function() {
-                axios.post('/api/declaraciones',
-                {
+            getBody: function() {
+                return {
                     periodo: 2018,
                     docencia_comp: this.declaraciones[0],
                     investigacion_comp: this.declaraciones[1],
@@ -102,9 +139,17 @@
                     perfeccionamiento_comp: this.declaraciones[3],
                     administracion_comp: this.declaraciones[4],
                     extension_comp: this.declaraciones[5],
-                    educacion_continua_comp: this.declaraciones[6],
-                })
+                    educacion_continua_comp: this.declaraciones[6]
+                }
+            },
+            enviarDeclaracion: function() {
+                axios.post('/api/declaraciones', this.getBody())
                 .then(response => { console.log("Se han registado los datos!") })
+                .catch(e => { console.log(e) });
+            },
+            actualizarDeclaracion: function() {
+                axios.put('/api/declaraciones/' + this.id, this.getBody())
+                .then(response => { console.log("Se han actualizado los datos!") })
                 .catch(e => { console.log(e) });
             }
         }
