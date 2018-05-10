@@ -47,20 +47,13 @@ class DeclaracionController extends Controller
     {
         $data = $request->validate([
             'periodo' => 'required',
-            'docencia_comp' => 'required|json',
-            'docencia_real' => 'json',
-            'investigacion_comp' => 'required|json',
-            'investigacion_real' => 'json',
-            'asistencia_comp' => 'required|json',
-            'asistencia_real' => 'json',
-            'perfeccionamiento_comp' => 'required|json',
-            'perfeccionamiento_real' => 'json',
-            'administracion_comp' => 'required|json',
-            'administracion_real' => 'json',
-            'extension_comp' => 'required|json',
-            'extension_real' => 'json',
-            'educacion_continua_comp' => 'required|json',
-            'educacion_continua_real' => 'json',
+            'docencia_comp' => 'required',
+            'investigacion_comp' => 'required',
+            'asistencia_comp' => 'required',
+            'perfeccionamiento_comp' => 'required',
+            'administracion_comp' => 'required',
+            'extension_comp' => 'required',
+            'educacion_continua_comp' => 'required',
         ]);
 
         /*$data->merge([
@@ -71,7 +64,7 @@ class DeclaracionController extends Controller
 
         $declaracion = Declaracion::create($data);
 
-        return $this->storeMessage();
+        return $this->creationMessage();
     }
 
     /**
@@ -107,20 +100,20 @@ class DeclaracionController extends Controller
     {
         $data = $request->validate([
             'periodo' => 'required',
-            'docencia_comp' => 'required|json',
-            'docencia_real' => 'required|json',
-            'investigacion_comp' => 'required|json',
-            'investigacion_real' => 'required|json',
-            'asistencia_comp' => 'required|json',
-            'asistencia_real' => 'required|json',
-            'perfeccionamiento_comp' => 'required|json',
-            'perfeccionamiento_real' => 'required|json',
-            'administracion_comp' => 'required|json',
-            'administracion_real' => 'required|json',
-            'extension_comp' => 'required|json',
-            'extension_real' => 'required|json',
-            'educacion_continua_comp' => 'required|json',
-            'educacion_continua_real' => 'required|json',
+            'docencia_comp' => 'required',
+            'docencia_real' => 'required',
+            'investigacion_comp' => 'required',
+            'investigacion_real' => 'required',
+            'asistencia_comp' => 'required',
+            'asistencia_real' => 'required',
+            'perfeccionamiento_comp' => 'required',
+            'perfeccionamiento_real' => 'required',
+            'administracion_comp' => 'required',
+            'administracion_real' => 'required',
+            'extension_comp' => 'required',
+            'extension_real' => 'required',
+            'educacion_continua_comp' => 'required',
+            'educacion_continua_real' => 'required',
         ]);
 
         //$data->merge(['id_usuario' => Auth::user()->id]);
