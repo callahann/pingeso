@@ -30,6 +30,11 @@ Vue.component(
     require('./components/formulario/secciones/ListaItems.vue').default
 );
 
+Vue.component(
+    'resumen-declaraciones',
+    require('./components/formulario/secciones/ResumenDeclaraciones.vue').default
+);
+
 const app = new Vue({
     el: '#app'
 }).$mount('#app');

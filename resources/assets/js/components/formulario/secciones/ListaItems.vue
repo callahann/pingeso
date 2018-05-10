@@ -7,48 +7,48 @@
             <div v-else>
                 <div class="items-heading text-center">
                     <!-- Primera fila -->
-                    <div class="col-md-7"></div>
-                    <div class="col-md-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-4">
                         <h4>Primer semestre</h4>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <h4>Segundo semestre</h4>
                     </div>
                     <div class="col-md-1"></div>
                     <!-- Segunda fila -->
-                    <div class="col-md-7">
+                    <div class="col-md-3">
                         <h4>Descripción</h4>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <h4>Hrs. semana</h4>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <h4>Hrs. semestre</h4>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <h4>Hrs. semana</h4>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <h4>Hrs. semestre</h4>
                     </div>
                     <div class="col-md-1"></div>
                 </div>
-                <div v-for="(item, index) in items" v-bind:key="item">
+                <div v-for="(item, index) in items" v-bind:key="item.id">
                     <div class="form-group">
-                        <div class="col-md-7">
+                        <div class="col-md-3">
                             <input class="form-control" v-model="item.descripcion">
                         </div>
-                        <div class="col-md-1">
-                            <input class="form-control" min=1 v-model="item.primero.horasSemana">
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemana">
                         </div>
-                        <div class="col-md-1">
-                            <input class="form-control" min=1 v-model="item.primero.horasSemestre">
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemestre">
                         </div>
-                        <div class="col-md-1">
-                            <input class="form-control" min=1 v-model="item.segundo.horasSemana">
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemana">
                         </div>
-                        <div class="col-md-1">
-                            <input class="form-control" min=1 v-model="item.segundo.horasSemestre">
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemestre">
                         </div>
                         <button type="button" class="btn btn-danger col-md-1"
                             v-on:click="quitarItem(index)"
@@ -70,6 +70,7 @@
     export default {
         data: function () {
             return {
+                id: 1,
                 items: []
             }
         },
@@ -77,6 +78,7 @@
             nuevoItem: function() {
                 this.items.push(
                     {
+                        id: this.id++,
                         descripcion: '',
                         primero: {
                             horasSemana: 1,
@@ -91,6 +93,11 @@
             },
             quitarItem: function(index) {
                 this.items.splice(index, 1);
+            }
+        },
+        watch: {
+            items: function(newItems) {
+                this.$emit('actualizar', newItems);
             }
         }
     }
