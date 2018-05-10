@@ -1,4 +1,8 @@
+@php($pagina = 'form')
 
+@extends('layouts.usach')
+
+@section('content')
 
 <div class="container">
     <div class="row">
@@ -26,6 +30,8 @@
       </div>
     </div>
 </div>
+
+@endsection
 <style>
 table {
     font-family: arial, sans-serif;
