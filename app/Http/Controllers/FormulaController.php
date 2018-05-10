@@ -35,12 +35,13 @@ class FormulaController extends Controller
      */
     public function store(Request $request)
     {
+
         $data = $request->validate([
             'nombre' => 'required',
             'detalle' => 'required',
         ]);
 
-        $formula = Formula::create($date);
+        $formula = Formula::create($data);
 
         return $this->creationMessage();
     }
@@ -76,7 +77,15 @@ class FormulaController extends Controller
      */
     public function update(Request $request, Formula $formula)
     {
-        //
+        $data = $request->validate([
+            'nombre' => 'required',
+            'detalle' => 'required',
+        ]);
+
+        $formula->fill($data);
+        $formula->save();
+
+        return $this->updateMessage();
     }
 
     /**
