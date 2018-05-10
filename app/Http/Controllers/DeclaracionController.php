@@ -114,4 +114,14 @@ class DeclaracionController extends Controller
 
         return $this->deleteMessage();
     }
+
+    public function approval($id)
+    {
+        $declaracion = Declaracion::findOrFail($id);
+        $declaracion->estado = 1;
+        $declaracion->save();
+
+        return $this->updateMessage();
+
+    }
 }
