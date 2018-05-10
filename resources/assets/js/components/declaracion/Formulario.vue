@@ -1,6 +1,14 @@
 <template>
     <div>
         <div class="col-md-10 col-md-offset-1">
+            <div v-if="error" class="alert alert-danger">
+                <a href="#" class="close" aria-label="close" v-on:click="error = false">&times;</a>
+                <strong>Oh no!</strong> Ha ocurrido un error.
+            </div>
+            <div v-if="correcto" class="alert alert-success">
+                <a href="#" class="close" aria-label="close" v-on:click="correcto = false">&times;</a>
+                <strong>Bien!</strong> Se han guardado los cambios.
+            </div>
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-heading panel-title text-center">Datos personales</div>
@@ -110,7 +118,9 @@
                 },
                 cargando: true,
                 nuevo: true,
-                declaraciones: [[], [], [], [], [], [], []]
+                declaraciones: [[], [], [], [], [], [], []],
+                correcto: false,
+                error: false
             }
         },
         created: function() {
@@ -146,18 +156,27 @@
             },
             enviar: function() {
                 axios.post('/api/declaraciones', this.getBody())
-                .then(response => { console.log("Se han registado los datos!") })
-                .catch(e => { console.log(e) });
+                .then(response => { 
+                    console.log("Se han registado los datos!");
+                    window.location.href = '/declaraciones';
+                })
+                .catch(e => { console.log(e); this.error = true });
             },
             actualizar: function() {
                 axios.put('/api/declaraciones/' + this.id, this.getBody())
-                .then(response => { console.log("Se han actualizado los datos!") })
-                .catch(e => { console.log(e) });
+                .then(response => { 
+                    console.log("Se han actualizado los datos!");
+                    this.correcto = true;
+                })
+                .catch(e => { console.log(e); this.error = true });
             },
             aprobar: function(estado) {
                 axios.get('/declaraciones/' + this.id + '/aprobar')
-                .then(response => { console.log("Se han aprobado la declaración!") })
-                .catch(e => { console.log(e) });
+                .then(response => { 
+                    console.log("Se han aprobado la declaración!");
+                    window.location.href = '/declaraciones';
+                })
+                .catch(e => { console.log(e); this.error = true });
             }
         }
     }

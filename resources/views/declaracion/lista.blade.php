@@ -10,15 +10,15 @@ Lista declaraciones
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Declaraciones
+                Informes de actividades
                 <a type="button" class="btn btn-xs btn-success pull-right" href="/declaraciones/formulario">     
-                    Agregar declaración <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    Ingresar nuevo informe <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </a>
             </div>
             <div class="panel-body">
                 @if($declaraciones->count() == 0)
                 <div class="text-center">
-                    <h3>No se han ingresado nuevas declaraciones</h3>
+                    <h3>No se han ingresado nuevos informes de actividades</h3>
                 </div>
                 @else
                 <table class="table table-striped">

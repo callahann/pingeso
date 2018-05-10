@@ -34,7 +34,7 @@
                     <div class="col-md-1"></div>
                 </div>
                 <div v-for="(item, index) in items" v-bind:key="item.id">
-                    <div class="form-group">
+                    <div class="row panel-body">
                         <div class="col-md-3">
                             <input class="form-control" v-model="item.descripcion">
                         </div>

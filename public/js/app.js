@@ -14078,6 +14078,14 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -14096,7 +14104,9 @@ module.exports = Cancel;
             },
             cargando: true,
             nuevo: true,
-            declaraciones: [[], [], [], [], [], [], []]
+            declaraciones: [[], [], [], [], [], [], []],
+            correcto: false,
+            error: false
         };
     },
     created: function created() {
@@ -14131,24 +14141,33 @@ module.exports = Cancel;
             };
         },
         enviar: function enviar() {
+            var _this2 = this;
+
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/declaraciones', this.getBody()).then(function (response) {
                 console.log("Se han registado los datos!");
+                window.location.href = '/declaraciones';
             }).catch(function (e) {
-                console.log(e);
+                console.log(e);_this2.error = true;
             });
         },
         actualizar: function actualizar() {
+            var _this3 = this;
+
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/declaraciones/' + this.id, this.getBody()).then(function (response) {
                 console.log("Se han actualizado los datos!");
+                _this3.correcto = true;
             }).catch(function (e) {
-                console.log(e);
+                console.log(e);_this3.error = true;
             });
         },
         aprobar: function aprobar(estado) {
+            var _this4 = this;
+
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/declaraciones/' + this.id + '/aprobar').then(function (response) {
                 console.log("Se han aprobado la declaración!");
+                window.location.href = '/declaraciones';
             }).catch(function (e) {
-                console.log(e);
+                console.log(e);_this4.error = true;
             });
         }
     }
@@ -47873,6 +47892,48 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+      _vm.error
+        ? _c("div", { staticClass: "alert alert-danger" }, [
+            _c(
+              "a",
+              {
+                staticClass: "close",
+                attrs: { href: "#", "aria-label": "close" },
+                on: {
+                  click: function($event) {
+                    _vm.error = false
+                  }
+                }
+              },
+              [_vm._v("×")]
+            ),
+            _vm._v(" "),
+            _c("strong", [_vm._v("Oh no!")]),
+            _vm._v(" Ha ocurrido un error.\n        ")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.correcto
+        ? _c("div", { staticClass: "alert alert-success" }, [
+            _c(
+              "a",
+              {
+                staticClass: "close",
+                attrs: { href: "#", "aria-label": "close" },
+                on: {
+                  click: function($event) {
+                    _vm.correcto = false
+                  }
+                }
+              },
+              [_vm._v("×")]
+            ),
+            _vm._v(" "),
+            _c("strong", [_vm._v("Bien!")]),
+            _vm._v(" Se han guardado los cambios.\n        ")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "panel panel-default" }, [
           _c("div", { staticClass: "panel-heading panel-title text-center" }, [
@@ -48679,7 +48740,7 @@ var render = function() {
               _vm._v(" "),
               _vm._l(_vm.items, function(item, index) {
                 return _c("div", { key: item.id }, [
-                  _c("div", { staticClass: "form-group" }, [
+                  _c("div", { staticClass: "row panel-body" }, [
                     _c("div", { staticClass: "col-md-3" }, [
                       _c("input", {
                         directives: [
