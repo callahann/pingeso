@@ -44,8 +44,9 @@ class FacultadController extends Controller
      * @param  \App\Facultad  $facultad
      * @return \Illuminate\Http\Response
      */
-    public function show(Facultad $facultad)
+    public function show($id)
     {
+        $facultad = Facultad::findOrFail($id);
         return $facultad;
     }
 
@@ -55,8 +56,9 @@ class FacultadController extends Controller
      * @param  \App\Facultad  $facultad
      * @return \Illuminate\Http\Response
      */
-    public function edit(Facultad $facultad)
+    public function edit($id)
     {
+        $facultad = Facultad::findOrFail($id);
         return $this->notDefined();
     }
 
@@ -67,8 +69,9 @@ class FacultadController extends Controller
      * @param  \App\Facultad  $facultad
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Facultad $facultad)
+    public function update(Request $request, $id)
     {
+        $facultad = Facultad::findOrFail($id);
         //
     }
 
@@ -78,8 +81,9 @@ class FacultadController extends Controller
      * @param  \App\Facultad  $facultad
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Facultad $facultad)
+    public function destroy($id)
     {
+        $facultad = Facultad::findOrFail($id);
         $facultad->deleted();
 
         return $this->notDefined();

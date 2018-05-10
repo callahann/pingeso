@@ -52,8 +52,9 @@ class FormulaController extends Controller
      * @param  \App\Formula  $formula
      * @return \Illuminate\Http\Response
      */
-    public function show(Formula $formula)
+    public function show($id)
     {
+        $formula = Formula::findOrFail($id);
         return $formula;
     }
 
@@ -63,8 +64,9 @@ class FormulaController extends Controller
      * @param  \App\Formula  $formula
      * @return \Illuminate\Http\Response
      */
-    public function edit(Formula $formula)
+    public function edit($id)
     {
+        $formula = Formula::findOrFail($id);
         return $this->notDefined();
     }
 
@@ -75,8 +77,9 @@ class FormulaController extends Controller
      * @param  \App\Formula  $formula
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Formula $formula)
+    public function update(Request $request, $id)
     {
+        $formula = Formula::findOrFail($id);
         $data = $request->validate([
             'nombre' => 'required',
             'detalle' => 'required',
@@ -94,8 +97,9 @@ class FormulaController extends Controller
      * @param  \App\Formula  $formula
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Formula $formula)
+    public function destroy($id)
     {
+        $formula = Formula::findOrFail($id);
         $formula->delete();
 
         return $this->deletedMessage();

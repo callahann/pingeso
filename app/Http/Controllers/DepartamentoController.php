@@ -53,8 +53,9 @@ class DepartamentoController extends Controller
      * @param  \App\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function show(Departamento $departamento)
+    public function show($id)
     {
+        $departamento = Departamento::finOrFail($id);
         return $departamento;
     }
 
@@ -64,8 +65,9 @@ class DepartamentoController extends Controller
      * @param  \App\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function edit(Departamento $departamento)
+    public function edit($id)
     {
+        $departamento = Departamento::finOrFail($id);
         return $this->notDefined();
     }
 
@@ -76,8 +78,9 @@ class DepartamentoController extends Controller
      * @param  \App\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Departamento $departamento)
+    public function update(Request $request, $id)
     {
+        $departamento = Departamento::finOrFail($id);
         $data = $request->validate([
             'id_facultad',
             'nombre',
@@ -97,8 +100,9 @@ class DepartamentoController extends Controller
      * @param  \App\Departamento  $departamento
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Departamento $departamento)
+    public function destroy($id)
     {
+        $departamento = Departamento::finOrFail($id);
         $departamento->deleted();
 
         return $this->deleteMessage();
