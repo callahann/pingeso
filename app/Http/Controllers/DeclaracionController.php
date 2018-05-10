@@ -73,8 +73,9 @@ class DeclaracionController extends Controller
      * @param  \App\Declaracion  $declaracion
      * @return \Illuminate\Http\Response
      */
-    public function edit(Declaracion $declaracion)
+    public function edit($id)
     {
+        $declaracion = Declaracion::findOrFail($id);
         return view('declaracion.formulario')->with(['id' => $declaracion->id]);
     }
 
@@ -85,8 +86,9 @@ class DeclaracionController extends Controller
      * @param  \App\Declaracion  $declaracion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Declaracion $declaracion)
+    public function update(Request $request, $id)
     {
+        $declaracion = Declaracion::findOrFail($id);
         /*$data = $request->validate([
             'periodo' => 'required',
         ]);*/
@@ -105,8 +107,9 @@ class DeclaracionController extends Controller
      * @param  \App\Declaracion  $declaracion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Declaracion $declaracion)
+    public function destroy($id)
     {
+        $declaracion = Declaracion::findOrFail($id);
         $declaracion->delete();
 
         return $this->deleteMessage();

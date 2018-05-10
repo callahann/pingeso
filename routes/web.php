@@ -15,8 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/declaraciones', 'DeclaracionController@index');
-
 Route::get('/declaraciones/formulario', function () {
     return view('declaracion.formulario')->with(['id' => null]);
 });
