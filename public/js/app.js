@@ -14145,7 +14145,7 @@ module.exports = Cancel;
             });
         },
         aprobar: function aprobar(estado) {
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/declaraciones/' + this.id + '/aprobar').then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/declaraciones/' + this.id + '/aprobar').then(function (response) {
                 console.log("Se han aprobado la declaración!");
             }).catch(function (e) {
                 console.log(e);

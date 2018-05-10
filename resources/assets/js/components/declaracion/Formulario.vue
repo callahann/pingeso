@@ -155,7 +155,7 @@
                 .catch(e => { console.log(e) });
             },
             aprobar: function(estado) {
-                axios.get('/api/declaraciones/' + this.id + '/aprobar')
+                axios.get('/declaraciones/' + this.id + '/aprobar')
                 .then(response => { console.log("Se han aprobado la declaración!") })
                 .catch(e => { console.log(e) });
             }
