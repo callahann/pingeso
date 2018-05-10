@@ -66,8 +66,9 @@ class DeclaracionController extends Controller
      * @param  \App\Declaracion  $declaracion
      * @return \Illuminate\Http\Response
      */
-    public function show(Declaracion $declaracion)
-    {
+    public function show($id)
+    {   
+        $declaracion = Declaracion::findOrFail($id);
         return $declaracion;
     }
 
