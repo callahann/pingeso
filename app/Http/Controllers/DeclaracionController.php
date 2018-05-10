@@ -16,7 +16,7 @@ class DeclaracionController extends Controller
      */
     public function index()
     {
-        $declaraciones = Declaracion::simplePaginate(5);
+        $declaraciones = Declaracion::where('estado', '=', 0)->simplePaginate(5);
         return view('declaracion.lista')->with(['declaraciones' => $declaraciones]);
     }
 
@@ -52,7 +52,7 @@ class DeclaracionController extends Controller
 
         $declaracion = Declaracion::create($request->all());
 
-        return $this->creationMessage();
+        return redirect('/declaraciones');
     }
 
     /**

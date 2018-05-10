@@ -14075,6 +14075,9 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -14110,7 +14113,6 @@ module.exports = Cancel;
             _this.declaraciones[6] = declaracion.educacion_continua_comp || [];
             _this.cargando = false;
             _this.nuevo = false;
-            console.log(_this.inicial);
         }).catch(function (e) {
             console.log(e);
         });
@@ -14128,16 +14130,23 @@ module.exports = Cancel;
                 educacion_continua_comp: this.declaraciones[6]
             };
         },
-        enviarDeclaracion: function enviarDeclaracion() {
+        enviar: function enviar() {
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/declaraciones', this.getBody()).then(function (response) {
                 console.log("Se han registado los datos!");
             }).catch(function (e) {
                 console.log(e);
             });
         },
-        actualizarDeclaracion: function actualizarDeclaracion() {
+        actualizar: function actualizar() {
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/declaraciones/' + this.id, this.getBody()).then(function (response) {
                 console.log("Se han actualizado los datos!");
+            }).catch(function (e) {
+                console.log(e);
+            });
+        },
+        aprobar: function aprobar(estado) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/declaraciones/' + this.id + '/aprobar').then(function (response) {
+                console.log("Se han aprobado la declaración!");
             }).catch(function (e) {
                 console.log(e);
             });
@@ -48034,45 +48043,70 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "panel panel-default" }, [
-          _c("div", { staticClass: "panel-footer" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-default",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#resumen"
-                },
-                on: {
-                  click: function($event) {
-                    _vm.resumenAbierto = true
+          _c(
+            "div",
+            { staticClass: "panel-footer" },
+            [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-default",
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "modal",
+                    "data-target": "#resumen"
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.resumenAbierto = true
+                    }
                   }
-                }
-              },
-              [_vm._v("Ver resumen")]
-            ),
-            _vm._v(" "),
-            _vm.nuevo
-              ? _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-success",
-                    attrs: { type: "button" },
-                    on: { click: _vm.enviarDeclaracion }
-                  },
-                  [_vm._v("Enviar")]
-                )
-              : _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-success",
-                    attrs: { type: "button" },
-                    on: { click: _vm.actualizarDeclaracion }
-                  },
-                  [_vm._v("Guardar cambios")]
-                )
-          ])
+                },
+                [_vm._v("Ver resumen")]
+              ),
+              _vm._v(" "),
+              _vm.nuevo
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button" },
+                      on: { click: _vm.enviar }
+                    },
+                    [_vm._v("Enviar")]
+                  )
+                : _c("else", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-info",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.actualizar()
+                          }
+                        }
+                      },
+                      [_vm._v("Guardar cambios")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.aprobar()
+                          }
+                        }
+                      },
+                      [_vm._v("Aprobar")]
+                    )
+                  ])
+            ],
+            1
+          )
         ])
       ]),
       _vm._v(" "),

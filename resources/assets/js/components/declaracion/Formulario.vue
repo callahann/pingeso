@@ -60,8 +60,11 @@
                     <div class="panel-footer">
                         <button type="button" class="btn btn-default" data-toggle="modal"
                             data-target="#resumen" v-on:click="resumenAbierto = true">Ver resumen</button>
-                        <button v-if="nuevo" type="button" class="btn btn-success" v-on:click="enviarDeclaracion">Enviar</button>
-                        <button v-else type="button" class="btn btn-success" v-on:click="actualizarDeclaracion">Guardar cambios</button>
+                        <button v-if="nuevo" type="button" class="btn btn-success" v-on:click="enviar">Enviar</button>
+                        <else v-else>
+                            <button type="button" class="btn btn-info" v-on:click="actualizar()">Guardar cambios</button>
+                            <button type="button" class="btn btn-success" v-on:click="aprobar()">Aprobar</button>
+                        </else>
                     </div>
                 </div>
             </div>
@@ -123,7 +126,6 @@
                 this.declaraciones[6] = declaracion.educacion_continua_comp || [];
                 this.cargando = false;
                 this.nuevo = false;
-                console.log(this.inicial);
             })
             .catch(e => {
                 console.log(e);
@@ -142,14 +144,19 @@
                     educacion_continua_comp: this.declaraciones[6]
                 }
             },
-            enviarDeclaracion: function() {
+            enviar: function() {
                 axios.post('/api/declaraciones', this.getBody())
                 .then(response => { console.log("Se han registado los datos!") })
                 .catch(e => { console.log(e) });
             },
-            actualizarDeclaracion: function() {
+            actualizar: function() {
                 axios.put('/api/declaraciones/' + this.id, this.getBody())
                 .then(response => { console.log("Se han actualizado los datos!") })
+                .catch(e => { console.log(e) });
+            },
+            aprobar: function(estado) {
+                axios.get('/api/declaraciones/' + this.id + '/aprobar')
+                .then(response => { console.log("Se han aprobado la declaración!") })
                 .catch(e => { console.log(e) });
             }
         }

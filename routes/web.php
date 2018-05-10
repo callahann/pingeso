@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/declaraciones/formulario', function () {
-    return view('declaracion.formulario')->with(['id' => null]);
+    return view('declaracion.formulario')->with(['id' => -1]);
 });
 
 Route::name('formulario')->get('/declaraciones/{declaracion}/formulario', 'DeclaracionController@edit');
