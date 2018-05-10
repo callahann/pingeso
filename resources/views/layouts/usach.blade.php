@@ -23,7 +23,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse" style="padding-left: 10em">
                     <!-- Left Side Of Navbar -->
                     <a href="/" class="btn navbar-btn @if($pagina == 'inicio')active @endif" role="button">Inicio</a>
-                    <a href="/formulario" class="btn navbar-btn @if($pagina == 'form')active @endif" role="button">Formulario</a>
+                    <a href="/declaraciones" class="btn navbar-btn @if($pagina == 'form')active @endif" role="button">Informe Actividades</a>
                 </div>
             </div>
         </nav>

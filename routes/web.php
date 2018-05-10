@@ -20,6 +20,7 @@ Route::get('/declaraciones/formulario', function () {
 });
 
 Route::name('formulario')->get('/declaraciones/{declaracion}/formulario', 'DeclaracionController@edit');
+Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
 
 Route::resource('declaraciones', 'DeclaracionController');
 Route::resource('apelaciones', 'ApelacionController');
