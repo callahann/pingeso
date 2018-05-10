@@ -52,8 +52,9 @@ class ApelacionController extends Controller
      * @param  \App\Apelacion  $apelacion
      * @return \Illuminate\Http\Response
      */
-    public function show(Apelacion $apelacion)
+    public function show($id)
     {
+        $apelacion = Apelacion::findOrFail($id);
         return $apelacion;
     }
 
