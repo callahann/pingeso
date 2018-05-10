@@ -39,13 +39,6 @@ class DeclaracionController extends Controller
     {
         $data = $request->validate([
             'periodo' => 'required',
-            'docencia_comp' => 'required',
-            'investigacion_comp' => 'required',
-            'asistencia_comp' => 'required',
-            'perfeccionamiento_comp' => 'required',
-            'administracion_comp' => 'required',
-            'extension_comp' => 'required',
-            'educacion_continua_comp' => 'required',
         ]);
 
         /*$data->merge([
@@ -92,20 +85,6 @@ class DeclaracionController extends Controller
     {
         $data = $request->validate([
             'periodo' => 'required',
-            'docencia_comp' => 'required',
-            'docencia_real' => 'required',
-            'investigacion_comp' => 'required',
-            'investigacion_real' => 'required',
-            'asistencia_comp' => 'required',
-            'asistencia_real' => 'required',
-            'perfeccionamiento_comp' => 'required',
-            'perfeccionamiento_real' => 'required',
-            'administracion_comp' => 'required',
-            'administracion_real' => 'required',
-            'extension_comp' => 'required',
-            'extension_real' => 'required',
-            'educacion_continua_comp' => 'required',
-            'educacion_continua_real' => 'required',
         ]);
 
         //$data->merge(['id_usuario' => Auth::user()->id]);
