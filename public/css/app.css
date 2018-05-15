@@ -1,4 +1,8 @@
-@import url(https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css);.navbar {
+@import url(https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css);textarea {
+  resize: vertical;
+}
+
+.navbar {
   background-color: #002F6C !important;
   border-bottom: 3px solid #EA7600 !important;
   margin-bottom: 2em !important;

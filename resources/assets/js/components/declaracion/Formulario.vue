@@ -1,99 +1,98 @@
 <template>
-    <div>
-        <div class="col-md-10 col-md-offset-1">
-            <div v-if="error" class="alert alert-danger">
-                <a href="#" class="close" aria-label="close" v-on:click="error = false">&times;</a>
-                <strong>Oh no!</strong> Ha ocurrido un error.
+    <div class="col-md-12">
+        <div v-if="error" class="alert alert-danger">
+            <a href="#" class="close" aria-label="close" v-on:click="error = false">&times;</a>
+            <strong>Oh no!</strong> Ha ocurrido un error.
+        </div>
+        <div v-if="correcto" class="alert alert-success">
+            <a href="#" class="close" aria-label="close" v-on:click="correcto = false">&times;</a>
+            <strong>Bien!</strong> Se han guardado los cambios.
+        </div>
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-title text-center">Datos personales</div>
+                <div class="panel-body">
+                    <datos-personales v-bind:editable="false"
+                        v-on:actualizar="datosPersonales = $event"></datos-personales>
+                </div>
             </div>
-            <div v-if="correcto" class="alert alert-success">
-                <a href="#" class="close" aria-label="close" v-on:click="correcto = false">&times;</a>
-                <strong>Bien!</strong> Se han guardado los cambios.
-            </div>
-            <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-heading panel-title text-center">Datos personales</div>
-                    <div class="panel-body">
-                        <datos-personales v-bind:editable="false"
-                            v-on:actualizar="datosPersonales = $event"></datos-personales>
+        </div>
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading panel-tabs">
+                    <ul class="nav nav-tabs text-center">
+                        <li class="active"><a data-toggle="tab" href="#docencia">Docencia</a></li>
+                        <li><a data-toggle="tab" href="#invdes">Investigación y desarrollo</a></li>
+                        <li><a data-toggle="tab" href="#asistec">Asistencia técnica</a></li>
+                        <li><a data-toggle="tab" href="#perf">Perfeccionamiento</a></li>
+                        <li><a data-toggle="tab" href="#adminacad">Administración académica</a></li>
+                        <li><a data-toggle="tab" href="#extension">Extensión</a></li>
+                        <li><a data-toggle="tab" href="#educont">Educación continua</a></li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div id="docencia" class="tab-pane fade in active">
+                        <lista-items :inicial="declaraciones[0]" :cargando="cargando"
+                            v-on:actualizar="declaraciones[0] = $event"></lista-items>
+                    </div>
+                    <div id="invdes" class="tab-pane fade">
+                        <lista-items :inicial="declaraciones[1]" :cargando="cargando"
+                                v-on:actualizar="declaraciones[1] = $event"></lista-items>
+                    </div>
+                    <div id="asistec" class="tab-pane fade">
+                        <lista-items :inicial="declaraciones[2]" :cargando="cargando"
+                                v-on:actualizar="declaraciones[2] = $event"></lista-items>
+                    </div>
+                    <div id="perf" class="tab-pane fade">
+                        <lista-items :inicial="declaraciones[3]" :cargando="cargando"
+                                v-on:actualizar="declaraciones[3] = $event"></lista-items>
+                    </div>
+                    <div id="adminacad" class="tab-pane fade">
+                        <lista-items :inicial="declaraciones[4]" :cargando="cargando"
+                                v-on:actualizar="declaraciones[4] = $event"></lista-items>
+                    </div>
+                    <div id="extension" class="tab-pane fade">
+                        <lista-items :inicial="declaraciones[5]" :cargando="cargando"
+                                v-on:actualizar="declaraciones[5] = $event"></lista-items>
+                    </div>
+                    <div id="educont" class="tab-pane fade">
+                        <lista-items :inicial="declaraciones[6]" :cargando="cargando"
+                                v-on:actualizar="declaraciones[6] = $event"></lista-items>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-heading panel-tabs">
-                        <ul class="nav nav-tabs text-center">
-                            <li class="active"><a data-toggle="tab" href="#docencia">Docencia</a></li>
-                            <li><a data-toggle="tab" href="#invdes">Investigación y desarrollo</a></li>
-                            <li><a data-toggle="tab" href="#asistec">Asistencia técnica</a></li>
-                            <li><a data-toggle="tab" href="#perf">Perfeccionamiento</a></li>
-                            <li><a data-toggle="tab" href="#adminacad">Administración académica</a></li>
-                            <li><a data-toggle="tab" href="#extension">Extensión</a></li>
-                            <li><a data-toggle="tab" href="#educont">Educación continua</a></li>
-                        </ul>
-                    </div>
-                    <div class="tab-content">
-                        <div id="docencia" class="tab-pane fade in active">
-                            <lista-items :inicial="declaraciones[0]" :cargando="cargando"
-                                v-on:actualizar="declaraciones[0] = $event"></lista-items>
-                        </div>
-                        <div id="invdes" class="tab-pane fade">
-                            <lista-items :inicial="declaraciones[1]" :cargando="cargando"
-                                 v-on:actualizar="declaraciones[1] = $event"></lista-items>
-                        </div>
-                        <div id="asistec" class="tab-pane fade">
-                            <lista-items :inicial="declaraciones[2]" :cargando="cargando"
-                                 v-on:actualizar="declaraciones[2] = $event"></lista-items>
-                        </div>
-                        <div id="perf" class="tab-pane fade">
-                            <lista-items :inicial="declaraciones[3]" :cargando="cargando"
-                                 v-on:actualizar="declaraciones[3] = $event"></lista-items>
-                        </div>
-                        <div id="adminacad" class="tab-pane fade">
-                            <lista-items :inicial="declaraciones[4]" :cargando="cargando"
-                                 v-on:actualizar="declaraciones[4] = $event"></lista-items>
-                        </div>
-                        <div id="extension" class="tab-pane fade">
-                            <lista-items :inicial="declaraciones[5]" :cargando="cargando"
-                                 v-on:actualizar="declaraciones[5] = $event"></lista-items>
-                        </div>
-                        <div id="educont" class="tab-pane fade">
-                            <lista-items :inicial="declaraciones[6]" :cargando="cargando"
-                                 v-on:actualizar="declaraciones[6] = $event"></lista-items>
-                        </div>
-                    </div>
+        </div>
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-default" data-toggle="modal"
+                        data-target="#resumen" v-on:click="resumenAbierto = true">Ver resumen</button>
+                    <button v-if="nuevo" type="button" class="btn btn-success" v-on:click="enviar">Enviar</button>
+                    <else v-else>
+                        <button type="button" class="btn btn-info" v-on:click="actualizar()">Guardar cambios</button>
+                        <button type="button" class="btn btn-success" v-on:click="aprobar()">Aprobar</button>
+                    </else>
                 </div>
             </div>
-            <div class="row">
-                <div class="panel panel-default">
-                    <div class="panel-footer">
-                        <button type="button" class="btn btn-default" data-toggle="modal"
-                            data-target="#resumen" v-on:click="resumenAbierto = true">Ver resumen</button>
-                        <button v-if="nuevo" type="button" class="btn btn-success" v-on:click="enviar">Enviar</button>
-                        <else v-else>
-                            <button type="button" class="btn btn-info" v-on:click="actualizar()">Guardar cambios</button>
-                            <button type="button" class="btn btn-success" v-on:click="aprobar()">Aprobar</button>
-                        </else>
+        </div>
+        <!-- Modal -->
+        <div id="resumen" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                            v-on:click="resumenAbierto = false">&times;</button>
+                        <h4 class="modal-title">Resumen de declaraciones</h4>
                     </div>
-                </div>
-            </div>
-            <!-- Modal -->
-            <div id="resumen" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Resumen de declaraciones</h4>
-                        </div>
-                        <div class="modal-body">
-                            <resumen-declaraciones
-                                v-bind:declaraciones="declaraciones"
-                                v-bind:abierto="resumenAbierto"></resumen-declaraciones>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal"
-                                v-on:click="resumenAbierto = false">Cerrar</button>
-                        </div>
+                    <div class="modal-body">
+                        <resumen-declaraciones
+                            v-bind:declaraciones="declaraciones"
+                            v-bind:abierto="resumenAbierto"></resumen-declaraciones>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                            v-on:click="resumenAbierto = false">Cerrar</button>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,10 @@ $celeste: #007FC6;
 $gris: #B1B1B1;
 $gris-oscuro: #404040;
 
+textarea {
+  resize: vertical;
+}
+
 .navbar {
   background-color: $azul !important;
   border-bottom: 3px solid $naranjo !important;

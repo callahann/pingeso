@@ -5,58 +5,68 @@
                 <h3>No se han agregado items aún. Presione el botón "+"</h3>
             </div>
             <div v-else>
-                <div class="items-heading text-center">
-                    <!-- Primera fila -->
-                    <div class="col-md-3"></div>
-                    <div class="col-md-4">
-                        <h4>Primer semestre</h4>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>Segundo semestre</h4>
-                    </div>
-                    <div class="col-md-1"></div>
-                    <!-- Segunda fila -->
-                    <div class="col-md-3">
-                        <h4>Descripción</h4>
-                    </div>
-                    <div class="col-md-2">
-                        <h4>Hrs. semana</h4>
-                    </div>
-                    <div class="col-md-2">
-                        <h4>Hrs. semestre</h4>
-                    </div>
-                    <div class="col-md-2">
-                        <h4>Hrs. semana</h4>
-                    </div>
-                    <div class="col-md-2">
-                        <h4>Hrs. semestre</h4>
-                    </div>
-                    <div class="col-md-1"></div>
-                </div>
-                <div v-for="(item, index) in items" v-bind:key="item.id">
-                    <div class="row panel-body">
-                        <div class="col-md-3">
-                            <input class="form-control" v-model="item.descripcion">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemana">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemestre">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemana">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemestre">
-                        </div>
-                        <button type="button" class="btn btn-danger col-md-1"
-                            v-on:click="quitarItem(index)"
-                            v-bind:class="{ disabled: items.length == 1 }">
-                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center" rowspan="2">
+                                Descripción
+                                <a class="badge" data-toggle="tooltip" data-placement="top"
+                                    title="Ingrese una breve descripción de la tarea">?</a>
+                            </th>
+                            <th class="text-center" colspan="2">Primer semestre</th>
+                            <th class="text-center" colspan="2">Segundo semestre</th>
+                            <th class="text-center" rowspan="2">
+                                Observaciones
+                                <a class="badge" data-toggle="tooltip" data-placement="top"
+                                    title="Agregue una observación respecto a esta tarea para presentarla al Director de Departamento">?</a>
+                            </th>
+                            <th rowspan="2"></th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Hrs. semana</th>
+                            <th class="text-center">Hrs. semestre</th>
+                            <th class="text-center">Hrs. semana</th>
+                            <th class="text-center">Hrs. semestre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in items" v-bind:key="item.id">
+                            <td class="col-md-3">
+                                <input class="form-control" v-model="item.descripcion">
+                            </td>
+                            <td class="col-md-1">
+                                <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemana">
+                            </td>
+                            <td class="col-md-1">
+                                <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemestre">
+                            </td>
+                            <td class="col-md-1">
+                                <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemana">
+                            </td>
+                            <td class="col-md-1">
+                                <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemestre">
+                            </td>
+                            <td class="col-md-4">
+                                <textarea class="form-control" rows=1 v-model="item.observaciones"></textarea>
+                            </td>
+                            <td class="col-md-1">
+                                <button type="button" class="btn btn-block btn-danger"
+                                    v-on:click="quitarItem(index)"
+                                    v-bind:class="{ disabled: items.length == 1 }">
+                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">TOTAL</th>
+                            <th class="text-center">{{ totales.primero.horasSemana }}</th>
+                            <th class="text-center">{{ totales.primero.horasSemestre }}</th>
+                            <th class="text-center">{{ totales.segundo.horasSemana }}</th>
+                            <th class="text-center">{{ totales.segundo.horasSemestre }}</th>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="panel-footer text-right">
@@ -91,7 +101,8 @@
                         segundo: {
                             horasSemana: 1,
                             horasSemestre: 1,
-                        }
+                        },
+                        observaciones: ''
                     }
                 );
             },
@@ -105,6 +116,32 @@
             },
             items: function(newItems) {
                 this.$emit('actualizar', newItems);
+                Vue.nextTick(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+            }
+        },
+        computed: {
+            totales: function() {
+                let totales = {
+                    primero: {
+                        horasSemana: 0,
+                        horasSemestre: 0
+                    },
+                    segundo: {
+                        horasSemana: 0,
+                        horasSemestre: 0
+                    }
+                };
+
+                this.items.forEach(function(item) {
+                    totales.primero.horasSemana += item.primero.horasSemana;
+                    totales.primero.horasSemestre += item.primero.horasSemestre;
+                    totales.segundo.horasSemana += item.segundo.horasSemana;
+                    totales.segundo.horasSemestre += item.segundo.horasSemestre;
+                });
+
+                return totales;
             }
         }
     }
