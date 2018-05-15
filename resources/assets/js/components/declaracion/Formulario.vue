@@ -164,7 +164,7 @@
             actualizar: function() {
                 axios.put('/api/declaraciones/' + this.id, this.getBody())
                 .then(response => { 
-                    console.log("Se han actualizado los datos!");
+                    console.log("Se han actualizado los datos!!");
                     this.correcto = true;
                 })
                 .catch(e => { console.log(e); this.error = true });
