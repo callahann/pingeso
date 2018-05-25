@@ -29,7 +29,7 @@
 </template>
 <script>
     export default {
-        props: ['declaraciones', 'abierto'],
+        props: ['informe', 'abierto'],
         data: function() {
             return {
                 posDec: 10, // Para redondear con un decimal. NO CAMBIAR
@@ -78,21 +78,25 @@
         },
         methods: {
             actualizarResumen: function() {
+                var index = 0;
                 this.totales.semanal = 0;
                 this.totales.anual = 0;
 
-                this.declaraciones.forEach((declaracion, index) => {
-                    this.resumenes[index].horasSemana = 0;
-                    this.resumenes[index].horasAnio = 0;
+                for (var itemKey in this.informe) {
+                    if (this.informe[itemKey] instanceof Array) {
+                        this.resumenes[index].horasSemana = 0;
+                        this.resumenes[index].horasAnio = 0;
 
-                    declaracion.forEach((item) => {
-                        this.resumenes[index].horasSemana += (item.primero.horasSemana + item.segundo.horasSemana) / 2;
-                        this.resumenes[index].horasAnio += item.primero.horasSemestre + item.segundo.horasSemestre;
-                    });
+                        this.informe[itemKey].forEach((item) => {
+                            this.resumenes[index].horasSemana += (item.primero.horasSemana + item.segundo.horasSemana) / 2;
+                            this.resumenes[index].horasAnio += item.primero.horasSemestre + item.segundo.horasSemestre;
+                        });
 
-                    this.totales.semanal += this.resumenes[index].horasSemana;
-                    this.totales.anual += this.resumenes[index].horasAnio;
-                });
+                        this.totales.semanal += this.resumenes[index].horasSemana;
+                        this.totales.anual += this.resumenes[index].horasAnio;
+                        index++;
+                    }
+                }
             }
         },
         watch: {

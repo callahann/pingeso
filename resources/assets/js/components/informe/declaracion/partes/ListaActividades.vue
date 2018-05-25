@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="panel-body">
-            <div v-if="items.length == 0" class="text-center">
-                <h3>No se han agregado items aún. Presione el botón "+"</h3>
+            <div v-if="actividades.length == 0" class="text-center">
+                <h3>No se han agregado actividades aún. Presione el botón "+"</h3>
             </div>
             <div v-else>
                 <table class="table table-striped">
@@ -11,7 +11,7 @@
                             <th class="text-center" rowspan="2">
                                 Descripción
                                 <a class="badge" data-toggle="tooltip" data-placement="top"
-                                    title="Ingrese una breve descripción de la tarea">?</a>
+                                    title="Breve descripción de la tarea a realizar">?</a>
                             </th>
                             <th class="text-center" colspan="2">Primer semestre</th>
                             <th class="text-center" colspan="2">Segundo semestre</th>
@@ -30,29 +30,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in items" v-bind:key="item.id">
+                        <tr v-for="(actividad, index) in actividades" v-bind:key="actividad.id">
                             <td class="col-md-3">
-                                <input class="form-control" v-model="item.descripcion">
+                                <input class="form-control" v-model="actividad.descripcion">
                             </td>
                             <td class="col-md-1">
-                                <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemana">
+                                <input type="number" class="form-control" min=1 v-model.number="actividad.primero.horasSemana">
                             </td>
                             <td class="col-md-1">
-                                <input type="number" class="form-control" min=1 v-model.number="item.primero.horasSemestre">
+                                <input type="number" class="form-control" min=1 v-model.number="actividad.primero.horasSemestre">
                             </td>
                             <td class="col-md-1">
-                                <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemana">
+                                <input type="number" class="form-control" min=1 v-model.number="actividad.segundo.horasSemana">
                             </td>
                             <td class="col-md-1">
-                                <input type="number" class="form-control" min=1 v-model.number="item.segundo.horasSemestre">
+                                <input type="number" class="form-control" min=1 v-model.number="actividad.segundo.horasSemestre">
                             </td>
                             <td class="col-md-4">
-                                <textarea class="form-control" rows=1 v-model="item.observaciones"></textarea>
+                                <textarea class="form-control" rows=1 v-model="actividad.observaciones"></textarea>
                             </td>
                             <td class="col-md-1">
                                 <button type="button" class="btn btn-block btn-danger"
-                                    v-on:click="quitarItem(index)"
-                                    v-bind:class="{ disabled: items.length == 1 }">
+                                    v-on:click="quitarActividad(index)">
                                     <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                                 </button>
                             </td>
@@ -70,7 +69,7 @@
             </div>
         </div>
         <div class="panel-footer text-right">
-            <button type="button" class="btn btn-success" v-on:click="nuevoItem">
+            <button type="button" class="btn btn-success" v-on:click="agregarActividad">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
         </div>
@@ -78,44 +77,41 @@
 </template>
 <script>
     export default {
-        props: ['inicial', 'cargando'],
+        props: ['previo'],
         data: function () {
             return {
                 id: 1,
-                items: []
+                actividades: []
             }
         },
-        mounted: function() {
-            this.items = this.inicial;
+        created: function() {
+            Object.assign(this.actividades, this.previo);
         },
         methods: {
             nuevoItem: function() {
-                this.items.push(
-                    {
-                        id: this.id++,
-                        descripcion: '',
-                        primero: {
-                            horasSemana: 1,
-                            horasSemestre: 1,
-                        },
-                        segundo: {
-                            horasSemana: 1,
-                            horasSemestre: 1,
-                        },
-                        observaciones: ''
-                    }
-                );
+                return {
+                    primero: {
+                        horasSemana: 0,
+                        horasSemestre: 0,
+                    },
+                    segundo: {
+                        horasSemana: 0,
+                        horasSemestre: 0,
+                    },
+                }
             },
-            quitarItem: function(index) {
-                this.items.splice(index, 1);
+            agregarActividad: function() {
+                let item = this.nuevoItem();
+                item['id'] = this.id++;
+                this.actividades.push(item);
+            },
+            quitarActividad: function(index) {
+                this.actividades.splice(index, 1);
             }
         },
         watch: {
-            cargando: function(newValue) {
-                if(!newValue) this.items = this.inicial;
-            },
-            items: function(newItems) {
-                this.$emit('actualizar', newItems);
+            actividades: function(newActividades) {
+                this.$emit('actualizar', newActividades);
                 Vue.nextTick(function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 });
@@ -123,22 +119,13 @@
         },
         computed: {
             totales: function() {
-                let totales = {
-                    primero: {
-                        horasSemana: 0,
-                        horasSemestre: 0
-                    },
-                    segundo: {
-                        horasSemana: 0,
-                        horasSemestre: 0
-                    }
-                };
-
-                this.items.forEach(function(item) {
-                    totales.primero.horasSemana += item.primero.horasSemana;
-                    totales.primero.horasSemestre += item.primero.horasSemestre;
-                    totales.segundo.horasSemana += item.segundo.horasSemana;
-                    totales.segundo.horasSemestre += item.segundo.horasSemestre;
+                let totales = this.nuevoItem();
+                
+                this.actividades.forEach(function(actividad) {
+                    totales.primero.horasSemana += actividad.primero.horasSemana;
+                    totales.primero.horasSemestre += actividad.primero.horasSemestre;
+                    totales.segundo.horasSemana += actividad.segundo.horasSemana;
+                    totales.segundo.horasSemestre += actividad.segundo.horasSemestre;
                 });
 
                 return totales;

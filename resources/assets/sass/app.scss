@@ -25,17 +25,18 @@ textarea {
 
   &-btn {
     color: white;
+    
+    &.router-link-active,
+    &.router-link-exact-active {
+      background-color: $celeste;
+      color: white;
+      box-shadow: none;
+    }
   }
 
   &-btn:hover {
     background-color: $gris;
     color: white;
-  }
-
-  &-btn.active {
-    background-color: $celeste;
-    color: white;
-    box-shadow: none;
   }
 }
 
@@ -64,17 +65,18 @@ textarea {
       background-color: transparent;
       color: white;
       border: 0 !important;
+
+      &.router-link-active,
+      &.router-link-exact-active {
+        background-color: white;
+        color: $gris-oscuro;
+        box-shadow: none;
+      }
     }
   
     a:hover {
       background-color: $celeste !important;
       color: white !important;
-    }
-  
-    a.active {
-      background-color: white;
-      color: $gris-oscuro;
-      box-shadow: none;
     }
   }
 }

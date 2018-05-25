@@ -16,8 +16,7 @@ class DeclaracionController extends Controller
      */
     public function index()
     {
-        $declaraciones = Declaracion::where('estado', '=', 0)->simplePaginate(5);
-        return view('declaracion.lista')->with(['declaraciones' => $declaraciones]);
+        return Declaracion::where('estado', '=', 0)->get();
     }
 
     public function indexDec(){

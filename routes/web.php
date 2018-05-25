@@ -11,21 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/declaraciones/formulario', function () {
-    return view('declaracion.formulario')->with(['id' => -1]);
-});
-
-Route::name('formulario')->get('/declaraciones/{declaracion}/formulario', 'DeclaracionController@edit');
-Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
-
-Route::resource('declaraciones', 'DeclaracionController');
-Route::resource('apelaciones', 'ApelacionController');
-Route::resource('despartamentos', 'DepartamentoController');
-Route::resource('facultades', 'FacultadController');
-Route::resource('formulas', 'FormulaController');
-Route::resource('roles', 'RolController');
-
+Route::get('/{any}', function() {
+    return view('spa');
+})->where('any', '.*');
