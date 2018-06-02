@@ -2,6 +2,10 @@
   resize: vertical;
 }
 
+td {
+  vertical-align: middle !important;
+}
+
 .navbar {
   background-color: #002F6C !important;
   border-bottom: 3px solid #EA7600 !important;

@@ -18,20 +18,13 @@ class CreateDeclaracionsTable extends Migration
             $table->unsignedInteger('id_formula')->nullable();
             $table->unsignedInteger('id_usuario')->nullable();
             $table->integer('periodo');
-            $table->json('docencia_comp')->nullable();
-            $table->json('docencia_real')->nullable();
-            $table->json('investigacion_comp')->nullable();
-            $table->json('investigacion_real')->nullable();
-            $table->json('asistencia_comp')->nullable();
-            $table->json('asistencia_real')->nullable();
-            $table->json('perfeccionamiento_comp')->nullable();
-            $table->json('perfeccionamiento_real')->nullable();
-            $table->json('administracion_comp')->nullable();
-            $table->json('administracion_real')->nullable();
-            $table->json('extension_comp')->nullable();
-            $table->json('extension_real')->nullable();
-            $table->json('educacion_continua_comp')->nullable();
-            $table->json('educacion_continua_real')->nullable();
+            $table->json('item_docencia')->nullable();
+            $table->json('item_investigacion')->nullable();
+            $table->json('item_asistencia')->nullable();
+            $table->json('item_perfeccionamiento')->nullable();
+            $table->json('item_administracion')->nullable();
+            $table->json('item_extension')->nullable();
+            $table->json('item_educacion_continua')->nullable();
             $table->integer('estado')->default(0);
             $table->timestamps();
             /*
