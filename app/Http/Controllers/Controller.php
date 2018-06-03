@@ -14,21 +14,21 @@ class Controller extends BaseController
     protected function creationMessage() 
     {
 
-        return response()->json('Se ha creado correctamente');
+        return response()->json('Se ha creado correctamente', 201);
     }
 
     protected function updateMessage()
     {
-        return response()->json('Se ha actualizado correctamente');
+        return response()->json('Se ha actualizado correctamente', 200);
     }
 
     protected function deleteMessage()
     {
-        return response()->json('Se ha borrado correctamente');
+        return response()->json('Se ha borrado correctamente', 200);
     }
 
     protected function notDefined()
     {
-        return response()->json('Función no definida');
+        return response()->json('Función no definida', 404);
     }
 }

@@ -22,6 +22,7 @@ Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approv
 
 Route::get('/descripciones/{tipo}', 'DescripcionController@all');
 
+Route::resource('usuarios', 'UserController')->except(['create','edit']);
 Route::resource('apelaciones', 'ApelacionController');
 Route::resource('despartamentos', 'DepartamentoController');
 Route::resource('facultades', 'FacultadController');
