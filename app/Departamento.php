@@ -3,14 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Departamento extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [
         'id_facultad',
-        'nombre',
-        'codigo',
-        'nombre_corto',
+        'nombre'
     ];
 
     protected function facultad()

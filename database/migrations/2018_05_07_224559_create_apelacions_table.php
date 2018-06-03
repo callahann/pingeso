@@ -19,6 +19,7 @@ class CreateApelacionsTable extends Migration
             $table->text('comentario');
             $table->string('nombre_archivo')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('id_declaracion')
                 ->references('id')

@@ -18,6 +18,7 @@ class CreateFormulasTable extends Migration
             $table->string('nombre');
             $table->text('detalle');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,3 +32,4 @@ class CreateFormulasTable extends Migration
         Schema::dropIfExists('formulas');
     }
 }
+

@@ -34,6 +34,7 @@ class CreateDeclaracionsTable extends Migration
             $table->json('educacion_continua_real')->nullable();
             $table->integer('estado')->default(0);
             $table->timestamps();
+            $table->softDeletes();
             /*
             $table->foreign('id_formula')
                 ->references('id')
