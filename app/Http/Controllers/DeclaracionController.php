@@ -51,7 +51,7 @@ class DeclaracionController extends Controller
 
         $declaracion = Declaracion::create($request->all());
 
-        return redirect('/declaraciones');
+        return $declaracion;
     }
 
     /**

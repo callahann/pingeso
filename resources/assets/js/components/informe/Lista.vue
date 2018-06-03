@@ -7,7 +7,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 Informes de actividades
-                <router-link class="btn btn-xs btn-success pull-right" :to="{ name: 'nuevo-informe' }">     
+                <router-link class="btn btn-xs btn-success pull-right" :to="{ name: 'nuevo-informe'}">     
                     Ingresar nuevo informe <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </router-link>
             </div>
@@ -34,7 +34,7 @@
                             <td class="col-md-4">{{ informe.periodo }}</td>
                             <td class="col-md-6">{{ informe.created_at }}</td>
                             <td class="col-md-2">
-                                <router-link class="btn btn-xs btn-success btn-block" :to="{ name: 'editar-informe', params: { id: informe.id } }">     
+                                <router-link class="btn btn-xs btn-success btn-block" :to="{ name: 'declarar-realizado', params: { id: informe.id }}">     
                                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                 </router-link>
                             </td>
