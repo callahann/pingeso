@@ -35,12 +35,11 @@ class DepartamentoController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'id_facultad',
-            'nombre',
-            'codigo',
-            'nombre_corto',
-        ]);
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
 
         $departamento = Departamento::create($data);
 
@@ -80,13 +79,13 @@ class DepartamentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $departamento = Departamento::finOrFail($id);
-        $data = $request->validate([
-            'id_facultad',
-            'nombre',
-            'codigo',
-            'nombre_corto',
-        ]);
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $departamento = Departamento::findOrFail($id);
 
         $departamento->fill($data);
         $departamento->save();
@@ -103,8 +102,16 @@ class DepartamentoController extends Controller
     public function destroy($id)
     {
         $departamento = Departamento::finOrFail($id);
-        $departamento->deleted();
+        $departamento->delete();
 
         return $this->deleteMessage();
+    }
+
+    protected function rules()
+    {
+        return [
+            'id_formula' => 'required',
+            'nombre' => 'required'
+        ];
     }
 }

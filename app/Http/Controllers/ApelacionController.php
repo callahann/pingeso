@@ -35,11 +35,11 @@ class ApelacionController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'id_declaracion' => 'required',
-            'comentario' => 'required',
-            'nombre_archivo' => 'file',
-        ]);
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
 
         $apelacion = Apelacion::create($data);
 
@@ -76,13 +76,15 @@ class ApelacionController extends Controller
      * @param  \App\Apelacion  $apelacion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Apelacion $apelacion)
+    public function update(Request $request, $id)
     {
-        $data = $request->validate([
-            'id_declaracion' => 'required',
-            'comentario' => 'required',
-            'nombre_archivo' => 'file',
-        ]);
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $apelacion = Apelacion::find($id);
 
         $apelacion->fill($data);
         $apelacion->save();
@@ -102,4 +104,13 @@ class ApelacionController extends Controller
 
         return $this->deleteMessage();
     }
+
+    protected function rules()
+    {
+        return [
+            'id_declaracion' => 'required',
+            'comentario' => 'required',
+            'nombre_archivo' => 'file',
+        ];
+    }   
 }

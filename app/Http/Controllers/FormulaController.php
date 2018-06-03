@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Formula;
 use Illuminate\Http\Request;
+use Validator;
 
 class FormulaController extends Controller
 {
@@ -35,13 +36,13 @@ class FormulaController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), $this->rules());
 
-        $data = $request->validate([
-            'nombre' => 'required',
-            'detalle' => 'required',
-        ]);
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
 
-        $formula = Formula::create($data);
+        $formula = Formula::create($request->all());
 
         return $this->creationMessage();
     }
@@ -79,11 +80,13 @@ class FormulaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
         $formula = Formula::findOrFail($id);
-        $data = $request->validate([
-            'nombre' => 'required',
-            'detalle' => 'required',
-        ]);
 
         $formula->fill($data);
         $formula->save();
@@ -103,5 +106,13 @@ class FormulaController extends Controller
         $formula->delete();
 
         return $this->deletedMessage();
+    }
+
+    protected function rules()
+    {
+        return [
+            'nombre' => 'required',
+            'detalle' => 'required',
+        ];
     }
 }
