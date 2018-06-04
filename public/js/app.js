@@ -11877,6 +11877,8 @@ process.umask = function() { return 0; };
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -12283,6 +12285,11 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -12297,13 +12304,34 @@ module.exports = Cancel;
             resumenAbierto: false,
             informe: {
                 periodo: 2018,
-                item_docencia: [],
-                item_investigacion: [],
-                item_asistencia: [],
-                item_perfeccionamiento: [],
-                item_administracion: [],
-                item_extension: [],
-                item_educacion_continua: []
+                item_docencia: {
+                    actividades: [],
+                    calificacion: 1
+                },
+                item_investigacion: {
+                    actividades: [],
+                    calificacion: 1
+                },
+                item_asistencia: {
+                    actividades: [],
+                    calificacion: 1
+                },
+                item_perfeccionamiento: {
+                    actividades: [],
+                    calificacion: 1
+                },
+                item_administracion: {
+                    actividades: [],
+                    calificacion: 1
+                },
+                item_extension: {
+                    actividades: [],
+                    calificacion: 1
+                },
+                item_educacion_continua: {
+                    actividades: [],
+                    calificacion: 1
+                }
             },
             cargando: true,
             mensaje: 0
@@ -12368,9 +12396,7 @@ module.exports = Cancel;
         volver: function volver(mensaje) {
             this.$router.push({
                 name: 'informes',
-                params: {
-                    mensaje: mensaje
-                }
+                params: mensaje === undefined ? {} : { mensaje: mensaje }
             });
             return mensaje;
         }
@@ -12527,26 +12553,51 @@ module.exports = Cancel;
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    props: ['informe'],
+    props: ['informe', 'etapa'],
     data: function data() {
         return {
-            posDec: 10, // Para redondear con un decimal. NO CAMBIAR
+            c: 20, // Para redondear con dos decimales. NO CAMBIAR
             resumenes: {},
             totales: {
                 comprometido: {
                     semanal: 0,
-                    anual: 0
+                    anual: 0,
+                    equivalente: 0
                 },
                 realizado: {
                     semanal: 0,
                     anual: 0,
                     equivalente: 0
                 }
-            }
+            },
+            rangos: [{
+                base: 0.01,
+                tope: 1.49,
+                leyenda: 'Insuficiente',
+                color: 'red'
+            }, {
+                base: 1.50,
+                tope: 1.99,
+                leyenda: 'Condicional',
+                color: 'orange'
+            }, {
+                base: 2.00,
+                tope: 2.79,
+                leyenda: 'Aceptable',
+                color: 'yellow'
+            }, {
+                base: 2.80,
+                tope: 3.69,
+                leyenda: 'Bueno',
+                color: 'green'
+            }, {
+                base: 3.70,
+                tope: 7.00,
+                leyenda: 'Sobresaliente',
+                color: 'blue'
+            }]
         };
     },
     created: function created() {
@@ -12557,7 +12608,8 @@ module.exports = Cancel;
                 this.resumenes[itemKey] = {
                     comprometido: {
                         horasSemana: 0,
-                        horasAnio: 0
+                        horasAnio: 0,
+                        equivalente: 0
                     },
                     realizado: {
                         horasSemana: 0,
@@ -12567,18 +12619,39 @@ module.exports = Cancel;
                 };
 
                 ['comprometido', 'realizado'].forEach(function (parte) {
-                    _this.informe[itemKey].forEach(function (item) {
-                        _this.resumenes[itemKey][parte].horasSemana += (item[parte].primero.horasSemana + item[parte].segundo.horasSemana) / 2;
-                        _this.resumenes[itemKey][parte].horasAnio += item[parte].primero.horasSemestre + item[parte].segundo.horasSemestre;
+                    _this.informe[itemKey].actividades.forEach(function (actividad) {
+                        _this.resumenes[itemKey][parte].horasSemana += (actividad[parte].primero.horasSemana + actividad[parte].segundo.horasSemana) / 2;
+                        _this.resumenes[itemKey][parte].horasAnio += actividad[parte].primero.horasSemestre + actividad[parte].segundo.horasSemestre;
                     });
 
                     _this.totales[parte].semanal += _this.resumenes[itemKey][parte].horasSemana;
                     _this.totales[parte].anual += _this.resumenes[itemKey][parte].horasAnio;
-                });
 
-                this.resumenes[itemKey].realizado.equivalente = (this.resumenes[itemKey].realizado.horasSemana * 36 + this.resumenes[itemKey].realizado.horasAnio) / 44;
-                this.totales.realizado.equivalente += this.resumenes[itemKey].realizado.equivalente;
+                    _this.resumenes[itemKey][parte].equivalente = _this.equivalentes(_this.resumenes[itemKey][parte].horasSemana, _this.resumenes[itemKey][parte].horasAnio);
+                    _this.totales[parte].equivalente += _this.resumenes[itemKey][parte].equivalente;
+                });
             }
+        }
+    },
+    computed: {
+        calificacion: function calificacion() {
+            if (this.totales.realizado.equivalente === 0) return 0;
+
+            var final = 0;
+            for (var itemKey in this.resumenes) {
+                final += this.resumenes[itemKey].realizado.equivalente * this.informe[itemKey].calificacion;
+            }return Math.round(final / this.totales.realizado.equivalente * 100) / 100;
+        },
+        rango: function rango() {
+            var calificacion = this.calificacion;
+            var rango = undefined;
+            this.rangos.forEach(function (opcion) {
+                if (opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion;
+            });
+            return rango || {
+                leyenda: 'No definido',
+                color: 'black'
+            };
         }
     }
 });
@@ -12588,10 +12661,6 @@ module.exports = Cancel;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-//
-//
-//
-//
 //
 //
 //
@@ -12904,7 +12973,8 @@ module.exports = Cancel;
             resumenes: {},
             totales: {
                 semanal: 0,
-                anual: 0
+                anual: 0,
+                equivalente: 0
             }
         };
     },
@@ -12924,15 +12994,17 @@ module.exports = Cancel;
                     this.resumenes[itemKey]['horasSemana'] = 0;
                     this.resumenes[itemKey]['horasAnio'] = 0;
 
-                    this.informe[itemKey].forEach(function (item) {
-                        _this.resumenes[itemKey].horasSemana += (item.comprometido.primero.horasSemana + item.comprometido.segundo.horasSemana) / 2;
-                        _this.resumenes[itemKey].horasAnio += item.comprometido.primero.horasSemestre + item.comprometido.segundo.horasSemestre;
+                    this.informe[itemKey].actividades.forEach(function (actividad) {
+                        _this.resumenes[itemKey].horasSemana += (actividad.comprometido.primero.horasSemana + actividad.comprometido.segundo.horasSemana) / 2;
+                        _this.resumenes[itemKey].horasAnio += actividad.comprometido.primero.horasSemestre + actividad.comprometido.segundo.horasSemestre;
                     });
 
                     this.totales.semanal += this.resumenes[itemKey].horasSemana;
                     this.totales.anual += this.resumenes[itemKey].horasAnio;
                 }
             }
+
+            this.totales.equivalente = this.equivalentes(this.totales.semanal, this.totales.anual);
         }
     },
     watch: {
@@ -12969,6 +13041,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 window.Vue = __webpack_require__(4);
 
 
@@ -12991,7 +13068,8 @@ var EtapasEnum = Object.freeze({
     declarando: 1,
     aprobando: 2,
     realizado: 3,
-    evaluando: 4
+    evaluando: 4,
+    apelando: 5
 });
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
@@ -13049,8 +13127,17 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
                 item_extension: 'Extensión',
                 item_educacion_continua: 'Educación continua'
             }),
-            etapas: EtapasEnum
+            etapas: EtapasEnum,
+            ecuaciones: Object.freeze({
+                equivalentes: 'Math.round((semanal * 36 + semestral_anual) / 44 * 10) / 10',
+                calificacion: ''
+            })
         };
+    },
+    methods: {
+        equivalentes: function equivalentes(a, b) {
+            return eval(this.ecuaciones.equivalentes.replaceAll('semanal', a).replaceAll('semestral_anual', b));
+        }
     }
 });
 
@@ -17168,32 +17255,13 @@ var render = function() {
       : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
-      _c(
-        "div",
-        { staticClass: "panel-heading" },
-        [
-          _vm._v("\n            Informes de actividades\n            "),
-          _c(
-            "router-link",
-            {
-              staticClass: "btn btn-xs btn-success pull-right",
-              attrs: { to: { name: "nuevo-informe" } }
-            },
-            [
-              _vm._v("     \n                Ingresar nuevo informe "),
-              _c("span", {
-                staticClass: "glyphicon glyphicon-plus",
-                attrs: { "aria-hidden": "true" }
-              })
-            ]
-          )
-        ],
-        1
-      ),
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n            Informes de actividades\n        ")
+      ]),
       _vm._v(" "),
       _vm.cargando
-        ? _c("div", { staticClass: "panel-body text-center" }, [_vm._m(0)])
-        : _c("div", { staticClass: "panel-body" }, [
+        ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
+        : _c("div", [
             _vm.informes.length === 0
               ? _c("div", { staticClass: "text-center" }, [
                   _c("h3", [
@@ -17222,7 +17290,7 @@ var render = function() {
                             _c(
                               "router-link",
                               {
-                                staticClass: "btn btn-xs btn-success btn-block",
+                                staticClass: "btn btn-xs btn-info btn-block",
                                 attrs: {
                                   to: {
                                     name: "declarar-realizado",
@@ -17244,7 +17312,29 @@ var render = function() {
                     })
                   )
                 ])
-          ])
+          ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: { to: { name: "nuevo-informe" } }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Agregar informe\n            ")
+            ]
+          )
+        ],
+        1
+      )
     ])
   ])
 }
@@ -17771,201 +17861,122 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "panel panel-default" }, [
-    _c("div", { staticClass: "panel-body" }, [
-      _c("table", { staticClass: "table table-striped" }, [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          [
-            _vm._l(_vm.resumenes, function(value, key) {
-              return _c("tr", { key: key }, [
-                _c("td", [_vm._v(_vm._s(_vm.titulos_item[key]))]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(value.comprometido.horasSemana * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(value.comprometido.horasAnio * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(value.realizado.horasSemana * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(value.realizado.horasAnio * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(value.realizado.equivalente * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", { staticClass: "col-md-2" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model.number",
-                        value: value.nota,
-                        expression: "value.nota",
-                        modifiers: { number: true }
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { type: "number", min: "1" },
-                    domProps: { value: value.nota },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+    _c("table", { staticClass: "table table-striped" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        [
+          _vm._l(_vm.resumenes, function(value, key) {
+            return _c("tr", { key: key }, [
+              _c("td", [_vm._v(_vm._s(_vm.titulos_item[key]))]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center" }, [
+                _vm._v(_vm._s(value.comprometido.horasSemana))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center" }, [
+                _vm._v(_vm._s(value.comprometido.horasAnio))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center" }, [
+                _vm._v(_vm._s(value.realizado.horasSemana))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center" }, [
+                _vm._v(_vm._s(value.realizado.horasAnio))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center" }, [
+                _vm._v(_vm._s(value.realizado.equivalente))
+              ]),
+              _vm._v(" "),
+              _vm.etapa === _vm.etapas.evaluando
+                ? _c("td", { staticClass: "col-md-2" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.number",
+                          value: _vm.informe[key].calificacion,
+                          expression: "informe[key].calificacion",
+                          modifiers: { number: true }
                         }
-                        _vm.$set(value, "nota", _vm._n($event.target.value))
-                      },
-                      blur: function($event) {
-                        _vm.$forceUpdate()
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "1", max: "7" },
+                      domProps: { value: _vm.informe[key].calificacion },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.informe[key],
+                            "calificacion",
+                            _vm._n($event.target.value)
+                          )
+                        },
+                        blur: function($event) {
+                          _vm.$forceUpdate()
+                        }
                       }
-                    }
-                  })
-                ])
-              ])
-            }),
+                    })
+                  ])
+                : _c("td", { staticClass: "text-center" }, [
+                    _vm._v(_vm._s(_vm.informe[key].calificacion))
+                  ])
+            ])
+          }),
+          _vm._v(" "),
+          _c("tr", [
+            _vm._m(1),
             _vm._v(" "),
-            _c("tr", [
-              _vm._m(1),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center" }, [
-                _c("b", [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(
-                        _vm.totales.comprometido.semanal * _vm.posDec
-                      ) / _vm.posDec
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center" }, [
-                _c("b", [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(_vm.totales.comprometido.anual * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center" }, [
-                _c("b", [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(_vm.totales.realizado.semanal * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center" }, [
-                _c("b", [
-                  _vm._v(
-                    _vm._s(
-                      Math.round(_vm.totales.realizado.anual * _vm.posDec) /
-                        _vm.posDec
-                    )
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _vm._m(2),
-              _vm._v(" "),
-              _vm._m(3)
+            _c("th", { staticClass: "text-center" }, [
+              _c("b", [_vm._v(_vm._s(_vm.totales.comprometido.semanal))])
             ]),
             _vm._v(" "),
-            _c("tr", [
-              _vm._m(4),
-              _vm._v(" "),
-              _c(
-                "td",
-                { staticClass: "text-center", attrs: { colspan: "2" } },
-                [
-                  _c("b", [
-                    _vm._v(
-                      _vm._s(
-                        Math.round(
-                          (_vm.totales.comprometido.semanal * 36 +
-                            _vm.totales.comprometido.anual) /
-                            44 *
-                            _vm.posDec
-                        ) / _vm.posDec
-                      )
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "td",
-                { staticClass: "text-center", attrs: { colspan: "2" } },
-                [
-                  _c("b", [
-                    _vm._v(
-                      _vm._s(
-                        Math.round(
-                          (_vm.totales.realizado.semanal * 36 +
-                            _vm.totales.realizado.anual) /
-                            44 *
-                            _vm.posDec
-                        ) / _vm.posDec
-                      )
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c("td", { staticClass: "text-center" }, [
+            _c("th", { staticClass: "text-center" }, [
+              _c("b", [_vm._v(_vm._s(_vm.totales.comprometido.anual))])
+            ]),
+            _vm._v(" "),
+            _c("th", { staticClass: "text-center" }, [
+              _c("b", [_vm._v(_vm._s(_vm.totales.realizado.semanal))])
+            ]),
+            _vm._v(" "),
+            _c("th", { staticClass: "text-center" }, [
+              _c("b", [_vm._v(_vm._s(_vm.totales.realizado.anual))])
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { rowspan: "2" } }),
+            _vm._v(" "),
+            _vm._m(2)
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _vm._m(3),
+            _vm._v(" "),
+            _c("th", { staticClass: "text-center", attrs: { colspan: "2" } }, [
+              _c("b", [_vm._v(_vm._s(_vm.totales.comprometido.equivalente))])
+            ]),
+            _vm._v(" "),
+            _c("th", { staticClass: "text-center", attrs: { colspan: "2" } }, [
+              _c("b", [_vm._v(_vm._s(_vm.totales.realizado.equivalente))])
+            ]),
+            _vm._v(" "),
+            _c(
+              "th",
+              { staticClass: "text-center", style: { color: _vm.rango.color } },
+              [
                 _vm._v(
-                  _vm._s(
-                    Math.round(_vm.totales.realizado.equivalente * _vm.posDec) /
-                      _vm.posDec
-                  )
+                  _vm._s(_vm.calificacion) + " - " + _vm._s(_vm.rango.leyenda)
                 )
-              ]),
-              _vm._v(" "),
-              _c("td")
-            ])
-          ],
-          2
-        )
-      ])
+              ]
+            )
+          ])
+        ],
+        2
+      )
     ])
   ])
 }
@@ -18014,21 +18025,13 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [_c("b", [_vm._v("Horas cronológicas promedio anual")])])
+    return _c("th", [_c("b", [_vm._v("Horas cronológicas promedio anual")])])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-center" }, [
-      _c("b", [_vm._v("Semanales realizadas")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-center" }, [
+    return _c("th", { staticClass: "text-center" }, [
       _c("b", [_vm._v("Calificación final y rango")])
     ])
   },
@@ -18036,7 +18039,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [_c("b", [_vm._v("Horas semanales equivalentes")])])
+    return _c("th", [_c("b", [_vm._v("Horas semanales equivalentes")])])
   }
 ]
 render._withStripped = true
@@ -18114,54 +18117,311 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "panel-body" }, [
-      _vm.actividades.length == 0
-        ? _c("div", { staticClass: "text-center" }, [
-            _vm.etapa <= _vm.etapas.evaluando
-              ? _c("h3", [
-                  _vm._v(
-                    'No se han agregado actividades aún. Presione el botón "+"'
-                  )
-                ])
-              : _c("h3", [
-                  _vm._v("No se declararon actividades para este ítem")
-                ])
-          ])
-        : _c("div", [
-            _vm.etapa <= _vm.etapas.aprobando
+    _vm.actividades.length == 0
+      ? _c("div", { staticClass: "text-center" }, [
+          _vm.etapa <= _vm.etapas.evaluando
+            ? _c("h3", [
+                _vm._v(
+                  'No se han agregado actividades aún. Presione el botón "+"'
+                )
+              ])
+            : _c("h3", [_vm._v("No se declararon actividades para este ítem")])
+        ])
+      : _c("div", [
+          _vm.etapa <= _vm.etapas.aprobando
+            ? _c("table", { staticClass: "table table-striped" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  [
+                    _vm._l(_vm.actividades, function(actividad, index) {
+                      return _c("tr", { key: actividad.id }, [
+                        _c("td", { staticClass: "col-md-3" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: actividad.descripcion,
+                                expression: "actividad.descripcion"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            domProps: { value: actividad.descripcion },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  actividad,
+                                  "descripcion",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "col-md-1" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model.number",
+                                value:
+                                  actividad.comprometido.primero.horasSemana,
+                                expression:
+                                  "actividad.comprometido.primero.horasSemana",
+                                modifiers: { number: true }
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "number", min: "0" },
+                            domProps: {
+                              value: actividad.comprometido.primero.horasSemana
+                            },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  actividad.comprometido.primero,
+                                  "horasSemana",
+                                  _vm._n($event.target.value)
+                                )
+                              },
+                              blur: function($event) {
+                                _vm.$forceUpdate()
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "col-md-1" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model.number",
+                                value:
+                                  actividad.comprometido.primero.horasSemestre,
+                                expression:
+                                  "actividad.comprometido.primero.horasSemestre",
+                                modifiers: { number: true }
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "number", min: "0" },
+                            domProps: {
+                              value:
+                                actividad.comprometido.primero.horasSemestre
+                            },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  actividad.comprometido.primero,
+                                  "horasSemestre",
+                                  _vm._n($event.target.value)
+                                )
+                              },
+                              blur: function($event) {
+                                _vm.$forceUpdate()
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "col-md-1" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model.number",
+                                value:
+                                  actividad.comprometido.segundo.horasSemana,
+                                expression:
+                                  "actividad.comprometido.segundo.horasSemana",
+                                modifiers: { number: true }
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "number", min: "0" },
+                            domProps: {
+                              value: actividad.comprometido.segundo.horasSemana
+                            },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  actividad.comprometido.segundo,
+                                  "horasSemana",
+                                  _vm._n($event.target.value)
+                                )
+                              },
+                              blur: function($event) {
+                                _vm.$forceUpdate()
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "col-md-1" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model.number",
+                                value:
+                                  actividad.comprometido.segundo.horasSemestre,
+                                expression:
+                                  "actividad.comprometido.segundo.horasSemestre",
+                                modifiers: { number: true }
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "number", min: "0" },
+                            domProps: {
+                              value:
+                                actividad.comprometido.segundo.horasSemestre
+                            },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  actividad.comprometido.segundo,
+                                  "horasSemestre",
+                                  _vm._n($event.target.value)
+                                )
+                              },
+                              blur: function($event) {
+                                _vm.$forceUpdate()
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "col-md-4" }, [
+                          _c("textarea", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: actividad.observaciones,
+                                expression: "actividad.observaciones"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { rows: "1" },
+                            domProps: { value: actividad.observaciones },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  actividad,
+                                  "observaciones",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", { staticClass: "col-md-1" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-block btn-danger",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  _vm.quitarActividad(index)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-minus",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          )
+                        ])
+                      ])
+                    }),
+                    _vm._v(" "),
+                    _c("tr", [
+                      _c("th", { staticClass: "text-right" }, [
+                        _vm._v("TOTAL")
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { staticClass: "text-center" }, [
+                        _vm._v(
+                          _vm._s(_vm.totales.comprometido.primero.horasSemana)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { staticClass: "text-center" }, [
+                        _vm._v(
+                          _vm._s(_vm.totales.comprometido.primero.horasSemestre)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { staticClass: "text-center" }, [
+                        _vm._v(
+                          _vm._s(_vm.totales.comprometido.segundo.horasSemana)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { staticClass: "text-center" }, [
+                        _vm._v(
+                          _vm._s(_vm.totales.comprometido.segundo.horasSemestre)
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { colspan: "2" } })
+                    ])
+                  ],
+                  2
+                )
+              ])
+            : _vm.etapa === _vm.etapas.realizado
               ? _c("table", { staticClass: "table table-striped" }, [
-                  _vm._m(0),
+                  _vm._m(1),
                   _vm._v(" "),
                   _c(
                     "tbody",
                     [
-                      _vm._l(_vm.actividades, function(actividad, index) {
+                      _vm._l(_vm.actividades, function(actividad) {
                         return _c("tr", { key: actividad.id }, [
                           _c("td", { staticClass: "col-md-3" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: actividad.descripcion,
-                                  expression: "actividad.descripcion"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              domProps: { value: actividad.descripcion },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    actividad,
-                                    "descripcion",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(actividad.descripcion) +
+                                "\n                    "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "col-md-1 text-center" }, [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(
+                                  actividad.comprometido[_vm.semestre]
+                                    .horasSemana
+                                ) +
+                                "\n                    "
+                            )
                           ]),
                           _vm._v(" "),
                           _c("td", { staticClass: "col-md-1" }, [
@@ -18171,9 +18431,10 @@ var render = function() {
                                   name: "model",
                                   rawName: "v-model.number",
                                   value:
-                                    actividad.comprometido.primero.horasSemana,
+                                    actividad.realizado[_vm.semestre]
+                                      .horasSemana,
                                   expression:
-                                    "actividad.comprometido.primero.horasSemana",
+                                    "actividad.realizado[semestre].horasSemana",
                                   modifiers: { number: true }
                                 }
                               ],
@@ -18181,7 +18442,7 @@ var render = function() {
                               attrs: { type: "number", min: "0" },
                               domProps: {
                                 value:
-                                  actividad.comprometido.primero.horasSemana
+                                  actividad.realizado[_vm.semestre].horasSemana
                               },
                               on: {
                                 input: function($event) {
@@ -18189,7 +18450,7 @@ var render = function() {
                                     return
                                   }
                                   _vm.$set(
-                                    actividad.comprometido.primero,
+                                    actividad.realizado[_vm.semestre],
                                     "horasSemana",
                                     _vm._n($event.target.value)
                                   )
@@ -18201,42 +18462,15 @@ var render = function() {
                             })
                           ]),
                           _vm._v(" "),
-                          _c("td", { staticClass: "col-md-1" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model.number",
-                                  value:
-                                    actividad.comprometido.primero
-                                      .horasSemestre,
-                                  expression:
-                                    "actividad.comprometido.primero.horasSemestre",
-                                  modifiers: { number: true }
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { type: "number", min: "0" },
-                              domProps: {
-                                value:
-                                  actividad.comprometido.primero.horasSemestre
-                              },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    actividad.comprometido.primero,
-                                    "horasSemestre",
-                                    _vm._n($event.target.value)
-                                  )
-                                },
-                                blur: function($event) {
-                                  _vm.$forceUpdate()
-                                }
-                              }
-                            })
+                          _c("td", { staticClass: "col-md-1 text-center" }, [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(
+                                  actividad.comprometido[_vm.semestre]
+                                    .horasSemestre
+                                ) +
+                                "\n                    "
+                            )
                           ]),
                           _vm._v(" "),
                           _c("td", { staticClass: "col-md-1" }, [
@@ -18246,47 +18480,10 @@ var render = function() {
                                   name: "model",
                                   rawName: "v-model.number",
                                   value:
-                                    actividad.comprometido.segundo.horasSemana,
-                                  expression:
-                                    "actividad.comprometido.segundo.horasSemana",
-                                  modifiers: { number: true }
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { type: "number", min: "0" },
-                              domProps: {
-                                value:
-                                  actividad.comprometido.segundo.horasSemana
-                              },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    actividad.comprometido.segundo,
-                                    "horasSemana",
-                                    _vm._n($event.target.value)
-                                  )
-                                },
-                                blur: function($event) {
-                                  _vm.$forceUpdate()
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "col-md-1" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model.number",
-                                  value:
-                                    actividad.comprometido.segundo
+                                    actividad.realizado[_vm.semestre]
                                       .horasSemestre,
                                   expression:
-                                    "actividad.comprometido.segundo.horasSemestre",
+                                    "actividad.realizado[semestre].horasSemestre",
                                   modifiers: { number: true }
                                 }
                               ],
@@ -18294,7 +18491,8 @@ var render = function() {
                               attrs: { type: "number", min: "0" },
                               domProps: {
                                 value:
-                                  actividad.comprometido.segundo.horasSemestre
+                                  actividad.realizado[_vm.semestre]
+                                    .horasSemestre
                               },
                               on: {
                                 input: function($event) {
@@ -18302,7 +18500,7 @@ var render = function() {
                                     return
                                   }
                                   _vm.$set(
-                                    actividad.comprometido.segundo,
+                                    actividad.realizado[_vm.semestre],
                                     "horasSemestre",
                                     _vm._n($event.target.value)
                                   )
@@ -18340,27 +18538,124 @@ var render = function() {
                                 }
                               }
                             })
+                          ])
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c("th", { staticClass: "text-right" }, [
+                          _vm._v("TOTAL")
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { staticClass: "text-center" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.totales.comprometido[_vm.semestre].horasSemana
+                            )
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { staticClass: "text-center" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.totales.realizado[_vm.semestre].horasSemana
+                            )
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { staticClass: "text-center" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.totales.comprometido[_vm.semestre]
+                                .horasSemestre
+                            )
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { staticClass: "text-center" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.totales.realizado[_vm.semestre].horasSemestre
+                            )
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("th", { attrs: { colspan: "2" } })
+                      ])
+                    ],
+                    2
+                  )
+                ])
+              : _c("table", { staticClass: "table table-striped" }, [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    [
+                      _vm._l(_vm.actividades, function(actividad) {
+                        return _c("tr", { key: actividad.id }, [
+                          _c("td", { staticClass: "col-md-3" }, [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(actividad.descripcion) +
+                                "\n                    "
+                            )
                           ]),
                           _vm._v(" "),
-                          _c("td", { staticClass: "col-md-1" }, [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-block btn-danger",
-                                attrs: { type: "button" },
-                                on: {
-                                  click: function($event) {
-                                    _vm.quitarActividad(index)
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", {
-                                  staticClass: "glyphicon glyphicon-minus",
-                                  attrs: { "aria-hidden": "true" }
-                                })
-                              ]
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(actividad.comprometido.primero.horasSemana)
                             )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                actividad.comprometido.primero.horasSemestre
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(actividad.realizado.primero.horasSemana)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(actividad.realizado.primero.horasSemestre)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(actividad.comprometido.segundo.horasSemana)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                actividad.comprometido.segundo.horasSemestre
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(actividad.realizado.segundo.horasSemana)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(actividad.realizado.segundo.horasSemestre)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "col-md-4" }, [
+                            _vm._v(_vm._s(actividad.observaciones))
                           ])
                         ])
                       }),
@@ -18384,6 +18679,46 @@ var render = function() {
                           )
                         ]),
                         _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticClass: "text-center",
+                            style: {
+                              color:
+                                _vm.totales.realizado.primero.horasSemana >=
+                                _vm.totales.comprometido.primero.horasSemana
+                                  ? "green"
+                                  : "red"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(_vm.totales.realizado.primero.horasSemana)
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticClass: "text-center",
+                            style: {
+                              color:
+                                _vm.totales.realizado.primero.horasSemestre >=
+                                _vm.totales.comprometido.primero.horasSemestre
+                                  ? "green"
+                                  : "red"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.realizado.primero.horasSemestre
+                              )
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
                         _c("th", { staticClass: "text-center" }, [
                           _vm._v(
                             _vm._s(_vm.totales.comprometido.segundo.horasSemana)
@@ -18398,418 +18733,53 @@ var render = function() {
                           )
                         ]),
                         _vm._v(" "),
-                        _c("td", { attrs: { colspan: "2" } })
+                        _c(
+                          "th",
+                          {
+                            staticClass: "text-center",
+                            style: {
+                              color:
+                                _vm.totales.realizado.segundo.horasSemana >=
+                                _vm.totales.comprometido.segundo.horasSemana
+                                  ? "green"
+                                  : "red"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(_vm.totales.realizado.segundo.horasSemana)
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "th",
+                          {
+                            staticClass: "text-center",
+                            style: {
+                              color:
+                                _vm.totales.realizado.segundo.horasSemestre >=
+                                _vm.totales.comprometido.segundo.horasSemestre
+                                  ? "green"
+                                  : "red"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.realizado.segundo.horasSemestre
+                              )
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("th")
                       ])
                     ],
                     2
                   )
                 ])
-              : _vm.etapa === _vm.etapas.realizado
-                ? _c("table", { staticClass: "table table-striped" }, [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      [
-                        _vm._l(_vm.actividades, function(actividad) {
-                          return _c("tr", { key: actividad.id }, [
-                            _c("td", { staticClass: "col-md-3" }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(actividad.descripcion) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1 text-center" }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(
-                                    actividad.comprometido[_vm.semestre]
-                                      .horasSemana
-                                  ) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1" }, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model.number",
-                                    value:
-                                      actividad.realizado[_vm.semestre]
-                                        .horasSemana,
-                                    expression:
-                                      "actividad.realizado[semestre].horasSemana",
-                                    modifiers: { number: true }
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "number", min: "0" },
-                                domProps: {
-                                  value:
-                                    actividad.realizado[_vm.semestre]
-                                      .horasSemana
-                                },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      actividad.realizado[_vm.semestre],
-                                      "horasSemana",
-                                      _vm._n($event.target.value)
-                                    )
-                                  },
-                                  blur: function($event) {
-                                    _vm.$forceUpdate()
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1 text-center" }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(
-                                    actividad.comprometido[_vm.semestre]
-                                      .horasSemestre
-                                  ) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1" }, [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model.number",
-                                    value:
-                                      actividad.realizado[_vm.semestre]
-                                        .horasSemestre,
-                                    expression:
-                                      "actividad.realizado[semestre].horasSemestre",
-                                    modifiers: { number: true }
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { type: "number", min: "0" },
-                                domProps: {
-                                  value:
-                                    actividad.realizado[_vm.semestre]
-                                      .horasSemestre
-                                },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      actividad.realizado[_vm.semestre],
-                                      "horasSemestre",
-                                      _vm._n($event.target.value)
-                                    )
-                                  },
-                                  blur: function($event) {
-                                    _vm.$forceUpdate()
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-4" }, [
-                              _c("textarea", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: actividad.observaciones,
-                                    expression: "actividad.observaciones"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: { rows: "1" },
-                                domProps: { value: actividad.observaciones },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      actividad,
-                                      "observaciones",
-                                      $event.target.value
-                                    )
-                                  }
-                                }
-                              })
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1" })
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _c("tr", [
-                          _c("th", { staticClass: "text-right" }, [
-                            _vm._v("TOTAL")
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.comprometido[_vm.semestre]
-                                  .horasSemana
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.realizado[_vm.semestre].horasSemana
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.comprometido[_vm.semestre]
-                                  .horasSemestre
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.realizado[_vm.semestre]
-                                  .horasSemestre
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { attrs: { colspan: "2" } })
-                        ])
-                      ],
-                      2
-                    )
-                  ])
-                : _c("table", { staticClass: "table table-striped" }, [
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      [
-                        _vm._l(_vm.actividades, function(actividad) {
-                          return _c("tr", { key: actividad.id }, [
-                            _c("td", { staticClass: "col-md-3" }, [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(actividad.descripcion) +
-                                  "\n                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  actividad.comprometido.primero.horasSemana
-                                )
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  actividad.comprometido.primero.horasSemestre
-                                )
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(actividad.realizado.primero.horasSemana)
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  actividad.realizado.primero.horasSemestre
-                                )
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  actividad.comprometido.segundo.horasSemana
-                                )
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  actividad.comprometido.segundo.horasSemestre
-                                )
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(actividad.realizado.segundo.horasSemana)
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "text-center" }, [
-                              _vm._v(
-                                _vm._s(
-                                  actividad.realizado.segundo.horasSemestre
-                                )
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-4" }, [
-                              _vm._v(_vm._s(actividad.observaciones))
-                            ])
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _c("tr", [
-                          _c("th", { staticClass: "text-right" }, [
-                            _vm._v("TOTAL")
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.comprometido.primero.horasSemana
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.comprometido.primero.horasSemestre
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "text-center",
-                              style: {
-                                color:
-                                  _vm.totales.realizado.primero.horasSemana >=
-                                  _vm.totales.comprometido.primero.horasSemana
-                                    ? "green"
-                                    : "red"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.totales.realizado.primero.horasSemana
-                                )
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "text-center",
-                              style: {
-                                color:
-                                  _vm.totales.realizado.primero.horasSemestre >=
-                                  _vm.totales.comprometido.primero.horasSemestre
-                                    ? "green"
-                                    : "red"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.totales.realizado.primero.horasSemestre
-                                )
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.comprometido.segundo.horasSemana
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm.totales.comprometido.segundo.horasSemestre
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "text-center",
-                              style: {
-                                color:
-                                  _vm.totales.realizado.segundo.horasSemana >=
-                                  _vm.totales.comprometido.segundo.horasSemana
-                                    ? "green"
-                                    : "red"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.totales.realizado.segundo.horasSemana
-                                )
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "text-center",
-                              style: {
-                                color:
-                                  _vm.totales.realizado.segundo.horasSemestre >=
-                                  _vm.totales.comprometido.segundo.horasSemestre
-                                    ? "green"
-                                    : "red"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.totales.realizado.segundo.horasSemestre
-                                )
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("td")
-                        ])
-                      ],
-                      2
-                    )
-                  ])
-          ])
-    ]),
+        ]),
     _vm._v(" "),
     _vm.etapa === _vm.etapas.declarando
       ? _c("div", { staticClass: "panel-footer text-right" }, [
@@ -18824,7 +18794,8 @@ var render = function() {
               _c("span", {
                 staticClass: "glyphicon glyphicon-plus",
                 attrs: { "aria-hidden": "true" }
-              })
+              }),
+              _vm._v(" Agregar actividad\n        ")
             ]
           )
         ])
@@ -18840,7 +18811,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
           _vm._v(
-            "\n                            Descripción\n                            "
+            "\n                        Descripción\n                        "
           ),
           _c(
             "a",
@@ -18866,7 +18837,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
           _vm._v(
-            "\n                            Observaciones\n                            "
+            "\n                        Observaciones\n                        "
           ),
           _c(
             "a",
@@ -18905,7 +18876,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
           _vm._v(
-            "\n                            Descripción\n                            "
+            "\n                        Descripción\n                        "
           ),
           _c(
             "a",
@@ -18931,7 +18902,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
           _vm._v(
-            "\n                            Observaciones\n                            "
+            "\n                        Observaciones\n                        "
           ),
           _c(
             "a",
@@ -18946,9 +18917,7 @@ var staticRenderFns = [
             },
             [_vm._v("?")]
           )
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { rowspan: "2" } })
+        ])
       ]),
       _vm._v(" "),
       _c("tr", [
@@ -18970,7 +18939,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", { staticClass: "text-center", attrs: { rowspan: "3" } }, [
           _vm._v(
-            "\n                            Descripción\n                            "
+            "\n                        Descripción\n                        "
           ),
           _c(
             "a",
@@ -19166,17 +19135,7 @@ var render = function() {
             _vm._m(2),
             _vm._v(" "),
             _c("td", { staticClass: "text-center", attrs: { colspan: "2" } }, [
-              _c("b", [
-                _vm._v(
-                  _vm._s(
-                    Math.round(
-                      (_vm.totales.semanal * 36 + _vm.totales.anual) /
-                        44 *
-                        _vm.posDec
-                    ) / _vm.posDec
-                  )
-                )
-              ])
+              _c("b", [_vm._v(_vm._s(_vm.totales.equivalente))])
             ])
           ])
         ],
@@ -19269,13 +19228,15 @@ var render = function() {
         )
       : _vm._e(),
     _vm._v(" "),
-    _vm.etapa === _vm.etapas.evaluando
+    _vm.etapa >= _vm.etapas.evaluando
       ? _c(
           "div",
           { staticClass: "row" },
           [
             !_vm.cargando
-              ? _c("evaluacion", { attrs: { informe: _vm.informe } })
+              ? _c("evaluacion", {
+                  attrs: { informe: _vm.informe, etapa: _vm.etapa }
+                })
               : _vm._e(),
             _vm._v(" "),
             _vm.cargando
@@ -19318,7 +19279,7 @@ var render = function() {
               "div",
               { staticClass: "tab-content" },
               _vm._l(_vm.informe, function(value, key) {
-                return value instanceof Array
+                return key.startsWith("item")
                   ? _c(
                       "div",
                       {
@@ -19329,10 +19290,13 @@ var render = function() {
                       },
                       [
                         _c("lista-actividades", {
-                          attrs: { previo: _vm.informe[key], etapa: _vm.etapa },
+                          attrs: {
+                            previo: value.actividades,
+                            etapa: _vm.etapa
+                          },
                           on: {
                             actualizar: function($event) {
-                              _vm.informe[key] = $event
+                              value.actividades = $event
                             }
                           }
                         })
@@ -19359,7 +19323,17 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("×")]
+              [_vm._v("Cerrar ×")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "close",
+                attrs: { href: "#", "aria-label": "close" },
+                on: { click: _vm.volver }
+              },
+              [_vm._v("Volver")]
             ),
             _vm._v(" "),
             _c("strong", [_vm._v("Bien!")]),
@@ -19420,7 +19394,12 @@ var render = function() {
                   attrs: { type: "button" },
                   on: { click: _vm.enviar }
                 },
-                [_vm._v("Guardar")]
+                [
+                  _c("span", {
+                    staticClass: "glyphicon glyphicon-floppy-disk",
+                    attrs: { "aria-hidden": "true" }
+                  })
+                ]
               )
             : _c(
                 "button",
@@ -19429,7 +19408,12 @@ var render = function() {
                   attrs: { type: "button" },
                   on: { click: _vm.actualizar }
                 },
-                [_vm._v("Guardar cambios")]
+                [
+                  _c("span", {
+                    staticClass: "glyphicon glyphicon-floppy-disk",
+                    attrs: { "aria-hidden": "true" }
+                  })
+                ]
               ),
           _vm._v(" "),
           _vm.etapa === _vm.etapas.aprobando
@@ -19440,7 +19424,13 @@ var render = function() {
                   attrs: { type: "button" },
                   on: { click: _vm.aprobar }
                 },
-                [_vm._v("Aprobar")]
+                [
+                  _c("span", {
+                    staticClass: "glyphicon glyphicon-ok",
+                    attrs: { "aria-hidden": "true" }
+                  }),
+                  _vm._v(" Aprobar\n                ")
+                ]
               )
             : _vm._e()
         ])
@@ -19452,54 +19442,52 @@ var render = function() {
       { staticClass: "modal fade", attrs: { id: "resumen", role: "dialog" } },
       [
         _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _c("div", { staticClass: "modal-header" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "close",
-                  attrs: { type: "button", "data-dismiss": "modal" },
-                  on: {
-                    click: function($event) {
-                      _vm.resumenAbierto = false
+          _c(
+            "div",
+            { staticClass: "modal-content" },
+            [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: {
+                      click: function($event) {
+                        _vm.resumenAbierto = false
+                      }
                     }
-                  }
-                },
-                [_vm._v("×")]
-              ),
+                  },
+                  [_vm._v("×")]
+                ),
+                _vm._v(" "),
+                _c("h4", { staticClass: "modal-title" }, [
+                  _vm._v("Resumen de items")
+                ])
+              ]),
               _vm._v(" "),
-              _c("h4", { staticClass: "modal-title" }, [
-                _vm._v("Resumen de items")
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "modal-body" },
-              [
-                _c("resumen-declaraciones", {
-                  attrs: { informe: _vm.informe, abierto: _vm.resumenAbierto }
-                })
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-default",
-                  attrs: { type: "button", "data-dismiss": "modal" },
-                  on: {
-                    click: function($event) {
-                      _vm.resumenAbierto = false
+              _c("resumen-declaraciones", {
+                attrs: { informe: _vm.informe, abierto: _vm.resumenAbierto }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-default",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: {
+                      click: function($event) {
+                        _vm.resumenAbierto = false
+                      }
                     }
-                  }
-                },
-                [_vm._v("Cerrar")]
-              )
-            ])
-          ])
+                  },
+                  [_vm._v("Cerrar")]
+                )
+              ])
+            ],
+            1
+          )
         ])
       ]
     )

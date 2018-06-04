@@ -4,6 +4,11 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 window.Vue = require('vue');
 
 import Vue from 'vue'
@@ -27,7 +32,8 @@ const EtapasEnum = Object.freeze({
     declarando: 1,
     aprobando: 2,
     realizado: 3,
-    evaluando: 4
+    evaluando: 4,
+    apelando: 5
 });
 
 const router = new VueRouter({
@@ -92,7 +98,16 @@ Vue.mixin({
                 item_extension: 'Extensión',
                 item_educacion_continua: 'Educación continua'
             }),
-            etapas: EtapasEnum
+            etapas: EtapasEnum,
+            ecuaciones: Object.freeze({
+                equivalentes: 'Math.round((semanal * 36 + semestral_anual) / 44 * 10) / 10',
+                calificacion: ''
+            })
+        }
+    },
+    methods: {
+        equivalentes: function(a, b) {
+            return eval(this.ecuaciones.equivalentes.replaceAll('semanal', a).replaceAll('semestral_anual', b));
         }
     }
 });

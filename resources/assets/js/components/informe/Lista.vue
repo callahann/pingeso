@@ -5,19 +5,16 @@
             {{ mensaje }}
         </div>
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading panel-title text-center">
                 Informes de actividades
-                <router-link class="btn btn-xs btn-success pull-right" :to="{ name: 'nuevo-informe'}">     
-                    Ingresar nuevo informe <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                </router-link>
             </div>
-            <div class="panel-body text-center" v-if="cargando">
+            <div class="text-center" v-if="cargando">
                 <h3>
                     <i class="fas fa-circle-notch fa-spin"></i> 
                     Cargando...
                 </h3>
             </div>
-            <div class="panel-body" v-else>
+            <div v-else>
                 <div v-if="informes.length === 0" class="text-center">
                     <h3>No se han ingresado nuevos informes de actividades</h3>
                 </div>
@@ -34,13 +31,18 @@
                             <td class="col-md-4">{{ informe.periodo }}</td>
                             <td class="col-md-6">{{ informe.created_at }}</td>
                             <td class="col-md-2">
-                                <router-link class="btn btn-xs btn-success btn-block" :to="{ name: 'declarar-realizado', params: { id: informe.id }}">     
+                                <router-link class="btn btn-xs btn-info btn-block" :to="{ name: 'declarar-realizado', params: { id: informe.id }}">     
                                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                 </router-link>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="panel-footer">
+                <router-link class="btn btn-success" :to="{ name: 'nuevo-informe'}">     
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar informe
+                </router-link>
             </div>
         </div>
     </div>

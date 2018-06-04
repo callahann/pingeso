@@ -21,7 +21,7 @@
                 </tr>
                 <tr>
                     <td><b>Horas semanales equivalentes</b></td>
-                    <td colspan="2" class="text-center"><b>{{ (Math.round((totales.semanal * 36 + totales.anual) / 44  * posDec) / posDec) }}</b></td>
+                    <td colspan="2" class="text-center"><b>{{ totales.equivalente }}</b></td>
                 </tr>
             </tbody>
         </table>
@@ -36,7 +36,8 @@
                 resumenes: {},
                 totales: {
                     semanal: 0,
-                    anual: 0
+                    anual: 0,
+                    equivalente: 0
                 }
             }
         },
@@ -54,15 +55,17 @@
                         this.resumenes[itemKey]['horasSemana'] = 0;
                         this.resumenes[itemKey]['horasAnio'] = 0;
 
-                        this.informe[itemKey].forEach((item) => {
-                            this.resumenes[itemKey].horasSemana += (item.comprometido.primero.horasSemana + item.comprometido.segundo.horasSemana) / 2;
-                            this.resumenes[itemKey].horasAnio += item.comprometido.primero.horasSemestre + item.comprometido.segundo.horasSemestre;
+                        this.informe[itemKey].actividades.forEach((actividad) => {
+                            this.resumenes[itemKey].horasSemana += (actividad.comprometido.primero.horasSemana + actividad.comprometido.segundo.horasSemana) / 2;
+                            this.resumenes[itemKey].horasAnio += actividad.comprometido.primero.horasSemestre + actividad.comprometido.segundo.horasSemestre;
                         });
 
                         this.totales.semanal += this.resumenes[itemKey].horasSemana;
                         this.totales.anual += this.resumenes[itemKey].horasAnio;
                     }
                 }
+
+                this.totales.equivalente = this.equivalentes(this.totales.semanal, this.totales.anual);
             }
         },
         watch: {

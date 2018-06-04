@@ -2,8 +2,17 @@
   resize: vertical;
 }
 
-td {
+.table {
+  margin-bottom: 0 !important;
+}
+
+.table td {
   vertical-align: middle !important;
+}
+
+.table th {
+  background-color: #e0e0e0 !important;
+  border-color: #B1B1B1 !important;
 }
 
 .navbar {
@@ -62,7 +71,7 @@ td {
 
 .panel-tabs a.router-link-active,
 .panel-tabs a.router-link-exact-active {
-  background-color: white;
+  background-color: #e0e0e0 !important;
   color: #404040;
   -webkit-box-shadow: none;
           box-shadow: none;

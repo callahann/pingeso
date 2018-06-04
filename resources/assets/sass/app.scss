@@ -8,14 +8,24 @@ $naranjo: #EA7600;
 $azul: #002F6C;
 $celeste: #007FC6;
 $gris: #B1B1B1;
+$gris-claro: #e0e0e0;
 $gris-oscuro: #404040;
 
 textarea {
   resize: vertical;
 }
 
-td {
-  vertical-align: middle !important;
+.table {
+  margin-bottom: 0 !important;
+
+  td {
+    vertical-align: middle !important;
+  }
+  
+  th {
+    background-color: $gris-claro !important;
+    border-color: $gris !important;
+  }
 }
 
 .navbar {
@@ -72,7 +82,7 @@ td {
 
       &.router-link-active,
       &.router-link-exact-active {
-        background-color: white;
+        background-color: $gris-claro !important;
         color: $gris-oscuro;
         box-shadow: none;
       }

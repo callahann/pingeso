@@ -10,8 +10,8 @@
         <div class="row" v-if="etapa === etapas.aprobando || etapa === etapas.evaluando">
             <datos-personales v-bind:editable="false"></datos-personales>
         </div>
-        <div class="row" v-if="etapa === etapas.evaluando">
-            <evaluacion v-if="!cargando" :informe="informe"></evaluacion>
+        <div class="row" v-if="etapa >= etapas.evaluando">
+            <evaluacion v-if="!cargando" :informe="informe" :etapa="etapa"></evaluacion>
             <div class="panel panel-default text-center" v-if="cargando">
                 <h3>
                     <i class="fas fa-circle-notch fa-spin"></i> 
@@ -38,9 +38,9 @@
                 <div class="tab-content" v-else>
                     <div :id="key" v-for="(value, key) in  informe" :key="key"
                         class="tab-pane fade" :class="{ 'in active': key === 'item_docencia' }"
-                        v-if="(value instanceof Array)">
-                        <lista-actividades :previo="informe[key]" :etapa="etapa"
-                            v-on:actualizar="informe[key] = $event"></lista-actividades>
+                        v-if="key.startsWith('item')">
+                        <lista-actividades :previo="value.actividades" :etapa="etapa"
+                            v-on:actualizar="value.actividades = $event"></lista-actividades>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,8 @@
         <!-- Mensajes -->
         <div class="row">
             <div v-if="mensaje === 1" class="alert alert-success">
-                <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
+                <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">Cerrar &times;</a>
+                <a href="#" class="close" aria-label="close" v-on:click="volver">Volver</a>
                 <strong>Bien!</strong> Se han guardado los cambios.
             </div>
             <div v-if="mensaje === -1" class="alert alert-danger">
@@ -62,9 +63,15 @@
                 <div class="panel-footer">
                     <button v-if="etapa <= etapas.declarando" type="button" class="btn btn-default" data-toggle="modal"
                         data-target="#resumen" v-on:click="resumenAbierto = true">Ver resumen</button>
-                    <button v-if="informe.id === undefined" type="button" class="btn btn-info" v-on:click="enviar">Guardar</button>
-                    <button v-else type="button" class="btn btn-info" v-on:click="actualizar">Guardar cambios</button>
-                    <button v-if="etapa === etapas.aprobando" type="button" class="btn btn-success" v-on:click="aprobar">Aprobar</button>
+                    <button v-if="informe.id === undefined" type="button" class="btn btn-info" v-on:click="enviar">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                    </button>
+                    <button v-else type="button" class="btn btn-info" v-on:click="actualizar">
+                        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                    </button>
+                    <button v-if="etapa === etapas.aprobando" type="button" class="btn btn-success" v-on:click="aprobar">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Aprobar
+                    </button>
                 </div>
             </div>
         </div>
@@ -78,11 +85,9 @@
                             v-on:click="resumenAbierto = false">&times;</button>
                         <h4 class="modal-title">Resumen de items</h4>
                     </div>
-                    <div class="modal-body">
-                        <resumen-declaraciones
-                            v-bind:informe="informe"
-                            v-bind:abierto="resumenAbierto"></resumen-declaraciones>
-                    </div>
+                    <resumen-declaraciones
+                        v-bind:informe="informe"
+                        v-bind:abierto="resumenAbierto"></resumen-declaraciones>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal"
                             v-on:click="resumenAbierto = false">Cerrar</button>
@@ -106,13 +111,34 @@
                 resumenAbierto: false,
                 informe: {
                     periodo: 2018,
-                    item_docencia: [],
-                    item_investigacion: [],
-                    item_asistencia: [],
-                    item_perfeccionamiento: [],
-                    item_administracion: [],
-                    item_extension: [],
-                    item_educacion_continua: []
+                    item_docencia: {
+                        actividades: [],
+                        calificacion: 1
+                    },
+                    item_investigacion: {
+                        actividades: [],
+                        calificacion: 1
+                    },
+                    item_asistencia: {
+                        actividades: [],
+                        calificacion: 1
+                    },
+                    item_perfeccionamiento: {
+                        actividades: [],
+                        calificacion: 1
+                    },
+                    item_administracion: {
+                        actividades: [],
+                        calificacion: 1
+                    },
+                    item_extension: {
+                        actividades: [],
+                        calificacion: 1
+                    },
+                    item_educacion_continua: {
+                        actividades: [],
+                        calificacion: 1
+                    }
                 },
                 cargando: true,
                 mensaje: 0
@@ -181,9 +207,7 @@
             volver: function(mensaje) {
                 this.$router.push({
                     name: 'informes',
-                    params: {
-                        mensaje: mensaje
-                    }
+                    params: mensaje === undefined ? {} : { mensaje: mensaje }
                 });
                 return mensaje;
             }
