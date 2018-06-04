@@ -10,6 +10,7 @@ class Apelacion extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'id',
         'id_declaracion',
         'comentario',
         'nombre_archivo',

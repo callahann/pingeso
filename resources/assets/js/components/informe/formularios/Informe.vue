@@ -7,17 +7,8 @@
                 <li class="active">Informe de Actividades</li>
             </ol>
         </div>
-        <div class="row" v-if="etapa === etapas.aprobando || etapa === etapas.evaluando">
+        <div class="row" v-if="etapa === etapas.aprobando">
             <datos-personales v-bind:editable="false"></datos-personales>
-        </div>
-        <div class="row" v-if="etapa >= etapas.evaluando">
-            <evaluacion v-if="!cargando" :informe="informe" :etapa="etapa"></evaluacion>
-            <div class="panel panel-default text-center" v-if="cargando">
-                <h3>
-                    <i class="fas fa-circle-notch fa-spin"></i> 
-                    Cargando...
-                </h3>
-            </div>
         </div>
         <div class="row">
             <div class="panel panel-default">
@@ -48,8 +39,8 @@
         <!-- Mensajes -->
         <div class="row">
             <div v-if="mensaje === 1" class="alert alert-success">
-                <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">Cerrar &times;</a>
-                <a href="#" class="close" aria-label="close" v-on:click="volver">Volver</a>
+                <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">[Cerrar &times;]</a>
+                <a href="#" class="close" aria-label="close" v-on:click="volver">[Volver] </a>
                 <strong>Bien!</strong> Se han guardado los cambios.
             </div>
             <div v-if="mensaje === -1" class="alert alert-danger">
@@ -57,7 +48,7 @@
                 <strong>Oh no!</strong> Ha ocurrido un error.
             </div>
         </div>
-        <!-- Modal resumen -->
+        <!--Footer -->
         <div class="row">
             <div class="panel panel-default">
                 <div class="panel-footer">
@@ -75,7 +66,7 @@
                 </div>
             </div>
         </div>
-        <!-- Modal -->
+        <!-- Modal resumen -->
         <div id="resumen" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->
@@ -99,13 +90,13 @@
 </template>
 <script>
     import axios from 'axios';
-    import DatosPersonales from '../DatosPersonales.vue';
-    import Evaluacion from './partes/Evaluacion';
+    import Base from './base';
+    import DatosPersonales from '../../DatosPersonales.vue';
     import ListaActividades from './partes/ListaActividades';
     import Resumen from './partes/Resumen';
 
     export default {
-        props: ['etapa'],
+        mixins: [Base],
         data: function() {
             return {
                 resumenAbierto: false,
@@ -139,53 +130,21 @@
                         actividades: [],
                         calificacion: 1
                     }
-                },
-                cargando: true,
-                mensaje: 0
+                }
             }
         },
         components: {
             'datos-personales': DatosPersonales,
-            'evaluacion': Evaluacion,
             'lista-actividades': ListaActividades,
             'resumen-declaraciones': Resumen,
         },
-        created: function() {
-            console.log('Etapa: ' + this.etapa);
-            this.obtener();
-        },
         methods: {
-            obtener: function() {
-                axios
-                    .get('/api/declaraciones/' + this.$route.params.id)
-                    .then(response => { 
-                        console.log("Se ha obtenido la data. Copiando localmente...");
-                        Object.assign(this.informe, response.data);
-                        this.cargando = false;
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.cargando = false;
-                    });
-            },
             enviar: function() {
                 axios
                     .post('/api/declaraciones', this.informe)
                     .then(response => {
                         console.log('Se ha registrado el informe correctamente');
                         this.informe = response.data;
-                        this.mensaje = 1;
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1; 
-                    });
-            },
-            actualizar: function() {
-                axios
-                    .put('/api/declaraciones/' + this.$route.params.id, this.informe)
-                    .then(response => { 
-                        console.log("Se han actualizado los datos!");
                         this.mensaje = 1;
                     })
                     .catch(e => {
@@ -203,13 +162,6 @@
                         console.log(e);
                         this.mensaje = -1; 
                     });
-            },
-            volver: function(mensaje) {
-                this.$router.push({
-                    name: 'informes',
-                    params: mensaje === undefined ? {} : { mensaje: mensaje }
-                });
-                return mensaje;
             }
         }
     }

@@ -171,12 +171,20 @@
                         <th class="text-right">TOTAL</th>
                         <th class="text-center">{{ totales.comprometido.primero.horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido.primero.horasSemestre }}</th>
-                        <th class="text-center" :style="{ color: totales.realizado.primero.horasSemana >= totales.comprometido.primero.horasSemana ? 'green' : 'red' }">{{ totales.realizado.primero.horasSemana }}</th>
-                        <th class="text-center" :style="{ color: totales.realizado.primero.horasSemestre >= totales.comprometido.primero.horasSemestre ? 'green' : 'red' }">{{ totales.realizado.primero.horasSemestre }}</th>
+                        <th class="text-center" :style="{ color: totales.realizado.primero.diffSemanal >= 0 ? 'green' : 'red' }">
+                            {{ totales.realizado.primero.horasSemana }} ({{ (totales.realizado.primero.diffSemanal >= 0 ? '+' : '') + totales.realizado.primero.diffSemanal }})
+                        </th>
+                        <th class="text-center" :style="{ color: totales.realizado.primero.diffSemestral >= 0 ? 'green' : 'red' }">
+                            {{ totales.realizado.primero.horasSemestre }} ({{ (totales.realizado.primero.diffSemestral >= 0 ? '+' : '') + totales.realizado.primero.diffSemestral }})
+                        </th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemestre }}</th>
-                        <th class="text-center" :style="{ color: totales.realizado.segundo.horasSemana >= totales.comprometido.segundo.horasSemana ? 'green' : 'red' }">{{ totales.realizado.segundo.horasSemana }}</th>
-                        <th class="text-center" :style="{ color: totales.realizado.segundo.horasSemestre >= totales.comprometido.segundo.horasSemestre ? 'green' : 'red' }">{{ totales.realizado.segundo.horasSemestre }}</th>
+                        <th class="text-center" :style="{ color: totales.realizado.segundo.diffSemanal >= 0 ? 'green' : 'red' }">
+                            {{ totales.realizado.segundo.horasSemana }} ({{ (totales.realizado.segundo.diffSemanal >= 0 ? '+' : '') + totales.realizado.segundo.diffSemanal }})
+                        </th>
+                        <th class="text-center" :style="{ color: totales.realizado.segundo.diffSemestral >= 0 ? 'green' : 'red' }">
+                            {{ totales.realizado.segundo.horasSemestre }} ({{ (totales.realizado.segundo.diffSemestral >= 0 ? '+' : '') + totales.realizado.segundo.diffSemestral }})
+                        </th>
                         <th></th>
                     </tr>
                 </tbody>
@@ -261,6 +269,11 @@
                         })
                     })
                 });
+                
+                totales.realizado.primero['diffSemanal'] =  totales.realizado.primero.horasSemana - totales.comprometido.primero.horasSemana;
+                totales.realizado.primero['diffSemestral'] =  totales.realizado.primero.horasSemestre - totales.comprometido.primero.horasSemestre;
+                totales.realizado.segundo['diffSemanal'] =  totales.realizado.segundo.horasSemana - totales.comprometido.segundo.horasSemana;
+                totales.realizado.segundo['diffSemestral'] =  totales.realizado.segundo.horasSemestre - totales.comprometido.segundo.horasSemestre;
 
                 return totales;
             }
