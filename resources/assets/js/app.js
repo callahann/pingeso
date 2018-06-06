@@ -21,6 +21,8 @@ import Inicio from './components/Inicio';
 import ListaInformes from './components/informe/Lista';
 import Informe from './components/informe/formularios/Informe';
 import Evaluacion from './components/informe/formularios/Evaluacion';
+import ListadoUsuarios from './components/usuario/ListadoUsuarios.Vue'
+import CrearUsuario from './components/usuario/CrearUsuario.Vue'
 
 
 /**
@@ -44,6 +46,16 @@ const router = new VueRouter({
             path: '/',
             name: 'inicio',
             component: Inicio,
+        },
+        {
+            path: '/usuarios',
+            name: 'usuarios',
+            component: ListadoUsuarios,
+        },
+        {
+            path: '/usuarios/crear',
+            name: 'nuevo-usuario',
+            component: CrearUsuario,
         },
         {
             path: '/informes',

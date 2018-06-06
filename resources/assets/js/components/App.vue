@@ -10,6 +10,7 @@
                     <!-- Left Side Of Navbar -->
                     <router-link :to="{ name: 'inicio' }" class="btn navbar-btn" role="button" active-class>Inicio</router-link>
                     <router-link :to="{ name: 'informes' }" class="btn navbar-btn" role="button" active-class>Informes de Actividades</router-link>
+                    <router-link :to="{ name: 'usuarios' }" class="btn navbar-btn" role="button" active-class>Usuarios</router-link>
                 </div>
             </div>
         </nav>
