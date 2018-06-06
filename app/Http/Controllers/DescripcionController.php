@@ -84,8 +84,13 @@ class DescripcionController extends Controller
         //
     }
 
-    public function all($tipo)
+    public function type($tipo)
     {
         return Descripcion::where('tipo', $tipo);
+    }
+
+    public function all()
+    {
+        return Descripcion::all();
     }
 }
