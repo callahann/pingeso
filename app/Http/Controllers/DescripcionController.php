@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Descripcion;
 use Illuminate\Http\Request;
+use Validator;
 
 class DescripcionController extends Controller
 {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Rol;
 use Illuminate\Http\Request;
+use Validator;
 
 class RolController extends Controller
 {
