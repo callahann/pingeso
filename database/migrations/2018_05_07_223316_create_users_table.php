@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('jerarquia');
             $table->string('jornada');
             $table->string('email')->unique();
-            $table->string('password');
+            //$table->string('password');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

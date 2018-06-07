@@ -22,7 +22,7 @@
         
         <div>
         <label>Jerarquía</label>
-        <select v-model="jerarquia">
+        <select v-model="user.jerarquia">
           <option disabled value="">Seleccionar jerarquía</option>
           <option>A</option>
           <option>B</option>
@@ -32,7 +32,7 @@
         
         <div>
         <label>Jornada</label>
-        <select v-model="jornada">
+        <select v-model="user.jornada">
           <option disabled value="">Seleccionar jornada</option>
           <option>Jornada completa</option>
           <option>3/4 Jornada completa</option>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+  import axios from 'axios';
   export default {
     name: 'add',
     data () {
@@ -57,11 +58,20 @@
     },
     methods: {
         addUser(e){
-            if(!this.user.first_name || !this.user.last_name || !this.user.email){
+            if(!this.user.nombre || !this.user.apellido || !this.user.email){
                 console.log('No se han llenado los campos necesarios');
             } else {
-                  //CONSULTA AXIOS
-                }
+              axios.post('/api/usuarios', this.user)
+                    .then(response => {
+                        console.log('Se ha registrado el usuario correctamente');
+                        this.message = response.data;
+                        this.mensaje = 1;
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        this.mensaje = -1; 
+                    });
+            }
             e.preventDefault();
         }
     }

@@ -13335,6 +13335,8 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 //
 //
 //
@@ -13364,6 +13366,7 @@ if (false) {(function () {
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
@@ -13374,7 +13377,16 @@ if (false) {(function () {
         };
     },
     created: function created() {
-        //AXIOS
+        var _this = this;
+
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios').then(function (response) {
+            _this.users = response.data.data;
+            _this.cargando = false;
+            console.log(_this.users);
+        }).catch(function (e) {
+            _this.cargando = false;
+            console.log(e);
+        });
     }
 });
 
@@ -13383,6 +13395,8 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 //
 //
 //
@@ -13432,6 +13446,7 @@ if (false) {(function () {
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'add',
@@ -13443,10 +13458,19 @@ if (false) {(function () {
 
     methods: {
         addUser: function addUser(e) {
-            if (!this.user.first_name || !this.user.last_name || !this.user.email) {
+            var _this = this;
+
+            if (!this.user.nombre || !this.user.apellido || !this.user.email) {
                 console.log('No se han llenado los campos necesarios');
             } else {
-                //CONSULTA AXIOS
+                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/usuarios', this.user).then(function (response) {
+                    console.log('Se ha registrado el usuario correctamente');
+                    _this.message = response.data;
+                    _this.mensaje = 1;
+                }).catch(function (e) {
+                    console.log(e);
+                    _this.mensaje = -1;
+                });
             }
             e.preventDefault();
         }
@@ -20662,8 +20686,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.jerarquia,
-                expression: "jerarquia"
+                value: _vm.user.jerarquia,
+                expression: "user.jerarquia"
               }
             ],
             on: {
@@ -20676,9 +20700,11 @@ var render = function() {
                     var val = "_value" in o ? o._value : o.value
                     return val
                   })
-                _vm.jerarquia = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
+                _vm.$set(
+                  _vm.user,
+                  "jerarquia",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
               }
             }
           },
@@ -20706,8 +20732,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.jornada,
-                expression: "jornada"
+                value: _vm.user.jornada,
+                expression: "user.jornada"
               }
             ],
             on: {
@@ -20720,9 +20746,11 @@ var render = function() {
                     var val = "_value" in o ? o._value : o.value
                     return val
                   })
-                _vm.jornada = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
+                _vm.$set(
+                  _vm.user,
+                  "jornada",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
               }
             }
           },

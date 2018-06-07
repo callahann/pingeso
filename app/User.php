@@ -23,7 +23,6 @@ class User extends Authenticatable
         'jerarquia',
         'jornada',
         'email',
-        'password',
     ];
 
     /**
@@ -32,7 +31,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token',
     ];
 
     protected $dates = ['deleted_at'];

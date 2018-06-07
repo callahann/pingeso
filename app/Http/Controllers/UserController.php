@@ -116,7 +116,6 @@ class UserController extends Controller
             'jerarquia' => 'required',
             'jornada' => 'required',
             'email' => 'required|unique:users,email',
-            'password' => 'required',
         ];
     }   
 }

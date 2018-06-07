@@ -28,6 +28,7 @@
 
 
 <script>
+    import axios from 'axios';
     export default {
         
         data: function() {
@@ -37,7 +38,16 @@
             }
         },
         created: function() {
-            //AXIOS
+            axios.get('/api/usuarios')
+            .then(response=> {
+              this.users = response.data.data;
+              this.cargando = false;
+              console.log(this.users);
+            })
+            .catch(e => {
+                this.cargando = false;
+                console.log(e);
+            });
         }
     }
 </script>
