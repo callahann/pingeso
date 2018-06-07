@@ -114,7 +114,7 @@ class ApelacionController extends Controller
         return [
             'id_declaracion' => 'required',
             'comentario' => 'required',
-            'archivo' => 'file',
+            'archivo' => 'sometimes|file',
         ];
     }   
 }
