@@ -42,7 +42,8 @@ class UserController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        User::create($data);
+        $request->merge(['id_rol' => 2, 'id_departamento' => 3]);
+        User::create($request->all());
 
         return $this->creationMessage();
     }
@@ -83,7 +84,6 @@ class UserController extends Controller
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
-
         $user = User::find($id);
         $user->fill($request->all);
         $user->save();
@@ -109,8 +109,6 @@ class UserController extends Controller
     protected function rules()
     {
         return [
-            'id_rol' => 'required',
-            'id_departamento' => 'required',
             'nombre' => 'required',
             'apellido' => 'required',
             'jerarquia' => 'required',
