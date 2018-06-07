@@ -41,8 +41,11 @@ class ApelacionController extends Controller
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
+        $fn = $request->id_declaracion . '_' . time() . $request->archivo->getClientOriginalExtension();
+        $request->archivo->storeAs('apelaciones',$fn);
 
-        $apelacion = Apelacion::create($data);
+        $request->merge(['nombre_archivo' => $fn]);
+        $apelacion = Apelacion::create($request->all());
 
         return $this->creationMessage();
     }
@@ -87,7 +90,7 @@ class ApelacionController extends Controller
 
         $apelacion = Apelacion::find($id);
 
-        $apelacion->fill($data);
+        $apelacion->fill($request->all());
         $apelacion->save();
 
         return $this->updateMessage();
@@ -111,7 +114,7 @@ class ApelacionController extends Controller
         return [
             'id_declaracion' => 'required',
             'comentario' => 'required',
-            'nombre_archivo' => 'file',
+            'archivo' => 'file',
         ];
     }   
 }
