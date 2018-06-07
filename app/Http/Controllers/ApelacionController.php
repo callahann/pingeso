@@ -41,10 +41,13 @@ class ApelacionController extends Controller
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
-        $fn = $request->id_declaracion . '_' . time() . $request->archivo->getClientOriginalExtension();
-        $request->archivo->storeAs('apelaciones',$fn);
 
-        $request->merge(['nombre_archivo' => $fn]);
+        if ($request->hasFile('archivo')) {
+            $fn = $request->id_declaracion . '_' . time() . $request->archivo->getClientOriginalExtension();
+            $request->archivo->storeAs('apelaciones',$fn);
+            $request->merge(['nombre_archivo' => $fn]);
+        }
+
         $apelacion = Apelacion::create($request->all());
 
         return $this->creationMessage();
@@ -86,6 +89,12 @@ class ApelacionController extends Controller
 
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
+        }
+        
+        if ($request->hasFile('archivo')) {
+            $fn = $request->id_declaracion . '_' . time() . $request->archivo->getClientOriginalExtension();
+            $request->archivo->storeAs('apelaciones',$fn);
+            $request->merge(['nombre_archivo' => $fn]);
         }
 
         $apelacion = Apelacion::find($id);
