@@ -1,24 +1,23 @@
 <template>  
-  <div class="add container">
-    <Alert v-if="alert" v-bind:message="alert" />
+  <div class="container">
     <h1 class="page-header">Agregar usuario</h1>
     <form v-on:submit="addUser">
         
             <h4>Datos del nuevo usuario</h4>
             <div class="form-group">
                 <label>Nombre</label>
-                <input type="text" class="form-control" placeholder="Nombre" v-model="customer.first_name">
+                <input type="text" class="form-control" placeholder="Nombre" v-model="user.nombre">
             </div>
             <div class="form-group">
                 <label>Apellido</label>
-                <input type="text" class="form-control" placeholder="Apellido" v-model="customer.last_name">
+                <input type="text" class="form-control" placeholder="Apellido" v-model="user.apellido">
             </div>
         
         
             
             <div class="form-group">
                 <label>Email</label>
-                <input type="text" class="form-control" placeholder="Email" v-model="customer.email">
+                <input type="text" class="form-control" placeholder="Email" v-model="user.email">
             </div>
         
         <div>
