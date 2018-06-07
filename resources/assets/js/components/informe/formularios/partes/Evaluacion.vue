@@ -128,24 +128,30 @@
             }
         },
         computed: {
-            calificacion: function() {
-                if (this.totales.realizado.equivalente === 0) return 0;
-                
-                var final = 0;
-                for(var itemKey in this.resumenes) 
-                    final += this.resumenes[itemKey].realizado.equivalente * this.informe[itemKey].calificacion;
-                return Math.round(final / this.totales.realizado.equivalente * 100) / 100;
+            calificacion: {
+                get() {
+                    if (this.totales.realizado.equivalente === 0) return 0;
+                    
+                    var final = 0;
+                    for(var itemKey in this.resumenes) 
+                        final += this.resumenes[itemKey].realizado.equivalente * this.informe[itemKey].calificacion;
+                    return Math.round(final / this.totales.realizado.equivalente * 100) / 100;
+                },
+                cache: false
             },
-            rango: function() {
-                let calificacion = this.calificacion;
-                var rango = undefined;
-                this.rangos.forEach((opcion) => {
-                    if(opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion;
-                });
-                return rango || {
-                    leyenda: 'No definido',
-                    color: 'black'
-                };
+            rango: {
+                get() {
+                    let calificacion = this.calificacion;
+                    var rango = undefined;
+                    this.rangos.forEach((opcion) => {
+                        if(opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion;
+                    });
+                    return rango || {
+                        leyenda: 'No definido',
+                        color: 'black'
+                    };
+                },
+                cache: false
             }
         }
     }

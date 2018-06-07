@@ -12381,7 +12381,10 @@ module.exports = Cancel;
             console.log("Se ha obtenido la data. Copiando localmente...");
             Object.assign(_this.informe, response.data);
 
-            if (_this.etapa >= _this.etapas.evaluando) _this.apelacion.id_declaracion = _this.informe.id;
+            if (_this.etapa >= _this.etapas.evaluando) {
+                _this.apelacion.id_declaracion = _this.informe.id;
+                _this.obtenerApelacion();
+            }
 
             _this.cargando = false;
         }).catch(function (e) {
@@ -13118,6 +13121,8 @@ if (false) {(function () {
 //
 //
 //
+//
+//
 
 
 
@@ -13142,23 +13147,23 @@ if (false) {(function () {
         'lista-actividades': __WEBPACK_IMPORTED_MODULE_4__partes_ListaActividades__["a" /* default */],
         'apelacion': __WEBPACK_IMPORTED_MODULE_5__partes_Apelacion__["a" /* default */]
     },
-    created: function created() {
-        var _this = this;
-
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/apelaciones/' + this.informe.id).then(function (response) {
-            console.log("Se ha obtenido la apelación. Copiando localmente...");
-            Object.assign(_this.apelacion, response.data);
-            _this.cargandoApelacion = false;
-        }).catch(function (e) {
-            console.log(e);
-            _this.cargandoApelacion = false;
-        });
-    },
     methods: {
+        obtenerApelacion: function obtenerApelacion() {
+            var _this = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/apelaciones/' + this.informe.id).then(function (response) {
+                console.log("Se ha obtenido la apelación. Copiando localmente...");
+                _this.apelacion = response.data;
+                _this.cargandoApelacion = false;
+            }).catch(function (e) {
+                console.log(e);
+                _this.cargandoApelacion = false;
+            });
+        },
         enviar: function enviar() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/apelaciones', this.apelacion, {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/apelaciones', this.formData(this.apelacion), {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -13309,24 +13314,32 @@ if (false) {(function () {
         }
     },
     computed: {
-        calificacion: function calificacion() {
-            if (this.totales.realizado.equivalente === 0) return 0;
+        calificacion: {
+            get: function get() {
+                if (this.totales.realizado.equivalente === 0) return 0;
 
-            var final = 0;
-            for (var itemKey in this.resumenes) {
-                final += this.resumenes[itemKey].realizado.equivalente * this.informe[itemKey].calificacion;
-            }return Math.round(final / this.totales.realizado.equivalente * 100) / 100;
+                var final = 0;
+                for (var itemKey in this.resumenes) {
+                    final += this.resumenes[itemKey].realizado.equivalente * this.informe[itemKey].calificacion;
+                }return Math.round(final / this.totales.realizado.equivalente * 100) / 100;
+            },
+
+            cache: false
         },
-        rango: function rango() {
-            var calificacion = this.calificacion;
-            var rango = undefined;
-            this.rangos.forEach(function (opcion) {
-                if (opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion;
-            });
-            return rango || {
-                leyenda: 'No definido',
-                color: 'black'
-            };
+        rango: {
+            get: function get() {
+                var calificacion = this.calificacion;
+                var rango = undefined;
+                this.rangos.forEach(function (opcion) {
+                    if (opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion;
+                });
+                return rango || {
+                    leyenda: 'No definido',
+                    color: 'black'
+                };
+            },
+
+            cache: false
         }
     }
 });
@@ -13673,6 +13686,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
         };
     },
     methods: {
+        formData: function formData(object) {
+            var formData = new FormData();
+            for (var key in object) {
+                formData.append(key, object[key]);
+            }
+            return formData;
+        },
         equivalentes: function equivalentes(a, b) {
             return eval(this.ecuaciones.equivalentes.replaceAll('semanal', a).replaceAll('semestral_anual', b));
         }
@@ -20364,8 +20384,42 @@ var render = function() {
       1
     ),
     _vm._v(" "),
+    _vm.etapa === _vm.etapas.apelando || _vm.apelacion.id !== undefined
+      ? _c(
+          "div",
+          { staticClass: "row" },
+          [
+            _vm.cargandoApelacion
+              ? _c("div", { staticClass: "panel panel-default text-center" }, [
+                  _vm._m(1)
+                ])
+              : _c("apelacion", {
+                  attrs: {
+                    previo: _vm.apelacion,
+                    editable:
+                      _vm.etapa === _vm.etapas.apelando &&
+                      _vm.apelacion.id === undefined
+                  },
+                  on: {
+                    actualizar: function($event) {
+                      _vm.apelacion = $event
+                    }
+                  }
+                })
+          ],
+          1
+        )
+      : _vm._e(),
+    _vm._v(" "),
     _vm.etapa === _vm.etapas.evaluando && _vm.apelacion.id === undefined
       ? _c("div", { staticClass: "row" }, [
+          _vm._v(
+            "\n        " +
+              _vm._s(_vm.apelacion.id) +
+              "\n        " +
+              _vm._s(_vm.apelacion) +
+              "\n        "
+          ),
           _c("div", { staticClass: "panel panel-default" }, [
             _c("div", { staticClass: "panel-heading panel-tabs" }, [
               _c(
@@ -20395,7 +20449,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _vm.cargando
-              ? _c("div", { staticClass: "text-center" }, [_vm._m(1)])
+              ? _c("div", { staticClass: "text-center" }, [_vm._m(2)])
               : _c(
                   "div",
                   { staticClass: "tab-content" },
@@ -20429,30 +20483,7 @@ var render = function() {
                 )
           ])
         ])
-      : _c(
-          "div",
-          { staticClass: "row" },
-          [
-            _vm.cargandoApelacion
-              ? _c("div", { staticClass: "panel panel-default text-center" }, [
-                  _vm._m(2)
-                ])
-              : _c("apelacion", {
-                  attrs: {
-                    previo: _vm.apelacion,
-                    editable:
-                      _vm.etapa === _vm.etapas.apelando &&
-                      _vm.apelacion.id === undefined
-                  },
-                  on: {
-                    actualizar: function($event) {
-                      _vm.apelacion = $event
-                    }
-                  }
-                })
-          ],
-          1
-        ),
+      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _vm.mensaje === 1
@@ -20562,7 +20593,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h3", [
       _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
-      _vm._v(" \n                    Cargando...\n                ")
+      _vm._v(" \n                Cargando...\n            ")
     ])
   },
   function() {
@@ -20571,7 +20602,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h3", [
       _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
-      _vm._v(" \n                Cargando...\n            ")
+      _vm._v(" \n                    Cargando...\n                ")
     ])
   }
 ]

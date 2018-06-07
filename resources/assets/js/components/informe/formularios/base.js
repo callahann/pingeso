@@ -15,8 +15,10 @@ export default {
                 console.log("Se ha obtenido la data. Copiando localmente...");
                 Object.assign(this.informe, response.data);
 
-                if(this.etapa >= this.etapas.evaluando)
+                if(this.etapa >= this.etapas.evaluando) {
                     this.apelacion.id_declaracion = this.informe.id;
+                    this.obtenerApelacion();
+                }
                     
                 this.cargando = false;
             })

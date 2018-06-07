@@ -20,6 +20,8 @@
             <evaluacion v-else :informe="informe" :etapa="etapa"></evaluacion>
         </div>
         <div class="row" v-if="etapa === etapas.evaluando && apelacion.id === undefined">
+            {{ apelacion.id }}
+            {{ apelacion }}
             <div class="panel panel-default">
                 <div class="panel-heading panel-tabs">
                     <ul class="nav nav-tabs text-center">
@@ -107,24 +109,23 @@
             'lista-actividades': ListaActividades,
             'apelacion': Apelacion
         },
-        created: function() {
-            axios
-                .get('/api/apelaciones/' + this.informe.id)
-                .then(response => { 
-                    console.log("Se ha obtenido la apelación. Copiando localmente...");
-                    Object.assign(this.apelacion, response.data);
-                    this.cargandoApelacion = false;
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.cargandoApelacion = false;
-                });
-        },
         methods: {
-            enviar: function() {
-                console.log(this.apelacion);
+            obtenerApelacion: function() {
                 axios
-                    .post('/api/apelaciones', this.apelacion,
+                    .get('/api/apelaciones/' + this.informe.id)
+                    .then(response => { 
+                        console.log("Se ha obtenido la apelación. Copiando localmente...");
+                        this.apelacion = response.data;
+                        this.cargandoApelacion = false;
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        this.cargandoApelacion = false;
+                    });
+            },
+            enviar: function() {
+                axios
+                    .post('/api/apelaciones', this.formData(this.apelacion),
                     {
                         headers: {
                             'Content-Type': 'multipart/form-data'

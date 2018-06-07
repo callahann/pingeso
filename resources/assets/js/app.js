@@ -131,6 +131,13 @@ Vue.mixin({
         }
     },
     methods: {
+        formData: function(object) {
+            let formData = new FormData();
+            for (var key in object) {
+                formData.append(key, object[key]);
+            }
+            return formData;
+        },
         equivalentes: function(a, b) {
             return eval(this.ecuaciones.equivalentes.replaceAll('semanal', a).replaceAll('semestral_anual', b));
         }
