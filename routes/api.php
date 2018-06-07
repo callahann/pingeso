@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('declaraciones', 'DeclaracionController');
 Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
+Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
 
 Route::get('/all/descripciones', 'DescripcionController@all');
 Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
