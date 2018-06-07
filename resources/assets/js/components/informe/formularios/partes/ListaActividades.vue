@@ -33,7 +33,20 @@
                 <tbody>
                     <tr v-for="(actividad, index) in actividades" v-bind:key="actividad.id">
                         <td class="col-md-3">
-                            <input class="form-control" v-model="actividad.descripcion">
+                            <select class="form-control" v-if="descripciones.length > 0 && !actividad.otra"
+                                v-model="actividad.descripcion" v-on:change="otra(actividad)">
+                                <option disabled value="">Seleccionar una...</option>
+                                <option v-for="descripcion in descripciones" :key="descripcion.id">{{ descripcion.descripcion }}</option>
+                                <option>Otra actividad...</option>
+                            </select>
+                            <div v-else class="input-group">
+                                <input  class="form-control" v-model="actividad.descripcion" placeholder="Descripción de la actividad">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-info" type="button" v-on:click="actividad.otra = false">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </td>
                         <td class="col-md-1">
                             <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemana">
@@ -195,15 +208,23 @@
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar actividad
             </button>
         </div>
+        <div class="panel-footer" v-if="etapa === etapas.realizado">
+            <b>Semestre: </b>
+            <label class="radio-inline"><input type="radio" v-model="semestre" value="primero">Primero</label>
+            <label class="radio-inline"><input type="radio" v-model="semestre" value="segundo">Segundo</label>
+        </div>
     </div>
 </template>
 <script>
+    import axios from 'axios';
+
     export default {
-        props: ['previo', 'etapa'],
+        props: ['previo', 'etapa', 'tipo'],
         data: function () {
             return {
                 id: 1,
                 actividades: [],
+                descripciones: [],
                 semestre: 'primero'
             }
         },
@@ -212,11 +233,23 @@
 
             let cuenta = this.actividades.length; 
             if(cuenta > 0) this.id = this.actividades[cuenta - 1].id;
+
+            if(this.etapa <= this.etapas.aprobando)
+                axios
+                    .get('/api/all/descripciones/' + this.tipo)
+                    .then(response => {
+                        this.descripciones = response.data;
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
         },
         methods: {
             nuevoItem: function() {
                 return {
                     id: this.id++,
+                    descripcion: '',
+                    otra: false,
                     comprometido: {
                         primero: {
                             horasSemana: 0,
@@ -246,6 +279,12 @@
             },
             quitarActividad: function(index) {
                 this.actividades.splice(index, 1);
+            },
+            otra: function(actividad) {
+                if(actividad.descripcion === 'Otra actividad...') {
+                    actividad.descripcion = '';
+                    actividad.otra = true;
+                }
             }
         },
         watch: {

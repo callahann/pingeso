@@ -122,8 +122,14 @@
         },
         methods: {
             enviar: function() {
+                console.log(this.apelacion);
                 axios
-                    .post('/api/apelaciones', this.apelacion)
+                    .post('/api/apelaciones', this.apelacion,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    })
                     .then(response => {
                         console.log(this.volver('Se ha registrado la apelación correctamente'));
                     })

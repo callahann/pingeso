@@ -11902,7 +11902,6 @@ process.umask = function() { return 0; };
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/declaraciones').then(function (response) {
             _this.informes = response.data;
             _this.cargando = false;
-            console.log(_this.informes);
         }).catch(function (e) {
             _this.cargando = false;
             console.log(e);
@@ -12402,10 +12401,14 @@ module.exports = Cancel;
                 _this2.mensaje = -1;
             });
         },
-        volver: function volver(mensaje) {
+        volver: function volver() {
+            var mensaje = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
+
             this.$router.push({
                 name: 'informes',
-                params: mensaje === undefined ? {} : { mensaje: mensaje }
+                params: {
+                    mensaje: mensaje
+                }
             });
             return mensaje;
         }
@@ -12613,6 +12616,26 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -12813,25 +12836,38 @@ if (false) {(function () {
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["a"] = ({
-    props: ['previo', 'etapa'],
+    props: ['previo', 'etapa', 'tipo'],
     data: function data() {
         return {
             id: 1,
             actividades: [],
+            descripciones: [],
             semestre: 'primero'
         };
     },
     created: function created() {
+        var _this = this;
+
         Object.assign(this.actividades, this.previo);
 
         var cuenta = this.actividades.length;
         if (cuenta > 0) this.id = this.actividades[cuenta - 1].id;
+
+        if (this.etapa <= this.etapas.aprobando) __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/all/descripciones/' + this.tipo).then(function (response) {
+            _this.descripciones = response.data;
+        }).catch(function (e) {
+            console.log(e);
+        });
     },
     methods: {
         nuevoItem: function nuevoItem() {
             return {
                 id: this.id++,
+                descripcion: '',
+                otra: false,
                 comprometido: {
                     primero: {
                         horasSemana: 0,
@@ -12861,6 +12897,12 @@ if (false) {(function () {
         },
         quitarActividad: function quitarActividad(index) {
             this.actividades.splice(index, 1);
+        },
+        otra: function otra(actividad) {
+            if (actividad.descripcion === 'Otra actividad...') {
+                actividad.descripcion = '';
+                actividad.otra = true;
+            }
         }
     },
     watch: {
@@ -13116,7 +13158,11 @@ if (false) {(function () {
         enviar: function enviar() {
             var _this2 = this;
 
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/apelaciones', this.apelacion).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/apelaciones', this.apelacion, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(function (response) {
                 console.log(_this2.volver('Se ha registrado la apelación correctamente'));
             }).catch(function (e) {
                 console.log(e);
@@ -13311,13 +13357,18 @@ if (false) {(function () {
     data: function data() {
         return {
             apelacion: {
-                descripcion: '',
-                nombre_archivo: null
+                comentario: '',
+                archivo: ''
             }
         };
     },
     created: function created() {
         Object.assign(this.apelacion, this.previo);
+    },
+    methods: {
+        obtenerArchivo: function obtenerArchivo() {
+            this.apelacion.archivo = this.$refs.archivo.files[0];
+        }
     },
     watch: {
         apelacion: {
@@ -18292,30 +18343,118 @@ var render = function() {
                     _vm._l(_vm.actividades, function(actividad, index) {
                       return _c("tr", { key: actividad.id }, [
                         _c("td", { staticClass: "col-md-3" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: actividad.descripcion,
-                                expression: "actividad.descripcion"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            domProps: { value: actividad.descripcion },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  actividad,
-                                  "descripcion",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
+                          _vm.descripciones.length > 0 && !actividad.otra
+                            ? _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: actividad.descripcion,
+                                      expression: "actividad.descripcion"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  on: {
+                                    change: [
+                                      function($event) {
+                                        var $$selectedVal = Array.prototype.filter
+                                          .call($event.target.options, function(
+                                            o
+                                          ) {
+                                            return o.selected
+                                          })
+                                          .map(function(o) {
+                                            var val =
+                                              "_value" in o ? o._value : o.value
+                                            return val
+                                          })
+                                        _vm.$set(
+                                          actividad,
+                                          "descripcion",
+                                          $event.target.multiple
+                                            ? $$selectedVal
+                                            : $$selectedVal[0]
+                                        )
+                                      },
+                                      function($event) {
+                                        _vm.otra(actividad)
+                                      }
+                                    ]
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "option",
+                                    { attrs: { disabled: "", value: "" } },
+                                    [_vm._v("Seleccionar una...")]
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._l(_vm.descripciones, function(
+                                    descripcion
+                                  ) {
+                                    return _c(
+                                      "option",
+                                      { key: descripcion.id },
+                                      [_vm._v(_vm._s(descripcion.descripcion))]
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("option", [_vm._v("Otra actividad...")])
+                                ],
+                                2
+                              )
+                            : _c("div", { staticClass: "input-group" }, [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: actividad.descripcion,
+                                      expression: "actividad.descripcion"
+                                    }
+                                  ],
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    placeholder: "Descripción de la actividad"
+                                  },
+                                  domProps: { value: actividad.descripcion },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        actividad,
+                                        "descripcion",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "input-group-btn" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-info",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          actividad.otra = false
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass:
+                                          "glyphicon glyphicon-list-alt"
+                                      })
+                                    ]
+                                  )
+                                ])
+                              ])
                         ]),
                         _vm._v(" "),
                         _c("td", { staticClass: "col-md-1" }, [
@@ -18993,6 +19132,54 @@ var render = function() {
             ]
           )
         ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.etapa === _vm.etapas.realizado
+      ? _c("div", { staticClass: "panel-footer" }, [
+          _c("b", [_vm._v("Semestre: ")]),
+          _vm._v(" "),
+          _c("label", { staticClass: "radio-inline" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.semestre,
+                  expression: "semestre"
+                }
+              ],
+              attrs: { type: "radio", value: "primero" },
+              domProps: { checked: _vm._q(_vm.semestre, "primero") },
+              on: {
+                change: function($event) {
+                  _vm.semestre = "primero"
+                }
+              }
+            }),
+            _vm._v("Primero")
+          ]),
+          _vm._v(" "),
+          _c("label", { staticClass: "radio-inline" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.semestre,
+                  expression: "semestre"
+                }
+              ],
+              attrs: { type: "radio", value: "segundo" },
+              domProps: { checked: _vm._q(_vm.semestre, "segundo") },
+              on: {
+                change: function($event) {
+                  _vm.semestre = "segundo"
+                }
+              }
+            }),
+            _vm._v("Segundo")
+          ])
+        ])
       : _vm._e()
   ])
 }
@@ -19451,7 +19638,7 @@ var render = function() {
           : _c(
               "div",
               { staticClass: "tab-content" },
-              _vm._l(_vm.informe, function(value, key) {
+              _vm._l(_vm.informe, function(value, key, index) {
                 return key.startsWith("item")
                   ? _c(
                       "div",
@@ -19465,7 +19652,8 @@ var render = function() {
                         _c("lista-actividades", {
                           attrs: {
                             previo: value.actividades,
-                            etapa: _vm.etapa
+                            etapa: _vm.etapa,
+                            tipo: index + 1
                           },
                           on: {
                             actualizar: function($event) {
@@ -20073,43 +20261,38 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.apelacion.descripcion,
-                expression: "apelacion.descripcion"
+                value: _vm.apelacion.comentario,
+                expression: "apelacion.comentario"
               }
             ],
             staticClass: "col-md-12 form-control",
             attrs: { rows: "3" },
-            domProps: { value: _vm.apelacion.descripcion },
+            domProps: { value: _vm.apelacion.comentario },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.apelacion, "descripcion", $event.target.value)
+                _vm.$set(_vm.apelacion, "comentario", $event.target.value)
               }
             }
           })
-        : _c("p", [_vm._v(_vm._s(_vm.apelacion.descripcion))])
+        : _c("p", [_vm._v(_vm._s(_vm.apelacion.comentario))])
     ]),
     _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-footer" }, [
+    _c("div", { staticClass: "panel-footer" }, [
       _c("label", { attrs: { for: "archivo" } }, [_vm._v("Archivo: ")]),
       _vm._v(" "),
       _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "file", id: "archivo" }
+        ref: "archivo",
+        staticClass: "form-control btn btn-info",
+        attrs: { type: "file" },
+        on: { change: _vm.obtenerArchivo }
       })
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 if (false) {

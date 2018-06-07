@@ -38,10 +38,12 @@ export default {
                     this.mensaje = -1; 
                 });
         },
-        volver: function(mensaje) {
+        volver: function(mensaje = undefined) {
             this.$router.push({
                 name: 'informes',
-                params: mensaje === undefined ? {} : { mensaje: mensaje }
+                params: { 
+                    mensaje: mensaje
+                }
             });
             return mensaje;
         }

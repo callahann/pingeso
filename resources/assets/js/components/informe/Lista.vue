@@ -62,7 +62,6 @@
                 .then(response => {
                     this.informes = response.data;
                     this.cargando = false;
-                    console.log(this.informes);
                 })
                 .catch(e => {
                     this.cargando = false;

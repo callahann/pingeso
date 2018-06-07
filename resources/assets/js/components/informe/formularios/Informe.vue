@@ -27,10 +27,10 @@
                     </h3>
                 </div>
                 <div class="tab-content" v-else>
-                    <div :id="key" v-for="(value, key) in  informe" :key="key"
+                    <div :id="key" v-for="(value, key, index) in  informe" :key="key"
                         class="tab-pane fade" :class="{ 'in active': key === 'item_docencia' }"
                         v-if="key.startsWith('item')">
-                        <lista-actividades :previo="value.actividades" :etapa="etapa"
+                        <lista-actividades :previo="value.actividades" :etapa="etapa" :tipo="index + 1"
                             v-on:actualizar="value.actividades = $event"></lista-actividades>
                     </div>
                 </div>
