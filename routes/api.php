@@ -20,7 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('declaraciones', 'DeclaracionController');
 Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
 
-Route::get('/descripciones/{tipo}', 'DescripcionController@all');
+Route::get('/all/descripciones', 'DescripcionController@all');
+Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
+
 
 Route::resource('usuarios', 'UserController')->except(['create','edit']);
 Route::resource('apelaciones', 'ApelacionController');

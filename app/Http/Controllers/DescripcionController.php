@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Descripcion;
 use Illuminate\Http\Request;
+use Validator;
 
 class DescripcionController extends Controller
 {
@@ -83,8 +84,13 @@ class DescripcionController extends Controller
         //
     }
 
-    public function all($tipo)
+    public function type($tipo)
     {
-        return Descripcion::where('tipo', $tipo);
+        return Descripcion::where('tipo', $tipo)->get();
+    }
+
+    public function all()
+    {
+        return Descripcion::all();
     }
 }

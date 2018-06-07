@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facultad;
 use Illuminate\Http\Request;
+use Validator;
 
 class FacultadController extends Controller
 {

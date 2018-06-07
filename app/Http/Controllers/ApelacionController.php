@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Apelacion;
 use Illuminate\Http\Request;
+use Validator;
 
 class ApelacionController extends Controller
 {

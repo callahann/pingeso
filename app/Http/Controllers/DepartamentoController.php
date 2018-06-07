@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Departamento;
 use Illuminate\Http\Request;
+use Validator;
 
 class DepartamentoController extends Controller
 {
