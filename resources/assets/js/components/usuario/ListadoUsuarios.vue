@@ -1,5 +1,5 @@
 <template>
-  <div class="customers container">
+  <div class="container">
   
     <h1 class="page-header">Usuarios</h1>
    
@@ -19,10 +19,11 @@
           </tr>
         </tbody>
     </table>
+    <div>
+     <router-link class="btn btn-xs btn-info btn-block" :to="{ name: 'nuevo-usuario'}">Agregar usuario</router-link>
+    </div>
   </div>
- <div>
-    <router-link class="btn btn-xs btn-info btn-block" :to="{ name: 'crear-usuario'}">Agregar usuario</router-link>
- </div>
+ 
 </template>
 
 
@@ -31,8 +32,8 @@
         
         data: function() {
             return {
-                informes: [],
-                cargando: true,
+                users: [],
+                
             }
         },
         created: function() {

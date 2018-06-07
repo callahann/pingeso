@@ -21,8 +21,8 @@ import Inicio from './components/Inicio';
 import ListaInformes from './components/informe/Lista';
 import Informe from './components/informe/formularios/Informe';
 import Evaluacion from './components/informe/formularios/Evaluacion';
-import ListadoUsuarios from './components/usuario/ListadoUsuarios.Vue'
-import CrearUsuario from './components/usuario/CrearUsuario.Vue'
+import ListadoUsuarios from './components/usuario/ListadoUsuarios'
+import CrearUsuario from './components/usuario/CrearUsuario'
 
 
 /**
