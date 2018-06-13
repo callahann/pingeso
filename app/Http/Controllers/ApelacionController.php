@@ -93,7 +93,7 @@ class ApelacionController extends Controller
         }
 
         if ($request->hasFile('archivo')) {
-            $fn = $request->id_declaracion . '_' . time() . $request->archivo->getClientOriginalExtension();
+            $fn = $request->id_declaracion . '_' . time() . '.' . $request->archivo->getClientOriginalExtension();
             $request->archivo->storeAs('apelaciones',$fn);
             $request->merge(['nombre_archivo' => $fn]);
         }
@@ -122,6 +122,13 @@ class ApelacionController extends Controller
     public function obtener($declaracion)
     {
         return Apelacion::where('id_declaracion', $declaracion)->get();
+    }
+
+    public function descargar($apelacion)
+    {
+        $apelacion = Apelacion::findOrFail($apelacion);
+
+        return response()->download('apelaciones/'. $apelacion->nombre_archivo);
     }
 
     protected function rules()
