@@ -23,12 +23,12 @@ class GoogleLoginController extends Controller
         if($findUser){
             $this->email = $user->getEmail();
             Auth::login($findUser);
-            if (Auth::user()){
-            return Auth::id();
+            /*if (Auth::user()){
+            return auth()->user()->email;
             }
             else{
                 return 'NO';
-            }
+            }*/
             return view('spa');
         }
         else{
@@ -37,6 +37,11 @@ class GoogleLoginController extends Controller
     }
 
     public function getUserEmail(){
-        
+        if(Auth::user()){
+            return auth()->user()->email;
+        }
+        else{
+            return 'No hay usuario logueado';
+        }
     }
 }

@@ -11830,23 +11830,22 @@ process.umask = function() { return 0; };
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
     data: function data() {
         return {
-            email: 'email_user'
+            nombre: 'nombre'
 
         };
     },
     created: function created() {
         var _this = this;
 
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/user?state=E0zlXoF6khwEKeRLH7HthNHscI7xkiPPQWGCXEnd&code=4%2FAAAzbTgh4OTPmL-jJz_wWxgf7SjNmNAUeJs_wwY9a1WxSOQGnpTQmt4ktYuBdwGjPNfDKeuiHMh1BUDJJ3zh3hU&authuser=0&hd=usach.cl&session_state=6d192cbecb7dccb6cde38024c377b3da3e22a959..8c76&prompt=none').then(function (response) {
-            _this.email = response.data.data;
-            console.log(_this.email);
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/user/name').then(function (response) {
+            _this.nombre = response.data;
+            console.log(_this.nombre);
         }).catch(function (e) {
             _this.cargando = false;
             console.log(e);
@@ -17695,7 +17694,7 @@ var render = function() {
       _vm._v("Sistema de evaluación y calificación de desempeño académico")
     ]),
     _vm._v(" "),
-    _c("h2", [_vm._v("Bienvenido, " + _vm._s(_vm.email))]),
+    _c("h2", [_vm._v("Bienvenido, " + _vm._s(_vm.nombre))]),
     _vm._v(" "),
     _vm._m(0)
   ])
