@@ -22,7 +22,7 @@ Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approv
 Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
 Route::get('/descarga/apelacion/{apelacion}', 'ApelacionController@descargar');
 
-Route::get('/user', 'Auth\GoogleLoginController@getUserEmail');
+Route::get('/userdata', 'Auth\GoogleLoginController@getUserEmail');
 Route::get('/all/descripciones', 'DescripcionController@all');
 Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
 
