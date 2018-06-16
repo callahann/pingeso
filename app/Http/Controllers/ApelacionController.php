@@ -36,6 +36,7 @@ class ApelacionController extends Controller
      */
     public function store(Request $request)
     {
+        return $request;
         $validator = Validator::make($request->all(), $this->rules());
 
         if ($validator->fails()) {
@@ -90,9 +91,9 @@ class ApelacionController extends Controller
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
-        
+
         if ($request->hasFile('archivo')) {
-            $fn = $request->id_declaracion . '_' . time() . $request->archivo->getClientOriginalExtension();
+            $fn = $request->id_declaracion . '_' . time() . '.' . $request->archivo->getClientOriginalExtension();
             $request->archivo->storeAs('apelaciones',$fn);
             $request->merge(['nombre_archivo' => $fn]);
         }
@@ -116,6 +117,18 @@ class ApelacionController extends Controller
         $apelacion->delete();
 
         return $this->deleteMessage();
+    }
+
+    public function obtener($declaracion)
+    {
+        return Apelacion::where('id_declaracion', $declaracion)->get();
+    }
+
+    public function descargar($apelacion)
+    {
+        $apelacion = Apelacion::findOrFail($apelacion);
+
+        return response()->download('apelaciones/'. $apelacion->nombre_archivo);
     }
 
     protected function rules()

@@ -19,8 +19,7 @@ Vue.use(VueRouter)
 import App from './components/App';
 import Inicio from './components/Inicio';
 import ListaInformes from './components/informe/Lista';
-import Informe from './components/informe/formularios/Informe';
-import Evaluacion from './components/informe/formularios/Evaluacion';
+import Formulario from './components/informe/formulario/Formulario';
 import ListadoUsuarios from './components/usuario/ListadoUsuarios'
 import CrearUsuario from './components/usuario/CrearUsuario'
 
@@ -66,37 +65,37 @@ const router = new VueRouter({
         {
             path: '/informes/declarar',
             name: 'nuevo-informe',
-            component: Informe,
+            component: Formulario,
             props: { etapa: EtapasEnum.declarando }
         },
         {
             path: '/informes/:id',
             name: 'editar-informe',
-            component: Informe,
+            component: Formulario,
             props: { etapa: EtapasEnum.declarando }
         },
         {
             path: '/informes/:id/aprobar',
             name: 'aprobar-informe',
-            component: Informe,
+            component: Formulario,
             props: { etapa: EtapasEnum.aprobando }
         },
         {
             path: '/informes/:id/realizado',
             name: 'declarar-realizado',
-            component: Informe,
+            component: Formulario,
             props: { etapa: EtapasEnum.realizado }
         },
         {
             path: '/informes/:id/evaluar',
             name: 'evaluar-informe',
-            component: Evaluacion,
+            component: Formulario,
             props: { etapa: EtapasEnum.evaluando }
         },
         {
             path: '/informes/:id/apelar',
             name: 'apelar-evaluacion',
-            component: Evaluacion,
+            component: Formulario,
             props: { etapa: EtapasEnum.apelando }
         },
     ],

@@ -1,7 +1,12 @@
 <template>
     <div>
         <div v-if="actividades.length == 0" class="text-center">
-            <h3 v-if="etapa <= etapas.evaluando">No se han agregado actividades aún. Presione el botón "+"</h3>
+            <h3 class="inline-text" v-if="etapa <= etapas.evaluando">
+                No se ha agregado actividades aún. Presione el botón 
+                <b class="btn-text">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar actividad
+                </b>
+            </h3>
             <h3 v-else>No se declararon actividades para este ítem</h3>
         </div>
         <div v-else>
@@ -43,7 +48,7 @@
                                 <input  class="form-control" v-model="actividad.descripcion" placeholder="Descripción de la actividad">
                                 <div class="input-group-btn">
                                     <button class="btn btn-info" type="button" v-on:click="actividad.otra = false">
-                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                        <i class="glyphicon glyphicon-list"></i>
                                     </button>
                                 </div>
                             </div>
@@ -229,7 +234,7 @@
             }
         },
         created: function() {
-            Object.assign(this.actividades, this.previo);
+            this.actividades = Object.assign([], this.actividades, this.previo);
 
             let cuenta = this.actividades.length; 
             if(cuenta > 0) this.id = this.actividades[cuenta - 1].id;

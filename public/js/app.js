@@ -13163,7 +13163,12 @@ if (false) {(function () {
         enviar: function enviar() {
             var _this2 = this;
 
+<<<<<<< HEAD
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/apelaciones', this.formData(this.apelacion), {
+=======
+            console.log(this.apelacion);
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/apelaciones', this.apelacion, {
+>>>>>>> 9493695b20be5e057a0fa6feee1962c99994b1fe
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -20690,9 +20695,9 @@ var render = function() {
         "tbody",
         _vm._l(_vm.users, function(user) {
           return _c("tr", [
-            _c("td", [_vm._v(_vm._s(user.first_name))]),
+            _c("td", [_vm._v(_vm._s(user.nombre))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(user.last_name))]),
+            _c("td", [_vm._v(_vm._s(user.apellido))]),
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(user.email))])
           ])
