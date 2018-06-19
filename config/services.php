@@ -35,4 +35,10 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'google' => [
+   'client_id'     => '1033226075080-n4n5d6ad3lm8gjogomcobgpeprlfkdbs.apps.googleusercontent.com', 
+   'client_secret' => 'h_0JXPmBnOsrxt7l9zxkBjYT',
+   'redirect'      => 'https://pingeso.com/logged'
+],
+
 ];

@@ -21,7 +21,11 @@ Route::resource('declaraciones', 'DeclaracionController');
 Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
 Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
 Route::get('/descarga/apelacion/{apelacion}', 'ApelacionController@descargar');
-
+Route::group(['middleware' => ['web', 'auth']], function (){
+	Route::get('/userdata', function (){
+		echo Auth::user()->email;
+	});	
+});
 
 Route::get('/all/descripciones', 'DescripcionController@all');
 Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
