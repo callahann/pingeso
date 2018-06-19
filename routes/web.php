@@ -29,6 +29,9 @@ Route::group(['middleware' => ['web', 'auth']], function (){
 	Route::get('/user/lastname', function (){
 		return Auth::user()->apellido;
 	});
+	Route::get('/user/role', function (){
+		return Auth::user()->id_rol;
+	});
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
