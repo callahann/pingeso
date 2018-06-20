@@ -91,7 +91,7 @@ class DepartamentoController extends Controller
         $departamento->fill($data);
         $departamento->save();
 
-        return $this->creationMessage();
+        return $this->updateMessage();
     }
 
     /**
