@@ -22,7 +22,8 @@ import ListaInformes from './components/informe/Lista';
 import Formulario from './components/informe/formulario/Formulario';
 import ListadoUsuarios from './components/usuario/ListadoUsuarios'
 import CrearUsuario from './components/usuario/CrearUsuario'
-
+import ListadoFacultades from './components/facultad/ListadoFacultades';
+import FormFacultad from './components/facultad/FormFacultad';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -40,6 +41,7 @@ const EtapasEnum = Object.freeze({
 
 const router = new VueRouter({
     mode: 'history',
+    base: 'home',
     routes: [
         {
             path: '/',
@@ -98,6 +100,24 @@ const router = new VueRouter({
             component: Formulario,
             props: { etapa: EtapasEnum.apelando }
         },
+        {
+            path: '/facultades',
+            name: 'facultades',
+            component: ListadoFacultades
+        },
+        {
+            path: '/facultades/crear',
+            name: 'crear-facultad',
+            component: FormFacultad,
+            props: true
+        },
+        {
+            path: '/facultades/editar',
+            name: 'editar-facultad',
+            component: FormFacultad,
+            props: true
+        },
+
     ],
 });
 

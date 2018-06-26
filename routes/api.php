@@ -21,7 +21,7 @@ Route::resource('declaraciones', 'DeclaracionController');
 Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
 Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
 Route::get('/descarga/apelacion/{apelacion}', 'ApelacionController@descargar');
-Route::group(['middleware' => ['web', 'auth']], function (){
+Route::group(['middleware' => ['auth:api']], function (){
 	Route::get('/userdata', function (){
 		echo Auth::user()->email;
 	});	

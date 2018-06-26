@@ -42,7 +42,7 @@ class DepartamentoController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        $departamento = Departamento::create($data);
+        $departamento = Departamento::create($request->all());
 
         return $this->creationMessage();
     }

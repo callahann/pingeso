@@ -15,7 +15,7 @@ Route::get('/{any}', function() {
 })->where('any', '.*');
 */
 
-Route::get('/', 'Auth\GoogleLoginController@redirectToProvider');
+Route::get('/', 'Auth\GoogleLoginController@redirectToProvider')->middleware(['guest']);
 Route::get('/logged', 'Auth\GoogleLoginController@handleProviderCallback');
 Auth::routes();
 
