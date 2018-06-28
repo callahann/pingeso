@@ -18,8 +18,13 @@ class CreatePeriodosTable extends Migration
             $table->dateTime('desde');
             $table->dateTime('hasta');
             $table->integer('estado');
+            $table->integer('id_departamento');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('id_departamento')
+                ->references('id')
+                ->on('departamentos');
         });
     }
 
