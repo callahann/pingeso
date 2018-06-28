@@ -11,6 +11,20 @@ $gris: #B1B1B1;
 $gris-claro: #e0e0e0;
 $gris-oscuro: #404040;
 
+body {
+  background-image: url('/images/back.png');
+  background-size: 300px 300px;
+}
+
+.vertical-center {
+  min-height: 100%;
+  min-height: 85vh;
+
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
 textarea {
   resize: vertical;
 }

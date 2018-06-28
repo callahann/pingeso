@@ -15,7 +15,7 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        return Departamento::paginate();
+        return Departamento::all();
     }
 
     /**

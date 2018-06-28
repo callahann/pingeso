@@ -21,19 +21,15 @@ Route::resource('declaraciones', 'DeclaracionController');
 Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
 Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
 Route::get('/descarga/apelacion/{apelacion}', 'ApelacionController@descargar');
-Route::group(['middleware' => ['web', 'auth']], function (){
-	Route::get('/userdata', function (){
-		echo Auth::user()->email;
-	});	
-});
 
 Route::get('/all/descripciones', 'DescripcionController@all');
 Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
 
-
-Route::resource('usuarios', 'UserController')->except(['create','edit']);
+Route::resource('usuarios', 'UserController')->except(['create', 'edit']);
 Route::resource('apelaciones', 'ApelacionController');
-Route::resource('despartamentos', 'DepartamentoController');
+Route::resource('departamentos', 'DepartamentoController');
 Route::resource('facultades', 'FacultadController');
 Route::resource('formulas', 'FormulaController');
 Route::resource('roles', 'RolController');
+Route::resource('jornadas', 'JornadaController');
+Route::resource('jerarquias', 'JerarquiaController');

@@ -9,13 +9,17 @@ class Departamento extends Model
 {
     use SoftDeletes;
     
-    protected $fillable = [
-        'id_facultad',
-        'nombre'
+    protected $guarded = [
+        'id_facultad'
     ];
 
-    protected function facultad()
+    public function facultad()
     {
-        return $this->belongsTo(Facultad::class,'id_facultad');
+        return $this->belongsTo(Facultad::class, 'id_facultad');
+    }
+
+    public function usuarios()
+    {
+        return $this->hasMany('App\User', 'id_departamento');
     }
 }

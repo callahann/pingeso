@@ -13,7 +13,7 @@
                 </ol>
             </div>
             <div class="row" v-if="etapa === etapas.aprobando">
-                <datos-personales v-bind:editable="false"></datos-personales>
+                <usuario v-bind:editable="false"></usuario>
             </div>
             <div class="row">
                 <resumen :informe="informe" :etapa="etapa"></resumen>
@@ -51,7 +51,7 @@
             <div class="row">
                 <div v-if="mensaje === 1" class="alert alert-success">
                     <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">[Cerrar &times;]</a>
-                    <a href="#" class="close" aria-label="close" v-on:click="volver">[Volver] </a>
+                    <a href="#" class="close" aria-label="close" v-on:click="volver('informes')">[Volver] </a>
                     <strong>Bien!</strong> Se han guardado los cambios.
                 </div>
                 <div v-if="mensaje === -1" class="alert alert-danger">
@@ -83,7 +83,6 @@
 </template>
 <script>
     import axios from 'axios';
-    import DatosPersonales from '../../DatosPersonales.vue';
     import ListaActividades from './partes/ListaActividades';
     import Apelacion from './partes/Apelacion';
     import Resumen from './partes/Resumen';
@@ -133,7 +132,6 @@
             }
         },
         components: {
-            'datos-personales': DatosPersonales,
             'lista-actividades': ListaActividades,
             'resumen': Resumen,
         },
@@ -188,21 +186,12 @@
                 axios
                     .get('/api/declaraciones/' + this.$route.params.id + '/aprobar')
                     .then(response => { 
-                        console.log(this.volver('Se ha aprobado la declaración'));
+                        console.log(this.volver('informes', 'Se ha aprobado la declaración'));
                     })
                     .catch(e => {
                         console.log(e);
                         this.mensaje = -1; 
                     });
-            },
-            volver: function(mensaje = undefined) {
-                this.$router.push({
-                    name: 'informes',
-                    params: { 
-                        mensaje: mensaje
-                    }
-                });
-                return mensaje;
             },
             obtenerApelacion: function() {
                 axios
@@ -227,14 +216,13 @@
                         }
                     })
                     .then(response => {
-                        console.log(this.volver('Se ha registrado la apelación correctamente'));
-                        this.apelacion = Object.assign({}, this.apelacion, response.data);
+                        console.log(this.volver('informes', 'Se ha registrado la apelación correctamente'));
                     })
                     .catch(e => {
                         console.log(e);
                         this.mensaje = -1; 
                     });
-            }
+            },
         }
     }
 </script>

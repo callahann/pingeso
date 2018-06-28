@@ -10,28 +10,27 @@
 | contains the "web" middleware group. Now create something great!
 |
 
-Route::get('/{any}', function() {
-    return view('spa');
-})->where('any', '.*');
 */
 
-Route::get('/', 'Auth\GoogleLoginController@redirectToProvider');
+Route::get('/', 'Auth\GoogleLoginController@redirectToProvider')->name('login');
 Route::get('/logged', 'Auth\GoogleLoginController@handleProviderCallback');
-Auth::routes();
+Route::get('/inicio', function() {
+	return view('spa');
+})->name('inicio')->middleware('auth');
+Route::get('/denegado', function() {
+	return view('denegado');
+})->name('no-registrado');
 
 Route::group(['middleware' => ['web', 'auth']], function (){
-	Route::get('/user/email', function (){
-		return Auth::user()->email;
+	Route::get('/user', function () {
+		return Auth::user()->load(['departamento.facultad', 'rol']);
 	});
-	Route::get('/user/name', function (){
-		return Auth::user()->nombre;
-	});
-	Route::get('/user/lastname', function (){
-		return Auth::user()->apellido;
-	});
-	Route::get('/user/role', function (){
-		return Auth::user()->id_rol;
+	Route::get('/logout', function() {
+		Auth::logout();
+		return redirect('/');
 	});
 });
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/{any}', function() {
+    return view('spa');
+})->where('any', '.*')->middleware('auth');

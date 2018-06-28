@@ -6,6 +6,9 @@ use App\Facultad;
 use App\Departamento;
 use App\Rol;
 use App\Descripcion;
+use App\Jerarquia;
+use App\Jornada;
+use App\User;
 
 class BaseSeeder extends Seeder
 {
@@ -18,14 +21,14 @@ class BaseSeeder extends Seeder
     {
         $roles = [
             [
-                'nombre' => 'Admin'
+                'nombre' => 'Académico'
             ],
             [
-                'nombre' => 'Profesor'
+                'nombre' => 'Director de departamento'
             ],
             [
-                'nombre' => 'Director'
-            ]
+                'nombre' => 'Administrador'
+            ],
         ];
 
         foreach ($roles as $rol) {
@@ -41,39 +44,39 @@ class BaseSeeder extends Seeder
         $dataD = [
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA ELECTRICA'
+                'nombre' => 'Ingeniería Eléctrica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA GEOGRAFICA'
+                'nombre' => 'Ingeniería Geográfica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA INFORMATICA'
+                'nombre' => 'Ingeniería Informática'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA INDUSTRIAL'
+                'nombre' => 'Ingeniería Industrial'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA MECANICA'
+                'nombre' => 'Ingeniería Mecánica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA METALURGICA'
+                'nombre' => 'Ingeniería Metalúrgica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA EN MINAS'
+                'nombre' => 'Ingeniería en Minas'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA EN OBRAS CIVILES'
+                'nombre' => 'Ingeniería en Obras Civiles'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'INGENIERIA QUIMICA'
+                'nombre' => 'Ingeniería Química'
             ]
         ];
 
@@ -191,10 +194,6 @@ class BaseSeeder extends Seeder
                 'tipo'=>1
             ],
             [
-                'descripcion'=>'Otras actividades', 
-                'tipo'=>1
-            ],
-            [
                 'descripcion'=>'Elaboracion de Proyectos de Investigación y Desarrollo', 
                 'tipo'=>2
             ],
@@ -222,11 +221,8 @@ class BaseSeeder extends Seeder
                 'descripcion'=>'Guías de memorias de título (2 Hr./semana/tema)', 
                 'tipo'=>2
             ],
-            ['descripcion'=>'Publicación de Trabajos de Desarrollo (Congresos y Jornadas)', 
-                'tipo'=>2
-            ],
             [
-                'descripcion'=>'Otras actividades', 
+                'descripcion'=>'Publicación de Trabajos de Desarrollo (Congresos y Jornadas)', 
                 'tipo'=>2
             ],
             [
@@ -242,10 +238,6 @@ class BaseSeeder extends Seeder
                 'tipo' => 3
             ],
             [
-                'descripcion' => 'Otras actividades',
-                'tipo' => 3
-            ],
-            [
                 'descripcion' => 'Perfeccionamiento docente',
                 'tipo' => 4
             ],
@@ -255,10 +247,6 @@ class BaseSeeder extends Seeder
             ],
             [
                 'descripcion' => 'Curso de capacitación',
-                'tipo' => 4
-            ],
-            [
-                'descripcion' => 'Otras actividades',
                 'tipo' => 4
             ],
             [
@@ -306,10 +294,6 @@ class BaseSeeder extends Seeder
                 'tipo'=> 6
             ],
             [
-                'descripcion' => 'Otras actividades',
-                'tipo'=> 6
-            ],
-            [
                 'descripcion' => 'Gestion y Administraciòn de carrera',
                 'tipo'=> 6
             ],
@@ -345,15 +329,103 @@ class BaseSeeder extends Seeder
                 'descripcion' => 'Representaciones en instituciones externas',
                 'tipo' => 7
             ],
-            [
-                'descripcion' => 'Otras actividades',
-                'tipo' => 7
-            ],
 
         ];
 
         foreach ($descripciones as $descripcion) {
             Descripcion::create($descripcion);
+        }
+
+        $jerarquias = [
+            [
+                'nombre' => 'Ayudante',
+            ],
+            [
+                'nombre' => 'Instructor',
+            ],
+            [
+                'nombre' => 'Profesor asistente',
+            ],
+            [
+                'nombre' => 'Profesor asociado',
+            ],
+            [
+                'nombre' => 'Profesor titular',
+            ],
+        ];
+
+        foreach ($jerarquias as $jerarquia) {
+            Jerarquia::create($jerarquia);
+        }
+
+        $jornadas = [
+            [
+                'nombre' => 'Completa',
+                'horas' => 36,
+            ],
+            [
+                'nombre' => '3/4',
+                'horas' => 27,
+            ],
+            [
+                'nombre' => '1/2',
+                'horas' => 18,
+            ],
+            [
+                'nombre' => '1/4',
+                'horas' => 9,
+            ],
+        ];
+
+        foreach ($jornadas as $jornada) {
+            Jornada::create($jornada);
+        }
+
+        $usuarios = [
+            [
+                'apellido_paterno' => 'Álvarez',
+                'apellido_materno' => 'Molina',
+                'nombres' => 'Mario Francisco',
+                'email' => 'mario.alvarez.m@usach.cl',
+                'id_departamento' => 3,
+                'id_jerarquia' => 5,
+                'id_jornada' => 1,
+                'id_rol' => 3
+            ],
+            [
+                'apellido_paterno' => 'Vargas',
+                'apellido_materno' => 'Mora',
+                'nombres' => 'Matías José',
+                'email' => 'matias.vargasm@usach.cl',
+                'id_departamento' => 3,
+                'id_jerarquia' => 5,
+                'id_jornada' => 1,
+                'id_rol' => 3
+            ],
+            [
+                'apellido_paterno' => 'Callahan',
+                'apellido_materno' => 'Apellido',
+                'nombres' => 'Nicolás',
+                'email' => 'nicolas.callahan@usach.cl',
+                'id_departamento' => 3,
+                'id_jerarquia' => 5,
+                'id_jornada' => 1,
+                'id_rol' => 3
+            ],
+            [
+                'apellido_paterno' => 'Fuentes',
+                'apellido_materno' => 'Apellido',
+                'nombres' => 'Héctor',
+                'email' => 'hector.fuentes@usach.cl',
+                'id_departamento' => 3,
+                'id_jerarquia' => 5,
+                'id_jornada' => 1,
+                'id_rol' => 3
+            ]
+        ];
+
+        foreach ($usuarios as $usuario) {
+            User::create($usuario);
         }
     }
 }

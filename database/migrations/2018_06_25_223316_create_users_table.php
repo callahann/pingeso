@@ -15,25 +15,30 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_rol');
+            $table->string('apellido_paterno');
+            $table->string('apellido_materno');
+            $table->string('nombres');
             $table->unsignedInteger('id_departamento');
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('jerarquia');
-            $table->string('jornada');
+            $table->unsignedInteger('id_jerarquia');
+            $table->unsignedInteger('id_jornada');
+            $table->unsignedInteger('id_rol');
             $table->string('email')->unique();
-            //$table->string('password');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_rol')
-                ->references('id')
-                ->on('rols');
             $table->foreign('id_departamento')
                 ->references('id')
                 ->on('departamentos');
-
+            $table->foreign('id_jerarquia')
+                ->references('id')
+                ->on('jerarquias');
+            $table->foreign('id_jornada')
+                ->references('id')
+                ->on('jornadas');
+            $table->foreign('id_rol')
+                ->references('id')
+                ->on('rols');
         });
     }
 

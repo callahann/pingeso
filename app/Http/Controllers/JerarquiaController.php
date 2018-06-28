@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Facultad;
+use App\Jerarquia;
 use Illuminate\Http\Request;
-use Validator;
 
-class FacultadController extends Controller
+class JerarquiaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class FacultadController extends Controller
      */
     public function index()
     {
-        return Facultad::with('departamentos')->get();
+        return Jerarquia::all();
     }
 
     /**
@@ -25,7 +24,7 @@ class FacultadController extends Controller
      */
     public function create()
     {
-        return $this->notDefined();
+        //
     }
 
     /**
@@ -42,51 +41,45 @@ class FacultadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Facultad  $facultad
+     * @param  \App\Jerarquia  $jerarquia
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Jerarquia $jerarquia)
     {
-        $facultad = Facultad::findOrFail($id);
-        return $facultad;
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Facultad  $facultad
+     * @param  \App\Jerarquia  $jerarquia
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Jerarquia $jerarquia)
     {
-        $facultad = Facultad::findOrFail($id);
-        return $this->notDefined();
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Facultad  $facultad
+     * @param  \App\Jerarquia  $jerarquia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Jerarquia $jerarquia)
     {
-        $facultad = Facultad::findOrFail($id);
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Facultad  $facultad
+     * @param  \App\Jerarquia  $jerarquia
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Jerarquia $jerarquia)
     {
-        $facultad = Facultad::findOrFail($id);
-        $facultad->deleted();
-
-        return $this->notDefined();
+        //
     }
 }
