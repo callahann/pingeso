@@ -6,7 +6,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
-                Informes de actividades
+                Administración de usuarios
             </div>
             <div class="text-center" v-if="cargando">
                 <h3>
@@ -15,24 +15,25 @@
                 </h3>
             </div>
             <div v-else>
-                <div v-if="informes.length === 0" class="text-center">
-                    <h3>No se ha ingresado nuevos informes de actividades</h3>
-                </div>
-                <table v-else class="table table-striped">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Periodo</th>
-                            <th>Creado el</th>
+                            <th>Apellido paterno</th>
+                            <th>Apellido materno</th>
+                            <th>Nombres</th>
+                            <th>Rol</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="informe in informes" v-bind:key="informe.id">
-                            <td class="col-md-4">{{ informe.periodo }}</td>
-                            <td class="col-md-6">{{ informe.created_at }}</td>
+                        <tr v-for="usuario in usuarios" v-bind:key="usuario.id">
+                            <td class="col-md-4">{{ usuario.apellido_paterno }}</td>
+                            <td class="col-md-4">{{ usuario.apellido_materno }}</td>
+                            <td class="col-md-6">{{ usuario.nombres }}</td>
+                            <td class="col-md-6">{{ usuario.rol.nombre }}</td>
                             <td class="col-md-2">
-                                <router-link class="btn btn-xs btn-info btn-block" :to="{ name: 'declarar-realizado', params: { id: informe.id }}">     
-                                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                <router-link class="btn btn-xs btn-info btn-block" :to="{ name: 'editar-usuario', params: { id: usuario.id }}">     
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                 </router-link>
                             </td>
                         </tr>
@@ -40,8 +41,8 @@
                 </table>
             </div>
             <div class="panel-footer">
-                <router-link class="btn btn-success" :to="{ name: 'nuevo-informe'}">     
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar informe
+                <router-link class="btn btn-success" :to="{ name: 'nuevo-usuario'}">     
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar usuario
                 </router-link>
             </div>
         </div>
@@ -53,14 +54,14 @@
         props: ['mensaje'],
         data: function() {
             return {
-                informes: [],
+                usuarios: [],
                 cargando: true,
             }
         },
         created: function() {
-            axios.get('/api/declaraciones')
+            axios.get('/api/usuarios')
                 .then(response => {
-                    this.informes = response.data;
+                    this.usuarios = response.data;
                     this.cargando = false;
                 })
                 .catch(e => {

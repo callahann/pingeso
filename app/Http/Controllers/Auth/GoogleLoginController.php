@@ -13,7 +13,9 @@ class GoogleLoginController extends Controller
     
     public function redirectToProvider()
     {
-        return Socialite::driver('google')->redirect();
+        return Auth::check() ?
+            redirect()->route('inicio') :
+            Socialite::driver('google')->redirect();
     }
 
     public function handleProviderCallback()
@@ -23,25 +25,10 @@ class GoogleLoginController extends Controller
         if($findUser){
             $this->email = $user->getEmail();
             Auth::login($findUser);
-            /*if (Auth::user()){
-            return auth()->user()->email;
-            }
-            else{
-                return 'NO';
-            }*/
-            return view('spa');
+            return redirect()->route('inicio');
         }
         else{
-            return 'No estás registrado en la aplicación';
-        }
-    }
-
-    public function getUserEmail(){
-        if(Auth::user()){
-            return auth()->user()->email;
-        }
-        else{
-            return 'No hay usuario logueado';
+            return redirect()->route('no-registrado');
         }
     }
 }

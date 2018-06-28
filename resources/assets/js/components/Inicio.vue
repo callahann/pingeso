@@ -1,7 +1,7 @@
 <template>
     <div class="col-md-12">
         <h1>Sistema de evaluación y calificación de desempeño académico</h1>
-        <h2>Bienvenido, {{nombre}}</h2>
+        <h2>Bienvenido/a</h2>
         <div>
             <blockquote>
                 <h3>Plataforma de gestión de distribución de tiempo académica, cuyas principales funciones son:</h3>
@@ -18,25 +18,5 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
-    export default {
-        
-        data: function() {
-            return {
-                nombre: 'nombre'
-                
-            }
-        },
-        created: function() {
-            axios.get('/user/name')
-            .then(response=> {
-              this.nombre = response.data;
-              console.log(this.nombre);
-            })
-            .catch(e => {
-                this.cargando = false;
-                console.log(e);
-            });
-        }
-    }
+    export default {}
 </script>

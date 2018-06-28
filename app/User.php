@@ -15,14 +15,11 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'id_rol',
+    protected $guarded = [
         'id_departamento',
-        'nombre',
-        'apellido',
-        'jerarquia',
-        'jornada',
-        'email',
+        'id_jerarquia',
+        'id_jornada',
+        'id_rol'
     ];
 
     /**
@@ -35,4 +32,24 @@ class User extends Authenticatable
     ];
 
     protected $dates = ['deleted_at'];
+
+    public function departamento()
+    {
+        return $this->belongsTo('App\Departamento', 'id_departamento');
+    }
+
+    public function jerarquia()
+    {
+        return $this->belongsTo('App\Jerarquia', 'id_jerarquia');
+    }
+
+    public function jornada()
+    {
+        return $this->belongsTo('App\Jornada', 'id_jornada');
+    }
+
+    public function rol()
+    {
+        return $this->belongsTo('App\Rol', 'id_rol');
+    }
 }

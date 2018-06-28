@@ -15,7 +15,7 @@ class RolController extends Controller
      */
     public function index()
     {
-        return Rol::paginate();
+        return Rol::all();
     }
 
     /**

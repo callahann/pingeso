@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Departamento;
+use App\Jerarquia;
+use App\Jornada;
+use App\Rol;
 use Validator;
 
 class UserController extends Controller
@@ -15,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::paginate();
+        return User::all()->load('rol');
     }
 
     /**
@@ -36,15 +40,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules());
+        $validator = Validator::make($request->all(), $this->rules($id));
 
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
 
-        $request->merge(['id_rol' => 2, 'id_departamento' => 3]);
-        User::create($request->all());
-
+        $user = new User($request->all());
+        $user->id_departamento = $request->departamento['id'];
+        $user->id_jerarquia = $request->jerarquia['id'];
+        $user->id_jornada = $request->jornada['id'];
+        $user->id_rol = $request->rol['id'];
+        $user->save();
         return $this->creationMessage();
     }
 
@@ -56,7 +63,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::findOrFail($id);
+        return User::find($id)->load(['departamento.facultad', 'jerarquia', 'jornada', 'rol']);
     }
 
     /**
@@ -79,13 +86,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), $this->rules());
+        $validator = Validator::make($request->all(), $this->rules($id));
 
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
+
         $user = User::find($id);
-        $user->fill($request->all);
+        $user->fill($request->all());
+        $user->id_departamento = $request->departamento['id'];
+        $user->id_jerarquia = $request->jerarquia['id'];
+        $user->id_jornada = $request->jornada['id'];
+        $user->id_rol = $request->rol['id'];
         $user->save();
 
         return $this->creationMessage();
@@ -106,14 +118,17 @@ class UserController extends Controller
         return $this->deleteMessage();
     }
 
-    protected function rules()
+    protected function rules($id)
     {
         return [
-            'nombre' => 'required',
-            'apellido' => 'required',
+            'apellido_paterno' => 'required',
+            'apellido_materno' => 'required',
+            'nombres' => 'required',
+            'departamento' => 'required',
             'jerarquia' => 'required',
             'jornada' => 'required',
-            'email' => 'required|unique:users,email',
+            'rol' => 'required',
+            'email' => 'required|unique:users,email,' . $id,
         ];
     }   
 }

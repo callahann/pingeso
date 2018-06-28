@@ -15,7 +15,7 @@ class FacultadController extends Controller
      */
     public function index()
     {
-        return Facultad::paginate();
+        return Facultad::with('departamentos')->get();
     }
 
     /**

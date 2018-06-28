@@ -1,4 +1,21 @@
-@import url(https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css);textarea {
+@import url(https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css);body {
+  background-image: url("/images/back.png");
+  background-size: 300px 300px;
+}
+
+.vertical-center {
+  min-height: 100%;
+  min-height: 85vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: transparent;
+}
+
+textarea {
   resize: vertical;
 }
 

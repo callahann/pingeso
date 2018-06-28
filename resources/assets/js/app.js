@@ -13,6 +13,7 @@ window.Vue = require('vue');
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import axios from 'axios'
 
 Vue.use(VueRouter)
 
@@ -20,8 +21,8 @@ import App from './components/App';
 import Inicio from './components/Inicio';
 import ListaInformes from './components/informe/Lista';
 import Formulario from './components/informe/formulario/Formulario';
-import ListadoUsuarios from './components/usuario/ListadoUsuarios'
-import CrearUsuario from './components/usuario/CrearUsuario'
+import ListaUsuarios from './components/usuario/Lista'
+import Usuario from './components/usuario/Usuario'
 import ListadoFacultades from './components/facultad/ListadoFacultades';
 import FormFacultad from './components/facultad/FormFacultad';
 
@@ -44,19 +45,26 @@ const router = new VueRouter({
     base: 'home',
     routes: [
         {
-            path: '/',
+            path: '/inicio',
             name: 'inicio',
             component: Inicio,
         },
         {
             path: '/usuarios',
             name: 'usuarios',
-            component: ListadoUsuarios,
+            component: ListaUsuarios,
         },
         {
             path: '/usuarios/crear',
             name: 'nuevo-usuario',
-            component: CrearUsuario,
+            component: Usuario,
+            props: { editable: true },
+        },
+        {
+            path: '/usuarios/:id',
+            name: 'editar-usuario',
+            component: Usuario,
+            props: { editable: true },
         },
         {
             path: '/informes',
@@ -117,6 +125,10 @@ const router = new VueRouter({
             component: FormFacultad,
             props: true
         },
+        {
+            path: '*',
+            redirect: 'inicio'
+        }
 
     ],
 });
@@ -124,15 +136,7 @@ const router = new VueRouter({
 Vue.mixin({
     data: function() {
         return {
-            datosPersonales: {
-                apellido_paterno: 'Álvarez',
-                apellido_materno: 'Molina',
-                nombres: 'Mario Francisco',
-                facultad: 'Ingeniería',
-                departamento: 'Informática',
-                jerarquia: 'Cargo',
-                jornada: 'Jornada'
-            },
+            usuario: undefined,
             titulos_item: Object.freeze({
                 item_docencia: 'Docencia',
                 item_investigacion: 'Investigación y desarrollo',
@@ -149,6 +153,16 @@ Vue.mixin({
             })
         }
     },
+    created: function() {
+        axios
+            .get('/user')
+            .then(response => { 
+                this.usuario = Object.assign({}, response.data, this.usuario);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    },
     methods: {
         formData: function(object) {
             let formData = new FormData();
@@ -159,7 +173,16 @@ Vue.mixin({
         },
         equivalentes: function(a, b) {
             return eval(this.ecuaciones.equivalentes.replaceAll('semanal', a).replaceAll('semestral_anual', b));
-        }
+        },
+        volver: function(route, mensaje = undefined) {
+            this.$router.push({
+                name: route,
+                params: { 
+                    mensaje: mensaje
+                }
+            });
+            return mensaje;
+        },
     }
 });
 
