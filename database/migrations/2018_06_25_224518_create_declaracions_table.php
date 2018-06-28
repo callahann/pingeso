@@ -17,6 +17,7 @@ class CreateDeclaracionsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('id_formula')->nullable();
             $table->unsignedInteger('id_usuario')->nullable();
+            $table->unsignedInteger('id_periodo')->nullable();
             $table->integer('periodo');
             $table->json('item_docencia')->nullable();
             $table->json('item_investigacion')->nullable();
@@ -28,7 +29,7 @@ class CreateDeclaracionsTable extends Migration
             $table->integer('estado')->default(0);
             $table->timestamps();
             $table->softDeletes();
-            /*
+            
             $table->foreign('id_formula')
                 ->references('id')
                 ->on('formulas');
@@ -36,7 +37,11 @@ class CreateDeclaracionsTable extends Migration
             $table->foreign('id_usuario')
                 ->references('id')
                 ->on('users');
-            */
+            
+            $table->foreign('id_periodo')
+                ->references('id')
+                ->on('periodos');
+            
 
         });
     }

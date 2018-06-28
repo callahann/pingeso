@@ -14,7 +14,7 @@ class RangoController extends Controller
      */
     public function index()
     {
-        //
+        return Rango::all();
     }
 
     /**
@@ -24,7 +24,7 @@ class RangoController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -35,51 +35,83 @@ class RangoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $rango = Rango::create($request->all());
+
+        return $this->creationMessage();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Rango  $rango
+     * @param  \App\Rango  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Rango $rango)
+    public function show($id)
     {
-        //
+        return Rango::findOrFail($id);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Rango  $rango
+     * @param  \App\Rango  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Rango $rango)
+    public function edit($id)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rango  $rango
+     * @param  \App\Rango  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rango $rango)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $rango = Rango::findOrFail($id);
+
+        $rango->fill($data);
+        $rango->save();
+
+        return $this->updateMessage();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Rango  $rango
+     * @param  \App\Rango  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Rango $rango)
+    public function destroy($id)
     {
-        //
+        $rango = Rango::findOrFail($id);
+        $rango->delete();
+
+        return $this->deleteMessage();
+    }
+
+    protected function rules()
+    {
+        return [
+            'base' => 'required|numeric',
+            'tope' => 'required|numeric',
+            'leyenda' => 'required',
+            'color' => 'required',
+        ];
     }
 }

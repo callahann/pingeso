@@ -15,7 +15,10 @@ class CreateFactorsTable extends Migration
     {
         Schema::create('factors', function (Blueprint $table) {
             $table->increments('id');
+            $table->decimal('diferencia',8,3);
+            $table->decimal('factor',8,3);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

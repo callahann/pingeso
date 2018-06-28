@@ -14,7 +14,7 @@ class PeriodoController extends Controller
      */
     public function index()
     {
-        //
+        return Periodo::all();
     }
 
     /**
@@ -24,7 +24,7 @@ class PeriodoController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -35,51 +35,82 @@ class PeriodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $periodo = Periodo::create($request->all());
+
+        return $this->creationMessage();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Periodo  $periodo
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Periodo $periodo)
+    public function show($id)
     {
-        //
+        return Periodo::findOrFail($id);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Periodo  $periodo
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Periodo $periodo)
+    public function edit($id)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Periodo  $periodo
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Periodo $periodo)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $periodo = Periodo::findOrFail($id);
+
+        $periodo->fill($data);
+        $periodo->save();
+
+        return $this->updateMessage();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Periodo  $periodo
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Periodo $periodo)
+    public function destroy($id)
     {
-        //
+        $periodo = Periodo::findOrFail($id);
+        $periodo->delete();
+
+        return $this->deleteMessage();
+    }
+
+    protected function rules()
+    {
+        return [
+            'desde' => 'required|date',
+            'hasta' => 'required|date',
+            'estado' => 'required|numeric',
+        ];
     }
 }

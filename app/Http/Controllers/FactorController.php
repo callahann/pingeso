@@ -14,7 +14,7 @@ class FactorController extends Controller
      */
     public function index()
     {
-        //
+        return Factor::all();
     }
 
     /**
@@ -24,7 +24,7 @@ class FactorController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -35,51 +35,81 @@ class FactorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $factor = Factor::create($request->all());
+
+        return $this->creationMessage();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Factor  $factor
+     * @param  \App\Factor  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Factor $factor)
+    public function show($id)
     {
-        //
+        return Factor::findOrFail($id);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Factor  $factor
+     * @param  \App\Factor  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Factor $factor)
+    public function edit($id)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Factor  $factor
+     * @param  \App\Factor  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Factor $factor)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $factor = Factor::findOrFail($id);
+
+        $factor->fill($data);
+        $factor->save();
+
+        return $this->updateMessage();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Factor  $factor
+     * @param  \App\Factor  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Factor $factor)
+    public function destroy($id)
     {
-        //
+        $factor = Factor::findOrFail($id);
+        $factor->delete();
+
+        return $this->deleteMessage();
+    }
+
+    protected function rules()
+    {
+        return [
+            'diferencia' => 'required|numeric',
+            'factor' => 'required|numeric',
+        ];
     }
 }

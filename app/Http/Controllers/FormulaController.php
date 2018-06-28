@@ -111,8 +111,8 @@ class FormulaController extends Controller
     protected function rules()
     {
         return [
-            'nombre' => 'required',
-            'detalle' => 'required',
+            'equivalente' => 'required',
+            'nota_final' => 'required',
         ];
     }
 }

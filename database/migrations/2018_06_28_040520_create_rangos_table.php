@@ -20,6 +20,7 @@ class CreateRangosTable extends Migration
             $table->string('leyenda');
             $table->string('color');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

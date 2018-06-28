@@ -40,7 +40,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules($id));
+        $validator = Validator::make($request->all(), $this->rules());
 
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
@@ -120,6 +120,18 @@ class UserController extends Controller
 
     protected function rules($id)
     {
+        if($id) {
+            return [
+                'apellido_paterno' => 'required',
+                'apellido_materno' => 'required',
+                'nombres' => 'required',
+                'departamento' => 'required',
+                'jerarquia' => 'required',
+                'jornada' => 'required',
+                'rol' => 'required',
+                'email' => 'required|unique:users,email,' . $id,
+            ];
+        }
         return [
             'apellido_paterno' => 'required',
             'apellido_materno' => 'required',
@@ -128,7 +140,7 @@ class UserController extends Controller
             'jerarquia' => 'required',
             'jornada' => 'required',
             'rol' => 'required',
-            'email' => 'required|unique:users,email,' . $id,
+            'email' => 'required|unique:users,email',
         ];
     }   
 }
