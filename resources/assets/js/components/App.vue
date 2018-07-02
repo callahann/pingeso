@@ -2,6 +2,7 @@
     <div>
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
+                <input type="number" class="col-md-2 from-control" v-model.number="auth.rol.id"/>
                 <div class="navbar-header">
                     <!-- Branding Image -->
                     <img :src="'/images/usach.png'" class="navbar-brand">
@@ -9,18 +10,43 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse" style="padding-left: 10em">
                     <!-- Left Side Of Navbar -->
                     <router-link :to="{ name: 'inicio' }" class="btn navbar-btn" role="button" active-class>Inicio</router-link>
-                    <router-link :to="{ name: 'informes' }" class="btn navbar-btn" role="button" active-class>Informes de Actividades</router-link>
-                    <router-link :to="{ name: 'usuarios' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id >= 3">Usuarios</router-link>
+                    <router-link :to="{ name: 'informes' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id < 4">Informes de Actividades</router-link>
+                    <router-link :to="{ name: 'usuarios' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 2 || auth.rol.id === 4">Usuarios</router-link>
                     <a href="/logout" class="btn navbar-btn pull-right" role="button" active-class>Cerrar sesión</a>
                 </div>
             </div>
         </nav>
         <div class="container">
-            <router-view></router-view>
+            <div class="col-md-12">
+                <div v-if="alert.abierto" :class="'alert alert-' + alert.class">
+                    <a href="#" class="close" aria-label="close" v-on:click="alert.abierto = false">[Cerrar &times;]</a>
+                    <a href="#" class="close" aria-label="close"
+                        v-for="boton in alert.botones" :key="boton.texto"
+                        v-on:click="boton.enlace">[{{ boton.texto }}] </a>
+                    <p :html="alert.mensaje"></p>
+                </div>
+            </div>
+            <router-view v-on:alert="mensaje($event)"></router-view>
         </div>
     </div>
 </template>
 <script>
-    export default {}
+    export default {
+        data: function() {
+            return {
+                alert: {
+                    mensaje: '',
+                    class: '',
+                    abierto: false
+                }
+            }
+        },
+        methods: {
+            mensaje: function(alert) {
+                this.alert = Object.assign({}, this.alert, alert);
+                this.alert.abierto = true;
+            }
+        }
+    }
 </script>
 

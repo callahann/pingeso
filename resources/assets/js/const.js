@@ -21,7 +21,12 @@ Vue.mixin({
                 item_extension: 'Extensión',
                 item_educacion_continua: 'Educación continua'
             }),
-            etapas: EtapasEnum
+            etapas: EtapasEnum,
+            estados: Object.freeze({
+                editable: 0,
+                enviado: 1,
+                aprobado: 2
+            })
         }
     },
     methods: {

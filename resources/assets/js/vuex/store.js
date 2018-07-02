@@ -25,23 +25,11 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
-        [Mutations.SET_AUTH_USER] (state, payload) {
-            state.auth = Object.assign({}, state.auth, payload.data)
+        [Mutations.SET_STATE_ARRAY] (state, { key, payload }) {
+            state[key] = Object.assign([], state[key], payload.data)
         },
-        [Mutations.SET_FACULTADES] (state, payload) {
-            state.facultades = Object.assign([], state.facultades, payload.data)
-        },
-        [Mutations.SET_JERARQUIAS] (state, payload) {
-            state.jerarquias = Object.assign([], state.jerarquias, payload.data)
-        },
-        [Mutations.SET_JORNADAS] (state, payload) {
-            state.jornadas = Object.assign([], state.jornadas, payload.data)
-        },
-        [Mutations.SET_ROLES] (state, payload) {
-            state.roles = Object.assign([], state.roles, payload.data)
-        },
-        [Mutations.SET_USUARIOS] (state, payload) {
-            state.usuarios = state.auth.rol.id > 1 ? Object.assign([], state.usuarios, payload.data) : []
+        [Mutations.SET_STATE_OBJECT] (state, { key, payload }) {
+            state[key] = Object.assign({}, state[key], payload.data)
         },
         [Mutations.INSERT_DECLARACION] (state, { payload, callback }) {
             state.informes.push(payload.data)
@@ -56,28 +44,40 @@ const store = new Vuex.Store({
             
             callback(true, payload.data);
         },
-        [Mutations.HANDLE_ERROR] (state, { payload, callback }) {
-            callback(false, payload);
+        [Mutations.HANDLE_ERROR] (state, { error, callback }) {
+            callback(false, error);
         }
     },
     actions: {
         async [Actions.INIT_STORE] ({ dispatch, commit }, callback) {
-            await dispatch(Actions.FETCH_AUTH_USER, callback)
-            commit(Mutations.SET_FACULTADES, await axios.get('/api/facultades'))
-            commit(Mutations.SET_JERARQUIAS, await axios.get('/api/jerarquias'))
-            commit(Mutations.SET_JORNADAS, await axios.get('/api/jornadas'))
-            commit(Mutations.SET_ROLES, await axios.get('/api/roles'))
-            commit(Mutations.SET_USUARIOS, await axios.get('/api/usuarios'))
+            const rol = await dispatch(Actions.FETCH_AUTH_USER, callback)
+            
+            dispatch(Actions.FETCH_DECLARACIONES, rol)
+
+            if(rol > 1) {
+                const request = ['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios']
+                request.forEach(r => {
+                    axios
+                        .get('/api/' + r)
+                        .then(response => {
+                            commit(Mutations.SET_STATE_ARRAY, { key: r, payload: response })
+                        })
+                })
+            }
+            
             callback()
         },
         async [Actions.FETCH_AUTH_USER] ({ commit }) {
+            const response = await axios.get('/user')
+            commit(Mutations.SET_STATE_OBJECT, { key: 'auth', payload: response })
+            return response.data.rol.id
+        },
+        [Actions.FETCH_DECLARACIONES] ({ commit }, rol) {
+            const q = rol === 1 ? '/user/declaraciones' : '/declaraciones'
             axios
-                .get('/user')
+                .get('/api' + q)
                 .then(response => {
-                    commit(Mutations.SET_AUTH_USER, response)
-                })
-                .catch(e => {
-                    console.log(e)
+                    commit(Mutations.SET_STATE_ARRAY, { key: 'informes', payload: response })
                 })
         },
         [Actions.INSERT_DECLARACION] ({ commit }, { informe, cb }) {
@@ -87,7 +87,7 @@ const store = new Vuex.Store({
                     commit(Mutations.INSERT_DECLARACION, { informe: response, callback: cb })
                 })
                 .catch(e => {
-                    commit(Mutations.HANDLE_ERROR, e, cb)
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
                 })
         },
         [Actions.UPDATE_DECLARACION] ({ commit }, { informe, cb }) {
@@ -97,7 +97,7 @@ const store = new Vuex.Store({
                     commit(Mutations.UPDATE_DECLARACION, { informe: response, callback: cb })
                 })
                 .catch(e => {
-                    commit(Mutations.HANDLE_ERROR, e, cb)
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
                 })
         },
         [Actions.APPROVE_DECLARACION] ({ commit }, { id, cb }) {
@@ -107,7 +107,7 @@ const store = new Vuex.Store({
                     commit(Mutations.UPDATE_DECLARACION, { informe: response, callback: cb })
                 })
                 .catch(e => {
-                    commit(Mutations.HANDLE_ERROR, e, cb)
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
                 })
         }
     }

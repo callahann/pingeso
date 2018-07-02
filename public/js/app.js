@@ -12725,13 +12725,15 @@ module.exports = defaults;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return INIT_STORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return INIT_STORE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return FETCH_AUTH_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return FETCH_DECLARACIONES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return INSERT_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return UPDATE_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
 var INIT_STORE = 'INIT_STORE';
 var FETCH_AUTH_USER = 'GET_AUTH_USER';
+var FETCH_DECLARACIONES = 'FETCH_DECLARACIONES';
 var INSERT_DECLARACION = 'INSERT_DECLARACION';
 var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
 var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
@@ -13033,6 +13035,7 @@ module.exports = Cancel;
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({});
 
@@ -13086,27 +13089,25 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             nota_final: '(nota_item_docencia * realizado_eq_item_docencia + nota_item_investigacion * realizado_eq_item_investigacion + nota_item_asistencia * realizado_eq_item_asistencia + nota_item_perfeccionamiento * realizado_eq_item_perfeccionamiento + nota_item_administracion * realizado_eq_item_administracion + nota_item_extension * realizado_eq_item_extension + nota_item_educacion_continua * realizado_eq_item_educacion_continua) / realizado_eq'
         }
     },
-    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_AUTH_USER */], function (state, payload) {
-        state.auth = Object.assign({}, state.auth, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* SET_FACULTADES */], function (state, payload) {
-        state.facultades = Object.assign([], state.facultades, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* SET_JERARQUIAS */], function (state, payload) {
-        state.jerarquias = Object.assign([], state.jerarquias, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* SET_JORNADAS */], function (state, payload) {
-        state.jornadas = Object.assign([], state.jornadas, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* SET_ROLES */], function (state, payload) {
-        state.roles = Object.assign([], state.roles, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* SET_USUARIOS */], function (state, payload) {
-        state.usuarios = state.auth.rol.id > 1 ? Object.assign([], state.usuarios, payload.data) : [];
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], function (state, _ref) {
-        var payload = _ref.payload,
-            callback = _ref.callback;
+    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_STATE_ARRAY */], function (state, _ref) {
+        var key = _ref.key,
+            payload = _ref.payload;
+
+        state[key] = Object.assign([], state[key], payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* SET_STATE_OBJECT */], function (state, _ref2) {
+        var key = _ref2.key,
+            payload = _ref2.payload;
+
+        state[key] = Object.assign({}, state[key], payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], function (state, _ref3) {
+        var payload = _ref3.payload,
+            callback = _ref3.callback;
 
         state.informes.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_DECLARACION */], function (state, _ref2) {
-        var payload = _ref2.payload,
-            callback = _ref2.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* UPDATE_DECLARACION */], function (state, _ref4) {
+        var payload = _ref4.payload,
+            callback = _ref4.callback;
 
         var index = state.informes.findIndex(function (informe) {
             return informe.id === payload.data.id;
@@ -13115,16 +13116,17 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.informes[index] = Object.assign({}, informe, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], function (state, _ref3) {
-        var payload = _ref3.payload,
-            callback = _ref3.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], function (state, _ref5) {
+        var error = _ref5.error,
+            callback = _ref5.callback;
 
-        callback(false, payload);
+        callback(false, error);
     }), _mutations),
-    actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* INIT_STORE */], function () {
-        var _ref5 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref4, callback) {
-            var dispatch = _ref4.dispatch,
-                commit = _ref4.commit;
+    actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* INIT_STORE */], function () {
+        var _ref7 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref6, callback) {
+            var dispatch = _ref6.dispatch,
+                commit = _ref6.commit;
+            var rol, request;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -13133,50 +13135,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
                             return dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["b" /* FETCH_AUTH_USER */], callback);
 
                         case 2:
-                            _context.t0 = commit;
-                            _context.t1 = __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* SET_FACULTADES */];
-                            _context.next = 6;
-                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/facultades');
+                            rol = _context.sent;
 
-                        case 6:
-                            _context.t2 = _context.sent;
-                            (0, _context.t0)(_context.t1, _context.t2);
-                            _context.t3 = commit;
-                            _context.t4 = __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* SET_JERARQUIAS */];
-                            _context.next = 12;
-                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/jerarquias');
 
-                        case 12:
-                            _context.t5 = _context.sent;
-                            (0, _context.t3)(_context.t4, _context.t5);
-                            _context.t6 = commit;
-                            _context.t7 = __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* SET_JORNADAS */];
-                            _context.next = 18;
-                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/jornadas');
+                            dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["c" /* FETCH_DECLARACIONES */], rol);
 
-                        case 18:
-                            _context.t8 = _context.sent;
-                            (0, _context.t6)(_context.t7, _context.t8);
-                            _context.t9 = commit;
-                            _context.t10 = __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* SET_ROLES */];
-                            _context.next = 24;
-                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/roles');
+                            if (rol > 1) {
+                                request = ['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'];
 
-                        case 24:
-                            _context.t11 = _context.sent;
-                            (0, _context.t9)(_context.t10, _context.t11);
-                            _context.t12 = commit;
-                            _context.t13 = __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* SET_USUARIOS */];
-                            _context.next = 30;
-                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/usuarios');
-
-                        case 30:
-                            _context.t14 = _context.sent;
-                            (0, _context.t12)(_context.t13, _context.t14);
+                                request.forEach(function (r) {
+                                    __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r).then(function (response) {
+                                        commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_STATE_ARRAY */], { key: r, payload: response });
+                                    });
+                                });
+                            }
 
                             callback();
 
-                        case 33:
+                        case 6:
                         case 'end':
                             return _context.stop();
                     }
@@ -13185,22 +13161,26 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x, _x2) {
-            return _ref5.apply(this, arguments);
+            return _ref7.apply(this, arguments);
         };
     }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* FETCH_AUTH_USER */], function () {
-        var _ref7 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref6) {
-            var commit = _ref6.commit;
+        var _ref9 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref8) {
+            var commit = _ref8.commit;
+            var response;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                 while (1) {
                     switch (_context2.prev = _context2.next) {
                         case 0:
-                            __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/user').then(function (response) {
-                                commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_AUTH_USER */], response);
-                            }).catch(function (e) {
-                                console.log(e);
-                            });
+                            _context2.next = 2;
+                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/user');
 
-                        case 1:
+                        case 2:
+                            response = _context2.sent;
+
+                            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* SET_STATE_OBJECT */], { key: 'auth', payload: response });
+                            return _context2.abrupt('return', response.data.rol.id);
+
+                        case 5:
                         case 'end':
                             return _context2.stop();
                     }
@@ -13209,37 +13189,44 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x3) {
-            return _ref7.apply(this, arguments);
+            return _ref9.apply(this, arguments);
         };
-    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* INSERT_DECLARACION */], function (_ref8, _ref9) {
-        var commit = _ref8.commit;
-        var informe = _ref9.informe,
-            cb = _ref9.cb;
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* FETCH_DECLARACIONES */], function (_ref10, rol) {
+        var commit = _ref10.commit;
+
+        var q = rol === 1 ? '/user/declaraciones' : '/declaraciones';
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api' + q).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_STATE_ARRAY */], { key: 'informes', payload: response });
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* INSERT_DECLARACION */], function (_ref11, _ref12) {
+        var commit = _ref11.commit;
+        var informe = _ref12.informe,
+            cb = _ref12.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], { informe: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], e, cb);
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* UPDATE_DECLARACION */], function (_ref10, _ref11) {
-        var commit = _ref10.commit;
-        var informe = _ref11.informe,
-            cb = _ref11.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* UPDATE_DECLARACION */], function (_ref13, _ref14) {
+        var commit = _ref13.commit;
+        var informe = _ref14.informe,
+            cb = _ref14.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id, informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_DECLARACION */], { informe: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* UPDATE_DECLARACION */], { informe: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], e, cb);
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref12, _ref13) {
-        var commit = _ref12.commit;
-        var id = _ref13.id,
-            cb = _ref13.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref15, _ref16) {
+        var commit = _ref15.commit;
+        var id = _ref16.id,
+            cb = _ref16.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/declaraciones/' + id + '/aprobar').then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_DECLARACION */], { informe: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* UPDATE_DECLARACION */], { informe: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], e, cb);
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
     }), _actions)
 });
@@ -13320,21 +13307,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: ['mensaje'],
     data: function data() {
         return {
-            informes: [],
-            cargando: true
+            informes: []
         };
     },
     created: function created() {
@@ -13359,6 +13337,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__partes_ListaActividades__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__partes_Apelacion__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__partes_Resumen__ = __webpack_require__(66);
+//
+//
+//
 //
 //
 //
@@ -13496,12 +13477,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             this.mensaje = ok ? 1 : -1;
             this.informe = Object.assign({}, this.informe, payload);
         },
-        enviar: function enviar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["d" /* INSERT_DECLARACION */], { informe: this.informe, cb: this.callback });
+        insertar: function insertar() {
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["e" /* INSERT_DECLARACION */], { informe: this.informe, cb: this.callback });
         },
         actualizar: function actualizar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["e" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.callback });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["f" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.callback });
         },
+        enviar: function enviar() {},
         aprobar: function aprobar(estado) {
             this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["a" /* APPROVE_DECLARACION */], { id: this.informe.id, cb: this.callback });
         },
@@ -14244,8 +14226,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
 
 
 
@@ -14491,7 +14471,7 @@ var app = function app() {
     });
 };
 
-__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["c" /* INIT_STORE */], app);
+__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["d" /* INIT_STORE */], app);
 
 /***/ }),
 /* 26 */
@@ -16903,6 +16883,32 @@ var render = function() {
   return _c("div", [
     _c("nav", { staticClass: "navbar navbar-default navbar-static-top" }, [
       _c("div", { staticClass: "container" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model.number",
+              value: _vm.auth.rol.id,
+              expression: "auth.rol.id",
+              modifiers: { number: true }
+            }
+          ],
+          staticClass: "col-md-2 from-control",
+          attrs: { type: "number" },
+          domProps: { value: _vm.auth.rol.id },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.auth.rol, "id", _vm._n($event.target.value))
+            },
+            blur: function($event) {
+              _vm.$forceUpdate()
+            }
+          }
+        }),
+        _vm._v(" "),
         _c("div", { staticClass: "navbar-header" }, [
           _c("img", {
             staticClass: "navbar-brand",
@@ -16931,20 +16937,22 @@ var render = function() {
               [_vm._v("Inicio")]
             ),
             _vm._v(" "),
-            _c(
-              "router-link",
-              {
-                staticClass: "btn navbar-btn",
-                attrs: {
-                  to: { name: "informes" },
-                  role: "button",
-                  "active-class": ""
-                }
-              },
-              [_vm._v("Informes de Actividades")]
-            ),
+            _vm.auth.rol.id < 4
+              ? _c(
+                  "router-link",
+                  {
+                    staticClass: "btn navbar-btn",
+                    attrs: {
+                      to: { name: "informes" },
+                      role: "button",
+                      "active-class": ""
+                    }
+                  },
+                  [_vm._v("Informes de Actividades")]
+                )
+              : _vm._e(),
             _vm._v(" "),
-            _vm.auth.rol.id >= 3
+            _vm.auth.rol.id === 2 || _vm.auth.rol.id === 4
               ? _c(
                   "router-link",
                   {
@@ -17772,21 +17780,13 @@ if (hadRuntime) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SET_AUTH_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SET_FACULTADES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SET_JERARQUIAS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return SET_JORNADAS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return SET_ROLES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return SET_USUARIOS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SET_STATE_ARRAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SET_STATE_OBJECT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return UPDATE_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HANDLE_ERROR; });
-var SET_AUTH_USER = 'SET_AUTH_USER';
-var SET_FACULTADES = 'SET_FACULTADES';
-var SET_JERARQUIAS = 'SET_JERARQUIAS';
-var SET_JORNADAS = 'SET_JORNADAS';
-var SET_ROLES = 'SET_ROLES';
-var SET_USUARIOS = 'SET_USUARIOS';
+var SET_STATE_ARRAY = 'SET_STATE_ARRAY';
+var SET_STATE_OBJECT = 'SET_STATE_OBJECT';
 var INSERT_DECLARACION = 'INSERT_DECLARACION';
 var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
 var HANDLE_ERROR = 'HANDLE_ERROR';
@@ -17832,65 +17832,75 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
         path: '/usuarios',
         name: 'usuarios',
         component: __WEBPACK_IMPORTED_MODULE_7__components_usuario_Lista__["a" /* default */],
-        meta: { adminUsuarios: true }
+        props: true,
+        meta: { eval: 'rol === 2 || rol === 4' }
     }, {
         path: '/usuarios/crear',
         name: 'nuevo-usuario',
         component: __WEBPACK_IMPORTED_MODULE_8__components_usuario_Usuario__["a" /* default */],
         props: { editable: true },
-        meta: { adminUsuarios: true }
+        meta: { eval: 'rol === 2 || rol === 4' }
     }, {
         path: '/usuarios/:id',
         name: 'editar-usuario',
         component: __WEBPACK_IMPORTED_MODULE_8__components_usuario_Usuario__["a" /* default */],
         props: { editable: true },
-        meta: { adminUsuarios: true }
+        meta: { eval: 'rol === 2 || rol === 4' }
     }, {
         path: '/informes',
         name: 'informes',
         component: __WEBPACK_IMPORTED_MODULE_5__components_informe_Lista__["a" /* default */],
-        props: true
+        props: true,
+        meta: { eval: 'rol < 4' }
     }, {
         path: '/informes/declarar',
         name: 'nuevo-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
-        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando }
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando },
+        meta: { eval: 'rol === 1' }
     }, {
         path: '/informes/:id',
         name: 'editar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
-        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando }
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando },
+        meta: { eval: 'rol === 1' }
     }, {
         path: '/informes/:id',
         name: 'aprobar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
-        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].aprobando }
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].aprobando },
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/informes/:id',
         name: 'realizado-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
-        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].realizado }
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].realizado },
+        meta: { eval: 'rol === 1' }
     }, {
         path: '/informes/:id',
         name: 'evaluar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
-        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].evaluando }
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].evaluando },
+        meta: { eval: 'rol === 3' }
     }, {
         path: '/informes/:id',
         name: 'apelar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
-        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].apelando }
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].apelando },
+        meta: { eval: 'rol === 1' }
     }]
 });
 
 router.beforeEach(function (to, from, next) {
     if (to.matched.some(function (record) {
-        return record.meta.adminUsuarios;
+        return record.meta.eval;
     })) {
-        if (__WEBPACK_IMPORTED_MODULE_3__vuex_store__["a" /* default */].state.auth.rol.id < 3) {
+        var toEval = to.matched.find(function (record) {
+            return record.meta.eval;
+        }).meta.eval;
+        if (!eval(toEval.replaceAll('rol', __WEBPACK_IMPORTED_MODULE_3__vuex_store__["a" /* default */].state.auth.rol.id))) {
             next({
-                path: '/inicio',
-                query: { redirect: to.fullPath }
+                name: 'inicio'
             });
         } else {
             next();
@@ -20806,59 +20816,55 @@ var render = function() {
         _vm._v("\n            Informes de actividades\n        ")
       ]),
       _vm._v(" "),
-      _vm.cargando
-        ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
-        : _c("div", [
-            _vm.informes.length === 0
-              ? _c("div", { staticClass: "text-center" }, [
-                  _c("h3", [
-                    _vm._v("No se ha ingresado nuevos informes de actividades")
-                  ])
-                ])
-              : _c("table", { staticClass: "table table-striped" }, [
-                  _vm._m(1),
+      _vm.informes.length === 0
+        ? _c("div", { staticClass: "text-center" }, [
+            _c("h3", [
+              _vm._v("No se ha ingresado nuevos informes de actividades")
+            ])
+          ])
+        : _c("table", { staticClass: "table table-striped" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.informes, function(informe) {
+                return _c("tr", { key: informe.id }, [
+                  _c("td", { staticClass: "col-md-4" }, [
+                    _vm._v(_vm._s(informe.periodo))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "col-md-6" }, [
+                    _vm._v(_vm._s(informe.created_at))
+                  ]),
                   _vm._v(" "),
                   _c(
-                    "tbody",
-                    _vm._l(_vm.informes, function(informe) {
-                      return _c("tr", { key: informe.id }, [
-                        _c("td", { staticClass: "col-md-4" }, [
-                          _vm._v(_vm._s(informe.periodo))
-                        ]),
-                        _vm._v(" "),
-                        _c("td", { staticClass: "col-md-6" }, [
-                          _vm._v(_vm._s(informe.created_at))
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "td",
-                          { staticClass: "col-md-2" },
-                          [
-                            _c(
-                              "router-link",
-                              {
-                                staticClass: "btn btn-xs btn-info btn-block",
-                                attrs: {
-                                  to: {
-                                    name: "declarar-realizado",
-                                    params: { id: informe.id }
-                                  }
-                                }
-                              },
-                              [
-                                _c("span", {
-                                  staticClass: "glyphicon glyphicon-eye-open",
-                                  attrs: { "aria-hidden": "true" }
-                                })
-                              ]
-                            )
-                          ],
-                          1
-                        )
-                      ])
-                    })
+                    "td",
+                    { staticClass: "col-md-2" },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "btn btn-xs btn-info btn-block",
+                          attrs: {
+                            to: {
+                              name: "declarar-realizado",
+                              params: { id: informe.id }
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-eye-open",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ],
+                    1
                   )
                 ])
+              })
+            )
           ]),
       _vm._v(" "),
       _c(
@@ -20886,15 +20892,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h3", [
-      _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
-      _vm._v(" \n                Cargando...\n            ")
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -22991,13 +22988,14 @@ var render = function() {
                   {
                     staticClass: "btn btn-info",
                     attrs: { type: "button" },
-                    on: { click: _vm.enviar }
+                    on: { click: _vm.insertar }
                   },
                   [
                     _c("span", {
                       staticClass: "glyphicon glyphicon-floppy-disk",
                       attrs: { "aria-hidden": "true" }
-                    })
+                    }),
+                    _vm._v(" Guardar\n                    ")
                   ]
                 )
               : _vm.etapa <= _vm.etapas.evaluando
@@ -23012,7 +23010,8 @@ var render = function() {
                       _c("span", {
                         staticClass: "glyphicon glyphicon-floppy-disk",
                         attrs: { "aria-hidden": "true" }
-                      })
+                      }),
+                      _vm._v(" Guardar\n                    ")
                     ]
                   )
                 : _c(
@@ -23030,6 +23029,24 @@ var render = function() {
                       _vm._v(" Enviar apelación\n                    ")
                     ]
                   ),
+            _vm._v(" "),
+            _vm.etapa === _vm.etapas.declarando
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button" },
+                    on: { click: _vm.enviar }
+                  },
+                  [
+                    _c("span", {
+                      staticClass: "glyphicon glyphicon-send",
+                      attrs: { "aria-hidden": "true" }
+                    }),
+                    _vm._v(" Enviar\n                    ")
+                  ]
+                )
+              : _vm._e(),
             _vm._v(" "),
             _vm.etapa === _vm.etapas.aprobando
               ? _c(
@@ -23162,93 +23179,89 @@ var render = function() {
           _vm._v("\n            Administración de usuarios\n        ")
         ]),
         _vm._v(" "),
-        _c("div", [
-          _c("table", { staticClass: "table table-striped" }, [
-            _c("thead", [
-              _c("tr", [
-                _c("th", { staticClass: "text-center" }, [
-                  _vm._v("Apellido paterno")
-                ]),
+        _c("table", { staticClass: "table table-striped" }, [
+          _c("thead", [
+            _c("tr", [
+              _c("th", { staticClass: "text-center" }, [
+                _vm._v("Apellido paterno")
+              ]),
+              _vm._v(" "),
+              _c("th", { staticClass: "text-center" }, [
+                _vm._v("Apellido materno")
+              ]),
+              _vm._v(" "),
+              _c("th", { staticClass: "text-center" }, [_vm._v("Nombres")]),
+              _vm._v(" "),
+              _vm.auth.rol.id > 2
+                ? _c("th", { staticClass: "text-center" }, [_vm._v("Facultad")])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.auth.rol.id > 2
+                ? _c("th", { staticClass: "text-center" }, [
+                    _vm._v("Departamento")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.auth.rol.id === 4
+                ? _c("th", { staticClass: "text-center" }, [_vm._v("Rol")])
+                : _vm._e(),
+              _vm._v(" "),
+              _c("th", { staticClass: "text-center" }, [_vm._v("Acciones")])
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.usuarios, function(usuario) {
+              return _c("tr", { key: usuario.id }, [
+                _c("td", [_vm._v(_vm._s(usuario.apellido_paterno))]),
                 _vm._v(" "),
-                _c("th", { staticClass: "text-center" }, [
-                  _vm._v("Apellido materno")
-                ]),
+                _c("td", [_vm._v(_vm._s(usuario.apellido_materno))]),
                 _vm._v(" "),
-                _c("th", { staticClass: "text-center" }, [_vm._v("Nombres")]),
+                _c("td", [_vm._v(_vm._s(usuario.nombres))]),
                 _vm._v(" "),
                 _vm.auth.rol.id > 2
-                  ? _c("th", { staticClass: "text-center" }, [
-                      _vm._v("Facultad")
+                  ? _c("td", [
+                      _vm._v(_vm._s(usuario.departamento.facultad.nombre))
                     ])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.auth.rol.id > 2
-                  ? _c("th", { staticClass: "text-center" }, [
-                      _vm._v("Departamento")
-                    ])
+                  ? _c("td", [_vm._v(_vm._s(usuario.departamento.nombre))])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.auth.rol.id === 4
-                  ? _c("th", { staticClass: "text-center" }, [_vm._v("Rol")])
+                  ? _c("td", [_vm._v(_vm._s(usuario.rol.nombre))])
                   : _vm._e(),
                 _vm._v(" "),
-                _c("th", { staticClass: "text-center" }, [_vm._v("Acciones")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.usuarios, function(usuario) {
-                return _c("tr", { key: usuario.id }, [
-                  _c("td", [_vm._v(_vm._s(usuario.apellido_paterno))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(usuario.apellido_materno))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(usuario.nombres))]),
-                  _vm._v(" "),
-                  _vm.auth.rol.id > 2
-                    ? _c("td", [
-                        _vm._v(_vm._s(usuario.departamento.facultad.nombre))
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.auth.rol.id > 2
-                    ? _c("td", [_vm._v(_vm._s(usuario.departamento.nombre))])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.auth.rol.id === 4
-                    ? _c("td", [_vm._v(_vm._s(usuario.rol.nombre))])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c(
-                    "td",
-                    { staticClass: "col-md-2" },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass: "btn btn-xs btn-info btn-block",
-                          attrs: {
-                            to: {
-                              name: "editar-usuario",
-                              params: { id: usuario.id }
-                            }
+                _c(
+                  "td",
+                  { staticClass: "col-md-2" },
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-xs btn-info btn-block",
+                        attrs: {
+                          to: {
+                            name: "editar-usuario",
+                            params: { id: usuario.id }
                           }
-                        },
-                        [
-                          _c("span", {
-                            staticClass: "glyphicon glyphicon-pencil",
-                            attrs: { "aria-hidden": "true" }
-                          })
-                        ]
-                      )
-                    ],
-                    1
-                  )
-                ])
-              })
-            )
-          ])
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-pencil",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ],
+                  1
+                )
+              ])
+            })
+          )
         ]),
         _vm._v(" "),
         _c(
