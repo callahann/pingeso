@@ -54,6 +54,8 @@
     </div>
 </template>
 <script>
+    import { mapState } from 'vuex'
+
     export default {
         props: ['informe', 'etapa'],
         data: function() {
@@ -89,9 +91,13 @@
             }
         },
         created: function() {                
-            this.actualizar();
+            this.actualizar()
         },
         methods: {
+            equivalentes: function(s, sa) {
+                const formula = this.formula.equivalente
+                return eval(formula.replaceAll('s', s).replaceAll('sa', sa))
+            },
             actualizar: function() {
                 this.totales = {
                     comprometido: {
@@ -104,7 +110,7 @@
                         anual: 0,
                         equivalente: 0
                     }
-                };
+                }
                 
                 for (var itemKey in this.informe) {
                     if (itemKey.startsWith('item')) {
@@ -123,48 +129,63 @@
 
                         ['comprometido', 'realizado'].forEach((parte) => {
                             this.informe[itemKey].actividades.forEach((actividad) => {
-                                this.resumenes[itemKey][parte].horasSemana += (actividad[parte].primero.horasSemana + actividad[parte].segundo.horasSemana) / 2;
-                                this.resumenes[itemKey][parte].horasAnio += actividad[parte].primero.horasSemestre + actividad[parte].segundo.horasSemestre;
-                            });
+                                this.resumenes[itemKey][parte].horasSemana += (actividad[parte].primero.horasSemana + actividad[parte].segundo.horasSemana) / 2
+                                this.resumenes[itemKey][parte].horasAnio += actividad[parte].primero.horasSemestre + actividad[parte].segundo.horasSemestre
+                            })
 
-                            this.totales[parte].semanal += this.resumenes[itemKey][parte].horasSemana;
-                            this.totales[parte].anual += this.resumenes[itemKey][parte].horasAnio;
+                            this.totales[parte].semanal += this.resumenes[itemKey][parte].horasSemana
+                            this.totales[parte].anual += this.resumenes[itemKey][parte].horasAnio
                             
-                            this.resumenes[itemKey][parte].equivalente = this.equivalentes(this.resumenes[itemKey][parte].horasSemana, this.resumenes[itemKey][parte].horasAnio);
-                            this.totales[parte].equivalente += this.resumenes[itemKey][parte].equivalente;
-                        });
+                            this.resumenes[itemKey][parte].equivalente = this.equivalentes(this.resumenes[itemKey][parte].horasSemana, this.resumenes[itemKey][parte].horasAnio)
+                            this.totales[parte].equivalente += this.resumenes[itemKey][parte].equivalente
+                        })
 
-                        this.totales.comprometido.equivalente = Math.round(this.totales.comprometido.equivalente * 10) / 10;
-                        this.totales.realizado.equivalente = Math.round(this.totales.realizado.equivalente * 10) / 10;
+                        this.totales.comprometido.equivalente = Math.round(this.totales.comprometido.equivalente * 10) / 10
+                        this.totales.realizado.equivalente = Math.round(this.totales.realizado.equivalente * 10) / 10
                     }
                 }
             }
         },
         computed: {
+            ...mapState(['formula']),
             calificacion: function() {
-                if (this.totales.realizado.equivalente === 0) return 0;
-                
-                var final = 0;
-                for(var itemKey in this.resumenes) 
-                    final += this.resumenes[itemKey].realizado.equivalente * this.informe[itemKey].calificacion;
-                return Math.round(final / this.totales.realizado.equivalente * 100) / 100;
+                let formula = this.formula.nota_final
+
+                for (var itemKey in this.informe) {
+                    if (itemKey.startsWith('item')) {
+                        formula = formula
+                                        .replaceAll('nota_' + itemKey, resumenes[itemKey].calificacion)
+                                        .replaceAll('comprometido_eq_' + itemKey, totales[itemKey].comprometido.equivalente)
+                                        .replaceAll('realizado_eq_' + itemKey, totales[itemKey].realizado.equivalente)
+                    }
+                }
+
+                formula = formula
+                                .replaceAll('comprometido_semanal' + itemKey, totales.comprometido.semanal)
+                                .replaceAll('comprometido_anual' + itemKey, totales.comprometido.anual)
+                                .replaceAll('comprometido_eq' + itemKey, totales.comprometido.equivalente)
+                                .replaceAll('realizado_semanal' + itemKey, totales.realizado.semanal)
+                                .replaceAll('realizado_anual' + itemKey, totales.realizado.anual)
+                                .replaceAll('realizado_eq' + itemKey, totales.realizado.equivalente)
+
+                return eval(formula)
             },
             rango: function() {
-                let calificacion = this.calificacion;
-                var rango = undefined;
+                let calificacion = this.calificacion
+                var rango = undefined
                 this.rangos.forEach((opcion) => {
-                    if(opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion;
-                });
+                    if(opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion
+                })
                 return rango || {
                     leyenda: 'No definido',
                     color: 'black'
-                };
+                }
             }
         },
         watch: {
             informe: {
                 handler() {
-                    this.actualizar();
+                    this.actualizar()
                 },
                 deep: true
             }

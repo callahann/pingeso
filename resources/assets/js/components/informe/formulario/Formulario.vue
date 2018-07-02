@@ -1,10 +1,6 @@
 <template>
     <div>
-        <div class="col-md-12 alert text-center" v-if="cargando">
-            <i class="fa fa-circle-notch fa-spin" aria-hidden="true" style="font-size: 10em"></i>&ensp;
-            <h3>Cargando...</h3>
-        </div>
-        <div class="col-md-12" v-else>
+        <div class="col-md-12">
             <div class="row">
                 <ol class="breadcrumb">
                     <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
@@ -19,13 +15,7 @@
                 <resumen :informe="informe" :etapa="etapa"></resumen>
             </div>
             <div class="row" v-if="apelacion.id !== undefined">
-                <div class="panel panel-default text-center" v-if="cargandoApelacion">
-                    <h3>
-                        <i class="fas fa-circle-notch fa-spin"></i> 
-                        Cargando...
-                    </h3>
-                </div>
-                <apelacion :previo="apelacion" v-on:actualizar="apelacion = $event" v-else></apelacion>
+                <apelacion :previo="apelacion" v-on:actualizar="apelacion = $event"></apelacion>
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -82,10 +72,14 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
-    import ListaActividades from './partes/ListaActividades';
-    import Apelacion from './partes/Apelacion';
-    import Resumen from './partes/Resumen';
+    import {
+        INSERT_DECLARACION,
+        UPDATE_DECLARACION,
+        APPROVE_DECLARACION
+    } from '../../../vuex/actions'
+    import ListaActividades from './partes/ListaActividades'
+    import Apelacion from './partes/Apelacion'
+    import Resumen from './partes/Resumen'
 
     export default {
         props: ['etapa'],
@@ -126,8 +120,6 @@
                 apelacion: {
                     id_declaracion: 0
                 },
-                cargando: true,
-                cargandoApelacion: true,
                 mensaje: 0
             }
         },
@@ -136,79 +128,39 @@
             'resumen': Resumen,
         },
         created: function() {
-            axios
-                .get('/api/declaraciones/' + this.$route.params.id)
-                .then(response => { 
-                    console.log("Se ha obtenido la data. Copiando localmente...");
-                    this.informe = Object.assign({}, this.informe, response.data);
-
-                    if(this.etapa >= this.etapas.evaluando) {
-                        this.apelacion.id_declaracion = this.informe.id;
-                        this.obtenerApelacion();
-                    }
-                        
-                    this.cargando = false;
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.cargando = false;
-                });
+            if(this.$route.params.id === undefined ) return;
+            this.informe = Object.assign({}, this.informe, response.data)
         },
         methods: {
+            callback: function(ok = false, payload) {
+                this.mensaje = ok ? 1 : -1
+                this.informe = Object.assign({}, this.informe, payload)
+            },
             enviar: function() {
-                let formData = this.formData(this.informe);
-                axios
-                    .post('/api/declaraciones', formData)
-                    .then(response => {
-                        console.log('Se ha registrado el informe correctamente');
-                        this.informe = Object.assign({}, this.informe, response.data);
-                        this.mensaje = 1;
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1; 
-                    });
+                this.$store.dispatch(INSERT_DECLARACION, { informe: this.informe, cb: this.callback })
             },
             actualizar: function() {
-                let formData = this.formData(this.informe);
-                axios
-                    .put('/api/declaraciones/' + this.$route.params.id, formData)
-                    .then(response => { 
-                        console.log("Se han actualizado los datos!");
-                        this.mensaje = 1;
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1; 
-                    });
+                this.$store.dispatch(UPDATE_DECLARACION, { informe: this.informe, cb: this.callback })
             },
             aprobar: function(estado) {
-                axios
-                    .get('/api/declaraciones/' + this.$route.params.id + '/aprobar')
-                    .then(response => { 
-                        console.log(this.volver('informes', 'Se ha aprobado la declaración'));
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1; 
-                    });
+                this.$store.dispatch(APPROVE_DECLARACION, { id: this.informe.id, cb: this.callback })
             },
             obtenerApelacion: function() {
-                axios
+                this.$http
                     .get('/api/apelaciones/' + this.informe.id)
                     .then(response => { 
-                        console.log("Se ha obtenido la apelación. Copiando localmente...");
-                        this.apelacion = Object.assign({}, this.apelacion, response.data);
-                        this.cargandoApelacion = false;
+                        console.log("Se ha obtenido la apelación. Copiando localmente...")
+                        this.apelacion = Object.assign({}, this.apelacion, response.data)
+                        this.cargandoApelacion = false
                     })
                     .catch(e => {
-                        console.log(e);
-                        this.cargandoApelacion = false;
-                    });
+                        console.log(e)
+                        this.cargandoApelacion = false
+                    })
             },
             enviarApelacion: function() {
-                let formData = this.formData(this.apelacion);
-                axios
+                let formData = this.formData(this.apelacion)
+                this.$http
                     .post('/api/apelaciones', formData,
                     {
                         headers: {
@@ -216,12 +168,12 @@
                         }
                     })
                     .then(response => {
-                        console.log(this.volver('informes', 'Se ha registrado la apelación correctamente'));
+                        console.log(this.volver('informes', 'Se ha registrado la apelación correctamente'))
                     })
                     .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1; 
-                    });
+                        console.log(e)
+                        this.mensaje = -1 
+                    })
             },
         }
     }

@@ -14,10 +14,7 @@
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
             <strong>Oh no!</strong> Ha ocurrido un error.
         </div>
-        <div class="col-md-12 alert text-center" v-if="cargando > 0">
-            <i class="fa fa-circle-notch fa-spin" aria-hidden="true" style="font-size: 10em"></i>&ensp;
-            <h3>Cargando...</h3>
-        </div>
+        <cargando v-if="cargando > 0"></cargando>
         <div class="panel panel-default" v-else>
             <div class="panel-heading panel-title text-center">
                 {{ !editable ? 'Datos personales' : usuario.id === undefined ? 'Agregar usuario' : 'Modificar usuario' }}
@@ -121,8 +118,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
-    
     export default {
         props: ['editable'],
         data: function() {
@@ -139,91 +134,91 @@
             }
         },
         created: function() {            
-            axios
+            this.$http
                 .get('/api/usuarios/' + this.$route.params.id)
                 .then(response => { 
-                    let f = Object.assign({}, response.data.departamento.facultad);
-                    delete response.data.departamento['facultad'];
-                    this.usuario = response.data;
+                    let f = Object.assign({}, response.data.departamento.facultad)
+                    delete response.data.departamento['facultad']
+                    this.usuario = response.data
 
                     this.facultades.forEach((facultad) => {
-                        if(facultad.id === f.id) this.facultad = Object.assign({}, facultad, this.facultad);
-                    });
+                        if(facultad.id === f.id) this.facultad = Object.assign({}, facultad, this.facultad)
+                    })
 
-                    this.cargando--;
+                    this.cargando--
                 })
                 .catch(e => {
-                    console.log(e);
-                    this.cargando--;
-                });
+                    console.log(e)
+                    this.cargando--
+                })
 
-            axios
+            this.$http
                 .get('/api/facultades')
                 .then(response => { 
-                    this.facultades = response.data;
-                    this.cargando--;
+                    this.facultades = response.data
+                    this.cargando--
                 })
                 .catch(e => {
-                    console.log(e);
-                    this.cargando--;
-                });
+                    console.log(e)
+                    this.cargando--
+                })
 
-            axios
+            this.$http
                 .get('/api/jerarquias')
                 .then(response => { 
-                    this.jerarquias = response.data;
-                    this.cargando--;
+                    this.jerarquias = response.data
+                    this.cargando--
                 })
                 .catch(e => {
-                    console.log(e);
-                    this.cargando--;
-                });
+                    console.log(e)
+                    this.cargando--
+                })
 
-            axios
+            this.$http
                 .get('/api/jornadas')
                 .then(response => { 
-                    this.jornadas = response.data;
-                    this.cargando--;
+                    this.jornadas = response.data
+                    this.cargando--
                 })
                 .catch(e => {
-                    console.log(e);
-                    this.cargando--;
-                });
+                    console.log(e)
+                    this.cargando--
+                })
 
-            axios
+            this.$http
                 .get('/api/roles')
                 .then(response => { 
-                    this.roles = response.data;
-                    this.cargando--;
+                    this.roles = response.data
+                    this.cargando--
                 })
                 .catch(e => {
-                    console.log(e);
-                    this.cargando--;
-                });
+                    console.log(e)
+                    this.cargando--
+                })
         },
         methods: {
             enviar: function() {
-                axios
+                this.$http
                     .post('/api/usuarios', this.usuario)
                     .then(response => { 
-                        console.log(this.volver('usuarios', 'Se ha registrado el usuario correctamente.'));
+                        console.log(this.volver('usuarios', 'Se ha registrado el usuario correctamente.'))
                     })
                     .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1;
-                    });
+                        console.log(e)
+                        this.mensaje = -1
+                    })
             },
             actualizar: function() {
-                axios
+                this.$http
                     .put('/api/usuarios/' + this.$route.params.id, this.usuario)
                     .then(response => { 
-                        this.usuario = Object.assign({}, response.data, this.usuario);
-                        this.mensaje = 1;
+                        this.usuario = Object.assign({}, response.data, this.usuario)
+                        this.mensaje = 1
                     })
                     .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1;
-                    });
+                        console.log(e)
+                        this.mensaje = -1
+                    })
             },
         }
     }

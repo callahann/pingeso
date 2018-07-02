@@ -221,7 +221,7 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
+    import axios from 'axios'
 
     export default {
         props: ['previo', 'etapa', 'tipo'],
@@ -234,20 +234,20 @@
             }
         },
         created: function() {
-            this.actividades = Object.assign([], this.actividades, this.previo);
+            this.actividades = Object.assign([], this.actividades, this.previo)
 
-            let cuenta = this.actividades.length; 
-            if(cuenta > 0) this.id = this.actividades[cuenta - 1].id;
+            let cuenta = this.actividades.length 
+            if(cuenta > 0) this.id = this.actividades[cuenta - 1].id
 
             if(this.etapa <= this.etapas.aprobando)
                 axios
                     .get('/api/all/descripciones/' + this.tipo)
                     .then(response => {
-                        this.descripciones = response.data;
+                        this.descripciones = response.data
                     })
                     .catch(e => {
-                        console.log(e);
-                    });
+                        console.log(e)
+                    })
         },
         methods: {
             nuevoItem: function() {
@@ -278,48 +278,48 @@
                 }
             },
             agregarActividad: function() {
-                let item = this.nuevoItem();
-                item['id'] = this.id++;
-                this.actividades.push(item);
+                let item = this.nuevoItem()
+                item['id'] = this.id++
+                this.actividades.push(item)
             },
             quitarActividad: function(index) {
-                this.actividades.splice(index, 1);
+                this.actividades.splice(index, 1)
             },
             otra: function(actividad) {
                 if(actividad.descripcion === 'Otra actividad...') {
-                    actividad.descripcion = '';
-                    actividad.otra = true;
+                    actividad.descripcion = ''
+                    actividad.otra = true
                 }
             }
         },
         watch: {
             actividades: function(newActividades) {
-                this.$emit('actualizar', newActividades);
+                this.$emit('actualizar', newActividades)
                 Vue.nextTick(function () {
-                    $('[data-toggle="tooltip"]').tooltip();
-                });
+                    $('[data-toggle="tooltip"]').tooltip()
+                })
             }
         },
         computed: {
             totales: function() {
-                let totales = this.nuevoItem();
+                let totales = this.nuevoItem()
                 
                 this.actividades.forEach(function(actividad) {
                     ['comprometido', 'realizado'].forEach((parte) => {
                         ['primero', 'segundo'].forEach((semestre) => {
                             ['horasSemana', 'horasSemestre'].forEach((hora) => {
-                                totales[parte][semestre][hora] += actividad[parte][semestre][hora];
+                                totales[parte][semestre][hora] += actividad[parte][semestre][hora]
                             })
                         })
                     })
-                });
+                })
                 
-                totales.realizado.primero['diffSemanal'] =  totales.realizado.primero.horasSemana - totales.comprometido.primero.horasSemana;
-                totales.realizado.primero['diffSemestral'] =  totales.realizado.primero.horasSemestre - totales.comprometido.primero.horasSemestre;
-                totales.realizado.segundo['diffSemanal'] =  totales.realizado.segundo.horasSemana - totales.comprometido.segundo.horasSemana;
-                totales.realizado.segundo['diffSemestral'] =  totales.realizado.segundo.horasSemestre - totales.comprometido.segundo.horasSemestre;
+                totales.realizado.primero['diffSemanal'] =  totales.realizado.primero.horasSemana - totales.comprometido.primero.horasSemana
+                totales.realizado.primero['diffSemestral'] =  totales.realizado.primero.horasSemestre - totales.comprometido.primero.horasSemestre
+                totales.realizado.segundo['diffSemanal'] =  totales.realizado.segundo.horasSemana - totales.comprometido.segundo.horasSemana
+                totales.realizado.segundo['diffSemestral'] =  totales.realizado.segundo.horasSemestre - totales.comprometido.segundo.horasSemestre
 
-                return totales;
+                return totales
             }
         }
     }

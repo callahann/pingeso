@@ -49,7 +49,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
     export default {
         props: ['mensaje'],
         data: function() {
@@ -59,7 +58,7 @@
             }
         },
         created: function() {
-            axios.get('/api/usuarios')
+            this.$http.get('/api/usuarios')
                 .then(response => {
                     this.usuarios = response.data;
                     this.cargando = false;

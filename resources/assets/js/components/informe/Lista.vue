@@ -23,6 +23,7 @@
                         <tr>
                             <th>Periodo</th>
                             <th>Creado el</th>
+                            <th>Aprobado</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -48,7 +49,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
     export default {
         props: ['mensaje'],
         data: function() {
@@ -58,15 +58,15 @@
             }
         },
         created: function() {
-            axios.get('/api/declaraciones')
+            this.$http.get('/api/declaraciones')
                 .then(response => {
-                    this.informes = response.data;
-                    this.cargando = false;
+                    this.informes = response.data
+                    this.cargando = false
                 })
                 .catch(e => {
-                    this.cargando = false;
-                    console.log(e);
-                });
+                    this.cargando = false
+                    console.log(e)
+                })
         }
     }
 </script>

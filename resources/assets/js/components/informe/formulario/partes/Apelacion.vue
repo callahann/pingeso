@@ -45,33 +45,33 @@
             }
         },
         created: function() {
-            this.apelacion = Object.assign({}, this.apelacion, this.previo);
+            this.apelacion = Object.assign({}, this.apelacion, this.previo)
         },
         methods: {
             obtenerArchivo: function() {
-                this.apelacion.archivo = this.$refs.archivo.files[0];
+                this.apelacion.archivo = this.$refs.archivo.files[0]
             },
             descargar: function() {
-                axios
+                this.$http
                     .get('/api/apelaciones/' + this.apelacion.id + '/archivo')
                     .then(response => {
-                        console.log('Se ha iniciado la descarga del archivo');
+                        console.log('Se ha iniciado la descarga del archivo')
                     })
                     .catch(e => {
-                        console.log(e);
-                        this.mensaje = -1; 
-                    });
+                        console.log(e)
+                        this.mensaje = -1 
+                    })
             }
         },
         computed: {
             editable: function() {
-                return this.etapa === this.etapas.apelando && this.apelacion.id === undefined;
+                return this.etapa === this.etapas.apelando && this.apelacion.id === undefined
             }
         },
         watch: {
             apelacion:  {
                 handler(e) {
-                    this.$emit('actualizar', e);
+                    this.$emit('actualizar', e)
                 },
                 deep: true
             }

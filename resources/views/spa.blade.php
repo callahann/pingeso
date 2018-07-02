@@ -15,7 +15,22 @@
     </head>
     <body>
         <div id="app">
-            <app></app>
+            <app>
+                <div class="vertical-center">
+                    <div class="container">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="panel panel-default text-center">
+                                <div class="panel-body">
+                                    <h3>
+                                        <i class="fas fa-circle-notch fa-spin loading"></i> 
+                                        <p>Cargando...</p>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </app>
         </div>
         <script src="{{ mix('js/app.js') }}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

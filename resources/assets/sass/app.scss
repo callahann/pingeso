@@ -23,6 +23,11 @@ body {
   display: flex;
   align-items: center;
   background: transparent;
+
+  .loading {
+    font-size: 5em;
+    margin-bottom:0.2em;
+  }
 }
 
 textarea {
