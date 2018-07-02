@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth:api']], function (){
 	});	
 });
 
+Route::get('/user/declaraciones', 'DeclaracionController@allListed');
 Route::get('/all/descripciones', 'DescripcionController@all');
 Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
 

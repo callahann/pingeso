@@ -124,4 +124,26 @@ class DeclaracionController extends Controller
         return $this->updateMessage();
 
     }
+
+    public function allListed()
+    {
+        if(Auth::user()) {
+            $id_rol = Auth::user()->id_rol;
+            $id_departamento = Auth::user()->id_departamento; 
+            if ($id_rol == 1) {
+                return Auth::user()->declaraciones()->paginate(); 
+            }
+            elseif ($id_rol == 2) {
+                return Declaracion::whereHas('user', function($q) use($id_departamento) {
+                    $q->where('id_departamento', $id_departamento)
+                      ->where('estado', 2);
+                });
+            }
+            else {
+                return Declaracion::where('estado', 3)->paginate();
+            }
+        }
+
+        return response()->json('No Permitido', 402);
+    }
 }
