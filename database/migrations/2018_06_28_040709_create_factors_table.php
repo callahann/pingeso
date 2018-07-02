@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormulasTable extends Migration
+class CreateFactorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateFormulasTable extends Migration
      */
     public function up()
     {
-        Schema::create('formulas', function (Blueprint $table) {
+        Schema::create('factors', function (Blueprint $table) {
             $table->increments('id');
-            $table->json('equivalente');
-            $table->json('nota_final');
-            $table->boolean('actual')->default(true);
+            $table->decimal('diferencia',8,3);
+            $table->decimal('factor',8,3);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,7 +29,6 @@ class CreateFormulasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('formulas');
+        Schema::dropIfExists('factors');
     }
 }
-

@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-8 col-md-offset-2">
+    <div :class="{ 'col-md-12': auth.rol.id >= 3, 'col-md-8 col-md-offset-2': auth.rol.id <= 2 }">
         <div v-if="mensaje !== undefined" class="alert alert-success">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = undefined">&times;</a>
             {{ mensaje }}
@@ -8,29 +8,27 @@
             <div class="panel-heading panel-title text-center">
                 Administración de usuarios
             </div>
-            <div class="text-center" v-if="cargando">
-                <h3>
-                    <i class="fas fa-circle-notch fa-spin"></i> 
-                    Cargando...
-                </h3>
-            </div>
-            <div v-else>
+            <div>
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Apellido paterno</th>
-                            <th>Apellido materno</th>
-                            <th>Nombres</th>
-                            <th>Rol</th>
-                            <th></th>
+                            <th class="text-center">Apellido paterno</th>
+                            <th class="text-center">Apellido materno</th>
+                            <th class="text-center">Nombres</th>
+                            <th class="text-center" v-if="auth.rol.id > 2">Facultad</th>
+                            <th class="text-center" v-if="auth.rol.id > 2">Departamento</th>
+                            <th class="text-center" v-if="auth.rol.id === 4">Rol</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="usuario in usuarios" v-bind:key="usuario.id">
-                            <td class="col-md-4">{{ usuario.apellido_paterno }}</td>
-                            <td class="col-md-4">{{ usuario.apellido_materno }}</td>
-                            <td class="col-md-6">{{ usuario.nombres }}</td>
-                            <td class="col-md-6">{{ usuario.rol.nombre }}</td>
+                            <td>{{ usuario.apellido_paterno }}</td>
+                            <td>{{ usuario.apellido_materno }}</td>
+                            <td>{{ usuario.nombres }}</td>
+                            <td v-if="auth.rol.id > 2">{{ usuario.departamento.facultad.nombre }}</td>
+                            <td v-if="auth.rol.id > 2">{{ usuario.departamento.nombre }}</td>
+                            <td v-if="auth.rol.id === 4">{{ usuario.rol.nombre }}</td>
                             <td class="col-md-2">
                                 <router-link class="btn btn-xs btn-info btn-block" :to="{ name: 'editar-usuario', params: { id: usuario.id }}">     
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -49,24 +47,10 @@
     </div>
 </template>
 <script>
+    import { mapState } from 'vuex'
+
     export default {
         props: ['mensaje'],
-        data: function() {
-            return {
-                usuarios: [],
-                cargando: true,
-            }
-        },
-        created: function() {
-            this.$http.get('/api/usuarios')
-                .then(response => {
-                    this.usuarios = response.data;
-                    this.cargando = false;
-                })
-                .catch(e => {
-                    this.cargando = false;
-                    console.log(e);
-                });
-        }
+        computed: mapState(['usuarios'])
     }
 </script>

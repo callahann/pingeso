@@ -14,8 +14,7 @@
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
             <strong>Oh no!</strong> Ha ocurrido un error.
         </div>
-        <cargando v-if="cargando > 0"></cargando>
-        <div class="panel panel-default" v-else>
+        <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
                 {{ !editable ? 'Datos personales' : usuario.id === undefined ? 'Agregar usuario' : 'Modificar usuario' }}
             </div>
@@ -118,83 +117,26 @@
     </div>
 </template>
 <script>
+    import { mapState } from 'vuex'
+
     export default {
         props: ['editable'],
         data: function() {
             return {
-                usuario: {
-                },
+                usuario: {},
                 facultad: {},
-                facultades: [],
-                jerarquias: [],
-                jornadas: [],
-                roles: [],
-                cargando: 5,
                 mensaje: 0
             }
         },
-        created: function() {            
-            this.$http
-                .get('/api/usuarios/' + this.$route.params.id)
-                .then(response => { 
-                    let f = Object.assign({}, response.data.departamento.facultad)
-                    delete response.data.departamento['facultad']
-                    this.usuario = response.data
-
-                    this.facultades.forEach((facultad) => {
-                        if(facultad.id === f.id) this.facultad = Object.assign({}, facultad, this.facultad)
-                    })
-
-                    this.cargando--
-                })
-                .catch(e => {
-                    console.log(e)
-                    this.cargando--
-                })
-
-            this.$http
-                .get('/api/facultades')
-                .then(response => { 
-                    this.facultades = response.data
-                    this.cargando--
-                })
-                .catch(e => {
-                    console.log(e)
-                    this.cargando--
-                })
-
-            this.$http
-                .get('/api/jerarquias')
-                .then(response => { 
-                    this.jerarquias = response.data
-                    this.cargando--
-                })
-                .catch(e => {
-                    console.log(e)
-                    this.cargando--
-                })
-
-            this.$http
-                .get('/api/jornadas')
-                .then(response => { 
-                    this.jornadas = response.data
-                    this.cargando--
-                })
-                .catch(e => {
-                    console.log(e)
-                    this.cargando--
-                })
-
-            this.$http
-                .get('/api/roles')
-                .then(response => { 
-                    this.roles = response.data
-                    this.cargando--
-                })
-                .catch(e => {
-                    console.log(e)
-                    this.cargando--
-                })
+        created: function() {
+            const usuario = this.usuarios.find(usuario => {
+                return usuario.id === this.$route.params.id
+            })
+            const f = usuario.departamento.facultad
+            this.usuario = Object.assign({}, this.usuario, usuario)
+            this.facultad = this.facultades.find(facultad => {
+                return facultad.id === f.id
+            })
         },
         methods: {
             enviar: function() {
@@ -220,6 +162,7 @@
                         this.mensaje = -1
                     })
             },
-        }
+        },
+        computed: mapState(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
     }
 </script>

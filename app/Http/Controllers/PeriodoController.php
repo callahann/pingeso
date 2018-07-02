@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Formula;
+use App\Periodo;
 use Illuminate\Http\Request;
-use Validator;
 
-class FormulaController extends Controller
+class PeriodoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class FormulaController extends Controller
      */
     public function index()
     {
-        return Formula::paginate();
+        return Periodo::all();
     }
 
     /**
@@ -42,7 +41,7 @@ class FormulaController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        $formula = Formula::create($request->all());
+        $periodo = Periodo::create($request->all());
 
         return $this->creationMessage();
     }
@@ -50,24 +49,22 @@ class FormulaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Formula  $formula
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $formula = Formula::findOrFail($id);
-        return $formula;
+        return Periodo::findOrFail($id);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Formula  $formula
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $formula = Formula::findOrFail($id);
         return $this->notDefined();
     }
 
@@ -75,7 +72,7 @@ class FormulaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Formula  $formula
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -86,10 +83,10 @@ class FormulaController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        $formula = Formula::findOrFail($id);
+        $periodo = Periodo::findOrFail($id);
 
-        $formula->fill($data);
-        $formula->save();
+        $periodo->fill($data);
+        $periodo->save();
 
         return $this->updateMessage();
     }
@@ -97,22 +94,23 @@ class FormulaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Formula  $formula
+     * @param  \App\Periodo  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $formula = Formula::findOrFail($id);
-        $formula->delete();
+        $periodo = Periodo::findOrFail($id);
+        $periodo->delete();
 
-        return $this->deletedMessage();
+        return $this->deleteMessage();
     }
 
     protected function rules()
     {
         return [
-            'equivalente' => 'required',
-            'nota_final' => 'required',
+            'desde' => 'required|date',
+            'hasta' => 'required|date',
+            'estado' => 'required|numeric',
         ];
     }
 }

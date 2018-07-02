@@ -18,7 +18,7 @@ Vue.prototype.$http = axios
 
 import App from './components/App'
 
-import { FETCH_AUTH_USER } from './vuex/actions'
+import { INIT_STORE, FETCH_AUTH_USER } from './vuex/actions'
 import store from './vuex/store'
 import { router } from './router'
 
@@ -37,4 +37,4 @@ const app = function() {
     })
 }
 
-store.dispatch(FETCH_AUTH_USER, app)
+store.dispatch(INIT_STORE, app)

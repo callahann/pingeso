@@ -22,6 +22,12 @@ Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approv
 Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
 Route::get('/descarga/apelacion/{apelacion}', 'ApelacionController@descargar');
 
+Route::group(['middleware' => ['auth:api']], function (){
+	Route::get('/userdata', function (){
+		echo Auth::user()->email;
+	});	
+});
+
 Route::get('/all/descripciones', 'DescripcionController@all');
 Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
 

@@ -42,7 +42,7 @@ class RolController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        $rol = Rol::create($data);
+        $rol = Rol::create($request->all());
 
         return $this->creationMessage();
     }

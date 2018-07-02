@@ -10,8 +10,8 @@
             <h3 v-else>No se declararon actividades para este ítem</h3>
         </div>
         <div v-else>
-            <!-- Declarando / Aprobando -->
-            <table class="table table-striped" v-if="etapa <= etapas.aprobando">
+            <!-- Declarando -->
+            <table class="table table-striped" v-if="etapa === etapas.declarando">
                 <thead>
                     <tr>
                         <th class="text-center" rowspan="2">
@@ -82,6 +82,52 @@
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemestre }}</th>
                         <th colspan="2"></th>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Evaluando -->
+            <table class="table table-striped" v-else-if="etapa === etapas.aprobando">
+                <thead>
+                    <tr>
+                        <th class="text-center" rowspan="2">
+                            Descripción
+                            <a class="badge" data-toggle="tooltip" data-placement="top"
+                                title="Breve descripción de la tarea a realizar">?</a>
+                        </th>
+                        <th class="text-center" colspan="2">Primer semestre</th>
+                        <th class="text-center" colspan="2">Segundo semestre</th>
+                        <th class="text-center" rowspan="2">
+                            Observaciones
+                            <a class="badge" data-toggle="tooltip" data-placement="top"
+                                title="Agregue una observación respecto a esta tarea">?</a>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Hrs. semana</th>
+                        <th class="text-center">Hrs. semestre</th>
+                        <th class="text-center">Hrs. semana</th>
+                        <th class="text-center">Hrs. semestre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(actividad) in actividades" v-bind:key="actividad.id">
+                        <td class="col-md-3">
+                            {{ actividad.descripcion }}
+                        </td>
+                        <td class="text-center">{{ actividad.comprometido.primero.horasSemana }}</td>
+                        <td class="text-center">{{ actividad.comprometido.primero.horasSemestre }}</td>
+                        <td class="text-center">{{ actividad.comprometido.segundo.horasSemana }}</td>
+                        <td class="text-center">{{ actividad.comprometido.segundo.horasSemestre }}</td>
+                        <td class="col-md-4">
+                            <textarea class="form-control" rows=1 v-model="actividad.observaciones"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-right">TOTAL</th>
+                        <th class="text-center">{{ totales.comprometido.primero.horasSemana }}</th>
+                        <th class="text-center">{{ totales.comprometido.primero.horasSemestre }}</th>
+                        <th class="text-center">{{ totales.comprometido.segundo.horasSemana }}</th>
+                        <th class="text-center">{{ totales.comprometido.segundo.horasSemestre }}</th>
                     </tr>
                 </tbody>
             </table>

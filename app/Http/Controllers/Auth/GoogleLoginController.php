@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 
 class GoogleLoginController extends Controller
-{
-    private $email = 'mail';
-    
+{    
     public function redirectToProvider()
     {
         return Auth::check() ?
@@ -22,12 +20,10 @@ class GoogleLoginController extends Controller
     {
         $user = Socialite::driver('google')->stateless()->user();
         $findUser = User::where('email', $user->getEmail())->first();
-        if($findUser){
-            $this->email = $user->getEmail();
+        if($findUser) {
             Auth::login($findUser);
             return redirect()->route('inicio');
-        }
-        else{
+        } else {
             return redirect()->route('no-registrado');
         }
     }

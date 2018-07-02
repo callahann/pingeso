@@ -12,7 +12,7 @@
 
 */
 
-Route::get('/', 'Auth\GoogleLoginController@redirectToProvider')->name('login');
+Route::get('/', 'Auth\GoogleLoginController@redirectToProvider')->name('login')->middleware(['guest']);
 Route::get('/logged', 'Auth\GoogleLoginController@handleProviderCallback');
 Route::get('/inicio', function() {
 	return view('spa');

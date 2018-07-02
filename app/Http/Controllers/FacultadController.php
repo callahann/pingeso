@@ -36,7 +36,15 @@ class FacultadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $facultad = Facultad::create($request->all());
+
+        return $this->creationMessage();
     }
 
     /**
@@ -59,7 +67,6 @@ class FacultadController extends Controller
      */
     public function edit($id)
     {
-        $facultad = Facultad::findOrFail($id);
         return $this->notDefined();
     }
 
@@ -73,7 +80,16 @@ class FacultadController extends Controller
     public function update(Request $request, $id)
     {
         $facultad = Facultad::findOrFail($id);
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $facultad->fill($request->all());
+        $facultad->save();
+
+        return $this->updateMessage();
     }
 
     /**
@@ -88,5 +104,12 @@ class FacultadController extends Controller
         $facultad->deleted();
 
         return $this->notDefined();
+    }
+
+    protected function rules()
+    {
+        return [
+            'nombre' => 'required'
+        ];
     }
 }

@@ -53,10 +53,34 @@ const router = new VueRouter({
         },
         {
             path: '/informes/:id',
-            name: 'etapa-informe',
+            name: 'editar-informe',
             component: Formulario,
-            props: true
-        }
+            props: { etapa: EtapasEnum.declarando }
+        },
+        {
+            path: '/informes/:id',
+            name: 'aprobar-informe',
+            component: Formulario,
+            props: { etapa: EtapasEnum.aprobando }
+        },
+        {
+            path: '/informes/:id',
+            name: 'realizado-informe',
+            component: Formulario,
+            props: { etapa: EtapasEnum.realizado }
+        },
+        {
+            path: '/informes/:id',
+            name: 'evaluar-informe',
+            component: Formulario,
+            props: { etapa: EtapasEnum.evaluando }
+        },
+        {
+            path: '/informes/:id',
+            name: 'apelar-informe',
+            component: Formulario,
+            props: { etapa: EtapasEnum.apelando }
+        },
     ],
 })
 

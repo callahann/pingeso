@@ -94,9 +94,9 @@
             this.actualizar()
         },
         methods: {
-            equivalentes: function(s, sa) {
+            equivalentes: function(se, sa) {
                 const formula = this.formula.equivalente
-                return eval(formula.replaceAll('s', s).replaceAll('sa', sa))
+                return eval(formula.replaceAll('se', se).replaceAll('sa', sa))
             },
             actualizar: function() {
                 this.totales = {

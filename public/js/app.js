@@ -11446,353 +11446,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(26).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(26).setImmediate))
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(30);
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(33);
-
-var DEFAULT_CONTENT_TYPE = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-};
-
-function setContentTypeIfUnset(headers, value) {
-  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
-    headers['Content-Type'] = value;
-  }
-}
-
-function getDefaultAdapter() {
-  var adapter;
-  if (typeof XMLHttpRequest !== 'undefined') {
-    // For browsers use XHR adapter
-    adapter = __webpack_require__(10);
-  } else if (typeof process !== 'undefined') {
-    // For node use HTTP adapter
-    adapter = __webpack_require__(10);
-  }
-  return adapter;
-}
-
-var defaults = {
-  adapter: getDefaultAdapter(),
-
-  transformRequest: [function transformRequest(data, headers) {
-    normalizeHeaderName(headers, 'Content-Type');
-    if (utils.isFormData(data) ||
-      utils.isArrayBuffer(data) ||
-      utils.isBuffer(data) ||
-      utils.isStream(data) ||
-      utils.isFile(data) ||
-      utils.isBlob(data)
-    ) {
-      return data;
-    }
-    if (utils.isArrayBufferView(data)) {
-      return data.buffer;
-    }
-    if (utils.isURLSearchParams(data)) {
-      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
-      return data.toString();
-    }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
-    }
-    return data;
-  }],
-
-  transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
-    }
-    return data;
-  }],
-
-  /**
-   * A timeout in milliseconds to abort a request. If set to 0 (default) a
-   * timeout is not created.
-   */
-  timeout: 0,
-
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN',
-
-  maxContentLength: -1,
-
-  validateStatus: function validateStatus(status) {
-    return status >= 200 && status < 300;
-  }
-};
-
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
-  }
-};
-
-utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
-  defaults.headers[method] = {};
-});
-
-utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
-});
-
-module.exports = defaults;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return FETCH_AUTH_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return UPDATE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
-var FETCH_AUTH_USER = 'GET_AUTH_USER';
-var INSERT_DECLARACION = 'INSERT_DECLARACION';
-var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
-var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
-
-
-
-/***/ }),
-/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12737,6 +12394,351 @@ var index_esm = {
 
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(30);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var utils = __webpack_require__(0);
+var normalizeHeaderName = __webpack_require__(33);
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = __webpack_require__(10);
+  } else if (typeof process !== 'undefined') {
+    // For node use HTTP adapter
+    adapter = __webpack_require__(10);
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return INIT_STORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return FETCH_AUTH_USER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return INSERT_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
+var INIT_STORE = 'INIT_STORE';
+var FETCH_AUTH_USER = 'GET_AUTH_USER';
+var INSERT_DECLARACION = 'INSERT_DECLARACION';
+var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
+var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
+
+
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13043,11 +13045,11 @@ module.exports = Cancel;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(8);
 
 
 var _mutations, _actions;
@@ -13064,100 +13066,178 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 __WEBPACK_IMPORTED_MODULE_1_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */]);
 
+var asArray = function asArray(data) {
+    return Object.keys(data).map(function (key) {
+        return data[key];
+    });
+};
+
 var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
     state: {
         queue: 0,
+        facultades: [],
         informes: [],
+        jerarquias: [],
+        jornadas: [],
+        roles: [],
         usuarios: [],
-        formula: Object.freeze({
-            equivalente: 'Math.round((s * 36 + sa) / 44 * 10) / 10',
+        formula: {
+            equivalente: 'Math.round((se * 36 + sa) / 44 * 10) / 10',
             nota_final: '(nota_item_docencia * realizado_eq_item_docencia + nota_item_investigacion * realizado_eq_item_investigacion + nota_item_asistencia * realizado_eq_item_asistencia + nota_item_perfeccionamiento * realizado_eq_item_perfeccionamiento + nota_item_administracion * realizado_eq_item_administracion + nota_item_extension * realizado_eq_item_extension + nota_item_educacion_continua * realizado_eq_item_educacion_continua) / realizado_eq'
-        })
+        }
     },
     mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_AUTH_USER */], function (state, payload) {
-        state.auth = payload.auth;
+        state.auth = Object.assign({}, state.auth, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* SET_FACULTADES */], function (state, payload) {
+        state.facultades = Object.assign([], state.facultades, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* SET_JERARQUIAS */], function (state, payload) {
+        state.jerarquias = Object.assign([], state.jerarquias, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* SET_JORNADAS */], function (state, payload) {
+        state.jornadas = Object.assign([], state.jornadas, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* SET_ROLES */], function (state, payload) {
+        state.roles = Object.assign([], state.roles, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* SET_USUARIOS */], function (state, payload) {
+        state.usuarios = state.auth.rol.id > 1 ? Object.assign([], state.usuarios, payload.data) : [];
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], function (state, _ref) {
         var payload = _ref.payload,
             callback = _ref.callback;
 
-        state.informes.push(payload);
-        callback(true, payload);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* UPDATE_DECLARACION */], function (state, _ref2) {
+        state.informes.push(payload.data);
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_DECLARACION */], function (state, _ref2) {
         var payload = _ref2.payload,
             callback = _ref2.callback;
 
         var index = state.informes.findIndex(function (informe) {
-            return informe.id === payload.id;
+            return informe.id === payload.data.id;
         });
         var informe = state.informes[index];
-        state.informes[index] = Object.assign({}, informe, payload);
+        state.informes[index] = Object.assign({}, informe, payload.data);
 
-        callback(true, payload);
+        callback(true, payload.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], function (state, _ref3) {
         var payload = _ref3.payload,
             callback = _ref3.callback;
 
         callback(false, payload);
     }), _mutations),
-    actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* FETCH_AUTH_USER */], function (_ref4, callback) {
-        var _this = this;
+    actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* INIT_STORE */], function () {
+        var _ref5 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref4, callback) {
+            var dispatch = _ref4.dispatch,
+                commit = _ref4.commit;
+            return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                while (1) {
+                    switch (_context.prev = _context.next) {
+                        case 0:
+                            _context.next = 2;
+                            return dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["b" /* FETCH_AUTH_USER */], callback);
 
-        var commit = _ref4.commit;
+                        case 2:
+                            _context.t0 = commit;
+                            _context.t1 = __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* SET_FACULTADES */];
+                            _context.next = 6;
+                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/facultades');
 
-        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/user').then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_AUTH_USER */], { auth: response.data });
-            callback();
-        }).catch(function (e) {
-            console.log(e);
-        });
-        return new Promise(function (resolve, reject) {
-            setTimeout(_asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-                var response;
-                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                _context.next = 2;
-                                return resolve();
+                        case 6:
+                            _context.t2 = _context.sent;
+                            (0, _context.t0)(_context.t1, _context.t2);
+                            _context.t3 = commit;
+                            _context.t4 = __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* SET_JERARQUIAS */];
+                            _context.next = 12;
+                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/jerarquias');
 
-                            case 2:
-                                response = _context.sent;
+                        case 12:
+                            _context.t5 = _context.sent;
+                            (0, _context.t3)(_context.t4, _context.t5);
+                            _context.t6 = commit;
+                            _context.t7 = __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* SET_JORNADAS */];
+                            _context.next = 18;
+                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/jornadas');
 
-                            case 3:
-                            case 'end':
-                                return _context.stop();
-                        }
+                        case 18:
+                            _context.t8 = _context.sent;
+                            (0, _context.t6)(_context.t7, _context.t8);
+                            _context.t9 = commit;
+                            _context.t10 = __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* SET_ROLES */];
+                            _context.next = 24;
+                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/roles');
+
+                        case 24:
+                            _context.t11 = _context.sent;
+                            (0, _context.t9)(_context.t10, _context.t11);
+                            _context.t12 = commit;
+                            _context.t13 = __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* SET_USUARIOS */];
+                            _context.next = 30;
+                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/usuarios');
+
+                        case 30:
+                            _context.t14 = _context.sent;
+                            (0, _context.t12)(_context.t13, _context.t14);
+
+                            callback();
+
+                        case 33:
+                        case 'end':
+                            return _context.stop();
                     }
-                }, _callee, _this);
-            })), 1000);
-        });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* INSERT_DECLARACION */], function (_ref6, _ref7) {
-        var commit = _ref6.commit;
-        var informe = _ref7.informe,
-            cb = _ref7.cb;
+                }
+            }, _callee, this);
+        }));
 
-        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], { informe: response.data, callback: cb });
-        }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], e, cb);
-        });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* UPDATE_DECLARACION */], function (_ref8, _ref9) {
+        return function (_x, _x2) {
+            return _ref5.apply(this, arguments);
+        };
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* FETCH_AUTH_USER */], function () {
+        var _ref7 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref6) {
+            var commit = _ref6.commit;
+            return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+                while (1) {
+                    switch (_context2.prev = _context2.next) {
+                        case 0:
+                            __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/user').then(function (response) {
+                                commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_AUTH_USER */], response);
+                            }).catch(function (e) {
+                                console.log(e);
+                            });
+
+                        case 1:
+                        case 'end':
+                            return _context2.stop();
+                    }
+                }
+            }, _callee2, this);
+        }));
+
+        return function (_x3) {
+            return _ref7.apply(this, arguments);
+        };
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* INSERT_DECLARACION */], function (_ref8, _ref9) {
         var commit = _ref8.commit;
         var informe = _ref9.informe,
             cb = _ref9.cb;
 
-        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id, informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* UPDATE_DECLARACION */], { informe: response.data, callback: cb });
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], { informe: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], e, cb);
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref10, _ref11) {
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* UPDATE_DECLARACION */], function (_ref10, _ref11) {
         var commit = _ref10.commit;
-        var id = _ref11.id,
+        var informe = _ref11.informe,
             cb = _ref11.cb;
 
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id, informe).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_DECLARACION */], { informe: response, callback: cb });
+        }).catch(function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], e, cb);
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref12, _ref13) {
+        var commit = _ref12.commit;
+        var id = _ref13.id,
+            cb = _ref13.cb;
+
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/declaraciones/' + id + '/aprobar').then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* UPDATE_DECLARACION */], { informe: response.data, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_DECLARACION */], { informe: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], e, cb);
         });
@@ -13275,7 +13355,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__partes_ListaActividades__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__partes_Apelacion__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__partes_Resumen__ = __webpack_require__(66);
@@ -13417,10 +13497,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             this.informe = Object.assign({}, this.informe, payload);
         },
         enviar: function enviar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["c" /* INSERT_DECLARACION */], { informe: this.informe, cb: this.callback });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["d" /* INSERT_DECLARACION */], { informe: this.informe, cb: this.callback });
         },
         actualizar: function actualizar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["d" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.callback });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["e" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.callback });
         },
         aprobar: function aprobar(estado) {
             this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["a" /* APPROVE_DECLARACION */], { id: this.informe.id, cb: this.callback });
@@ -13460,8 +13540,54 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -13876,7 +14002,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -13975,9 +14101,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         this.actualizar();
     },
     methods: {
-        equivalentes: function equivalentes(s, sa) {
+        equivalentes: function equivalentes(se, sa) {
             var formula = this.formula.equivalente;
-            return eval(formula.replaceAll('s', s).replaceAll('sa', sa));
+            return eval(formula.replaceAll('se', se).replaceAll('sa', sa));
         },
         actualizar: function actualizar() {
             var _this = this;
@@ -14071,6 +14197,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
 //
 //
 //
@@ -14119,28 +14246,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
+
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: ['mensaje'],
-    data: function data() {
-        return {
-            usuarios: [],
-            cargando: true
-        };
-    },
-    created: function created() {
-        var _this = this;
-
-        this.$http.get('/api/usuarios').then(function (response) {
-            _this.usuarios = response.data;
-            _this.cargando = false;
-        }).catch(function (e) {
-            _this.cargando = false;
-            console.log(e);
-        });
-    }
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['usuarios'])
 });
 
 /***/ }),
@@ -14148,6 +14259,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
 //
 //
 //
@@ -14266,7 +14378,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
+
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: ['editable'],
@@ -14274,62 +14387,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {
             usuario: {},
             facultad: {},
-            facultades: [],
-            jerarquias: [],
-            jornadas: [],
-            roles: [],
-            cargando: 5,
             mensaje: 0
         };
     },
     created: function created() {
         var _this = this;
 
-        this.$http.get('/api/usuarios/' + this.$route.params.id).then(function (response) {
-            var f = Object.assign({}, response.data.departamento.facultad);
-            delete response.data.departamento['facultad'];
-            _this.usuario = response.data;
-
-            _this.facultades.forEach(function (facultad) {
-                if (facultad.id === f.id) _this.facultad = Object.assign({}, facultad, _this.facultad);
-            });
-
-            _this.cargando--;
-        }).catch(function (e) {
-            console.log(e);
-            _this.cargando--;
+        var usuario = this.usuarios.find(function (usuario) {
+            return usuario.id === _this.$route.params.id;
         });
-
-        this.$http.get('/api/facultades').then(function (response) {
-            _this.facultades = response.data;
-            _this.cargando--;
-        }).catch(function (e) {
-            console.log(e);
-            _this.cargando--;
-        });
-
-        this.$http.get('/api/jerarquias').then(function (response) {
-            _this.jerarquias = response.data;
-            _this.cargando--;
-        }).catch(function (e) {
-            console.log(e);
-            _this.cargando--;
-        });
-
-        this.$http.get('/api/jornadas').then(function (response) {
-            _this.jornadas = response.data;
-            _this.cargando--;
-        }).catch(function (e) {
-            console.log(e);
-            _this.cargando--;
-        });
-
-        this.$http.get('/api/roles').then(function (response) {
-            _this.roles = response.data;
-            _this.cargando--;
-        }).catch(function (e) {
-            console.log(e);
-            _this.cargando--;
+        var f = usuario.departamento.facultad;
+        this.usuario = Object.assign({}, this.usuario, usuario);
+        this.facultad = this.facultades.find(function (facultad) {
+            return facultad.id === f.id;
         });
     },
     methods: {
@@ -14354,7 +14424,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 _this3.mensaje = -1;
             });
         }
-    }
+    },
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
 });
 
 /***/ }),
@@ -14375,10 +14446,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vuex_store__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router__ = __webpack_require__(54);
 /**
@@ -14420,7 +14491,7 @@ var app = function app() {
     });
 };
 
-__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["b" /* FETCH_AUTH_USER */], app);
+__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["c" /* INIT_STORE */], app);
 
 /***/ }),
 /* 26 */
@@ -14490,7 +14561,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 27 */
@@ -14683,7 +14754,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(5)))
 
 /***/ }),
 /* 28 */
@@ -15880,7 +15951,7 @@ return Promise$1;
 
 //# sourceMappingURL=es6-promise.map
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(4)))
 
 /***/ }),
 /* 30 */
@@ -15892,7 +15963,7 @@ return Promise$1;
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(9);
 var Axios = __webpack_require__(32);
-var defaults = __webpack_require__(6);
+var defaults = __webpack_require__(7);
 
 /**
  * Create an instance of Axios
@@ -15975,7 +16046,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(6);
+var defaults = __webpack_require__(7);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(41);
 var dispatchRequest = __webpack_require__(42);
@@ -16514,7 +16585,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(43);
 var isCancel = __webpack_require__(12);
-var defaults = __webpack_require__(6);
+var defaults = __webpack_require__(7);
 var isAbsoluteURL = __webpack_require__(44);
 var combineURLs = __webpack_require__(45);
 
@@ -17702,10 +17773,20 @@ if (hadRuntime) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SET_AUTH_USER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SET_FACULTADES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SET_JERARQUIAS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return SET_JORNADAS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return SET_ROLES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return SET_USUARIOS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return UPDATE_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HANDLE_ERROR; });
 var SET_AUTH_USER = 'SET_AUTH_USER';
+var SET_FACULTADES = 'SET_FACULTADES';
+var SET_JERARQUIAS = 'SET_JERARQUIAS';
+var SET_JORNADAS = 'SET_JORNADAS';
+var SET_ROLES = 'SET_ROLES';
+var SET_USUARIOS = 'SET_USUARIOS';
 var INSERT_DECLARACION = 'INSERT_DECLARACION';
 var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
 var HANDLE_ERROR = 'HANDLE_ERROR';
@@ -17776,9 +17857,29 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando }
     }, {
         path: '/informes/:id',
-        name: 'etapa-informe',
+        name: 'editar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
-        props: true
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando }
+    }, {
+        path: '/informes/:id',
+        name: 'aprobar-informe',
+        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].aprobando }
+    }, {
+        path: '/informes/:id',
+        name: 'realizado-informe',
+        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].realizado }
+    }, {
+        path: '/informes/:id',
+        name: 'evaluar-informe',
+        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].evaluando }
+    }, {
+        path: '/informes/:id',
+        name: 'apelar-informe',
+        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].apelando }
     }]
 });
 
@@ -20439,7 +20540,7 @@ if (inBrowser && window.Vue) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EtapasEnum; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -20447,9 +20548,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var EtapasEnum = Object.freeze({
     declarando: 1,
-    realizado: 2,
-    evaluando: 3,
-    apelando: 4
+    aprobando: 2,
+    realizado: 3,
+    evaluando: 4,
+    apelando: 5
 });
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
@@ -20487,7 +20589,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
             return mensaje;
         }
     },
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['auth', 'cargando']))
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['auth']))
 });
 
 
@@ -20557,49 +20659,49 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "col-md-12" }, [
+    _c("h1", [
+      _vm._v("Sistema de evaluación y calificación de desempeño académico")
+    ]),
+    _vm._v(" "),
+    _c("h2", [_vm._v("Bienvenido/a " + _vm._s(_vm.auth.avatar))]),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-12" }, [
-      _c("h1", [
-        _vm._v("Sistema de evaluación y calificación de desempeño académico")
-      ]),
-      _vm._v(" "),
-      _c("h2", [_vm._v("Bienvenido/a")]),
-      _vm._v(" "),
-      _c("div", [
-        _c("blockquote", [
-          _c("h3", [
+    return _c("div", [
+      _c("blockquote", [
+        _c("h3", [
+          _vm._v(
+            "Plataforma de gestión de distribución de tiempo académica, cuyas principales funciones son:"
+          )
+        ]),
+        _vm._v(" "),
+        _c("ul", [
+          _c("li", [_vm._v("Crear convenio de académico.")]),
+          _vm._v(" "),
+          _c("li", [_vm._v("Renegociar convenios.")]),
+          _vm._v(" "),
+          _c("li", [
             _vm._v(
-              "Plataforma de gestión de distribución de tiempo académica, cuyas principales funciones son:"
+              "Revisión de convenios a la finalización del periodo lectivo."
             )
           ]),
           _vm._v(" "),
-          _c("ul", [
-            _c("li", [_vm._v("Crear convenio de académico.")]),
-            _vm._v(" "),
-            _c("li", [_vm._v("Renegociar convenios.")]),
-            _vm._v(" "),
-            _c("li", [
-              _vm._v(
-                "Revisión de convenios a la finalización del periodo lectivo."
-              )
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _vm._v(
-                "Edición de la evaluación de la distribución de tiempo académica."
-              )
-            ]),
-            _vm._v(" "),
-            _c("li", [_vm._v("Pre-evaluación de convenios.")]),
-            _vm._v(" "),
-            _c("li", [_vm._v("Justificación sobre las actividades.")])
-          ])
+          _c("li", [
+            _vm._v(
+              "Edición de la evaluación de la distribución de tiempo académica."
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", [_vm._v("Pre-evaluación de convenios.")]),
+          _vm._v(" "),
+          _c("li", [_vm._v("Justificación sobre las actividades.")])
         ])
       ])
     ])
@@ -20951,7 +21053,7 @@ var render = function() {
             : _c("h3", [_vm._v("No se declararon actividades para este ítem")])
         ])
       : _c("div", [
-          _vm.etapa <= _vm.etapas.aprobando
+          _vm.etapa === _vm.etapas.declarando
             ? _c("table", { staticClass: "table table-striped" }, [
                 _vm._m(1),
                 _vm._v(" "),
@@ -21306,7 +21408,7 @@ var render = function() {
                   2
                 )
               ])
-            : _vm.etapa === _vm.etapas.realizado
+            : _vm.etapa === _vm.etapas.aprobando
               ? _c("table", { staticClass: "table table-striped" }, [
                   _vm._m(2),
                   _vm._v(" "),
@@ -21323,103 +21425,32 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("td", { staticClass: "col-md-1 text-center" }, [
+                          _c("td", { staticClass: "text-center" }, [
                             _vm._v(
-                              "\n                        " +
-                                _vm._s(
-                                  actividad.comprometido[_vm.semestre]
-                                    .horasSemana
-                                ) +
-                                "\n                    "
+                              _vm._s(actividad.comprometido.primero.horasSemana)
                             )
                           ]),
                           _vm._v(" "),
-                          _c("td", { staticClass: "col-md-1" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model.number",
-                                  value:
-                                    actividad.realizado[_vm.semestre]
-                                      .horasSemana,
-                                  expression:
-                                    "actividad.realizado[semestre].horasSemana",
-                                  modifiers: { number: true }
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { type: "number", min: "0" },
-                              domProps: {
-                                value:
-                                  actividad.realizado[_vm.semestre].horasSemana
-                              },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    actividad.realizado[_vm.semestre],
-                                    "horasSemana",
-                                    _vm._n($event.target.value)
-                                  )
-                                },
-                                blur: function($event) {
-                                  _vm.$forceUpdate()
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "col-md-1 text-center" }, [
+                          _c("td", { staticClass: "text-center" }, [
                             _vm._v(
-                              "\n                        " +
-                                _vm._s(
-                                  actividad.comprometido[_vm.semestre]
-                                    .horasSemestre
-                                ) +
-                                "\n                    "
+                              _vm._s(
+                                actividad.comprometido.primero.horasSemestre
+                              )
                             )
                           ]),
                           _vm._v(" "),
-                          _c("td", { staticClass: "col-md-1" }, [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model.number",
-                                  value:
-                                    actividad.realizado[_vm.semestre]
-                                      .horasSemestre,
-                                  expression:
-                                    "actividad.realizado[semestre].horasSemestre",
-                                  modifiers: { number: true }
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { type: "number", min: "0" },
-                              domProps: {
-                                value:
-                                  actividad.realizado[_vm.semestre]
-                                    .horasSemestre
-                              },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    actividad.realizado[_vm.semestre],
-                                    "horasSemestre",
-                                    _vm._n($event.target.value)
-                                  )
-                                },
-                                blur: function($event) {
-                                  _vm.$forceUpdate()
-                                }
-                              }
-                            })
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(actividad.comprometido.segundo.horasSemana)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                actividad.comprometido.segundo.horasSemestre
+                              )
+                            )
                           ]),
                           _vm._v(" "),
                           _c("td", { staticClass: "col-md-4" }, [
@@ -21459,124 +21490,6 @@ var render = function() {
                         _vm._v(" "),
                         _c("th", { staticClass: "text-center" }, [
                           _vm._v(
-                            _vm._s(
-                              _vm.totales.comprometido[_vm.semestre].horasSemana
-                            )
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { staticClass: "text-center" }, [
-                          _vm._v(
-                            _vm._s(
-                              _vm.totales.realizado[_vm.semestre].horasSemana
-                            )
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { staticClass: "text-center" }, [
-                          _vm._v(
-                            _vm._s(
-                              _vm.totales.comprometido[_vm.semestre]
-                                .horasSemestre
-                            )
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { staticClass: "text-center" }, [
-                          _vm._v(
-                            _vm._s(
-                              _vm.totales.realizado[_vm.semestre].horasSemestre
-                            )
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { attrs: { colspan: "2" } })
-                      ])
-                    ],
-                    2
-                  )
-                ])
-              : _c("table", { staticClass: "table table-striped" }, [
-                  _vm._m(3),
-                  _vm._v(" "),
-                  _c(
-                    "tbody",
-                    [
-                      _vm._l(_vm.actividades, function(actividad) {
-                        return _c("tr", { key: actividad.id }, [
-                          _c("td", { staticClass: "col-md-3" }, [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(actividad.descripcion) +
-                                "\n                    "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(actividad.comprometido.primero.horasSemana)
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                actividad.comprometido.primero.horasSemestre
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(actividad.realizado.primero.horasSemana)
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(actividad.realizado.primero.horasSemestre)
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(actividad.comprometido.segundo.horasSemana)
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(
-                                actividad.comprometido.segundo.horasSemestre
-                              )
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(actividad.realizado.segundo.horasSemana)
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(
-                              _vm._s(actividad.realizado.segundo.horasSemestre)
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "col-md-4" }, [
-                            _vm._v(_vm._s(actividad.observaciones))
-                          ])
-                        ])
-                      }),
-                      _vm._v(" "),
-                      _c("tr", [
-                        _c("th", { staticClass: "text-right" }, [
-                          _vm._v("TOTAL")
-                        ]),
-                        _vm._v(" "),
-                        _c("th", { staticClass: "text-center" }, [
-                          _vm._v(
                             _vm._s(_vm.totales.comprometido.primero.horasSemana)
                           )
                         ]),
@@ -21588,66 +21501,6 @@ var render = function() {
                             )
                           )
                         ]),
-                        _vm._v(" "),
-                        _c(
-                          "th",
-                          {
-                            staticClass: "text-center",
-                            style: {
-                              color:
-                                _vm.totales.realizado.primero.diffSemanal >= 0
-                                  ? "green"
-                                  : "red"
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(
-                                  _vm.totales.realizado.primero.horasSemana
-                                ) +
-                                " (" +
-                                _vm._s(
-                                  (_vm.totales.realizado.primero.diffSemanal >=
-                                  0
-                                    ? "+"
-                                    : "") +
-                                    _vm.totales.realizado.primero.diffSemanal
-                                ) +
-                                ")\n                    "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "th",
-                          {
-                            staticClass: "text-center",
-                            style: {
-                              color:
-                                _vm.totales.realizado.primero.diffSemestral >= 0
-                                  ? "green"
-                                  : "red"
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(
-                                  _vm.totales.realizado.primero.horasSemestre
-                                ) +
-                                " (" +
-                                _vm._s(
-                                  (_vm.totales.realizado.primero
-                                    .diffSemestral >= 0
-                                    ? "+"
-                                    : "") +
-                                    _vm.totales.realizado.primero.diffSemestral
-                                ) +
-                                ")\n                    "
-                            )
-                          ]
-                        ),
                         _vm._v(" "),
                         _c("th", { staticClass: "text-center" }, [
                           _vm._v(
@@ -21661,74 +21514,454 @@ var render = function() {
                               _vm.totales.comprometido.segundo.horasSemestre
                             )
                           )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "th",
-                          {
-                            staticClass: "text-center",
-                            style: {
-                              color:
-                                _vm.totales.realizado.segundo.diffSemanal >= 0
-                                  ? "green"
-                                  : "red"
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(
-                                  _vm.totales.realizado.segundo.horasSemana
-                                ) +
-                                " (" +
-                                _vm._s(
-                                  (_vm.totales.realizado.segundo.diffSemanal >=
-                                  0
-                                    ? "+"
-                                    : "") +
-                                    _vm.totales.realizado.segundo.diffSemanal
-                                ) +
-                                ")\n                    "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "th",
-                          {
-                            staticClass: "text-center",
-                            style: {
-                              color:
-                                _vm.totales.realizado.segundo.diffSemestral >= 0
-                                  ? "green"
-                                  : "red"
-                            }
-                          },
-                          [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(
-                                  _vm.totales.realizado.segundo.horasSemestre
-                                ) +
-                                " (" +
-                                _vm._s(
-                                  (_vm.totales.realizado.segundo
-                                    .diffSemestral >= 0
-                                    ? "+"
-                                    : "") +
-                                    _vm.totales.realizado.segundo.diffSemestral
-                                ) +
-                                ")\n                    "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("th")
+                        ])
                       ])
                     ],
                     2
                   )
                 ])
+              : _vm.etapa === _vm.etapas.realizado
+                ? _c("table", { staticClass: "table table-striped" }, [
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      [
+                        _vm._l(_vm.actividades, function(actividad) {
+                          return _c("tr", { key: actividad.id }, [
+                            _c("td", { staticClass: "col-md-3" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(actividad.descripcion) +
+                                  "\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido[_vm.semestre]
+                                      .horasSemana
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-1" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model.number",
+                                    value:
+                                      actividad.realizado[_vm.semestre]
+                                        .horasSemana,
+                                    expression:
+                                      "actividad.realizado[semestre].horasSemana",
+                                    modifiers: { number: true }
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { type: "number", min: "0" },
+                                domProps: {
+                                  value:
+                                    actividad.realizado[_vm.semestre]
+                                      .horasSemana
+                                },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      actividad.realizado[_vm.semestre],
+                                      "horasSemana",
+                                      _vm._n($event.target.value)
+                                    )
+                                  },
+                                  blur: function($event) {
+                                    _vm.$forceUpdate()
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido[_vm.semestre]
+                                      .horasSemestre
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-1" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model.number",
+                                    value:
+                                      actividad.realizado[_vm.semestre]
+                                        .horasSemestre,
+                                    expression:
+                                      "actividad.realizado[semestre].horasSemestre",
+                                    modifiers: { number: true }
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { type: "number", min: "0" },
+                                domProps: {
+                                  value:
+                                    actividad.realizado[_vm.semestre]
+                                      .horasSemestre
+                                },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      actividad.realizado[_vm.semestre],
+                                      "horasSemestre",
+                                      _vm._n($event.target.value)
+                                    )
+                                  },
+                                  blur: function($event) {
+                                    _vm.$forceUpdate()
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-4" }, [
+                              _c("textarea", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: actividad.observaciones,
+                                    expression: "actividad.observaciones"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { rows: "1" },
+                                domProps: { value: actividad.observaciones },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      actividad,
+                                      "observaciones",
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        }),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", { staticClass: "text-right" }, [
+                            _vm._v("TOTAL")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido[_vm.semestre]
+                                  .horasSemana
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.realizado[_vm.semestre].horasSemana
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido[_vm.semestre]
+                                  .horasSemestre
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.realizado[_vm.semestre]
+                                  .horasSemestre
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { colspan: "2" } })
+                        ])
+                      ],
+                      2
+                    )
+                  ])
+                : _c("table", { staticClass: "table table-striped" }, [
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _c(
+                      "tbody",
+                      [
+                        _vm._l(_vm.actividades, function(actividad) {
+                          return _c("tr", { key: actividad.id }, [
+                            _c("td", { staticClass: "col-md-3" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(actividad.descripcion) +
+                                  "\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(
+                                  actividad.comprometido.primero.horasSemana
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(
+                                  actividad.comprometido.primero.horasSemestre
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(actividad.realizado.primero.horasSemana)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(
+                                  actividad.realizado.primero.horasSemestre
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(
+                                  actividad.comprometido.segundo.horasSemana
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(
+                                  actividad.comprometido.segundo.horasSemestre
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(actividad.realizado.segundo.horasSemana)
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(
+                                _vm._s(
+                                  actividad.realizado.segundo.horasSemestre
+                                )
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-4" }, [
+                              _vm._v(_vm._s(actividad.observaciones))
+                            ])
+                          ])
+                        }),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c("th", { staticClass: "text-right" }, [
+                            _vm._v("TOTAL")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido.primero.horasSemana
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido.primero.horasSemestre
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "th",
+                            {
+                              staticClass: "text-center",
+                              style: {
+                                color:
+                                  _vm.totales.realizado.primero.diffSemanal >= 0
+                                    ? "green"
+                                    : "red"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    _vm.totales.realizado.primero.horasSemana
+                                  ) +
+                                  " (" +
+                                  _vm._s(
+                                    (_vm.totales.realizado.primero
+                                      .diffSemanal >= 0
+                                      ? "+"
+                                      : "") +
+                                      _vm.totales.realizado.primero.diffSemanal
+                                  ) +
+                                  ")\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "th",
+                            {
+                              staticClass: "text-center",
+                              style: {
+                                color:
+                                  _vm.totales.realizado.primero.diffSemestral >=
+                                  0
+                                    ? "green"
+                                    : "red"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    _vm.totales.realizado.primero.horasSemestre
+                                  ) +
+                                  " (" +
+                                  _vm._s(
+                                    (_vm.totales.realizado.primero
+                                      .diffSemestral >= 0
+                                      ? "+"
+                                      : "") +
+                                      _vm.totales.realizado.primero
+                                        .diffSemestral
+                                  ) +
+                                  ")\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido.segundo.horasSemana
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido.segundo.horasSemestre
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "th",
+                            {
+                              staticClass: "text-center",
+                              style: {
+                                color:
+                                  _vm.totales.realizado.segundo.diffSemanal >= 0
+                                    ? "green"
+                                    : "red"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    _vm.totales.realizado.segundo.horasSemana
+                                  ) +
+                                  " (" +
+                                  _vm._s(
+                                    (_vm.totales.realizado.segundo
+                                      .diffSemanal >= 0
+                                      ? "+"
+                                      : "") +
+                                      _vm.totales.realizado.segundo.diffSemanal
+                                  ) +
+                                  ")\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "th",
+                            {
+                              staticClass: "text-center",
+                              style: {
+                                color:
+                                  _vm.totales.realizado.segundo.diffSemestral >=
+                                  0
+                                    ? "green"
+                                    : "red"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    _vm.totales.realizado.segundo.horasSemestre
+                                  ) +
+                                  " (" +
+                                  _vm._s(
+                                    (_vm.totales.realizado.segundo
+                                      .diffSemestral >= 0
+                                      ? "+"
+                                      : "") +
+                                      _vm.totales.realizado.segundo
+                                        .diffSemestral
+                                  ) +
+                                  ")\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("th")
+                        ])
+                      ],
+                      2
+                    )
+                  ])
         ]),
     _vm._v(" "),
     _vm.etapa === _vm.etapas.declarando
@@ -21865,6 +22098,68 @@ var staticRenderFns = [
         ]),
         _vm._v(" "),
         _c("th", { attrs: { rowspan: "2" } })
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { staticClass: "text-center" }, [_vm._v("Hrs. semana")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Hrs. semestre")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Hrs. semana")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Hrs. semestre")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
+          _vm._v(
+            "\n                        Descripción\n                        "
+          ),
+          _c(
+            "a",
+            {
+              staticClass: "badge",
+              attrs: {
+                "data-toggle": "tooltip",
+                "data-placement": "top",
+                title: "Breve descripción de la tarea a realizar"
+              }
+            },
+            [_vm._v("?")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { colspan: "2" } }, [
+          _vm._v("Primer semestre")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { colspan: "2" } }, [
+          _vm._v("Segundo semestre")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
+          _vm._v(
+            "\n                        Observaciones\n                        "
+          ),
+          _c(
+            "a",
+            {
+              staticClass: "badge",
+              attrs: {
+                "data-toggle": "tooltip",
+                "data-placement": "top",
+                title: "Agregue una observación respecto a esta tarea"
+              }
+            },
+            [_vm._v("?")]
+          )
+        ])
       ]),
       _vm._v(" "),
       _c("tr", [
@@ -22834,141 +23129,154 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-    _vm.mensaje !== undefined
-      ? _c("div", { staticClass: "alert alert-success" }, [
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.mensaje = undefined
+  return _c(
+    "div",
+    {
+      class: {
+        "col-md-12": _vm.auth.rol.id >= 3,
+        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
+      }
+    },
+    [
+      _vm.mensaje !== undefined
+        ? _c("div", { staticClass: "alert alert-success" }, [
+            _c(
+              "a",
+              {
+                staticClass: "close",
+                attrs: { href: "#", "aria-label": "close" },
+                on: {
+                  click: function($event) {
+                    _vm.mensaje = undefined
+                  }
                 }
-              }
-            },
-            [_vm._v("×")]
-          ),
-          _vm._v("\n        " + _vm._s(_vm.mensaje) + "\n    ")
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-        _vm._v("\n            Administración de usuarios\n        ")
-      ]),
+              },
+              [_vm._v("×")]
+            ),
+            _vm._v("\n        " + _vm._s(_vm.mensaje) + "\n    ")
+          ])
+        : _vm._e(),
       _vm._v(" "),
-      _vm.cargando
-        ? _c("div", { staticClass: "text-center" }, [_vm._m(0)])
-        : _c("div", [
-            _c("table", { staticClass: "table table-striped" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.usuarios, function(usuario) {
-                  return _c("tr", { key: usuario.id }, [
-                    _c("td", { staticClass: "col-md-4" }, [
-                      _vm._v(_vm._s(usuario.apellido_paterno))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "col-md-4" }, [
-                      _vm._v(_vm._s(usuario.apellido_materno))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "col-md-6" }, [
-                      _vm._v(_vm._s(usuario.nombres))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "col-md-6" }, [
-                      _vm._v(_vm._s(usuario.rol.nombre))
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "td",
-                      { staticClass: "col-md-2" },
-                      [
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "btn btn-xs btn-info btn-block",
-                            attrs: {
-                              to: {
-                                name: "editar-usuario",
-                                params: { id: usuario.id }
-                              }
+      _c("div", { staticClass: "panel panel-default" }, [
+        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+          _vm._v("\n            Administración de usuarios\n        ")
+        ]),
+        _vm._v(" "),
+        _c("div", [
+          _c("table", { staticClass: "table table-striped" }, [
+            _c("thead", [
+              _c("tr", [
+                _c("th", { staticClass: "text-center" }, [
+                  _vm._v("Apellido paterno")
+                ]),
+                _vm._v(" "),
+                _c("th", { staticClass: "text-center" }, [
+                  _vm._v("Apellido materno")
+                ]),
+                _vm._v(" "),
+                _c("th", { staticClass: "text-center" }, [_vm._v("Nombres")]),
+                _vm._v(" "),
+                _vm.auth.rol.id > 2
+                  ? _c("th", { staticClass: "text-center" }, [
+                      _vm._v("Facultad")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.auth.rol.id > 2
+                  ? _c("th", { staticClass: "text-center" }, [
+                      _vm._v("Departamento")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.auth.rol.id === 4
+                  ? _c("th", { staticClass: "text-center" }, [_vm._v("Rol")])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("th", { staticClass: "text-center" }, [_vm._v("Acciones")])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.usuarios, function(usuario) {
+                return _c("tr", { key: usuario.id }, [
+                  _c("td", [_vm._v(_vm._s(usuario.apellido_paterno))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(usuario.apellido_materno))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(usuario.nombres))]),
+                  _vm._v(" "),
+                  _vm.auth.rol.id > 2
+                    ? _c("td", [
+                        _vm._v(_vm._s(usuario.departamento.facultad.nombre))
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.auth.rol.id > 2
+                    ? _c("td", [_vm._v(_vm._s(usuario.departamento.nombre))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.auth.rol.id === 4
+                    ? _c("td", [_vm._v(_vm._s(usuario.rol.nombre))])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    { staticClass: "col-md-2" },
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "btn btn-xs btn-info btn-block",
+                          attrs: {
+                            to: {
+                              name: "editar-usuario",
+                              params: { id: usuario.id }
                             }
-                          },
-                          [
-                            _c("span", {
-                              staticClass: "glyphicon glyphicon-pencil",
-                              attrs: { "aria-hidden": "true" }
-                            })
-                          ]
-                        )
-                      ],
-                      1
-                    )
-                  ])
-                })
-              )
-            ])
-          ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "panel-footer" },
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "btn btn-success",
-              attrs: { to: { name: "nuevo-usuario" } }
-            },
-            [
-              _c("span", {
-                staticClass: "glyphicon glyphicon-plus",
-                attrs: { "aria-hidden": "true" }
-              }),
-              _vm._v(" Agregar usuario\n            ")
-            ]
-          )
-        ],
-        1
-      )
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("h3", [
-      _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
-      _vm._v(" \n                Cargando...\n            ")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Apellido paterno")]),
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-pencil",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ])
+              })
+            )
+          ])
+        ]),
         _vm._v(" "),
-        _c("th", [_vm._v("Apellido materno")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Nombres")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Rol")]),
-        _vm._v(" "),
-        _c("th")
+        _c(
+          "div",
+          { staticClass: "panel-footer" },
+          [
+            _c(
+              "router-link",
+              {
+                staticClass: "btn btn-success",
+                attrs: { to: { name: "nuevo-usuario" } }
+              },
+              [
+                _c("span", {
+                  staticClass: "glyphicon glyphicon-plus",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(" Agregar usuario\n            ")
+              ]
+            )
+          ],
+          1
+        )
       ])
-    ])
-  }
-]
+    ]
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 if (false) {
@@ -23043,578 +23351,546 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _vm.editable
-        ? _c("ol", { staticClass: "breadcrumb" }, [
-            _c(
-              "li",
-              [
-                _c("router-link", { attrs: { to: { name: "inicio" } } }, [
-                  _vm._v("Inicio")
-                ])
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "li",
-              [
-                _c("router-link", { attrs: { to: { name: "usuarios" } } }, [
-                  _vm._v("Listado")
-                ])
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("li", { staticClass: "active" }, [_vm._v("Usuario")])
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.mensaje === 1
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = 0
-                  }
+  return _c("div", [
+    _vm.editable
+      ? _c("ol", { staticClass: "breadcrumb" }, [
+          _c(
+            "li",
+            [
+              _c("router-link", { attrs: { to: { name: "inicio" } } }, [
+                _vm._v("Inicio")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            [
+              _c("router-link", { attrs: { to: { name: "usuarios" } } }, [
+                _vm._v("Listado")
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("li", { staticClass: "active" }, [_vm._v("Usuario")])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.mensaje === 1
+      ? _c("div", { staticClass: "alert alert-success" }, [
+          _c(
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = 0
                 }
-              },
-              [_vm._v("[Cerrar ×]")]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.volver("usuarios")
-                  }
+              }
+            },
+            [_vm._v("[Cerrar ×]")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.volver("usuarios")
                 }
-              },
-              [_vm._v("[Volver] ")]
-            ),
-            _vm._v(" "),
-            _c("strong", [_vm._v("Bien!")]),
-            _vm._v(" Se han guardado los cambios.\n    ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.mensaje === -1
-        ? _c("div", { staticClass: "alert alert-danger" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = 0
-                  }
+              }
+            },
+            [_vm._v("[Volver] ")]
+          ),
+          _vm._v(" "),
+          _c("strong", [_vm._v("Bien!")]),
+          _vm._v(" Se han guardado los cambios.\n    ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.mensaje === -1
+      ? _c("div", { staticClass: "alert alert-danger" }, [
+          _c(
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = 0
                 }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v(" "),
-            _c("strong", [_vm._v("Oh no!")]),
-            _vm._v(" Ha ocurrido un error.\n    ")
-          ])
-        : _vm._e(),
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v(" "),
+          _c("strong", [_vm._v("Oh no!")]),
+          _vm._v(" Ha ocurrido un error.\n    ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v(
+          "\n            " +
+            _vm._s(
+              !_vm.editable
+                ? "Datos personales"
+                : _vm.usuario.id === undefined
+                  ? "Agregar usuario"
+                  : "Modificar usuario"
+            ) +
+            "\n        "
+        )
+      ]),
       _vm._v(" "),
-      _vm.cargando > 0
-        ? _c("cargando")
-        : _c("div", { staticClass: "panel panel-default" }, [
-            _c(
-              "div",
-              { staticClass: "panel-heading panel-title text-center" },
-              [
-                _vm._v(
-                  "\n            " +
-                    _vm._s(
-                      !_vm.editable
-                        ? "Datos personales"
-                        : _vm.usuario.id === undefined
-                          ? "Agregar usuario"
-                          : "Modificar usuario"
-                    ) +
-                    "\n        "
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "form-group col-md-3" }, [
-                  _c("label", { attrs: { for: "apellido_paterno" } }, [
-                    _vm._v("Apellido paterno:")
-                  ]),
-                  _vm._v(" "),
-                  _vm.editable
-                    ? _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.usuario.apellido_paterno,
-                            expression: "usuario.apellido_paterno"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", id: "apellido_paterno" },
-                        domProps: { value: _vm.usuario.apellido_paterno },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.usuario,
-                              "apellido_paterno",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    : _c("p", [_vm._v(_vm._s(_vm.usuario.apellido_paterno))])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group col-md-3" }, [
-                  _c("label", { attrs: { for: "apellido_materno" } }, [
-                    _vm._v("Apellido materno:")
-                  ]),
-                  _vm._v(" "),
-                  _vm.editable
-                    ? _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.usuario.apellido_materno,
-                            expression: "usuario.apellido_materno"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", id: "apellido_materno" },
-                        domProps: { value: _vm.usuario.apellido_materno },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.usuario,
-                              "apellido_materno",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    : _c("p", [_vm._v(_vm._s(_vm.usuario.apellido_materno))])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group col-md-6" }, [
-                  _c("label", { attrs: { for: "nombres" } }, [
-                    _vm._v("Nombres:")
-                  ]),
-                  _vm._v(" "),
-                  _vm.editable
-                    ? _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.usuario.nombres,
-                            expression: "usuario.nombres"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", id: "nombres" },
-                        domProps: { value: _vm.usuario.nombres },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.usuario,
-                              "nombres",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    : _c("p", [_vm._v(_vm._s(_vm.usuario.nombres))])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "form-group col-md-3" }, [
-                  _c("label", { attrs: { for: "facultad" } }, [
-                    _vm._v("Facultad:")
-                  ]),
-                  _vm._v(" "),
-                  _vm.editable
-                    ? _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.facultad,
-                              expression: "facultad"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "facultad" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.facultad = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        _vm._l(_vm.facultades, function(facultad) {
-                          return _c(
-                            "option",
-                            { key: facultad.id, domProps: { value: facultad } },
-                            [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(facultad.nombre) +
-                                  "\n                        "
-                              )
-                            ]
-                          )
-                        })
-                      )
-                    : _c("p", [_vm._v(_vm._s(_vm.usuario.facultad.nombre))])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group col-md-3" }, [
-                  _c("label", { attrs: { for: "depto" } }, [
-                    _vm._v("Departamento:")
-                  ]),
-                  _vm._v(" "),
-                  _vm.editable
-                    ? _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.usuario.departamento,
-                              expression: "usuario.departamento"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "depto" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.usuario,
-                                "departamento",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        _vm._l(_vm.facultad.departamentos, function(
-                          departamento
-                        ) {
-                          return _vm.facultad.departamentos !== undefined
-                            ? _c(
-                                "option",
-                                {
-                                  key: departamento.id,
-                                  domProps: { value: departamento }
-                                },
-                                [
-                                  _vm._v(
-                                    "\n                            " +
-                                      _vm._s(departamento.nombre) +
-                                      "\n                        "
-                                  )
-                                ]
-                              )
-                            : _c(
-                                "option",
-                                { attrs: { disabled: "", value: "" } },
-                                [_vm._v("Seleccione una facultad...")]
-                              )
-                        })
-                      )
-                    : _c("p", [_vm._v(_vm._s(_vm.usuario.departamento.nombre))])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group col-md-3" }, [
-                  _c("label", { attrs: { for: "jerarquia" } }, [
-                    _vm._v("Jerarquía:")
-                  ]),
-                  _vm._v(" "),
-                  _vm.editable
-                    ? _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.usuario.jerarquia,
-                              expression: "usuario.jerarquia"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "jerarquia" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.usuario,
-                                "jerarquia",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        _vm._l(_vm.jerarquias, function(jerarquia) {
-                          return _c(
-                            "option",
-                            {
-                              key: jerarquia.id,
-                              domProps: { value: jerarquia }
-                            },
-                            [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(jerarquia.nombre) +
-                                  "\n                        "
-                              )
-                            ]
-                          )
-                        })
-                      )
-                    : _c("p", [_vm._v(_vm._s(_vm.usuario.jerarquia.nombre))])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group col-md-3" }, [
-                  _c("label", { attrs: { for: "jornada" } }, [
-                    _vm._v("Jornada:")
-                  ]),
-                  _vm._v(" "),
-                  _vm.editable
-                    ? _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.usuario.jornada,
-                              expression: "usuario.jornada"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { id: "jornada" },
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.usuario,
-                                "jornada",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            }
-                          }
-                        },
-                        _vm._l(_vm.jornadas, function(jornada) {
-                          return _c(
-                            "option",
-                            { key: jornada.id, domProps: { value: jornada } },
-                            [
-                              _vm._v(
-                                "\n                            " +
-                                  _vm._s(jornada.nombre) +
-                                  "\n                        "
-                              )
-                            ]
-                          )
-                        })
-                      )
-                    : _c("p", [_vm._v(_vm._s(_vm.usuario.jornada.nombre))])
-                ])
-              ]),
-              _vm._v(" "),
-              _vm.editable
-                ? _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "form-group col-md-6" }, [
-                      _c("label", { attrs: { for: "email" } }, [
-                        _vm._v("E-mail:")
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.usuario.email,
-                            expression: "usuario.email"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          id: "email",
-                          type: "text",
-                          placeholder: "Correo institucional (@usach.cl)"
-                        },
-                        domProps: { value: _vm.usuario.email },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.usuario, "email", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group col-md-6" }, [
-                      _c("label", { attrs: { for: "rol" } }, [_vm._v("Rol:")]),
-                      _vm._v(" "),
-                      _vm.editable
-                        ? _c(
-                            "select",
-                            {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.usuario.rol,
-                                  expression: "usuario.rol"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: { id: "rol" },
-                              on: {
-                                change: function($event) {
-                                  var $$selectedVal = Array.prototype.filter
-                                    .call($event.target.options, function(o) {
-                                      return o.selected
-                                    })
-                                    .map(function(o) {
-                                      var val =
-                                        "_value" in o ? o._value : o.value
-                                      return val
-                                    })
-                                  _vm.$set(
-                                    _vm.usuario,
-                                    "rol",
-                                    $event.target.multiple
-                                      ? $$selectedVal
-                                      : $$selectedVal[0]
-                                  )
-                                }
-                              }
-                            },
-                            _vm._l(_vm.roles, function(rol) {
-                              return _c(
-                                "option",
-                                { key: rol.id, domProps: { value: rol } },
-                                [_vm._v(_vm._s(rol.nombre))]
-                              )
-                            })
-                          )
-                        : _vm._e()
-                    ])
-                  ])
-                : _vm._e()
+      _c("div", { staticClass: "panel-body" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "form-group col-md-3" }, [
+            _c("label", { attrs: { for: "apellido_paterno" } }, [
+              _vm._v("Apellido paterno:")
             ]),
             _vm._v(" "),
             _vm.editable
-              ? _c("div", { staticClass: "panel-footer" }, [
-                  _vm.usuario.id === undefined
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-success",
-                          attrs: { type: "button" },
-                          on: { click: _vm.enviar }
-                        },
-                        [
-                          _c("span", {
-                            staticClass: "glyphicon glyphicon-send",
-                            attrs: { "aria-hidden": "true" }
-                          }),
-                          _vm._v(" Registrar\n            ")
-                        ]
+              ? _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.usuario.apellido_paterno,
+                      expression: "usuario.apellido_paterno"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", id: "apellido_paterno" },
+                  domProps: { value: _vm.usuario.apellido_paterno },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.usuario,
+                        "apellido_paterno",
+                        $event.target.value
                       )
-                    : _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-info",
-                          attrs: { type: "button" },
-                          on: { click: _vm.actualizar }
-                        },
-                        [
-                          _c("span", {
-                            staticClass: "glyphicon glyphicon-floppy-disk",
-                            attrs: { "aria-hidden": "true" }
-                          }),
-                          _vm._v(" Guardar cambios\n            ")
-                        ]
+                    }
+                  }
+                })
+              : _c("p", [_vm._v(_vm._s(_vm.usuario.apellido_paterno))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-3" }, [
+            _c("label", { attrs: { for: "apellido_materno" } }, [
+              _vm._v("Apellido materno:")
+            ]),
+            _vm._v(" "),
+            _vm.editable
+              ? _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.usuario.apellido_materno,
+                      expression: "usuario.apellido_materno"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", id: "apellido_materno" },
+                  domProps: { value: _vm.usuario.apellido_materno },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.usuario,
+                        "apellido_materno",
+                        $event.target.value
                       )
-                ])
-              : _vm._e()
+                    }
+                  }
+                })
+              : _c("p", [_vm._v(_vm._s(_vm.usuario.apellido_materno))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-6" }, [
+            _c("label", { attrs: { for: "nombres" } }, [_vm._v("Nombres:")]),
+            _vm._v(" "),
+            _vm.editable
+              ? _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.usuario.nombres,
+                      expression: "usuario.nombres"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", id: "nombres" },
+                  domProps: { value: _vm.usuario.nombres },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.usuario, "nombres", $event.target.value)
+                    }
+                  }
+                })
+              : _c("p", [_vm._v(_vm._s(_vm.usuario.nombres))])
           ])
-    ],
-    1
-  )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "form-group col-md-3" }, [
+            _c("label", { attrs: { for: "facultad" } }, [_vm._v("Facultad:")]),
+            _vm._v(" "),
+            _vm.editable
+              ? _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.facultad,
+                        expression: "facultad"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "facultad" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.facultad = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  _vm._l(_vm.facultades, function(facultad) {
+                    return _c(
+                      "option",
+                      { key: facultad.id, domProps: { value: facultad } },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(facultad.nombre) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  })
+                )
+              : _c("p", [_vm._v(_vm._s(_vm.usuario.facultad.nombre))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-3" }, [
+            _c("label", { attrs: { for: "depto" } }, [_vm._v("Departamento:")]),
+            _vm._v(" "),
+            _vm.editable
+              ? _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.usuario.departamento,
+                        expression: "usuario.departamento"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "depto" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.usuario,
+                          "departamento",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.facultad.departamentos, function(departamento) {
+                    return _vm.facultad.departamentos !== undefined
+                      ? _c(
+                          "option",
+                          {
+                            key: departamento.id,
+                            domProps: { value: departamento }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(departamento.nombre) +
+                                "\n                        "
+                            )
+                          ]
+                        )
+                      : _c("option", { attrs: { disabled: "", value: "" } }, [
+                          _vm._v("Seleccione una facultad...")
+                        ])
+                  })
+                )
+              : _c("p", [_vm._v(_vm._s(_vm.usuario.departamento.nombre))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-3" }, [
+            _c("label", { attrs: { for: "jerarquia" } }, [
+              _vm._v("Jerarquía:")
+            ]),
+            _vm._v(" "),
+            _vm.editable
+              ? _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.usuario.jerarquia,
+                        expression: "usuario.jerarquia"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "jerarquia" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.usuario,
+                          "jerarquia",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.jerarquias, function(jerarquia) {
+                    return _c(
+                      "option",
+                      { key: jerarquia.id, domProps: { value: jerarquia } },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(jerarquia.nombre) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  })
+                )
+              : _c("p", [_vm._v(_vm._s(_vm.usuario.jerarquia.nombre))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-3" }, [
+            _c("label", { attrs: { for: "jornada" } }, [_vm._v("Jornada:")]),
+            _vm._v(" "),
+            _vm.editable
+              ? _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.usuario.jornada,
+                        expression: "usuario.jornada"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "jornada" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.usuario,
+                          "jornada",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(_vm.jornadas, function(jornada) {
+                    return _c(
+                      "option",
+                      { key: jornada.id, domProps: { value: jornada } },
+                      [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(jornada.nombre) +
+                            "\n                        "
+                        )
+                      ]
+                    )
+                  })
+                )
+              : _c("p", [_vm._v(_vm._s(_vm.usuario.jornada.nombre))])
+          ])
+        ]),
+        _vm._v(" "),
+        _vm.editable
+          ? _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "form-group col-md-6" }, [
+                _c("label", { attrs: { for: "email" } }, [_vm._v("E-mail:")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.usuario.email,
+                      expression: "usuario.email"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    id: "email",
+                    type: "text",
+                    placeholder: "Correo institucional (@usach.cl)"
+                  },
+                  domProps: { value: _vm.usuario.email },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.usuario, "email", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-md-6" }, [
+                _c("label", { attrs: { for: "rol" } }, [_vm._v("Rol:")]),
+                _vm._v(" "),
+                _vm.editable
+                  ? _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.usuario.rol,
+                            expression: "usuario.rol"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "rol" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.usuario,
+                              "rol",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      _vm._l(_vm.roles, function(rol) {
+                        return _c(
+                          "option",
+                          { key: rol.id, domProps: { value: rol } },
+                          [_vm._v(_vm._s(rol.nombre))]
+                        )
+                      })
+                    )
+                  : _vm._e()
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.editable
+        ? _c("div", { staticClass: "panel-footer" }, [
+            _vm.usuario.id === undefined
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button" },
+                    on: { click: _vm.enviar }
+                  },
+                  [
+                    _c("span", {
+                      staticClass: "glyphicon glyphicon-send",
+                      attrs: { "aria-hidden": "true" }
+                    }),
+                    _vm._v(" Registrar\n            ")
+                  ]
+                )
+              : _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-info",
+                    attrs: { type: "button" },
+                    on: { click: _vm.actualizar }
+                  },
+                  [
+                    _c("span", {
+                      staticClass: "glyphicon glyphicon-floppy-disk",
+                      attrs: { "aria-hidden": "true" }
+                    }),
+                    _vm._v(" Guardar cambios\n            ")
+                  ]
+                )
+          ])
+        : _vm._e()
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

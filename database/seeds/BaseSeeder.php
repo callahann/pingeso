@@ -27,6 +27,9 @@ class BaseSeeder extends Seeder
                 'nombre' => 'Director de departamento'
             ],
             [
+                'nombre' => 'Comisión'
+            ],
+            [
                 'nombre' => 'Administrador'
             ],
         ];
@@ -390,7 +393,7 @@ class BaseSeeder extends Seeder
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
                 'id_jornada' => 1,
-                'id_rol' => 3
+                'id_rol' => 4
             ],
             [
                 'apellido_paterno' => 'Vargas',
@@ -400,7 +403,7 @@ class BaseSeeder extends Seeder
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
                 'id_jornada' => 1,
-                'id_rol' => 3
+                'id_rol' => 4
             ],
             [
                 'apellido_paterno' => 'Callahan',
@@ -410,7 +413,7 @@ class BaseSeeder extends Seeder
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
                 'id_jornada' => 1,
-                'id_rol' => 3
+                'id_rol' => 4
             ],
             [
                 'apellido_paterno' => 'Fuentes',
@@ -420,7 +423,7 @@ class BaseSeeder extends Seeder
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
                 'id_jornada' => 1,
-                'id_rol' => 3
+                'id_rol' => 4
             ]
         ];
 

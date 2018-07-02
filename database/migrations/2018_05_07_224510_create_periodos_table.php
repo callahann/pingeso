@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFormulasTable extends Migration
+class CreatePeriodosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,18 @@ class CreateFormulasTable extends Migration
      */
     public function up()
     {
-        Schema::create('formulas', function (Blueprint $table) {
+        Schema::create('periodos', function (Blueprint $table) {
             $table->increments('id');
-            $table->json('equivalente');
-            $table->json('nota_final');
-            $table->boolean('actual')->default(true);
+            $table->dateTime('desde');
+            $table->dateTime('hasta');
+            $table->integer('estado');
+            $table->integer('id_departamento');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('id_departamento')
+                ->references('id')
+                ->on('departamentos');
         });
     }
 
@@ -30,7 +35,6 @@ class CreateFormulasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('formulas');
+        Schema::dropIfExists('periodos');
     }
 }
-

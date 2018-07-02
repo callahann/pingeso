@@ -3,9 +3,10 @@ import { mapState } from 'vuex'
 
 const EtapasEnum = Object.freeze({
     declarando: 1,
-    realizado: 2,
-    evaluando: 3,
-    apelando: 4
+    aprobando: 2,
+    realizado: 3,
+    evaluando: 4,
+    apelando: 5
 })
 
 Vue.mixin({
@@ -42,7 +43,7 @@ Vue.mixin({
         },
     },
     computed: {
-        ...mapState(['auth', 'cargando'])
+        ...mapState(['auth'])
     }
 })
 
