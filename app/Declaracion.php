@@ -39,4 +39,14 @@ class Declaracion extends Model
     {
         return $this->hasMany(Apelacion::class,'id_declaracion');
     }
+
+    public function formula()
+    {
+        return $this->belongsTo(Formula::class,'id_formula');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'id_usuario');
+    }
 }

@@ -10,6 +10,13 @@ class Formula extends Model
     use SoftDeletes;
     
     protected $fillable = [
-        'nombre'
+        'equivalente',
+        'nota_final',
+        'actual',
     ];
+
+    public function declaraciones()
+    {
+    	return $this->hasMany(Declaracion::class, 'id_formula');
+    }
 }

@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jerarquia extends Model
 {
-    //
+    protected $fillable = [
+    	'nombre'
+    ];
 
     public function usuarios()
     {
-        return $this->hasMany('App\User', 'id_jerarquia');
+        return $this->hasMany(User::class, 'id_jerarquia');
     }
 }

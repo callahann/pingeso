@@ -9,4 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Factor extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+    	'diferencia',
+        'factor',
+    ];
+    
 }

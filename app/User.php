@@ -35,21 +35,21 @@ class User extends Authenticatable
 
     public function departamento()
     {
-        return $this->belongsTo('App\Departamento', 'id_departamento');
+        return $this->belongsTo(Departamento::class, 'id_departamento');
     }
 
     public function jerarquia()
     {
-        return $this->belongsTo('App\Jerarquia', 'id_jerarquia');
+        return $this->belongsTo(Jerarquia::class, 'id_jerarquia');
     }
 
     public function jornada()
     {
-        return $this->belongsTo('App\Jornada', 'id_jornada');
+        return $this->belongsTo(Jornada::class, 'id_jornada');
     }
 
     public function rol()
     {
-        return $this->belongsTo('App\Rol', 'id_rol');
+        return $this->belongsTo(Rol::class, 'id_rol');
     }
 }

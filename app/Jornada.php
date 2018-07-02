@@ -10,6 +10,6 @@ class Jornada extends Model
     
     public function usuarios()
     {
-        return $this->hasMany('App\User', 'id_jornada');
+        return $this->hasMany(User::class, 'id_jornada');
     }
 }

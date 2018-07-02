@@ -20,6 +20,11 @@ class Departamento extends Model
 
     public function usuarios()
     {
-        return $this->hasMany('App\User', 'id_departamento');
+        return $this->hasMany(User::class, 'id_departamento');
+    }
+
+    public function periodos()
+    {
+        return $this->hasMany(Periodo::class, 'id_departamento');
     }
 }

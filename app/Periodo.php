@@ -12,6 +12,17 @@ class Periodo extends Model
     protected $fillable = [
         'desde',
         'hasta',
-        'estado'
+        'estado',
+        'id_departamento',
     ];
+
+    public function declaraciones()
+    {
+    	return $this->hasMany(Declaracion::class, 'id_periodo');
+    }
+
+    public function departamento()
+    {
+        return $this->belongsTo(Departamento::class, 'id_departamento');
+    }
 }
