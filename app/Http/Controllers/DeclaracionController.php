@@ -134,10 +134,10 @@ class DeclaracionController extends Controller
                 return Auth::user()->declaraciones()->paginate(); 
             }
             elseif ($id_rol == 2) {
-                return Declaracion::whereHas('user', function($q) use($id_departamento) {
+                return Declaracion::whereHas('usuario', function($q) use($id_departamento) {
                     $q->where('id_departamento', $id_departamento)
                       ->where('estado', 2);
-                });
+                })->paginate();
             }
             else {
                 return Declaracion::where('estado', 3)->paginate();
