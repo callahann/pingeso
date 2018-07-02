@@ -53,14 +53,17 @@
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-footer">
-                        <button v-if="informe.id === undefined" type="button" class="btn btn-info" v-on:click="enviar">
-                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                        <button v-if="informe.id === undefined" type="button" class="btn btn-info" v-on:click="insertar">
+                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&ensp;Guardar
                         </button>
                         <button v-else-if="etapa <= etapas.evaluando" type="button" class="btn btn-info" v-on:click="actualizar">
-                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&ensp;Guardar
                         </button>
                         <button v-else type="button" class="btn btn-success" v-on:click="enviarApelacion">
                             <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Enviar apelación
+                        </button>
+                        <button v-if="etapa === etapas.declarando" type="button" class="btn btn-success" v-on:click="enviar">
+                            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&ensp;Enviar
                         </button>
                         <button v-if="etapa === etapas.aprobando" type="button" class="btn btn-success" v-on:click="aprobar">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Aprobar
@@ -136,11 +139,14 @@
                 this.mensaje = ok ? 1 : -1
                 this.informe = Object.assign({}, this.informe, payload)
             },
-            enviar: function() {
+            insertar: function() {
                 this.$store.dispatch(INSERT_DECLARACION, { informe: this.informe, cb: this.callback })
             },
             actualizar: function() {
                 this.$store.dispatch(UPDATE_DECLARACION, { informe: this.informe, cb: this.callback })
+            },
+            enviar: function() {
+
             },
             aprobar: function(estado) {
                 this.$store.dispatch(APPROVE_DECLARACION, { id: this.informe.id, cb: this.callback })
