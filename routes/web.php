@@ -22,9 +22,6 @@ Route::get('/denegado', function() {
 })->name('no-registrado');
 
 Route::group(['middleware' => ['web', 'auth']], function (){
-	Route::get('/user', function () {
-		return Auth::user()->load(['departamento.facultad', 'rol']);
-	});
 	Route::get('/logout', function() {
 		Auth::logout();
 		return redirect('/');

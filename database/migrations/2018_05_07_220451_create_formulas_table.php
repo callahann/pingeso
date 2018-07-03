@@ -15,8 +15,8 @@ class CreateFormulasTable extends Migration
     {
         Schema::create('formulas', function (Blueprint $table) {
             $table->increments('id');
-            $table->json('equivalente');
-            $table->json('nota_final');
+            $table->text('equivalente');
+            $table->text('nota_final');
             $table->boolean('actual')->default(true);
             $table->timestamps();
             $table->softDeletes();

@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all()->load(['departamento.facultad', 'jerarquia', 'jornada', 'rol']);
+        return User::all();
     }
 
     /**
@@ -63,7 +63,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id)->load(['departamento.facultad', 'jerarquia', 'jornada', 'rol']);
+        return User::find($id);
     }
 
     /**

@@ -11,9 +11,6 @@ class Declaracion extends Model
     
     protected $fillable = [
         'id',
-        'id_formula',
-        'id_usuario',
-        'periodo',
         'item_docencia',
         'item_investigacion',
         'item_asistencia',
@@ -24,7 +21,6 @@ class Declaracion extends Model
         'estado',
     ];
 
-
     protected $casts = [
         'item_docencia'=> 'array',
         'item_investigacion'=> 'array',
@@ -33,6 +29,18 @@ class Declaracion extends Model
         'item_administracion'=> 'array',
         'item_extension'=> 'array',
         'item_educacion_continua'=> 'array',
+    ];
+
+    protected $hidden = [
+        'id_formula',
+        'id_usuario',
+        'id_periodo'
+    ];
+
+    protected $appends = [
+        'apelaciones',
+        'formula',
+        'periodo'
     ];
 
     public function apelaciones()
@@ -45,8 +53,28 @@ class Declaracion extends Model
         return $this->belongsTo(Formula::class,'id_formula');
     }
 
+    public function periodo()
+    {
+        return $this->belongsTo(periodo::class,'id_periodo');
+    }
+
     public function usuario()
     {
         return $this->belongsTo(User::class, 'id_usuario');
+    }
+
+    public function getApelacionesAttribute()
+    {
+        return $this->apelaciones()->get();
+    }
+
+    public function getFormulaAttribute()
+    {
+        return $this->formula()->first();
+    }
+
+    public function getPeriodoAttribute()
+    {
+        return $this->periodo()->first();
     }
 }
