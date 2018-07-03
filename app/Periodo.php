@@ -16,6 +16,14 @@ class Periodo extends Model
         'id_departamento',
     ];
 
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'desde',
+        'hasta'
+    ];
+
     public function declaraciones()
     {
     	return $this->hasMany(Declaracion::class, 'id_periodo');
