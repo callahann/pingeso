@@ -10,6 +10,8 @@ import ListaInformes from './components/informe/Lista'
 import Formulario from './components/informe/formulario/Formulario'
 import ListaUsuarios from './components/usuario/Lista'
 import Usuario from './components/usuario/Usuario'
+import ListadoFacultades from './components/facultad/ListadoFacultades'
+import FormFacultad from './components/facultad/FormFacultad'
 
 const router = new VueRouter({
     mode: 'history',
