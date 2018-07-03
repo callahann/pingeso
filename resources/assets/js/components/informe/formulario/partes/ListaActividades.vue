@@ -267,8 +267,6 @@
     </div>
 </template>
 <script>
-    import axios from 'axios'
-
     export default {
         props: ['previo', 'etapa', 'tipo'],
         data: function () {
@@ -281,19 +279,13 @@
         },
         created: function() {
             this.actividades = Object.assign([], this.actividades, this.previo)
-
-            let cuenta = this.actividades.length 
+            const cuenta = this.actividades.length 
             if(cuenta > 0) this.id = this.actividades[cuenta - 1].id
 
-            if(this.etapa <= this.etapas.aprobando)
-                axios
-                    .get('/api/all/descripciones/' + this.tipo)
-                    .then(response => {
-                        this.descripciones = response.data
-                    })
-                    .catch(e => {
-                        console.log(e)
-                    })
+            const descripciones = this.$store.state.descripciones.filter(descripcion => {
+                return descripcion.tipo === this.tipo;
+            });
+            this.descripciones = Object.assign([], this.descripciones, descripciones);
         },
         methods: {
             nuevoItem: function() {
@@ -324,7 +316,7 @@
                 }
             },
             agregarActividad: function() {
-                let item = this.nuevoItem()
+                const item = this.nuevoItem()
                 item['id'] = this.id++
                 this.actividades.push(item)
             },
@@ -348,7 +340,7 @@
         },
         computed: {
             totales: function() {
-                let totales = this.nuevoItem()
+                const totales = this.nuevoItem()
                 
                 this.actividades.forEach(function(actividad) {
                     ['comprometido', 'realizado'].forEach((parte) => {

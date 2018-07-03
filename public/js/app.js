@@ -12614,12 +12614,6 @@ process.umask = function() { return 0; };
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(30);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
@@ -12721,7 +12715,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12739,6 +12733,12 @@ var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
 var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
 
 
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(30);
 
 /***/ }),
 /* 9 */
@@ -13036,8 +13036,33 @@ module.exports = Cancel;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["a"] = ({});
+/* harmony default export */ __webpack_exports__["a"] = ({
+    data: function data() {
+        return {
+            alert: {
+                mensaje: '',
+                class: '',
+                abierto: false
+            }
+        };
+    },
+    methods: {
+        mensaje: function mensaje(alert) {
+            this.alert = Object.assign({}, this.alert, alert);
+            this.alert.abierto = true;
+        }
+    }
+});
 
 /***/ }),
 /* 15 */
@@ -13049,10 +13074,10 @@ module.exports = Cancel;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(7);
 
 
 var _mutations, _actions;
@@ -13077,17 +13102,16 @@ var asArray = function asArray(data) {
 
 var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
     state: {
-        queue: 0,
+        descripciones: [],
+        factores: [],
         facultades: [],
         informes: [],
         jerarquias: [],
         jornadas: [],
+        rangos: [],
         roles: [],
         usuarios: [],
-        formula: {
-            equivalente: 'Math.round((se * 36 + sa) / 44 * 10) / 10',
-            nota_final: '(nota_item_docencia * realizado_eq_item_docencia + nota_item_investigacion * realizado_eq_item_investigacion + nota_item_asistencia * realizado_eq_item_asistencia + nota_item_perfeccionamiento * realizado_eq_item_perfeccionamiento + nota_item_administracion * realizado_eq_item_administracion + nota_item_extension * realizado_eq_item_extension + nota_item_educacion_continua * realizado_eq_item_educacion_continua) / realizado_eq'
-        }
+        formulas: []
     },
     mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_STATE_ARRAY */], function (state, _ref) {
         var key = _ref.key,
@@ -13140,19 +13164,19 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
                             dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["c" /* FETCH_DECLARACIONES */], rol);
 
-                            if (rol > 1) {
-                                request = ['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'];
+                            request = ['descripciones', 'factores', 'formulas', 'rangos'];
 
-                                request.forEach(function (r) {
-                                    __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r).then(function (response) {
-                                        commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_STATE_ARRAY */], { key: r, payload: response });
-                                    });
+                            if (rol === 2 || rol === 4) request.concat(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios']);
+
+                            request.forEach(function (r) {
+                                __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r).then(function (response) {
+                                    commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_STATE_ARRAY */], { key: r, payload: response });
                                 });
-                            }
+                            });
 
                             callback();
 
-                        case 6:
+                        case 8:
                         case 'end':
                             return _context.stop();
                     }
@@ -13172,7 +13196,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
                     switch (_context2.prev = _context2.next) {
                         case 0:
                             _context2.next = 2;
-                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/user');
+                            return __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/auth');
 
                         case 2:
                             response = _context2.sent;
@@ -13194,7 +13218,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
     }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* FETCH_DECLARACIONES */], function (_ref10, rol) {
         var commit = _ref10.commit;
 
-        var q = rol === 1 ? '/user/declaraciones' : '/declaraciones';
+        var q = rol === 1 ? '/auth/declaraciones' : '/declaraciones';
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api' + q).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* SET_STATE_ARRAY */], { key: 'informes', payload: response });
         });
@@ -13333,7 +13357,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__partes_ListaActividades__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__partes_Apelacion__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__partes_Resumen__ = __webpack_require__(66);
@@ -13522,8 +13546,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 //
 //
 //
@@ -13792,8 +13814,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 //
 //
 //
-
-
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: ['previo', 'etapa', 'tipo'],
@@ -13809,15 +13829,13 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var _this = this;
 
         this.actividades = Object.assign([], this.actividades, this.previo);
-
         var cuenta = this.actividades.length;
         if (cuenta > 0) this.id = this.actividades[cuenta - 1].id;
 
-        if (this.etapa <= this.etapas.aprobando) __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/all/descripciones/' + this.tipo).then(function (response) {
-            _this.descripciones = response.data;
-        }).catch(function (e) {
-            console.log(e);
+        var descripciones = this.$store.state.descripciones.filter(function (descripcion) {
+            return descripcion.tipo === _this.tipo;
         });
+        this.descripciones = Object.assign([], this.descripciones, descripciones);
     },
     methods: {
         nuevoItem: function nuevoItem() {
@@ -14050,33 +14068,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     data: function data() {
         return {
             resumenes: {},
-            totales: {},
-            rangos: [{
-                base: 0.01,
-                tope: 1.49,
-                leyenda: 'Insuficiente',
-                color: 'red'
-            }, {
-                base: 1.50,
-                tope: 1.99,
-                leyenda: 'Condicional',
-                color: 'orange'
-            }, {
-                base: 2.00,
-                tope: 2.79,
-                leyenda: 'Aceptable',
-                color: 'yellow'
-            }, {
-                base: 2.80,
-                tope: 3.69,
-                leyenda: 'Bueno',
-                color: 'green'
-            }, {
-                base: 3.70,
-                tope: 7.00,
-                leyenda: 'Sobresaliente',
-                color: 'blue'
-            }]
+            totales: {}
         };
     },
     created: function created() {
@@ -14376,10 +14368,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         var usuario = this.usuarios.find(function (usuario) {
             return usuario.id === _this.$route.params.id;
         });
-        var f = usuario.departamento.facultad;
         this.usuario = Object.assign({}, this.usuario, usuario);
         this.facultad = this.facultades.find(function (facultad) {
-            return facultad.id === f.id;
+            return facultad.id === usuario.departamento.id_facultad;
         });
     },
     methods: {
@@ -14426,10 +14417,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vuex_store__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router__ = __webpack_require__(54);
 /**
@@ -15943,7 +15934,7 @@ return Promise$1;
 var utils = __webpack_require__(0);
 var bind = __webpack_require__(9);
 var Axios = __webpack_require__(32);
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(6);
 
 /**
  * Create an instance of Axios
@@ -16026,7 +16017,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(6);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(41);
 var dispatchRequest = __webpack_require__(42);
@@ -16565,7 +16556,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(43);
 var isCancel = __webpack_require__(12);
-var defaults = __webpack_require__(7);
+var defaults = __webpack_require__(6);
 var isAbsoluteURL = __webpack_require__(44);
 var combineURLs = __webpack_require__(45);
 
@@ -16981,7 +16972,60 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "container" }, [_c("router-view")], 1)
+    _c(
+      "div",
+      { staticClass: "container" },
+      [
+        _c("div", { staticClass: "col-md-12" }, [
+          _vm.alert.abierto
+            ? _c(
+                "div",
+                { class: "alert alert-" + _vm.alert.class },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "close",
+                      attrs: { href: "#", "aria-label": "close" },
+                      on: {
+                        click: function($event) {
+                          _vm.alert.abierto = false
+                        }
+                      }
+                    },
+                    [_vm._v("[Cerrar ×]")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.alert.botones, function(boton) {
+                    return _c(
+                      "a",
+                      {
+                        key: boton.texto,
+                        staticClass: "close",
+                        attrs: { href: "#", "aria-label": "close" },
+                        on: { click: boton.enlace }
+                      },
+                      [_vm._v("[" + _vm._s(boton.texto) + "] ")]
+                    )
+                  }),
+                  _vm._v(" "),
+                  _c("p", { attrs: { html: _vm.alert.mensaje } })
+                ],
+                2
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c("router-view", {
+          on: {
+            alert: function($event) {
+              _vm.mensaje($event)
+            }
+          }
+        })
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -20576,7 +20620,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
                 item_extension: 'Extensión',
                 item_educacion_continua: 'Educación continua'
             }),
-            etapas: EtapasEnum
+            etapas: EtapasEnum,
+            estados: Object.freeze({
+                editable: 0,
+                enviado: 1,
+                aprobado: 2
+            })
         };
     },
     methods: {

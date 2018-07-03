@@ -80,6 +80,7 @@
         UPDATE_DECLARACION,
         APPROVE_DECLARACION
     } from '../../../vuex/actions'
+    import { mapState } from 'vuex'
     import ListaActividades from './partes/ListaActividades'
     import Apelacion from './partes/Apelacion'
     import Resumen from './partes/Resumen'
@@ -90,7 +91,6 @@
             return {
                 resumenAbierto: false,
                 informe: {
-                    periodo: 2018,
                     item_docencia: {
                         actividades: [],
                         calificacion: 1
@@ -118,7 +118,8 @@
                     item_educacion_continua: {
                         actividades: [],
                         calificacion: 1
-                    }
+                    },
+                    formula: {}
                 },
                 apelacion: {
                     id_declaracion: 0
@@ -131,8 +132,16 @@
             'resumen': Resumen,
         },
         created: function() {
+            this.informe.formula = this.formulas.find(formula => {
+                return formula.actual;
+            })
+
             if(this.$route.params.id === undefined ) return;
-            this.informe = Object.assign({}, this.informe, response.data)
+
+            const informe = this.informes.find(informe => {
+                return informe.id === this.$route.params.id
+            })
+            this.informe = Object.assign({}, this.informe, informe)
         },
         methods: {
             callback: function(ok = false, payload) {
@@ -181,6 +190,7 @@
                         this.mensaje = -1 
                     })
             },
-        }
+        },
+        computed: mapState(['formulas', 'informes'])
     }
 </script>

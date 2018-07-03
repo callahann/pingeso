@@ -13,30 +13,23 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::get('/auth', function (Request $request) {
     return $request->user();
 });
-
+Route::get('/auth/declaraciones', 'DeclaracionController@allListed');
+Route::resource('apelaciones', 'ApelacionController');
 Route::resource('declaraciones', 'DeclaracionController');
 Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
 Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
 Route::get('/descarga/apelacion/{apelacion}', 'ApelacionController@descargar');
-
-Route::group(['middleware' => ['auth:api']], function (){
-	Route::get('/userdata', function (){
-		echo Auth::user()->email;
-	});	
-});
-
-Route::get('/user/declaraciones', 'DeclaracionController@allListed');
-Route::get('/all/descripciones', 'DescripcionController@all');
-Route::get('/all/descripciones/{tipo}', 'DescripcionController@type');
-
-Route::resource('usuarios', 'UserController')->except(['create', 'edit']);
-Route::resource('apelaciones', 'ApelacionController');
 Route::resource('departamentos', 'DepartamentoController');
+Route::get('/descripciones', 'DescripcionController@all');
+Route::get('/descripciones/{tipo}', 'DescripcionController@type');
+Route::resource('factores', 'FactorController');
 Route::resource('facultades', 'FacultadController');
 Route::resource('formulas', 'FormulaController');
-Route::resource('roles', 'RolController');
 Route::resource('jornadas', 'JornadaController');
 Route::resource('jerarquias', 'JerarquiaController');
+Route::resource('rangos', 'RangoController');
+Route::resource('roles', 'RolController');
+Route::resource('usuarios', 'UserController')->except(['create', 'edit']);

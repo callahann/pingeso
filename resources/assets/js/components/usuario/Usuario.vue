@@ -132,10 +132,9 @@
             const usuario = this.usuarios.find(usuario => {
                 return usuario.id === this.$route.params.id
             })
-            const f = usuario.departamento.facultad
             this.usuario = Object.assign({}, this.usuario, usuario)
             this.facultad = this.facultades.find(facultad => {
-                return facultad.id === f.id
+                return facultad.id === usuario.departamento.id_facultad
             })
         },
         methods: {

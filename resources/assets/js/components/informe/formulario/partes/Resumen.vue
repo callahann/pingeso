@@ -61,33 +61,7 @@
         data: function() {
             return {
                 resumenes: {},
-                totales: {},
-                rangos: [{
-                    base: 0.01,
-                    tope: 1.49,
-                    leyenda: 'Insuficiente',
-                    color: 'red'
-                },{
-                    base: 1.50,
-                    tope: 1.99,
-                    leyenda: 'Condicional',
-                    color: 'orange'
-                },{
-                    base: 2.00,
-                    tope: 2.79,
-                    leyenda: 'Aceptable',
-                    color: 'yellow'
-                },{
-                    base: 2.80,
-                    tope: 3.69,
-                    leyenda: 'Bueno',
-                    color: 'green'
-                },{
-                    base: 3.70,
-                    tope: 7.00,
-                    leyenda: 'Sobresaliente',
-                    color: 'blue'
-                }]
+                totales: {}
             }
         },
         created: function() {                
@@ -95,7 +69,7 @@
         },
         methods: {
             equivalentes: function(se, sa) {
-                const formula = this.formula.equivalente
+                const formula = this.informe.formula.equivalente
                 return eval(formula.replaceAll('se', se).replaceAll('sa', sa))
             },
             actualizar: function() {
@@ -147,9 +121,9 @@
             }
         },
         computed: {
-            ...mapState(['formula']),
+            ...mapState(['factores', 'rangos']),
             calificacion: function() {
-                let formula = this.formula.nota_final
+                let formula = this.informe.formula.nota_final
 
                 for (var itemKey in this.informe) {
                     if (itemKey.startsWith('item')) {
@@ -172,9 +146,8 @@
             },
             rango: function() {
                 let calificacion = this.calificacion
-                var rango = undefined
-                this.rangos.forEach((opcion) => {
-                    if(opcion.base <= calificacion && calificacion <= opcion.tope) rango = opcion
+                const rango = this.rangos.find((rango) => {
+                    return rango.base <= calificacion && calificacion <= rango.tope
                 })
                 return rango || {
                     leyenda: 'No definido',

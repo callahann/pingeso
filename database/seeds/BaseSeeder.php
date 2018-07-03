@@ -2,12 +2,15 @@
 
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
-use App\Facultad;
 use App\Departamento;
-use App\Rol;
 use App\Descripcion;
+use App\Factor;
+use App\Facultad;
+use App\Formula;
 use App\Jerarquia;
 use App\Jornada;
+use App\Rango;
+use App\Rol;
 use App\User;
 
 class BaseSeeder extends Seeder
@@ -354,7 +357,7 @@ class BaseSeeder extends Seeder
             ],
             [
                 'nombre' => 'Profesor titular',
-            ],
+            ]
         ];
 
         foreach ($jerarquias as $jerarquia) {
@@ -429,6 +432,65 @@ class BaseSeeder extends Seeder
 
         foreach ($usuarios as $usuario) {
             User::create($usuario);
+        }
+
+        $rangos = [
+            [
+                'base' => 0.01,
+                'tope' => 1.49,
+                'leyenda' => 'Insuficiente',
+                'color' => 'red'
+            ],
+            [
+                'base' => 1.50,
+                'tope' => 1.99,
+                'leyenda' => 'Condicional',
+                'color' => '#FD7505'
+            ],
+            [
+                'base' => 2.00,
+                'tope' => 2.79,
+                'leyenda' => 'Aceptable',
+                'color' => '#F6A904'
+            ],
+            [
+                'base' => 2.80,
+                'tope' => 3.69,
+                'leyenda' => 'Bueno',
+                'color' => '#74C11D'
+            ],
+            [
+                'base' => 3.70,
+                'tope' => 7.00,
+                'leyenda' => 'Sobresaliente',
+                'color' => 'blue'
+            ]
+        ];
+
+        foreach ($rangos as $rango) {
+            Rango::create($rango);
+        }
+
+        $factores = [
+            [
+                'diferencia' => 7,
+                'factor' => 1.0
+            ]
+        ];
+
+        foreach ($factores as $factor) {
+            Factor::create($factor);
+        }
+
+        $formulas = [
+            [
+                'equivalente' => "Math.round((se * 36 + sa) / 44 * 10) / 10",
+                'nota_final' => "(nota_item_docencia * realizado_eq_item_docencia + nota_item_investigacion * realizado_eq_item_investigacion + nota_item_asistencia * realizado_eq_item_asistencia + nota_item_perfeccionamiento * realizado_eq_item_perfeccionamiento + nota_item_administracion * realizado_eq_item_administracion + nota_item_extension * realizado_eq_item_extension + nota_item_educacion_continua * realizado_eq_item_educacion_continua) / realizado_eq"
+            ]
+        ];
+
+        foreach ($formulas as $formula) {
+            Formula::create($formula);
         }
     }
 }
