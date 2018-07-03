@@ -7,6 +7,7 @@ use App\User;
 use App\Formula;
 use Illuminate\Http\Request;
 use Validator;
+use Auth;
 
 class DeclaracionController extends Controller
 {
