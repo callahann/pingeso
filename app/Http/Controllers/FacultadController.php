@@ -101,9 +101,9 @@ class FacultadController extends Controller
     public function destroy($id)
     {
         $facultad = Facultad::findOrFail($id);
-        $facultad->deleted();
+        $facultad->delete();
 
-        return $this->notDefined();
+        return $this->deleteMessage();
     }
 
     protected function rules()

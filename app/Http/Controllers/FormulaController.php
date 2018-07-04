@@ -105,7 +105,7 @@ class FormulaController extends Controller
         $formula = Formula::findOrFail($id);
         $formula->delete();
 
-        return $this->deletedMessage();
+        return $this->deleteMessage();
     }
 
     protected function rules()

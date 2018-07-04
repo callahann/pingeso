@@ -53,7 +53,7 @@ const store = new Vuex.Store({
             
             dispatch(Actions.FETCH_DECLARACIONES, rol)
 
-            const request = ['descripciones', 'factores', 'formulas', 'rangos']
+            var request = ['descripciones', 'factores', 'formulas', 'rangos']
             if(rol === 2 || rol === 4)
                 request = request.concat(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
             

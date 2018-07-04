@@ -91,6 +91,27 @@ const router = new VueRouter({
             props: { etapa: EtapasEnum.apelando },
             meta: { eval: 'rol === 1' }
         },
+        {
+             path: '/facultades',
+             name: 'facultades',
+             component: ListadoFacultades,
+             meta: { eval: 'rol === 4'},
+             props: true
+         },
+         {
+             path: '/facultades/crear',
+             name: 'crear-facultad',
+             component: FormFacultad,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/facultades/editar',
+             name: 'editar-facultad',
+             component: FormFacultad,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
     ],
 })
 

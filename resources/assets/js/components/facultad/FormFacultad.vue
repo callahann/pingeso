@@ -3,14 +3,9 @@
     <div>
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
-            <li><router-link :to="{ name: 'usuarios'}">Listado</router-link></li>
-            <li class="active">Usuario</li>
+            <li><router-link :to="{ name: 'facultades'}">Listado</router-link></li>
+            <li class="active">Facultad</li>
         </ol>
-        <div v-if="status === 1" class="alert alert-success">
-            <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">[Cerrar &times;]</a>
-            <a href="#" class="close" aria-label="close" v-on:click="volver('usuarios')">[Volver] </a>
-            <strong>Bien!</strong> Se han guardado los cambios.
-        </div>
         <div v-if="status === -1" class="alert alert-danger">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
             <strong>Oh no!</strong> Ha ocurrido un error.
@@ -53,6 +48,11 @@
             required: false
         }
     },
+    created: function() {
+        this.editable = true;
+        this.message = '';
+        this.status = 0;
+    },
     data () {
         console.log(this);
         return {
@@ -64,30 +64,25 @@
             console.log('Voy a'+(this.accion=='Editar')?'Editar':'Crear');
             if (this.accion=='Editar') {
                axios.put('/api/facultades/'+this.element.id, this.element)
-                .success(response => {
-                    self.$router.push('/facultades');
-                })
                 .then(response => {
-                    console.log('Se ha editado la facultad correctamente');
-                    this.message = response.data;
-                    this.mensaje = 1;
-                    self.$router.push('/facultades');
+                    console.log(this.volver('facultades', response.data))
+                    this.status = 1;
                 })
                 .catch(e => {
                     console.log(e);
-                    this.mensaje = -1; 
+                    this.message = response.data;
+                    this.status = -1; 
                 }); 
             } else {
                 axios.post('/api/facultades/', this.element)
                 .then(response => {
-                    console.log('Se ha registrado la facultad correctamente');
-                    this.message = response.data;
-                    this.mensaje = 1;
-                    self.$router.push('/facultades');
+                    console.log(this.volver('facultades', response.data))
+                    this.status = 1;
                 })
                 .catch(e => {
                     console.log(e);
-                    this.mensaje = -1; 
+                    this.message = response.data;
+                    this.status = -1; 
                 });
             }   
             

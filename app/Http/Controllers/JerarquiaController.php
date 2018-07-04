@@ -24,7 +24,7 @@ class JerarquiaController extends Controller
      */
     public function create()
     {
-        //
+        return $this->notDefined();
     }
 
     /**
@@ -35,51 +35,80 @@ class JerarquiaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $jerarquia = Jerarquia::create($request->all());
+
+        return $this->creationMessage();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Jerarquia  $jerarquia
+     * @param  \App\Jerarquia  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Jerarquia $jerarquia)
+    public function show($id)
     {
-        //
+        return Jerarquia::findOrFail($id);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Jerarquia  $jerarquia
+     * @param  \App\Jerarquia  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Jerarquia $jerarquia)
+    public function edit($id)
     {
-        //
+        return $this->notDefined();
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Jerarquia  $jerarquia
+     * @param  \App\Jerarquia  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Jerarquia $jerarquia)
+    public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules());
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $jerarquia = Jerarquia::findOrFail($id);
+
+        $jerarquia->fill($data);
+        $jerarquia->save();
+
+        return $this->updateMessage();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Jerarquia  $jerarquia
+     * @param  \App\Jerarquia  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Jerarquia $jerarquia)
+    public function destroy($id)
     {
-        //
+        $jerarquia = Jerarquia::findOrFail($id);
+        $jerarquia->delete();
+
+        return $this->deleteMessage();
+    }
+
+    protected function rules()
+    {
+        return [
+            'nombre' => 'required'
+        ];
     }
 }
