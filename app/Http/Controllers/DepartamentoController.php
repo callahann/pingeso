@@ -15,7 +15,7 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        return Departamento::all();
+        return Departamento::with('facultad')->get();
     }
 
     /**
@@ -88,7 +88,7 @@ class DepartamentoController extends Controller
 
         $departamento = Departamento::findOrFail($id);
 
-        $departamento->fill($data);
+        $departamento->fill($request->all());
         $departamento->save();
 
         return $this->updateMessage();
@@ -102,7 +102,7 @@ class DepartamentoController extends Controller
      */
     public function destroy($id)
     {
-        $departamento = Departamento::finOrFail($id);
+        $departamento = Departamento::findOrFail($id);
         $departamento->delete();
 
         return $this->deleteMessage();
@@ -111,7 +111,7 @@ class DepartamentoController extends Controller
     protected function rules()
     {
         return [
-            'id_formula' => 'required',
+            'id_facultad' => 'required',
             'nombre' => 'required'
         ];
     }

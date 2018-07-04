@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Departamento extends Model
 {
     use SoftDeletes;
-    
+
+    protected $fillable = [
+        'id_facultad',
+        'nombre'
+    ];
+
     protected $guarded = [
         'id_facultad'
     ];

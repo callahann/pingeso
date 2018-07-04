@@ -12,6 +12,8 @@ import ListaUsuarios from './components/usuario/Lista'
 import Usuario from './components/usuario/Usuario'
 import ListadoFacultades from './components/facultad/ListadoFacultades'
 import FormFacultad from './components/facultad/FormFacultad'
+import ListadoDepartamentos from './components/departamento/ListadoDepartamentos'
+import FormDepartamento from './components/departamento/FormDepartamento'
 
 const router = new VueRouter({
     mode: 'history',
@@ -109,6 +111,27 @@ const router = new VueRouter({
              path: '/facultades/editar',
              name: 'editar-facultad',
              component: FormFacultad,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/departamentos',
+             name: 'departamentos',
+             component: ListadoDepartamentos,
+             meta: { eval: 'rol === 4'},
+             props: true
+         },
+         {
+             path: '/departamentos/crear',
+             name: 'crear-departamento',
+             component: FormDepartamento,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/departamentos/editar',
+             name: 'editar-departamento',
+             component: FormDepartamento,
              props: true,
              meta: { eval: 'rol === 4'}
          },
