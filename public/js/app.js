@@ -22744,9 +22744,7 @@ var render = function() {
                 _c("td", [_vm._v(_vm._s(usuario.nombres))]),
                 _vm._v(" "),
                 _vm.auth.rol.id > 2
-                  ? _c("td", [
-                      _vm._v(_vm._s(usuario.departamento.facultad.nombre))
-                    ])
+                  ? _c("td", [_vm._v(_vm._s(usuario.facultad.nombre))])
                   : _vm._e(),
                 _vm._v(" "),
                 _vm.auth.rol.id > 2

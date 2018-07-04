@@ -29,7 +29,8 @@ class User extends Authenticatable
         'departamento',
         'jerarquia',
         'jornada',
-        'rol'
+        'rol',
+        'facultad'
     ];
 
     public function departamento()
@@ -75,5 +76,10 @@ class User extends Authenticatable
     public function getRolAttribute()
     {
         return $this->rol()->first();
+    }
+
+    public function getFacultadAttribute()
+    {
+        return $this->departamento()->first()->facultad()->first();
     }
 }
