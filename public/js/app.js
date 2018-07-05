@@ -14534,9 +14534,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         });
     },
     methods: {
-        deleteElem: function deleteElem(id, index) {
+        deleteElem: function deleteElem(id, index, nombre) {
             var _this2 = this;
 
+            var c = confirm("¿Estás seguro de borrar la " + nombre + "?");
+            if (c == false) {
+                console.log('FALSE');
+                return;
+            }
             console.log('Index: ', index);
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/facultades/' + id).then(function (response) {
                 _this2.facultades.splice(index, 1);
@@ -14720,9 +14725,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         });
     },
     methods: {
-        deleteElem: function deleteElem(id, index) {
+        deleteElem: function deleteElem(id, index, nombre) {
             var _this2 = this;
 
+            var c = confirm("¿Estás seguro de borrar el departamento de " + nombre + "?");
+            if (c == false) {
+                console.log('FALSE');
+                return;
+            }
             console.log('Index: ', index);
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/departamentos/' + id).then(function (response) {
                 _this2.departamentos.splice(index, 1);
@@ -24634,7 +24644,7 @@ var render = function() {
                         staticClass: "btn btn-xs btn-danger",
                         on: {
                           click: function($event) {
-                            _vm.deleteElem(facu.id, index)
+                            _vm.deleteElem(facu.id, index, facu.nombre)
                           }
                         }
                       },
@@ -25023,7 +25033,11 @@ var render = function() {
                         staticClass: "btn btn-xs btn-danger",
                         on: {
                           click: function($event) {
-                            _vm.deleteElem(departamento.id, index)
+                            _vm.deleteElem(
+                              departamento.id,
+                              index,
+                              departamento.nombre
+                            )
                           }
                         }
                       },

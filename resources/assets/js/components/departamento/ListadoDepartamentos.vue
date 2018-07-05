@@ -24,7 +24,7 @@
                           <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-departamento', params: {accion: 'Editar', elemento: departamento} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
-                          <button v-on:click="deleteElem(departamento.id,index)" class="btn btn-xs btn-danger">
+                          <button v-on:click="deleteElem(departamento.id,index,departamento.nombre)" class="btn btn-xs btn-danger">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                           </button>
                         </td>
@@ -69,12 +69,18 @@
             });
         },
         methods: {
-            deleteElem(id, index){
+            deleteElem(id, index, nombre){
+                var c = confirm("¿Estás seguro de borrar el departamento de "+ nombre + "?");
+                if (c == false){
+                    console.log('FALSE');
+                    return;     
+                }
                 console.log('Index: ', index);
                 axios.delete('/api/departamentos/'+id)
                 .then(response=> {
                     this.departamentos.splice(index, 1);
                 });
+                
             }
         }
     }
