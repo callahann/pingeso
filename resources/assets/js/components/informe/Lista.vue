@@ -4,6 +4,9 @@
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = undefined">&times;</a>
             {{ mensaje }}
         </div>
+        <div v-if="declarar" class="alert alert-warning">
+            <strong>Atención: </strong> Puede enviar su declaración hasta el <b>{{ hasta }}</b>
+        </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
                 Informes de actividades
@@ -16,14 +19,15 @@
                     <tr>
                         <th>Periodo</th>
                         <th>Creado el</th>
-                        <th>Aprobado</th>
+                        <th>Estado</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="informe in informes" v-bind:key="informe.id">
-                        <td class="col-md-4">{{ informe.periodo }}</td>
-                        <td class="col-md-6">{{ informe.created_at }}</td>
+                        <td>{{ informe.periodo.nombre }}</td>
+                        <td>{{ new Date(informe.created_at).toString() }}</td>
+                        <td>{{ estados.etiquetas[informe.estado] }}</td>
                         <td class="col-md-2">
                             <router-link class="btn btn-xs btn-info btn-block" :to="{ name: 'declarar-realizado', params: { id: informe.id }}">     
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
@@ -33,7 +37,7 @@
                 </tbody>
             </table>
             <div class="panel-footer">
-                <router-link class="btn btn-success" :to="{ name: 'nuevo-informe'}">     
+                <router-link class="btn btn-success text-right" :to="{ name: 'nuevo-informe'}" v-if="declarar">     
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar informe
                 </router-link>
             </div>
@@ -41,23 +45,33 @@
     </div>
 </template>
 <script>
+    import { mapState } from 'vuex'
+
     export default {
         props: ['mensaje'],
-        data: function() {
-            return {
-                informes: [],
+        computed: {
+            ...mapState(['informes']),
+            declarar: function() {
+                if(this.auth.departamento.periodo === null) return false
+
+                const periodo = this.auth.departamento.periodo
+                if(periodo.etapa > 1) return false
+
+                const informe = this.informes.find(informe => {
+                    return informe.periodo.id === periodo.id
+                })
+                if(informe) return false
+
+                const ahora = Date.now()
+                const desde = Date.parse(periodo.desde)
+                const hasta = Date.parse(periodo.hasta)
+                return desde <= ahora && ahora <= hasta
+            },
+            hasta: function() {
+                const hastaStr = this.auth.departamento.periodo.hasta
+                const hasta = new Date(hastaStr)
+                return hasta.toStringWithTime()
             }
-        },
-        created: function() {
-            this.$http.get('/api/declaraciones')
-                .then(response => {
-                    this.informes = response.data
-                    this.cargando = false
-                })
-                .catch(e => {
-                    this.cargando = false
-                    console.log(e)
-                })
         }
     }
 </script>

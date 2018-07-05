@@ -9,6 +9,7 @@ use App\Facultad;
 use App\Formula;
 use App\Jerarquia;
 use App\Jornada;
+use App\Periodo;
 use App\Rango;
 use App\Rol;
 use App\User;
@@ -396,7 +397,7 @@ class BaseSeeder extends Seeder
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
                 'id_jornada' => 1,
-                'id_rol' => 4
+                'id_rol' => 1
             ],
             [
                 'apellido_paterno' => 'Vargas',
@@ -491,6 +492,19 @@ class BaseSeeder extends Seeder
 
         foreach ($formulas as $formula) {
             Formula::create($formula);
+        }
+
+        $periodos = [
+            [
+                'nombre' => '2018',
+                'desde' => '2018-07-05 00:00:00',
+                'hasta' => '2018-07-15 23:59:59',
+                'id_departamento' => 3
+            ]
+        ];
+
+        foreach ($periodos as $periodo) {
+            Periodo::create($periodo);
         }
     }
 }

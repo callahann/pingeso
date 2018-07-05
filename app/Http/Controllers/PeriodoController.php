@@ -18,16 +18,6 @@ class PeriodoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return $this->notDefined();
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -41,31 +31,12 @@ class PeriodoController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
+        $anterior = Periodo::where('actual', true)->first();
+        $anterior->actual = false;
+        $anterior->save();
+
         $periodo = Periodo::create($request->all());
-
         return $this->creationMessage();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Periodo  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return Periodo::findOrFail($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Periodo  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        return $this->notDefined();
     }
 
     /**

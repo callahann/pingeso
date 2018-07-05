@@ -15,7 +15,7 @@ class FacultadController extends Controller
      */
     public function index()
     {
-        return Facultad::all();
+        return Facultad::all()->load('departamentos');
     }
 
     /**

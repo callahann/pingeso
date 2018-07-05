@@ -31,6 +31,9 @@ const store = new Vuex.Store({
         [Mutations.SET_STATE_OBJECT] (state, { key, payload }) {
             state[key] = Object.assign({}, state[key], payload.data)
         },
+        [Mutations.SET_STATE_PAGINATION] (state, { key, payload }) {
+            state[key] = Object.assign({}, state[key], payload.data)
+        },
         [Mutations.INSERT_DECLARACION] (state, { payload, callback }) {
             state.informes.push(payload.data)
             callback(true, payload.data);
@@ -88,9 +91,8 @@ const store = new Vuex.Store({
             return response.data.rol.id
         },
         [Actions.FETCH_DECLARACIONES] ({ commit }, rol) {
-            const q = rol === 1 ? '/auth/declaraciones' : '/declaraciones'
             axios
-                .get('/api' + q)
+                .get('/api/auth/declaraciones')
                 .then(response => {
                     commit(Mutations.SET_STATE_ARRAY, { key: 'informes', payload: response })
                 })

@@ -18,6 +18,10 @@ class Departamento extends Model
         'id_facultad'
     ];
 
+    protected $appends = [
+        'periodo'
+    ];
+
     public function facultad()
     {
         return $this->belongsTo(Facultad::class, 'id_facultad')->withTrashed();
@@ -31,5 +35,9 @@ class Departamento extends Model
     public function periodos()
     {
         return $this->hasMany(Periodo::class, 'id_departamento');
+    }
+
+    public function getPeriodoAttribute() {
+        return $this->periodos()->where('actual', true)->first();
     }
 }

@@ -10,35 +10,7 @@ use Validator;
 use Auth;
 
 class DeclaracionController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return Declaracion::where('estado', '=', 0)->get();
-    }
-
-    public function indexDec(){
-        //$declaraciones = Declaracion::all();
-        //$users = User::all();
-        //return view('listado', compact('declaraciones','users'));
-        return view('listado');
-    }
-
-    
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return $this->notDefined();
-    }
-
+{   
     /**
      * Store a newly created resource in storage.
      *
@@ -51,33 +23,12 @@ class DeclaracionController extends Controller
             'periodo' => 'required',
         ]);*/
 
-        $declaracion = Declaracion::create($request->all());
-
+        $declaracion = new Declaracion($request->all());
+        $declaracion->id_formula = $request->formula['id'];
+        $declaracion->id_periodo = $request->periodo['id'];
+        $declaracion->id_usuario = $request->usuario['id'];
+        $declaracion->save();
         return $declaracion;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Declaracion  $declaracion
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {   
-        $declaracion = Declaracion::findOrFail($id);
-        return $declaracion;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Declaracion  $declaracion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $declaracion = Declaracion::findOrFail($id);
-        return view('declaracion.formulario')->with(['id' => $declaracion->id]);
     }
 
     /**
@@ -116,35 +67,41 @@ class DeclaracionController extends Controller
         return $this->deleteMessage();
     }
 
-    public function approval($id)
-    {
-        $declaracion = Declaracion::findOrFail($id);
-        $declaracion->estado = 1;
-        $declaracion->save();
-
-        return $this->updateMessage();
-
-    }
-
+    /**
+     * Retorna las declaraciones que corresponden al usuario con
+     * sesión activa de acuerdo a su rol. Por ejemplo, a un académico
+     * retornará sus declaraciones, a un director las declaraciones
+     * por aprobar, etc.
+     * 
+     * @return Collection 
+     */
     public function allListed()
     {
-        if(Auth::user()) {
+        if(Auth::check()) {
             $id_rol = Auth::user()->id_rol;
-            $id_departamento = Auth::user()->id_departamento; 
-            if ($id_rol == 1) {
-                return Auth::user()->declaraciones()->paginate(); 
-            }
-            elseif ($id_rol == 2) {
-                return Declaracion::whereHas('usuario', function($q) use($id_departamento) {
-                    $q->where('id_departamento', $id_departamento)
-                      ->where('estado', 2);
-                })->paginate();
-            }
-            else {
-                return Declaracion::where('estado', 3)->paginate();
+            switch ($id_rol) {
+                case 1: return Auth::user()
+                            ->declaraciones()
+                            ->where('estado', '<>', 1)
+                            ->get();
+                case 2:
+                    $id_departamento = Auth::user()->id_departamento; 
+                    return Declaracion::where('estado', 1)
+                            ->whereHas('usuario', function($q) use($id_departamento) {
+                                $q->where('id_departamento', $id_departamento);
+                            })
+                            ->whereHas('periodo', function($q) {
+                                $q->where('actual', true);
+                            })
+                            ->get();
+                case 3: return Declaracion::where('estado', 2)
+                            ->whereHas('periodo', function($q) {
+                                $q->where('actual', true);
+                            })
+                            ->get();
             }
         }
 
-        return response()->json('No Permitido', 402);
+        return response()->json([]);
     }
 }

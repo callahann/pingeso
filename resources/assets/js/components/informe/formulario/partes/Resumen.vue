@@ -51,6 +51,11 @@
                 </tr>
             </tbody>
         </table>
+        <div v-if="etapa <= etapas.aprobando && estado.mensaje"
+            :class="'alert alert-' + estado.clase"
+            style="margin-bottom: 0">
+            <strong>{{ estado.mensaje }}</strong>
+        </div>
     </div>
 </template>
 <script>
@@ -153,6 +158,13 @@
                     leyenda: 'No definido',
                     color: 'black'
                 }
+            },
+            estado: function() {
+                const horas = this.auth.jornada.horas
+                const diferencia = Math.round((horas - this.totales.comprometido.equivalente) * 10) / 10
+                const mensaje = diferencia <= 0 ? undefined : 'Aún falta declarar ' + diferencia + ' horas'
+                const clase = diferencia <= horas * 0.1 ? 'info' : diferencia <= horas * 0.4 ? 'warning' : 'danger'
+                return { mensaje, clase }
             }
         },
         watch: {

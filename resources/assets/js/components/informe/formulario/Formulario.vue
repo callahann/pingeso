@@ -14,8 +14,8 @@
             <div class="row">
                 <resumen :informe="informe" :etapa="etapa"></resumen>
             </div>
-            <div class="row" v-if="apelacion.id !== undefined">
-                <apelacion :previo="apelacion" v-on:actualizar="apelacion = $event"></apelacion>
+            <div class="row" v-if="informe.apelacion.id !== undefined">
+                <apelacion :previo="informe.apelacion" v-on:actualizar="informe.apelacion = $event"></apelacion>
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -125,6 +125,8 @@
                         id_declaracion: undefined
                     },
                     formula: {},
+                    periodo: {},
+                    usuario: {},
                     estado: 0
                 },
                 mensaje: 0
@@ -138,6 +140,8 @@
             this.informe.formula = this.formulas.find(formula => {
                 return formula.actual;
             })
+            this.informe.periodo = this.auth.departamento.periodo
+            this.informe.usuario = this.auth
 
             if(this.$route.params.id === undefined ) return;
 
@@ -154,7 +158,8 @@
             actualizar: function() {
                 this.$store.dispatch(
                     this.informe.id === undefined ? INSERT_DECLARACION : UPDATE_DECLARACION,
-                    { informe: this.informe, cb: this.callback })
+                    { informe: this.informe, cb: this.callback }
+                )
             },
             enviar: async function() {
                 await this.$store.dispatch(SEND_DECLARACION, this.informe.id)

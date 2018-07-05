@@ -13,17 +13,8 @@ class Facultad extends Model
         'nombre',
     ];
 
-    protected $appends = [
-        'departamentos'
-    ];
-
     public function departamentos()
     {
         return $this->hasMany('App\Departamento', 'id_facultad');
-    }
-
-    public function getDepartamentosAttribute()
-    {
-        return $this->departamentos()->get();
     }
 }

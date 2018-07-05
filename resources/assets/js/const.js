@@ -25,7 +25,12 @@ Vue.mixin({
             estados: Object.freeze({
                 editable: 0,
                 enviado: 1,
-                aprobado: 2
+                aprobado: 2,
+                etiquetas: [
+                    'No enviado',
+                    'Esperando aprobación',
+                    'Aprobado'
+                ]
             })
         }
     },

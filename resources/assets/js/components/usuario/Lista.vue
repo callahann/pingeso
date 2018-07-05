@@ -25,7 +25,7 @@
                         <td>{{ usuario.apellido_paterno }}</td>
                         <td>{{ usuario.apellido_materno }}</td>
                         <td>{{ usuario.nombres }}</td>
-                        <td v-if="auth.rol.id > 2">{{ usuario.facultad.nombre }}</td>
+                        <td v-if="auth.rol.id > 2">{{ usuario.departamento.facultad.nombre }}</td>
                         <td v-if="auth.rol.id > 2">{{ usuario.departamento.nombre }}</td>
                         <td v-if="auth.rol.id === 4">{{ usuario.rol.nombre }}</td>
                         <td class="col-md-2">

@@ -9,6 +9,19 @@ String.prototype.replaceAll = function(search, replacement) {
     return target.replace(new RegExp(search, 'g'), replacement)
 }
 
+Date.prototype.toString = function() {
+    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+    var day = this.getDate()
+  	var monthIndex = this.getMonth()
+    return day + ' de ' + months[monthIndex]
+}
+
+Date.prototype.toStringWithTime = function() {
+    var hours = this.getHours()
+    var mins = this.getMinutes()
+    return this.toString() + ' a las ' + (hours < 10 ? '0': '') + hours + ':' + (mins < 10 ? '0': '') + mins
+}
+
 window.Vue = require('vue')
 
 import Vue from 'vue'

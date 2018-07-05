@@ -19,17 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return User::all()->load('departamento.facultad');
     }
 
     /**
@@ -53,28 +43,6 @@ class UserController extends Controller
         $user->id_rol = $request->rol['id'];
         $user->save();
         return $this->creationMessage();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return User::find($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

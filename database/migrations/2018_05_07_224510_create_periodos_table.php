@@ -15,9 +15,11 @@ class CreatePeriodosTable extends Migration
     {
         Schema::create('periodos', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre');
             $table->dateTime('desde');
             $table->dateTime('hasta');
-            $table->integer('etapa');
+            $table->integer('etapa')->default(1);
+            $table->boolean('actual')->default(true);
             $table->integer('id_departamento');
             $table->timestamps();
             $table->softDeletes();

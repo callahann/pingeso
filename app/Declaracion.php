@@ -31,12 +31,6 @@ class Declaracion extends Model
         'item_educacion_continua'=> 'array',
     ];
 
-    protected $hidden = [
-        'id_formula',
-        'id_usuario',
-        'id_periodo'
-    ];
-
     protected $appends = [
         'apelaciones',
         'formula',
