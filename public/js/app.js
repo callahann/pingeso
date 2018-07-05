@@ -13255,7 +13255,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref14.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], { informe: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* INSERT_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13404,11 +13404,19 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__partes_ListaActividades__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__partes_Apelacion__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__partes_Resumen__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__partes_ListaActividades__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__partes_Apelacion__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__partes_Resumen__ = __webpack_require__(70);
+
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//
+//
 //
 //
 //
@@ -13526,17 +13534,18 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
                     actividades: [],
                     calificacion: 1
                 },
-                formula: {}
-            },
-            apelacion: {
-                id_declaracion: 0
+                apelacion: {
+                    id_declaracion: undefined
+                },
+                formula: {},
+                estado: 0
             },
             mensaje: 0
         };
     },
     components: {
-        'lista-actividades': __WEBPACK_IMPORTED_MODULE_2__partes_ListaActividades__["a" /* default */],
-        'resumen': __WEBPACK_IMPORTED_MODULE_4__partes_Resumen__["a" /* default */]
+        'lista-actividades': __WEBPACK_IMPORTED_MODULE_3__partes_ListaActividades__["a" /* default */],
+        'resumen': __WEBPACK_IMPORTED_MODULE_5__partes_Resumen__["a" /* default */]
     },
     created: function created() {
         var _this = this;
@@ -13560,16 +13569,61 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             this.mensaje = ok ? 1 : -1;
             this.informe = Object.assign({}, this.informe, payload);
         },
-        insertar: function insertar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["e" /* INSERT_DECLARACION */], { informe: this.informe, cb: this.callback });
-        },
         actualizar: function actualizar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["g" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.callback });
+            this.$store.dispatch(this.informe.id === undefined ? __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["e" /* INSERT_DECLARACION */] : __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["g" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.callback });
         },
-        enviar: function enviar() {},
-        aprobar: function aprobar(estado) {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["a" /* APPROVE_DECLARACION */], { id: this.informe.id, cb: this.callback });
-        },
+        enviar: function () {
+            var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.next = 2;
+                                return this.$store.dispatch(SEND_DECLARACION, this.informe.id);
+
+                            case 2:
+                                this.volver('informes', 'Se ha registrado la apelación correctamente');
+
+                            case 3:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, this);
+            }));
+
+            function enviar() {
+                return _ref.apply(this, arguments);
+            }
+
+            return enviar;
+        }(),
+        aprobar: function () {
+            var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(estado) {
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+                    while (1) {
+                        switch (_context2.prev = _context2.next) {
+                            case 0:
+                                _context2.next = 2;
+                                return this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["a" /* APPROVE_DECLARACION */], this.informe.id);
+
+                            case 2:
+                                this.volver('informes', 'Se ha registrado la apelación correctamente');
+
+                            case 3:
+                            case 'end':
+                                return _context2.stop();
+                        }
+                    }
+                }, _callee2, this);
+            }));
+
+            function aprobar(_x2) {
+                return _ref2.apply(this, arguments);
+            }
+
+            return aprobar;
+        }(),
         obtenerApelacion: function obtenerApelacion() {
             var _this2 = this;
 
@@ -13582,23 +13636,37 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
                 _this2.cargandoApelacion = false;
             });
         },
-        enviarApelacion: function enviarApelacion() {
-            var _this3 = this;
+        apelar: function () {
+            var _ref3 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee3() {
+                var formData;
+                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee3$(_context3) {
+                    while (1) {
+                        switch (_context3.prev = _context3.next) {
+                            case 0:
+                                this.informe.apelacion.id_declaracion = this.informe.id;
+                                formData = this.formData(this.informe.apelacion);
+                                _context3.next = 4;
+                                return this.$store.dispatch(INSERT_APELACION, { apelacion: formData });
 
-            var formData = this.formData(this.apelacion);
-            this.$http.post('/api/apelaciones', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).then(function (response) {
-                console.log(_this3.volver('informes', 'Se ha registrado la apelación correctamente'));
-            }).catch(function (e) {
-                console.log(e);
-                _this3.mensaje = -1;
-            });
-        }
+                            case 4:
+                                this.volver('informes', 'Se ha registrado la apelación correctamente');
+
+                            case 5:
+                            case 'end':
+                                return _context3.stop();
+                        }
+                    }
+                }, _callee3, this);
+            }));
+
+            function apelar() {
+                return _ref3.apply(this, arguments);
+            }
+
+            return apelar;
+        }()
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['formulas', 'informes'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapState */])(['formulas', 'informes'])
 });
 
 /***/ }),
@@ -23562,53 +23630,21 @@ var render = function() {
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "panel panel-default" }, [
           _c("div", { staticClass: "panel-footer" }, [
-            _vm.informe.id === undefined
-              ? _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-info",
-                    attrs: { type: "button" },
-                    on: { click: _vm.insertar }
-                  },
-                  [
-                    _c("span", {
-                      staticClass: "glyphicon glyphicon-floppy-disk",
-                      attrs: { "aria-hidden": "true" }
-                    }),
-                    _vm._v(" Guardar\n                    ")
-                  ]
-                )
-              : _vm.etapa <= _vm.etapas.evaluando
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-info",
-                      attrs: { type: "button" },
-                      on: { click: _vm.actualizar }
-                    },
-                    [
-                      _c("span", {
-                        staticClass: "glyphicon glyphicon-floppy-disk",
-                        attrs: { "aria-hidden": "true" }
-                      }),
-                      _vm._v(" Guardar\n                    ")
-                    ]
-                  )
-                : _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-success",
-                      attrs: { type: "button" },
-                      on: { click: _vm.enviarApelacion }
-                    },
-                    [
-                      _c("span", {
-                        staticClass: "glyphicon glyphicon-send",
-                        attrs: { "aria-hidden": "true" }
-                      }),
-                      _vm._v(" Enviar apelación\n                    ")
-                    ]
-                  ),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-info",
+                attrs: { type: "button" },
+                on: { click: _vm.actualizar }
+              },
+              [
+                _c("span", {
+                  staticClass: "glyphicon glyphicon-floppy-disk",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(" Guardar\n                    ")
+              ]
+            ),
             _vm._v(" "),
             _vm.etapa === _vm.etapas.declarando
               ? _c(
@@ -23629,19 +23665,55 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             _vm.etapa === _vm.etapas.aprobando
+              ? _c("a", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-warning",
+                      attrs: { type: "button" },
+                      on: { click: _vm.revision }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-eye-open",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(" Solicitar revisión\n                        ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button" },
+                      on: { click: _vm.aprobar }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-ok",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(" Aprobar\n                        ")
+                    ]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.etapa === _vm.etapas.apelando
               ? _c(
                   "button",
                   {
                     staticClass: "btn btn-success",
                     attrs: { type: "button" },
-                    on: { click: _vm.aprobar }
+                    on: { click: _vm.apelar }
                   },
                   [
                     _c("span", {
-                      staticClass: "glyphicon glyphicon-ok",
+                      staticClass: "glyphicon glyphicon-send",
                       attrs: { "aria-hidden": "true" }
                     }),
-                    _vm._v(" Aprobar\n                    ")
+                    _vm._v(" Enviar apelación\n                    ")
                   ]
                 )
               : _vm._e()

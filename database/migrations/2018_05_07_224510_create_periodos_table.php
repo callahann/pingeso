@@ -17,7 +17,7 @@ class CreatePeriodosTable extends Migration
             $table->increments('id');
             $table->dateTime('desde');
             $table->dateTime('hasta');
-            $table->integer('estado');
+            $table->integer('etapa');
             $table->integer('id_departamento');
             $table->timestamps();
             $table->softDeletes();
