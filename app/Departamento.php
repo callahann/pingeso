@@ -20,7 +20,7 @@ class Departamento extends Model
 
     public function facultad()
     {
-        return $this->belongsTo(Facultad::class, 'id_facultad');
+        return $this->belongsTo(Facultad::class, 'id_facultad')->withTrashed();
     }
 
     public function usuarios()
