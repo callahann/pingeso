@@ -22,7 +22,7 @@
                           <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-facultad', params: {accion: 'Editar', elemento: facu} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
-                          <button v-on:click="deleteElem(facu.id,index)" class="btn btn-xs btn-danger">
+                          <button v-on:click="deleteElem(facu.id,index,facu.nombre)" class="btn btn-xs btn-danger">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                           </button>
                         </td>
@@ -68,7 +68,12 @@
             });
         },
         methods: {
-            deleteElem(id, index){
+            deleteElem(id, index, nombre){
+                var c = confirm("¿Estás seguro de borrar la "+ nombre + "?");
+                if (c == false){
+                    console.log('FALSE');
+                    return;     
+                }
                 console.log('Index: ', index);
                 axios.delete('/api/facultades/'+id)
                 .then(response=> {
