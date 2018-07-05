@@ -110,7 +110,7 @@ class PeriodoController extends Controller
         return [
             'desde' => 'required|date',
             'hasta' => 'required|date',
-            'estado' => 'required|numeric',
+            'etapa' => 'required|numeric',
         ];
     }
 }

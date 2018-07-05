@@ -12,7 +12,7 @@ class Periodo extends Model
     protected $fillable = [
         'desde',
         'hasta',
-        'estado',
+        'etapa',
         'id_departamento',
     ];
 
