@@ -44,7 +44,7 @@ class FacultadController extends Controller
 
         $facultad = Facultad::create($request->all());
 
-        return $this->creationMessage();
+        return $facultad;
     }
 
     /**
@@ -89,7 +89,7 @@ class FacultadController extends Controller
         $facultad->fill($request->all());
         $facultad->save();
 
-        return $this->updateMessage();
+        return $facultad;
     }
 
     /**

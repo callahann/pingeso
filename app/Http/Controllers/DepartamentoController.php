@@ -80,7 +80,7 @@ class DepartamentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), $this->rules());
+        $validator = Validator::make($request->all(), $this->rules($id));
 
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
@@ -108,11 +108,17 @@ class DepartamentoController extends Controller
         return $this->deleteMessage();
     }
 
-    protected function rules()
+    protected function rules($id)
     {
+        if($id) {
+            return [
+                'id_facultad' => 'required',
+                'nombre' => 'required|unique:departamentos,nombre,' . $id
+            ];
+        }
         return [
             'id_facultad' => 'required',
-            'nombre' => 'required'
+            'nombre' => 'required|unique:departamentos,nombre'
         ];
     }
 }

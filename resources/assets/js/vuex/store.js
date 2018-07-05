@@ -22,6 +22,7 @@ const store = new Vuex.Store({
         roles: [],
         usuarios: [],
         formulas: [],
+        departamentos: [],
     },
     mutations: {
         [Mutations.SET_STATE_ARRAY] (state, { key, payload }) {
@@ -45,6 +46,19 @@ const store = new Vuex.Store({
         },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
             callback(false, error);
+        },
+        [Mutations.INSERT_FACULTAD] (state, { payload, callback }) {
+            state.facultades.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_FACULTAD] (state, { payload, callback }) {
+            const index = state.facultades.findIndex(facultad => {
+                return facultad.id === payload.data.id
+            })
+            const facultad = state.facultades[index]
+            state.facultades[index] = Object.assign({}, facultad, payload.data)
+            
+            callback(true, payload.data);
         }
     },
     actions: {
@@ -55,7 +69,7 @@ const store = new Vuex.Store({
 
             var request = ['descripciones', 'factores', 'formulas', 'rangos']
             if(rol === 2 || rol === 4)
-                request = request.concat(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
+                request = request.concat(['facultades','departamentos' , 'jerarquias', 'jornadas', 'roles', 'usuarios'])
             
             request.forEach(r => {
                 axios
@@ -109,7 +123,27 @@ const store = new Vuex.Store({
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
                 })
-        }
+        },
+        [Actions.INSERT_FACULTAD] ({ commit }, { facultad, cb }) {
+            axios
+                .post('/api/facultades', facultad)
+                .then(response => {
+                    commit(Mutations.INSERT_FACULTAD, { facultad: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_FACULTAD] ({ commit }, { facultad, cb }) {
+            axios
+                .put('/api/facultades/' + facultad.id, facultad)
+                .then(response => {
+                    commit(Mutations.UPDATE_FACULTAD, { facultad: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
     }
 })
 
