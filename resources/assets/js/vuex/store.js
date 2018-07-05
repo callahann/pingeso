@@ -99,7 +99,7 @@ const store = new Vuex.Store({
             axios
                 .post('/api/declaraciones', informe)
                 .then(response => {
-                    commit(Mutations.INSERT_DECLARACION, { informe: response, callback: cb })
+                    commit(Mutations.INSERT_DECLARACION, { payload: response, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
