@@ -13158,6 +13158,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var payload = _ref6.payload,
             callback = _ref6.callback;
 
+        console.log('Payload:', payload);
         state.facultades.push(payload.data);
         callback(true, payload.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* UPDATE_FACULTAD */], function (state, _ref7) {
@@ -14462,8 +14463,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
 //
 //
 //
@@ -14506,6 +14508,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -14516,26 +14519,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     },
     data: function data() {
-        return {
-            facultades: []
-
-        };
-    },
-    created: function created() {
-        var _this = this;
-
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/facultades').then(function (response) {
-            _this.facultades = response.data;
-            _this.cargando = false;
-            console.log('Facultades:', _this.facultades);
-        }).catch(function (e) {
-            _this.cargando = false;
-            console.log(e);
-        });
+        return {};
     },
     methods: {
         deleteElem: function deleteElem(id, index, nombre) {
-            var _this2 = this;
+            var _this = this;
 
             var c = confirm("¿Estás seguro de borrar la " + nombre + "?");
             if (c == false) {
@@ -14543,11 +14531,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 return;
             }
             console.log('Index: ', index);
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/facultades/' + id).then(function (response) {
-                _this2.facultades.splice(index, 1);
+            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/facultades/' + id).then(function (response) {
+                _this.facultades.splice(index, 1);
             });
         }
-    }
+    },
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['facultades'])
 });
 
 /***/ }),
@@ -14555,8 +14544,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 //
 //
 //
@@ -14594,6 +14585,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+
+
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -14620,28 +14613,20 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
 
     methods: {
-        addElem: function addElem() {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
-            console.log( true ? 'Editar' : 'Crear');
+            this.mensaje = ok ? 1 : -1;
+            this.element = Object.assign({}, this.element, payload);
+        },
+        addElem: function addElem() {
             if (this.accion == 'Editar') {
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/facultades/' + this.element.id, this.element).then(function (response) {
-                    console.log(_this.volver('facultades', response.data));
-                    _this.status = 1;
-                }).catch(function (e) {
-                    console.log(e);
-                    _this.message = response.data;
-                    _this.status = -1;
-                });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["h" /* UPDATE_FACULTAD */], { facultad: this.element, cb: this.callback });
+                this.volver('facultades', 'Se ha actualizado la facultad correctamente.');
             } else {
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/facultades/', this.element).then(function (response) {
-                    console.log(_this.volver('facultades', response.data));
-                    _this.status = 1;
-                }).catch(function (e) {
-                    console.log(e);
-                    _this.message = response.data;
-                    _this.status = -1;
-                });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["f" /* INSERT_FACULTAD */], { facultad: this.element, cb: this.callback });
+                this.volver('facultades', 'Se ha creado la facultad correctamente.');
             }
         }
     }

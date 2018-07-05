@@ -48,6 +48,7 @@ const store = new Vuex.Store({
             callback(false, error);
         },
         [Mutations.INSERT_FACULTAD] (state, { payload, callback }) {
+            console.log('Payload:', payload);
             state.facultades.push(payload.data)
             callback(true, payload.data);
         },

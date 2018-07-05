@@ -23,7 +23,8 @@ class CreateApelacionsTable extends Migration
 
             $table->foreign('id_declaracion')
                 ->references('id')
-                ->on('declaracions');
+                ->on('declaracions')
+                ->onDelete('cascade');;
         });
     }
 

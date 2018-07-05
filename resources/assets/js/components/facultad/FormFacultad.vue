@@ -36,8 +36,13 @@
 </template>
 
 <script>
-  import axios from 'axios';
-  export default {
+    import {
+        INSERT_FACULTAD,
+        UPDATE_FACULTAD
+    } from '../../vuex/actions'
+    import { mapState } from 'vuex'
+    import axios from 'axios';
+    export default {
     props: {
         accion: {
             type: String,
@@ -60,30 +65,17 @@
         }
     },
     methods: {
+        callback: function(ok = false, payload) {
+            this.mensaje = ok ? 1 : -1
+            this.element = Object.assign({}, this.element, payload)
+        },
         addElem(){
-            console.log('Voy a'+(this.accion=='Editar')?'Editar':'Crear');
             if (this.accion=='Editar') {
-               axios.put('/api/facultades/'+this.element.id, this.element)
-                .then(response => {
-                    console.log(this.volver('facultades', response.data))
-                    this.status = 1;
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.message = response.data;
-                    this.status = -1; 
-                }); 
+                this.$store.dispatch(UPDATE_FACULTAD, { facultad: this.element, cb: this.callback });
+                this.volver('facultades', 'Se ha actualizado la facultad correctamente.')
             } else {
-                axios.post('/api/facultades/', this.element)
-                .then(response => {
-                    console.log(this.volver('facultades', response.data))
-                    this.status = 1;
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.message = response.data;
-                    this.status = -1; 
-                });
+                this.$store.dispatch(INSERT_FACULTAD, { facultad: this.element, cb: this.callback });
+                this.volver('facultades', 'Se ha creado la facultad correctamente.')
             }   
             
         }

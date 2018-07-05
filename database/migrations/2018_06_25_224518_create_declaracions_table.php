@@ -31,15 +31,18 @@ class CreateDeclaracionsTable extends Migration
             
             $table->foreign('id_formula')
                 ->references('id')
-                ->on('formulas');
+                ->on('formulas')
+                ->onDelete('cascade');;
 
             $table->foreign('id_usuario')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');;
             
             $table->foreign('id_periodo')
                 ->references('id')
-                ->on('periodos');
+                ->on('periodos')
+                ->onDelete('cascade');;
             
 
         });

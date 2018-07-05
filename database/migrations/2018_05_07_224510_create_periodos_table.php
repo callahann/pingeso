@@ -24,7 +24,8 @@ class CreatePeriodosTable extends Migration
 
             $table->foreign('id_departamento')
                 ->references('id')
-                ->on('departamentos');
+                ->on('departamentos')
+                ->onDelete('cascade');;
         });
     }
 
