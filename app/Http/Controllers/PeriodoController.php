@@ -31,9 +31,8 @@ class PeriodoController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        $anterior = Periodo::where('actual', true)->first();
-        $anterior->actual = false;
-        $anterior->save();
+        $anterior = Periodo::last();
+        $anterior->delete();
 
         $periodo = Periodo::create($request->all());
         return $this->creationMessage();

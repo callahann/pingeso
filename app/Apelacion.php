@@ -16,8 +16,16 @@ class Apelacion extends Model
         'nombre_archivo',
     ];
 
+    protected $appends = [
+        'actual'
+    ];
+
     public function declaracion()
     {
         return $this->belongsTo(Apelacion::class,'id_declaracion');
+    }
+
+    public function getActualAttribute() {
+        return !$this->trashed();
     }
 }

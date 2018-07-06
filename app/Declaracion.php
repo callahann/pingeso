@@ -34,7 +34,8 @@ class Declaracion extends Model
     protected $appends = [
         'apelaciones',
         'formula',
-        'periodo'
+        'periodo',
+        'usuario'
     ];
 
     public function apelaciones()
@@ -59,7 +60,10 @@ class Declaracion extends Model
 
     public function getApelacionesAttribute()
     {
-        return $this->apelaciones()->get();
+        return $this->apelaciones()
+                    ->withTrashed()
+                    ->orderBy('created_at', 'desc')
+                    ->get();
     }
 
     public function getFormulaAttribute()
@@ -70,5 +74,10 @@ class Declaracion extends Model
     public function getPeriodoAttribute()
     {
         return $this->periodo()->first();
+    }
+
+    public function getUsuarioAttribute()
+    {
+        return $this->usuario()->with('departamento.facultad')->first();
     }
 }

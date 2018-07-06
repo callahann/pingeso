@@ -15,17 +15,7 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        return Departamento::with('facultad')->get();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Departamento::all();
     }
 
     /**
@@ -45,30 +35,6 @@ class DepartamentoController extends Controller
         $departamento = Departamento::create($request->all());
 
         return $this->creationMessage();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Departamento  $departamento
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $departamento = Departamento::finOrFail($id);
-        return $departamento;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Departamento  $departamento
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $departamento = Departamento::finOrFail($id);
-        return $this->notDefined();
     }
 
     /**

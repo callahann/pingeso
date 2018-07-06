@@ -2,32 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Apelacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Validator;
+use App\Apelacion;
 
 class ApelacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return Apelacion::paginate();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return $this->notDefined();
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -36,7 +18,6 @@ class ApelacionController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
         $validator = Validator::make($request->all(), $this->rules());
 
         if ($validator->fails()) {
@@ -44,39 +25,18 @@ class ApelacionController extends Controller
         }
 
         if ($request->hasFile('archivo')) {
-            $fn = $request->id_declaracion . '_' . time() . $request->archivo->getClientOriginalExtension();
+            $fn = $request->id_declaracion . '_' . time() . '.' . $request->archivo->getClientOriginalExtension();
             $request->archivo->storeAs('apelaciones',$fn);
             $request->merge(['nombre_archivo' => $fn]);
         }
 
+        $anterior = Apelacion::where('id_declaracion', $request->id_declaracion)->first();
+        if($anterior) $anterior->delete();
+
         $apelacion = Apelacion::create($request->all());
-
-        return $this->creationMessage();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Apelacion  $apelacion
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $apelacion = Apelacion::findOrFail($id);
         return $apelacion;
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Apelacion  $apelacion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Apelacion $apelacion)
-    {
-        return $this->notDefined();
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -115,8 +75,7 @@ class ApelacionController extends Controller
     public function destroy(Apelacion $apelacion)
     {
         $apelacion->delete();
-
-        return $this->deleteMessage();
+        return $apelacion;
     }
 
     public function obtener($declaracion)
@@ -124,11 +83,10 @@ class ApelacionController extends Controller
         return Apelacion::where('id_declaracion', $declaracion)->get();
     }
 
-    public function descargar($apelacion)
+    public function descargar(Apelacion $apelacion)
     {
-        $apelacion = Apelacion::findOrFail($apelacion);
-
-        return response()->download('apelaciones/'. $apelacion->nombre_archivo);
+        $path = storage_path('app/apelaciones/' . $apelacion->nombre_archivo);
+        return response()->download($path);
     }
 
     protected function rules()

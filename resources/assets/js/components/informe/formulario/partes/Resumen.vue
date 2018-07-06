@@ -33,7 +33,7 @@
                         <input type="number" class="form-control" min=1 max=7 
                             v-if="etapa === etapas.evaluando"
                             v-model.number="informe[key].calificacion">
-                        <p v-else>{{ informe[key].calificacion }}</p>
+                        <p class="text-center" v-else>{{ informe[key].calificacion }}</p>
                     </td>
                 </tr>
                 <tr>
@@ -128,26 +128,35 @@
         computed: {
             ...mapState(['factores', 'rangos']),
             calificacion: function() {
-                let formula = this.informe.formula.nota_final
+                var formula = this.informe.formula.nota_final
+                var min = 7, max = 1
 
                 for (var itemKey in this.informe) {
                     if (itemKey.startsWith('item')) {
+                        min = Math.min(min, this.informe[itemKey].calificacion)
+                        max = Math.max(max, this.informe[itemKey].calificacion)
+
                         formula = formula
-                                        .replaceAll('nota_' + itemKey, resumenes[itemKey].calificacion)
-                                        .replaceAll('comprometido_eq_' + itemKey, totales[itemKey].comprometido.equivalente)
-                                        .replaceAll('realizado_eq_' + itemKey, totales[itemKey].realizado.equivalente)
+                                        .replaceAll('nota_' + itemKey, this.informe[itemKey].calificacion)
+                                        .replaceAll('comprometido_eq_' + itemKey, this.resumenes[itemKey].comprometido.equivalente)
+                                        .replaceAll('realizado_eq_' + itemKey, this.resumenes[itemKey].realizado.equivalente)
                     }
                 }
 
                 formula = formula
-                                .replaceAll('comprometido_semanal' + itemKey, totales.comprometido.semanal)
-                                .replaceAll('comprometido_anual' + itemKey, totales.comprometido.anual)
-                                .replaceAll('comprometido_eq' + itemKey, totales.comprometido.equivalente)
-                                .replaceAll('realizado_semanal' + itemKey, totales.realizado.semanal)
-                                .replaceAll('realizado_anual' + itemKey, totales.realizado.anual)
-                                .replaceAll('realizado_eq' + itemKey, totales.realizado.equivalente)
+                                .replaceAll('comprometido_semanal', this.totales.comprometido.semanal)
+                                .replaceAll('comprometido_anual', this.totales.comprometido.anual)
+                                .replaceAll('comprometido_eq', this.totales.comprometido.equivalente)
+                                .replaceAll('realizado_semanal', this.totales.realizado.semanal)
+                                .replaceAll('realizado_anual', this.totales.realizado.anual)
+                                .replaceAll('realizado_eq', this.totales.realizado.equivalente)
 
-                return eval(formula)
+                var calificacion = eval(formula)
+                const diferencia = max - min
+                const factor = this.factores.find(factor => {
+                    return diferencia <= factor.diferencia
+                })
+                return calificacion * factor.factor
             },
             rango: function() {
                 let calificacion = this.calificacion

@@ -15,7 +15,7 @@ class FormulaController extends Controller
      */
     public function index()
     {
-        return Formula::all();
+        return Formula::first();
     }
 
     /**

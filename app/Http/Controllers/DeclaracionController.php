@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Declaracion;
-use App\User;
-use App\Formula;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
+use App\Apelacion;
+use App\Declaracion;
+use App\Formula;
+use App\User;
 
 class DeclaracionController extends Controller
 {   
@@ -41,16 +42,9 @@ class DeclaracionController extends Controller
     public function update(Request $request, $id)
     {
         $declaracion = Declaracion::findOrFail($id);
-        /*$data = $request->validate([
-            'periodo' => 'required',
-        ]);*/
-
-        //$data->merge(['id_usuario' => Auth::user()->id]);
-
         $declaracion->fill($request->all());
         $declaracion->save();
-
-        return $this->updateMessage();
+        return $declaracion;
     }
 
     /**
@@ -63,8 +57,7 @@ class DeclaracionController extends Controller
     {
         $declaracion = Declaracion::findOrFail($id);
         $declaracion->delete();
-
-        return $this->deleteMessage();
+        return $declaracion;
     }
 
     /**
@@ -81,27 +74,52 @@ class DeclaracionController extends Controller
             $id_rol = Auth::user()->id_rol;
             switch ($id_rol) {
                 case 1: return Auth::user()
-                            ->declaraciones()
-                            ->where('estado', '<>', 1)
-                            ->get();
+                                    ->declaraciones()
+                                    ->orderBy('created_at', 'desc')
+                                    ->get()
+                                    ->load(['periodo' => function($q) {
+                                        $q->withTrashed();
+                                    }]);
                 case 2:
                     $id_departamento = Auth::user()->id_departamento; 
-                    return Declaracion::where('estado', 1)
+                    return Declaracion::where('estado', 2)
+                            ->has('periodo')
                             ->whereHas('usuario', function($q) use($id_departamento) {
                                 $q->where('id_departamento', $id_departamento);
                             })
-                            ->whereHas('periodo', function($q) {
-                                $q->where('actual', true);
-                            })
                             ->get();
-                case 3: return Declaracion::where('estado', 2)
-                            ->whereHas('periodo', function($q) {
-                                $q->where('actual', true);
-                            })
+                case 3: return Declaracion::where('estado', 3)
+                            ->has('periodo')
                             ->get();
             }
         }
 
         return response()->json([]);
+    }
+
+    public function decline(Request $request, $id)
+    {
+        $request->merge(['estado' => 1]);
+        return $this->update($request, $id);
+    }
+
+    public function send(Request $request, $id)
+    {
+        $request->merge(['estado' => 2]);
+        return $this->update($request, $id);
+    }
+
+    public function approve(Request $request, $id)
+    {
+        $request->merge(['estado' => 3]);
+        return $this->update($request, $id);
+    }
+
+    public function resolve(Request $request, $id)
+    {
+        $apelacion = Apelacion::where('id_declaracion', $id)->first();
+        $apelacion->delete();
+
+        return $this->update($request, $id);
     }
 }

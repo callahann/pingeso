@@ -15,13 +15,13 @@ const store = new Vuex.Store({
         descripciones: [],
         factores: [],
         facultades: [],
+        formula: {},
         informes: [],
         jerarquias: [],
         jornadas: [],
         rangos: [],
         roles: [],
         usuarios: [],
-        formulas: [],
         departamentos: [],
     },
     mutations: {
@@ -47,12 +47,12 @@ const store = new Vuex.Store({
             
             callback(true, payload.data);
         },
-        [Mutations.HANDLE_ERROR] (state, { error, callback }) {
-            callback(false, error);
-        },
-        [Mutations.INSERT_FACULTAD] (state, { payload, callback }) {
-            console.log('Payload:', payload);
-            state.facultades.push(payload.data)
+        [Mutations.ATTACH_APELACION] (state, { payload, callback }) {
+            const index = state.informes.findIndex(informe => {
+                return informe.id === payload.data.id_declaracion
+            })
+            state.informes[index].apelaciones.push(payload.data)
+            
             callback(true, payload.data);
         },
         [Mutations.UPDATE_FACULTAD] (state, { payload, callback }) {
@@ -63,6 +63,9 @@ const store = new Vuex.Store({
             state.facultades[index] = Object.assign({}, facultad, payload.data)
             
             callback(true, payload.data);
+        },
+        [Mutations.HANDLE_ERROR] (state, { error, callback }) {
+            callback(false, error);
         }
     },
     actions: {
@@ -71,9 +74,9 @@ const store = new Vuex.Store({
             
             dispatch(Actions.FETCH_DECLARACIONES, rol)
 
-            var request = ['descripciones', 'factores', 'formulas', 'rangos']
+            var request = ['descripciones', 'factores', 'rangos']
             if(rol === 2 || rol === 4)
-                request = request.concat(['facultades','departamentos' , 'jerarquias', 'jornadas', 'roles', 'usuarios'])
+                request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
             
             request.forEach(r => {
                 axios
@@ -82,6 +85,12 @@ const store = new Vuex.Store({
                         commit(Mutations.SET_STATE_ARRAY, { key: r, payload: response })
                     })
             })
+
+            axios
+                .get('/api/formulas')
+                .then(response => {
+                    commit(Mutations.SET_STATE_OBJECT, { key: 'formula', payload: response })
+                })
             
             callback()
         },
@@ -111,17 +120,57 @@ const store = new Vuex.Store({
             axios
                 .put('/api/declaraciones/' + informe.id, informe)
                 .then(response => {
-                    commit(Mutations.UPDATE_DECLARACION, { informe: response, callback: cb })
+                    commit(Mutations.UPDATE_DECLARACION, { payload: response, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
                 })
         },
-        [Actions.APPROVE_DECLARACION] ({ commit }, { id, cb }) {
+        [Actions.SEND_DECLARACION] ({ commit }, { informe, cb }) {
             axios
-                .get('/api/declaraciones/' + id + '/aprobar')
+                .put('/api/declaraciones/' + informe.id + '/enviar', informe)
                 .then(response => {
-                    commit(Mutations.UPDATE_DECLARACION, { informe: response, callback: cb })
+                    commit(Mutations.UPDATE_DECLARACION, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.APPROVE_DECLARACION] ({ commit }, { informe, cb }) {
+            axios
+                .put('/api/declaraciones/' + informe.id + '/aprobar', informe)
+                .then(response => {
+                    commit(Mutations.UPDATE_DECLARACION, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DECLINE_DECLARACION] ({ commit }, { informe, cb }) {
+            axios
+                .put('/api/declaraciones/' + informe.id + '/revision', informe)
+                .then(response => {
+                    commit(Mutations.UPDATE_DECLARACION, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_APELACION] ({ commit }, { apelacion, cb }) {
+            axios
+                .post('/api/apelaciones', apelacion)
+                .then(response => {
+                    commit(Mutations.ATTACH_APELACION, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.RESOLVE_APELACION] ({ commit }, { informe, cb }) {
+            axios
+                .put('/api/declaraciones/' + informe.id + '/resolver', informe)
+                .then(response => {
+                    commit(Mutations.UPDATE_DECLARACION, { payload: response, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

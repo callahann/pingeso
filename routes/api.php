@@ -18,10 +18,13 @@ Route::get('/auth', function (Request $request) {
 });
 Route::get('/auth/declaraciones', 'DeclaracionController@allListed');
 Route::resource('apelaciones', 'ApelacionController');
+Route::get('/apelaciones/{apelacion}/adjunto', 'ApelacionController@descargar');
 Route::resource('declaraciones', 'DeclaracionController');
-Route::get('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approval');
+Route::put('/declaraciones/{declaracion}/enviar', 'DeclaracionController@send');
+Route::put('/declaraciones/{declaracion}/aprobar', 'DeclaracionController@approve');
+Route::put('/declaraciones/{declaracion}/revision', 'DeclaracionController@decline');
+Route::put('/declaraciones/{declaracion}/resolver', 'DeclaracionController@resolve');
 Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obtener');
-Route::get('/descarga/apelacion/{apelacion}', 'ApelacionController@descargar');
 Route::resource('departamentos', 'DepartamentoController');
 Route::get('/descripciones', 'DescripcionController@all');
 Route::get('/descripciones/{tipo}', 'DescripcionController@type');

@@ -6,16 +6,18 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th class="col-md-9">Comentario</th>
                     <th class="col-md-3">Archivo</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <textarea class="col-md-12 form-control" rows=3 v-model="apelacion.comentario" v-if="editable"></textarea>
-                        <p v-else>{{ apelacion.comentario }}</p>
+                <tr v-if="actual">
+                    <td>1</td>
+                    <td v-if="editable">
+                        <textarea class="col-md-12 form-control" rows=3 v-model="apelacion.comentario"></textarea>
                     </td>
+                    <td v-else>{{ apelacion.comentario }}</td>
                     <td v-if="editable">
                         <label for="input" class="btn btn-info btn-block input-file">
                             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> {{ apelacion.archivo !== undefined ? apelacion.archivo.name : 'Seleccionar archivo...' }}
@@ -23,9 +25,19 @@
                         <input id="input" type="file" ref="archivo" v-on:change="obtenerArchivo">
                     </td>
                     <td v-else>
-                        <button v-if="apelacion.nombre_archivo" type="button" class="btn btn-info btn-block" v-on:click="descargar">
+                        <a :href="'/api/apelaciones/' + apelacion.id + '/adjunto'" v-if="apelacion.nombre_archivo" type="button" class="btn btn-info btn-block">
                             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {{ apelacion.nombre_archivo }}
-                        </button>
+                        </a>
+                        <p class="text-center" v-else>No se adjuntó archivo a esta apelación</p>
+                    </td>
+                </tr>
+                <tr v-for="(anterior, index) in apelaciones" :key="anterior.id" v-if="anterior.id !== apelacion.id">
+                    <td>{{ index + 2 }}</td>
+                    <td>{{ anterior.comentario }}</td>
+                    <td>
+                        <a :href="'/api/apelaciones/' + anterior.id + '/adjunto'" v-if="anterior.nombre_archivo" type="button" class="btn btn-info btn-block">
+                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {{ anterior.nombre_archivo }}
+                        </a>
                         <p class="text-center" v-else>No se adjuntó archivo a esta apelación</p>
                     </td>
                 </tr>
@@ -35,37 +47,35 @@
 </template>
 <script>
     export default {
-        props: ['previo'],
+        props: ['apelaciones', 'actual'],
         data: function() {
             return {
                 apelacion: {
                     comentario: '',
                     archivo: undefined
-                }
+                },
+                anteriores: []
             }
         },
         created: function() {
-            this.apelacion = Object.assign({}, this.apelacion, this.previo)
+            const index = this.apelaciones.findIndex(apelacion => {
+                return apelacion.actual === true
+            })
+            if(index === -1) return;
+
+            const actual = this.apelaciones[index]
+            this.apelacion = Object.assign({}, this.apelacion, actual)
+            this.anteriores = Object.assign([], this.anteriores, this.apelaciones)
+            this.anteriores.splice(index, 1)
         },
         methods: {
             obtenerArchivo: function() {
                 this.apelacion.archivo = this.$refs.archivo.files[0]
-            },
-            descargar: function() {
-                this.$http
-                    .get('/api/apelaciones/' + this.apelacion.id + '/archivo')
-                    .then(response => {
-                        console.log('Se ha iniciado la descarga del archivo')
-                    })
-                    .catch(e => {
-                        console.log(e)
-                        this.mensaje = -1 
-                    })
             }
         },
         computed: {
             editable: function() {
-                return this.etapa === this.etapas.apelando && this.apelacion.id === undefined
+                return this.apelacion.id === undefined
             }
         },
         watch: {

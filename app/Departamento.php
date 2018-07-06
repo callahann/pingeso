@@ -37,7 +37,8 @@ class Departamento extends Model
         return $this->hasMany(Periodo::class, 'id_departamento');
     }
 
-    public function getPeriodoAttribute() {
-        return $this->periodos()->where('actual', true)->first();
+    public function getPeriodoAttribute()
+    {
+        return $this->periodos()->first();
     }
 }

@@ -14,7 +14,7 @@ class RangoController extends Controller
      */
     public function index()
     {
-        return Rango::all();
+        return Rango::orderBy('base', 'asc')->get();
     }
 
     /**

@@ -85,7 +85,7 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- Evaluando -->
+            <!-- Aprobando -->
             <table class="table table-striped" v-else-if="etapa === etapas.aprobando">
                 <thead>
                     <tr>
@@ -128,6 +128,7 @@
                         <th class="text-center">{{ totales.comprometido.primero.horasSemestre }}</th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemestre }}</th>
+                        <th></th>
                     </tr>
                 </tbody>
             </table>

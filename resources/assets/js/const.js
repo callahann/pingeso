@@ -24,13 +24,21 @@ Vue.mixin({
             etapas: EtapasEnum,
             estados: Object.freeze({
                 editable: 0,
-                enviado: 1,
-                aprobado: 2,
+                revisar: 1,
+                enviado: 2,
+                aprobado: 3,
                 etiquetas: [
                     'No enviado',
+                    'Revisar',
                     'Esperando aprobación',
                     'Aprobado'
                 ]
+            }),
+            rol: Object.freeze({
+                academico: 1,
+                director: 2,
+                comision: 3,
+                admin: 4
             })
         }
     },
@@ -50,7 +58,7 @@ Vue.mixin({
                 }
             })
             return mensaje
-        },
+        }
     },
     computed: {
         ...mapState(['auth'])

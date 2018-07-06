@@ -14,7 +14,7 @@ class FactorController extends Controller
      */
     public function index()
     {
-        return Factor::all();
+        return Factor::orderBy('diferencia', 'asc')->get();
     }
 
     /**

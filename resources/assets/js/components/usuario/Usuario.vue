@@ -49,7 +49,7 @@
                                 {{ facultad.nombre }}
                             </option>
                         </select>
-                        <p v-else>{{ usuario.facultad.nombre }}</p>
+                        <p v-else>{{ usuario.departamento.facultad.nombre }}</p>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="depto">Departamento:</label>
@@ -120,7 +120,7 @@
     import { mapState } from 'vuex'
 
     export default {
-        props: ['editable'],
+        props: ['editable', 'declarante'],
         data: function() {
             return {
                 usuario: {},
@@ -129,9 +129,10 @@
             }
         },
         created: function() {
-            const usuario = this.usuarios.find(usuario => {
-                return usuario.id === this.$route.params.id
-            })
+            const usuario = this.declarante ? this.declarante : 
+                            this.usuarios.find(usuario => {
+                                return usuario.id === this.$route.params.id
+                            })
             this.usuario = Object.assign({}, this.usuario, usuario)
             this.facultad = this.facultades.find(facultad => {
                 return facultad.id === usuario.departamento.id_facultad

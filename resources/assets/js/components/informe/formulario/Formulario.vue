@@ -8,14 +8,14 @@
                     <li class="active">Informe de Actividades</li>
                 </ol>
             </div>
-            <div class="row" v-if="etapa === etapas.aprobando">
-                <usuario v-bind:editable="false"></usuario>
+            <div class="row" v-if="informe.usuario && (etapa === etapas.aprobando || etapa === etapas.evaluando)">
+                <usuario v-bind:editable="false" :declarante="informe.usuario"></usuario>
             </div>
             <div class="row">
                 <resumen :informe="informe" :etapa="etapa"></resumen>
             </div>
-            <div class="row" v-if="informe.apelacion.id !== undefined">
-                <apelacion :previo="informe.apelacion" v-on:actualizar="informe.apelacion = $event"></apelacion>
+            <div class="row" v-if="(etapa === etapas.apelando && auth.rol.id === rol.academico) || apelado">
+                <apelacion :apelaciones="informe.apelaciones" :actual="informe.periodo.actual" v-on:actualizar="apelacion = $event"></apelacion>
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -53,10 +53,10 @@
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-footer">
-                        <button type="button" class="btn btn-info" v-on:click="actualizar">
+                        <button v-if="etapa < etapas.apelando" type="button" class="btn btn-info" v-on:click="actualizar">
                             <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&ensp;Guardar
                         </button>
-                        <button v-if="etapa === etapas.declarando" type="button" class="btn btn-success" v-on:click="enviar">
+                        <button v-if="etapa === etapas.declarando && informe.id" type="button" class="btn btn-success" v-on:click="enviar">
                             <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&ensp;Enviar
                         </button>
                         <a v-if="etapa === etapas.aprobando">
@@ -67,8 +67,11 @@
                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&ensp;Aprobar
                             </button>
                         </a>
-                        <button v-if="etapa === etapas.apelando" type="button" class="btn btn-success" v-on:click="apelar">
+                        <button v-if="informe.periodo.actual && etapa === etapas.apelando && auth.rol.id === rol.academico" type="button" class="btn btn-success" v-on:click="apelar">
                             <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&ensp;Enviar apelación
+                        </button>
+                        <button v-else-if="apelado" type="button" class="btn btn-success" v-on:click="resuelto">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&ensp;Marcar resuelto
                         </button>
                     </div>
                 </div>
@@ -80,9 +83,14 @@
     import {
         INSERT_DECLARACION,
         UPDATE_DECLARACION,
-        APPROVE_DECLARACION
+        SEND_DECLARACION,
+        APPROVE_DECLARACION,
+        DECLINE_DECLARACION,
+        INSERT_APELACION,
+        RESOLVE_APELACION
     } from '../../../vuex/actions'
     import { mapState } from 'vuex'
+    import Usuario from '../../usuario/Usuario'
     import ListaActividades from './partes/ListaActividades'
     import Apelacion from './partes/Apelacion'
     import Resumen from './partes/Resumen'
@@ -121,74 +129,86 @@
                         actividades: [],
                         calificacion: 1
                     },
-                    apelacion: {
-                        id_declaracion: undefined
-                    },
+                    apelaciones: undefined,
                     formula: {},
                     periodo: {},
-                    usuario: {},
+                    usuario: undefined,
                     estado: 0
                 },
-                mensaje: 0
+                apelacion: {},
+                mensaje: 0,
+                mensajeVolver: ''
             }
         },
         components: {
+            'usuario': Usuario,
             'lista-actividades': ListaActividades,
             'resumen': Resumen,
+            'apelacion': Apelacion,
         },
         created: function() {
-            this.informe.formula = this.formulas.find(formula => {
-                return formula.actual;
-            })
-            this.informe.periodo = this.auth.departamento.periodo
-            this.informe.usuario = this.auth
-
-            if(this.$route.params.id === undefined ) return;
-
-            const informe = this.informes.find(informe => {
-                return informe.id === this.$route.params.id
-            })
-            this.informe = Object.assign({}, this.informe, informe)
+            if(this.$route.params.id) {
+                const informe = this.informes.find(informe => {
+                    return informe.id === this.$route.params.id
+                })
+                this.informe = Object.assign({}, this.informe, informe)
+            } else {
+                this.informe.formula = this.formula
+                this.informe.periodo = this.auth.departamento.periodo
+                this.informe.usuario = this.auth
+            }
         },
         methods: {
-            callback: function(ok = false, payload) {
+            cbMensaje: function(ok = false, payload) {
                 this.mensaje = ok ? 1 : -1
                 this.informe = Object.assign({}, this.informe, payload)
+            },
+            cbVolver: function(ok = false, payload) {
+                if(ok) this.volver('informes', this.mensajeVolver)
+                this.mensaje = -1
             },
             actualizar: function() {
                 this.$store.dispatch(
                     this.informe.id === undefined ? INSERT_DECLARACION : UPDATE_DECLARACION,
-                    { informe: this.informe, cb: this.callback }
+                    { informe: this.informe, cb: this.cbMensaje }
                 )
             },
             enviar: async function() {
-                await this.$store.dispatch(SEND_DECLARACION, this.informe.id)
-                this.volver('informes', 'Se ha registrado la apelación correctamente')
+                if(confirm('¿Está seguro que desea enviar esta declaración?')) {
+                    this.mensajeVolver = 'Se ha enviado la declaración al Director de Departamento'
+                    this.$store.dispatch(SEND_DECLARACION, { informe: this.informe, cb: this.cbVolver })
+                }
             },
             aprobar: async function(estado) {
-                await this.$store.dispatch(APPROVE_DECLARACION, this.informe.id)
-                this.volver('informes', 'Se ha registrado la apelación correctamente')
+                if(confirm('¿Está seguro que desea aprobar esta declaración?')) {
+                    this.mensajeVolver = 'Se ha aprobado la declaración'
+                    this.$store.dispatch(APPROVE_DECLARACION, { informe: this.informe, cb: this.cbVolver })
+                }
             },
-            obtenerApelacion: function() {
-                this.$http
-                    .get('/api/apelaciones/' + this.informe.id)
-                    .then(response => { 
-                        console.log("Se ha obtenido la apelación. Copiando localmente...")
-                        this.apelacion = Object.assign({}, this.apelacion, response.data)
-                        this.cargandoApelacion = false
-                    })
-                    .catch(e => {
-                        console.log(e)
-                        this.cargandoApelacion = false
-                    })
+            revision: async function(estado) {
+                if(confirm('¿Está seguro que desea solicitar revisión para esta declaración?')) {
+                    this.mensajeVolver = 'Se ha solicitado la revisión de la declaración'
+                    this.$store.dispatch(DECLINE_DECLARACION, { informe: this.informe, cb: this.cbVolver })
+                }
             },
-            apelar: async function() {
-                this.informe.apelacion.id_declaracion = this.informe.id;
-                let formData = this.formData(this.informe.apelacion)
-                await this.$store.dispatch(INSERT_APELACION, { apelacion: formData })
-                this.volver('informes', 'Se ha registrado la apelación correctamente')
+            apelar: function() {
+                this.apelacion.id_declaracion = this.informe.id;
+                let formData = this.formData(this.apelacion)
+                this.mensajeVolver = 'Se ha registrado la apelación correctamente'
+                this.$store.dispatch(INSERT_APELACION, { apelacion: formData, cb: this.cbVolver })
             },
+            resuelto: function() {
+                this.mensajeVolver = 'Se ha marcado como resuelto'
+                this.$store.dispatch(RESOLVE_APELACION, { informe: this.informe, cb: this.cbVolver })
+            }
         },
-        computed: mapState(['formulas', 'informes'])
+        computed: {
+            ...mapState(['formula', 'informes']),
+            apelado: function() {
+                return this.informe.apelaciones.find(apelacion => {
+                    return apelacion.actual
+                }) !== undefined
+            }
+        }
     }
 </script>

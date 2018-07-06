@@ -15,4 +15,8 @@ class Factor extends Model
         'factor',
     ];
     
+    protected $casts = [
+        'diferencia' => 'float',
+        'factor' => 'float'
+    ];
 }
