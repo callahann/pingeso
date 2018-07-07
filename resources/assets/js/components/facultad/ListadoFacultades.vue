@@ -61,7 +61,6 @@
                     console.log('FALSE');
                     return;     
                 }
-                console.log('Index: ', index);
                 axios.delete('/api/facultades/'+id)
                 .then(response=> {
                     this.facultades.splice(index, 1);

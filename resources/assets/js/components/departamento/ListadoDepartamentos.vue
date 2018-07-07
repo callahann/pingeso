@@ -43,6 +43,7 @@
 
 
 <script>
+    import { mapState } from 'vuex'
     import axios from 'axios';
     export default {
         props: {
@@ -52,21 +53,8 @@
             },
         },
         data: function() {
-            return {
-                departamentos: [],
-                
+            return {            
             }
-        },
-        created: function() {
-            axios.get('/api/departamentos')
-            .then(response=> {
-              this.departamentos = response.data;
-              this.cargando = false;
-            })
-            .catch(e => {
-                this.cargando = false;
-                console.log(e);
-            });
         },
         methods: {
             deleteElem(id, index, nombre){
@@ -82,6 +70,7 @@
                 });
                 
             }
-        }
+        },
+        computed: mapState(['departamentos'])
     }
 </script>

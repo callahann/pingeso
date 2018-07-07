@@ -55,6 +55,10 @@ const store = new Vuex.Store({
             
             callback(true, payload.data);
         },
+        [Mutations.INSERT_FACULTAD] (state, { payload, callback }) {
+            state.facultades.push(payload.data)
+            callback(true, payload.data);
+        },
         [Mutations.UPDATE_FACULTAD] (state, { payload, callback }) {
             const index = state.facultades.findIndex(facultad => {
                 return facultad.id === payload.data.id
@@ -62,6 +66,33 @@ const store = new Vuex.Store({
             const facultad = state.facultades[index]
             state.facultades[index] = Object.assign({}, facultad, payload.data)
             
+            callback(true, payload.data);
+        },
+        [Mutations.DELETE_FACULTAD] (state, { payload, callback}) {
+            const index = state.facultades.findIndex(facultad => {
+                return facultad.id === payload.data.id
+            })
+            state.facultades.splice(index, 1);
+            callback(true, payload.data);
+        },
+        [Mutations.INSERT_DEPARTAMENTO] (state, { payload, callback }) {
+            state.departamentos.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_DEPARTAMENTO] (state, { payload, callback }) {
+            const index = state.departamentos.findIndex(departamento => {
+                return departamento.id === payload.data.id
+            })
+            const departamento = state.departamentos[index]
+            state.departamentos[index] = Object.assign({}, departamento, payload.data)
+            
+            callback(true, payload.data);
+        },
+        [Mutations.DELETE_DEPARTAMENTO] (state, { payload, callback}) {
+            const index = state.departamentos.findIndex(departamento => {
+                return departamento.id === payload.data.id
+            })
+            state.departamentos.splice(index, 1);
             callback(true, payload.data);
         },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
@@ -180,7 +211,7 @@ const store = new Vuex.Store({
             axios
                 .post('/api/facultades', facultad)
                 .then(response => {
-                    commit(Mutations.INSERT_FACULTAD, { facultad: response, callback: cb })
+                    commit(Mutations.INSERT_FACULTAD, { payload: response, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
@@ -190,7 +221,47 @@ const store = new Vuex.Store({
             axios
                 .put('/api/facultades/' + facultad.id, facultad)
                 .then(response => {
-                    commit(Mutations.UPDATE_FACULTAD, { facultad: response, callback: cb })
+                    commit(Mutations.UPDATE_FACULTAD, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DELETE_FACULTAD] ({ commit }, { facultad, cb }) {
+            axios
+                .delete('/api/facultades/' + facultad.id, facultad)
+                .then(response => {
+                    commit(Mutations.DELETE_FACULTAD, { payload: {data: facultad}, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_DEPARTAMENTO] ({ commit }, { departamento, cb }) {
+            axios
+                .post('/api/departamentos', departamento)
+                .then(response => {
+                    commit(Mutations.INSERT_DEPARTAMENTO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_DEPARTAMENTO] ({ commit }, { departamento, cb }) {
+            axios
+                .put('/api/departamentos/' + departamento.id, departamento)
+                .then(response => {
+                    commit(Mutations.UPDATE_DEPARTAMENTO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DELETE_DEPARTAMENTO] ({ commit }, { departamento, cb }) {
+            axios
+                .delete('/api/departamentos/' + departamento.id, departamento)
+                .then(response => {
+                    commit(Mutations.DELETE_DEPARTAMENTO, { payload: {data: departamento}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

@@ -41,7 +41,6 @@
         UPDATE_FACULTAD
     } from '../../vuex/actions'
     import { mapState } from 'vuex'
-    import axios from 'axios';
     export default {
     props: {
         accion: {

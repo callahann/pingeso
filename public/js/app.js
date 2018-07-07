@@ -1435,41 +1435,6 @@ module.exports = __webpack_require__(36);
 
 /***/ }),
 /* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return INIT_STORE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return FETCH_AUTH_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return FETCH_DECLARACIONES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return UPDATE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return SEND_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DECLINE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return INSERT_APELACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return RESOLVE_APELACION; });
-/* unused harmony export FETCH_ADJUNTO */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return INSERT_FACULTAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return UPDATE_FACULTAD; });
-/* unused harmony export DELETE_FACULTAD */
-var INIT_STORE = 'INIT_STORE';
-var FETCH_AUTH_USER = 'GET_AUTH_USER';
-var FETCH_DECLARACIONES = 'FETCH_DECLARACIONES';
-var INSERT_DECLARACION = 'INSERT_DECLARACION';
-var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
-var SEND_DECLARACION = 'SEND_DECLARACION';
-var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
-var DECLINE_DECLARACION = 'DECLINE_DECLARACION';
-var INSERT_APELACION = 'INSERT_APELACION';
-var RESOLVE_APELACION = 'RESOLVE_APELACION';
-var INSERT_FACULTAD = 'INSERT_FACULTAD';
-var UPDATE_FACULTAD = 'UPDATE_FACULTAD';
-var DELETE_FACULTAD = 'DELETE_FACULTAD';
-
-
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12435,6 +12400,47 @@ module.exports = Vue;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(32).setImmediate))
 
 /***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return INIT_STORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return FETCH_AUTH_USER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return FETCH_DECLARACIONES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return INSERT_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return SEND_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DECLINE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return INSERT_APELACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return RESOLVE_APELACION; });
+/* unused harmony export FETCH_ADJUNTO */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return INSERT_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return UPDATE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return DELETE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return INSERT_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return UPDATE_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_DEPARTAMENTO; });
+var INIT_STORE = 'INIT_STORE';
+var FETCH_AUTH_USER = 'GET_AUTH_USER';
+var FETCH_DECLARACIONES = 'FETCH_DECLARACIONES';
+var INSERT_DECLARACION = 'INSERT_DECLARACION';
+var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
+var SEND_DECLARACION = 'SEND_DECLARACION';
+var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
+var DECLINE_DECLARACION = 'DECLINE_DECLARACION';
+var INSERT_APELACION = 'INSERT_APELACION';
+var RESOLVE_APELACION = 'RESOLVE_APELACION';
+var INSERT_FACULTAD = 'INSERT_FACULTAD';
+var UPDATE_FACULTAD = 'UPDATE_FACULTAD';
+var DELETE_FACULTAD = 'DELETE_FACULTAD';
+var INSERT_DEPARTAMENTO = 'INSERT_DEPARTAMENTO';
+var UPDATE_DEPARTAMENTO = 'UPDATE_DEPARTAMENTO';
+var DELETE_DEPARTAMENTO = 'DELETE_DEPARTAMENTO';
+
+
+
+/***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
@@ -13088,13 +13094,13 @@ module.exports = Cancel;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(5);
 
 
 var _mutations, _actions;
@@ -13131,28 +13137,28 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         usuarios: [],
         departamentos: []
     },
-    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* SET_STATE_ARRAY */], function (state, _ref) {
+    mutations: (_mutations = {}, _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* SET_STATE_ARRAY */], function (state, _ref) {
         var key = _ref.key,
             payload = _ref.payload;
 
         state[key] = Object.assign([], state[key], payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* SET_STATE_OBJECT */], function (state, _ref2) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* SET_STATE_OBJECT */], function (state, _ref2) {
         var key = _ref2.key,
             payload = _ref2.payload;
 
         state[key] = Object.assign({}, state[key], payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* SET_STATE_PAGINATION */], function (state, _ref3) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["j" /* SET_STATE_PAGINATION */], function (state, _ref3) {
         var key = _ref3.key,
             payload = _ref3.payload;
 
         state[key] = Object.assign({}, state[key], payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* INSERT_DECLARACION */], function (state, _ref4) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* INSERT_DECLARACION */], function (state, _ref4) {
         var payload = _ref4.payload,
             callback = _ref4.callback;
 
         state.informes.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* UPDATE_DECLARACION */], function (state, _ref5) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* UPDATE_DECLARACION */], function (state, _ref5) {
         var payload = _ref5.payload,
             callback = _ref5.callback;
 
@@ -13173,9 +13179,15 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.informes[index].apelaciones.push(payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_FACULTAD */], function (state, _ref7) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* INSERT_FACULTAD */], function (state, _ref7) {
         var payload = _ref7.payload,
             callback = _ref7.callback;
+
+        state.facultades.push(payload.data);
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* UPDATE_FACULTAD */], function (state, _ref8) {
+        var payload = _ref8.payload,
+            callback = _ref8.callback;
 
         var index = state.facultades.findIndex(function (facultad) {
             return facultad.id === payload.data.id;
@@ -13184,29 +13196,64 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.facultades[index] = Object.assign({}, facultad, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], function (state, _ref8) {
-        var error = _ref8.error,
-            callback = _ref8.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACULTAD */], function (state, _ref9) {
+        var payload = _ref9.payload,
+            callback = _ref9.callback;
+
+        var index = state.facultades.findIndex(function (facultad) {
+            return facultad.id === payload.data.id;
+        });
+        state.facultades.splice(index, 1);
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* INSERT_DEPARTAMENTO */], function (state, _ref10) {
+        var payload = _ref10.payload,
+            callback = _ref10.callback;
+
+        state.departamentos.push(payload.data);
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* UPDATE_DEPARTAMENTO */], function (state, _ref11) {
+        var payload = _ref11.payload,
+            callback = _ref11.callback;
+
+        var index = state.departamentos.findIndex(function (departamento) {
+            return departamento.id === payload.data.id;
+        });
+        var departamento = state.departamentos[index];
+        state.departamentos[index] = Object.assign({}, departamento, payload.data);
+
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], function (state, _ref12) {
+        var payload = _ref12.payload,
+            callback = _ref12.callback;
+
+        var index = state.departamentos.findIndex(function (departamento) {
+            return departamento.id === payload.data.id;
+        });
+        state.departamentos.splice(index, 1);
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], function (state, _ref13) {
+        var error = _ref13.error,
+            callback = _ref13.callback;
 
         callback(false, error);
     }), _mutations),
-    actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* INIT_STORE */], function () {
-        var _ref10 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref9, callback) {
-            var dispatch = _ref9.dispatch,
-                commit = _ref9.commit;
+    actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* INIT_STORE */], function () {
+        var _ref15 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref14, callback) {
+            var dispatch = _ref14.dispatch,
+                commit = _ref14.commit;
             var rol, request;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
                             _context.next = 2;
-                            return dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["c" /* FETCH_AUTH_USER */], callback);
+                            return dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["e" /* FETCH_AUTH_USER */], callback);
 
                         case 2:
                             rol = _context.sent;
 
 
-                            dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["d" /* FETCH_DECLARACIONES */], rol);
+                            dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["f" /* FETCH_DECLARACIONES */], rol);
 
                             request = ['descripciones', 'factores', 'rangos'];
 
@@ -13214,12 +13261,12 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
                             request.forEach(function (r) {
                                 __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r).then(function (response) {
-                                    commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* SET_STATE_ARRAY */], { key: r, payload: response });
+                                    commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* SET_STATE_ARRAY */], { key: r, payload: response });
                                 });
                             });
 
                             __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/formulas').then(function (response) {
-                                commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* SET_STATE_OBJECT */], { key: 'formula', payload: response });
+                                commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* SET_STATE_OBJECT */], { key: 'formula', payload: response });
                             });
 
                             callback();
@@ -13233,11 +13280,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x, _x2) {
-            return _ref10.apply(this, arguments);
+            return _ref15.apply(this, arguments);
         };
-    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* FETCH_AUTH_USER */], function () {
-        var _ref12 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref11) {
-            var commit = _ref11.commit;
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* FETCH_AUTH_USER */], function () {
+        var _ref17 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref16) {
+            var commit = _ref16.commit;
             var response;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                 while (1) {
@@ -13249,7 +13296,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
                         case 2:
                             response = _context2.sent;
 
-                            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* SET_STATE_OBJECT */], { key: 'auth', payload: response });
+                            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* SET_STATE_OBJECT */], { key: 'auth', payload: response });
                             return _context2.abrupt('return', response.data.rol.id);
 
                         case 5:
@@ -13261,103 +13308,143 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x3) {
-            return _ref12.apply(this, arguments);
+            return _ref17.apply(this, arguments);
         };
-    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* FETCH_DECLARACIONES */], function (_ref13, rol) {
-        var commit = _ref13.commit;
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* FETCH_DECLARACIONES */], function (_ref18, rol) {
+        var commit = _ref18.commit;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/auth/declaraciones').then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* SET_STATE_ARRAY */], { key: 'informes', payload: response });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* SET_STATE_ARRAY */], { key: 'informes', payload: response });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* INSERT_DECLARACION */], function (_ref14, _ref15) {
-        var commit = _ref14.commit;
-        var informe = _ref15.informe,
-            cb = _ref15.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* INSERT_DECLARACION */], function (_ref19, _ref20) {
+        var commit = _ref19.commit;
+        var informe = _ref20.informe,
+            cb = _ref20.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* INSERT_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* INSERT_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* UPDATE_DECLARACION */], function (_ref16, _ref17) {
-        var commit = _ref16.commit;
-        var informe = _ref17.informe,
-            cb = _ref17.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["n" /* UPDATE_DECLARACION */], function (_ref21, _ref22) {
+        var commit = _ref21.commit;
+        var informe = _ref22.informe,
+            cb = _ref22.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id, informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["j" /* SEND_DECLARACION */], function (_ref18, _ref19) {
-        var commit = _ref18.commit;
-        var informe = _ref19.informe,
-            cb = _ref19.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["m" /* SEND_DECLARACION */], function (_ref23, _ref24) {
+        var commit = _ref23.commit;
+        var informe = _ref24.informe,
+            cb = _ref24.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/enviar', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref20, _ref21) {
-        var commit = _ref20.commit;
-        var informe = _ref21.informe,
-            cb = _ref21.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref25, _ref26) {
+        var commit = _ref25.commit;
+        var informe = _ref26.informe,
+            cb = _ref26.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/aprobar', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref22, _ref23) {
-        var commit = _ref22.commit;
-        var informe = _ref23.informe,
-            cb = _ref23.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref27, _ref28) {
+        var commit = _ref27.commit;
+        var informe = _ref28.informe,
+            cb = _ref28.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/revision', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* INSERT_APELACION */], function (_ref24, _ref25) {
-        var commit = _ref24.commit;
-        var apelacion = _ref25.apelacion,
-            cb = _ref25.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* INSERT_APELACION */], function (_ref29, _ref30) {
+        var commit = _ref29.commit;
+        var apelacion = _ref30.apelacion,
+            cb = _ref30.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/apelaciones', apelacion).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* RESOLVE_APELACION */], function (_ref26, _ref27) {
-        var commit = _ref26.commit;
-        var informe = _ref27.informe,
-            cb = _ref27.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["l" /* RESOLVE_APELACION */], function (_ref31, _ref32) {
+        var commit = _ref31.commit;
+        var informe = _ref32.informe,
+            cb = _ref32.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/resolver', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* INSERT_FACULTAD */], function (_ref28, _ref29) {
-        var commit = _ref28.commit;
-        var facultad = _ref29.facultad,
-            cb = _ref29.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* INSERT_FACULTAD */], function (_ref33, _ref34) {
+        var commit = _ref33.commit;
+        var facultad = _ref34.facultad,
+            cb = _ref34.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/facultades', facultad).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* INSERT_FACULTAD */], { facultad: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* INSERT_FACULTAD */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["l" /* UPDATE_FACULTAD */], function (_ref30, _ref31) {
-        var commit = _ref30.commit;
-        var facultad = _ref31.facultad,
-            cb = _ref31.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["p" /* UPDATE_FACULTAD */], function (_ref35, _ref36) {
+        var commit = _ref35.commit;
+        var facultad = _ref36.facultad,
+            cb = _ref36.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/facultades/' + facultad.id, facultad).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* UPDATE_FACULTAD */], { facultad: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* UPDATE_FACULTAD */], { payload: response, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* DELETE_FACULTAD */], function (_ref37, _ref38) {
+        var commit = _ref37.commit;
+        var facultad = _ref38.facultad,
+            cb = _ref38.cb;
+
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/facultades/' + facultad.id, facultad).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACULTAD */], { payload: { data: facultad }, callback: cb });
+        }).catch(function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["j" /* INSERT_DEPARTAMENTO */], function (_ref39, _ref40) {
+        var commit = _ref39.commit;
+        var departamento = _ref40.departamento,
+            cb = _ref40.cb;
+
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/departamentos', departamento).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* INSERT_DEPARTAMENTO */], { payload: response, callback: cb });
+        }).catch(function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["o" /* UPDATE_DEPARTAMENTO */], function (_ref41, _ref42) {
+        var commit = _ref41.commit;
+        var departamento = _ref42.departamento,
+            cb = _ref42.cb;
+
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/departamentos/' + departamento.id, departamento).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* UPDATE_DEPARTAMENTO */], { payload: response, callback: cb });
+        }).catch(function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* DELETE_DEPARTAMENTO */], function (_ref43, _ref44) {
+        var commit = _ref43.commit;
+        var departamento = _ref44.departamento,
+            cb = _ref44.cb;
+
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/departamentos/' + departamento.id, departamento).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], { payload: { data: departamento }, callback: cb });
+        }).catch(function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
     }), _actions)
 });
@@ -13404,7 +13491,7 @@ module.exports = __webpack_require__(56);
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(5);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -13522,7 +13609,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         enviar: function enviar(informe) {
             if (confirm('¿Está seguro que desea enviar esta declaración?')) {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["j" /* SEND_DECLARACION */], { informe: informe, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["m" /* SEND_DECLARACION */], { informe: informe, cb: this.callback });
             }
         },
         tieneApelacion: function tieneApelacion(informe) {
@@ -13547,7 +13634,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__usuario_Usuario__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__partes_ListaActividades__ = __webpack_require__(68);
@@ -13729,7 +13816,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             this.mensaje = -1;
         },
         actualizar: function actualizar() {
-            this.$store.dispatch(this.informe.id === undefined ? __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["g" /* INSERT_DECLARACION */] : __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["k" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.cbMensaje });
+            this.$store.dispatch(this.informe.id === undefined ? __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["i" /* INSERT_DECLARACION */] : __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["n" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.cbMensaje });
         },
         enviar: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
@@ -13739,7 +13826,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                             case 0:
                                 if (confirm('¿Está seguro que desea enviar esta declaración?')) {
                                     this.mensajeVolver = 'Se ha enviado la declaración al Director de Departamento';
-                                    this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["j" /* SEND_DECLARACION */], { informe: this.informe, cb: this.cbVolver });
+                                    this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["m" /* SEND_DECLARACION */], { informe: this.informe, cb: this.cbVolver });
                                 }
 
                             case 1:
@@ -13810,11 +13897,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             this.apelacion.id_declaracion = this.informe.id;
             var formData = this.formData(this.apelacion);
             this.mensajeVolver = 'Se ha registrado la apelación correctamente';
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["f" /* INSERT_APELACION */], { apelacion: formData, cb: this.cbVolver });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["h" /* INSERT_APELACION */], { apelacion: formData, cb: this.cbVolver });
         },
         resuelto: function resuelto() {
             this.mensajeVolver = 'Se ha marcado como resuelto';
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["i" /* RESOLVE_APELACION */], { informe: this.informe, cb: this.cbVolver });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["l" /* RESOLVE_APELACION */], { informe: this.informe, cb: this.cbVolver });
         }
     },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapState */])(['formula', 'informes']), {
@@ -14843,7 +14930,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 console.log('FALSE');
                 return;
             }
-            console.log('Index: ', index);
             __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/facultades/' + id).then(function (response) {
                 _this.facultades.splice(index, 1);
             });
@@ -14857,10 +14943,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 //
 //
 //
@@ -14898,7 +14982,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-
 
 
 
@@ -14935,10 +15018,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["l" /* UPDATE_FACULTAD */], { facultad: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["p" /* UPDATE_FACULTAD */], { facultad: this.element, cb: this.callback });
                 this.volver('facultades', 'Se ha actualizado la facultad correctamente.');
             } else {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["h" /* INSERT_FACULTAD */], { facultad: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["k" /* INSERT_FACULTAD */], { facultad: this.element, cb: this.callback });
                 this.volver('facultades', 'Se ha creado la facultad correctamente.');
             }
         }
@@ -14950,8 +15033,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
 //
 //
 //
@@ -14996,6 +15080,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -15006,25 +15091,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         }
     },
     data: function data() {
-        return {
-            departamentos: []
-
-        };
-    },
-    created: function created() {
-        var _this = this;
-
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/departamentos').then(function (response) {
-            _this.departamentos = response.data;
-            _this.cargando = false;
-        }).catch(function (e) {
-            _this.cargando = false;
-            console.log(e);
-        });
+        return {};
     },
     methods: {
         deleteElem: function deleteElem(id, index, nombre) {
-            var _this2 = this;
+            var _this = this;
 
             var c = confirm("¿Estás seguro de borrar el departamento de " + nombre + "?");
             if (c == false) {
@@ -15032,11 +15103,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 return;
             }
             console.log('Index: ', index);
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete('/api/departamentos/' + id).then(function (response) {
-                _this2.departamentos.splice(index, 1);
+            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/departamentos/' + id).then(function (response) {
+                _this.departamentos.splice(index, 1);
             });
         }
-    }
+    },
+    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['departamentos'])
 });
 
 /***/ }),
@@ -15044,8 +15116,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(2);
 //
 //
 //
@@ -15096,6 +15168,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -15114,53 +15187,31 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         this.message = '';
         this.status = 0;
     },
-    beforeCreate: function beforeCreate() {
-        var _this = this;
-
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/facultades').then(function (response) {
-            _this.facultades = response.data;
-            _this.cargando = false;
-            console.log('Facultades:', _this.facultades);
-        }).catch(function (e) {
-            _this.cargando = false;
-            console.log(e);
-        });
-    },
     data: function data() {
-        console.log(this);
         return {
-            element: this.elemento ? this.elemento : { id_facultad: '' },
-            facultades: []
+            element: this.elemento ? this.elemento : { id_facultad: '' }
         };
     },
 
     methods: {
-        addElem: function addElem() {
-            var _this2 = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
-            console.log( true ? 'Editar' : 'Crear');
-            if (this.accion == 'Editar') {
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/departamentos/' + this.element.id, this.element).then(function (response) {
-                    console.log(_this2.volver('departamentos', response.data));
-                    _this2.status = 1;
-                }).catch(function (e) {
-                    console.log(e);
-                    _this2.message = response.data;
-                    _this2.status = -1;
-                });
-            } else {
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/api/departamentos/', this.element).then(function (response) {
-                    console.log(_this2.volver('departamentos', response.data));
-                    _this2.status = 1;
-                }).catch(function (e) {
-                    console.log(e);
-                    _this2.message = response.data;
-                    _this2.status = -1;
-                });
-            }
+            this.mensaje = ok ? 1 : -1;
+            this.element = Object.assign({}, this.element, payload);
         },
-        getFacultades: function getFacultades() {}
-    }
+        addElem: function addElem() {
+            if (this.accion == 'Editar') {
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["o" /* UPDATE_DEPARTAMENTO */], { departamento: this.element, cb: this.callback });
+                this.volver('departamentos', 'Se ha actualizado el departamento correctamente.');
+            } else {
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["j" /* INSERT_DEPARTAMENTO */], { departamento: this.element, cb: this.callback });
+                this.volver('departamentos', 'Se ha creado el departamento correctamente.');
+            }
+        }
+    },
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['facultades'])
 });
 
 /***/ }),
@@ -15177,14 +15228,14 @@ module.exports = __webpack_require__(85);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vuex_store__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router__ = __webpack_require__(59);
 /**
@@ -15211,7 +15262,7 @@ Date.prototype.toStringWithTime = function () {
     return this.toString() + ' a las ' + (hours < 10 ? '0' : '') + hours + ':' + (mins < 10 ? '0' : '') + mins;
 };
 
-window.Vue = __webpack_require__(5);
+window.Vue = __webpack_require__(4);
 
 
 
@@ -15239,7 +15290,7 @@ var app = function app() {
     });
 };
 
-__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["e" /* INIT_STORE */], app);
+__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["g" /* INIT_STORE */], app);
 
 /***/ }),
 /* 32 */
@@ -18624,16 +18675,19 @@ if (hadRuntime) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SET_STATE_ARRAY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return SET_STATE_OBJECT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return SET_STATE_PAGINATION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return SET_STATE_ARRAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return SET_STATE_OBJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return SET_STATE_PAGINATION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return INSERT_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return UPDATE_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ATTACH_APELACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return INSERT_FACULTAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return UPDATE_FACULTAD; });
-/* unused harmony export DELETE_FACULTAD */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return HANDLE_ERROR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return INSERT_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return UPDATE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return INSERT_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return UPDATE_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DELETE_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return HANDLE_ERROR; });
 var SET_STATE_ARRAY = 'SET_STATE_ARRAY';
 var SET_STATE_OBJECT = 'SET_STATE_OBJECT';
 var SET_STATE_PAGINATION = 'SET_STATE_PAGINATION';
@@ -18643,6 +18697,9 @@ var ATTACH_APELACION = 'ATTACH_APELACION';
 var INSERT_FACULTAD = 'INSERT_FACULTAD';
 var UPDATE_FACULTAD = 'UPDATE_FACULTAD';
 var DELETE_FACULTAD = 'DELETE_FACULTAD';
+var INSERT_DEPARTAMENTO = 'INSERT_DEPARTAMENTO';
+var UPDATE_DEPARTAMENTO = 'UPDATE_DEPARTAMENTO';
+var DELETE_DEPARTAMENTO = 'DELETE_DEPARTAMENTO';
 var HANDLE_ERROR = 'HANDLE_ERROR';
 
 
@@ -18653,7 +18710,7 @@ var HANDLE_ERROR = 'HANDLE_ERROR';
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return router; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__const__ = __webpack_require__(61);
@@ -21446,7 +21503,7 @@ if (inBrowser && window.Vue) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EtapasEnum; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(2);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -25752,7 +25809,7 @@ var render = function() {
           _c(
             "li",
             [
-              _c("router-link", { attrs: { to: { name: "facultades" } } }, [
+              _c("router-link", { attrs: { to: { name: "departamentos" } } }, [
                 _vm._v("Listado")
               ])
             ],

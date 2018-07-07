@@ -15,7 +15,7 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        return Departamento::all();
+        return Departamento::with('facultad')->get();
     }
 
     /**
@@ -34,7 +34,7 @@ class DepartamentoController extends Controller
 
         $departamento = Departamento::create($request->all());
 
-        return $this->creationMessage();
+        return $departamento->load('facultad');
     }
 
     /**
@@ -57,7 +57,7 @@ class DepartamentoController extends Controller
         $departamento->fill($request->all());
         $departamento->save();
 
-        return $this->updateMessage();
+        return $departamento->load('facultad');
     }
 
     /**
@@ -74,7 +74,7 @@ class DepartamentoController extends Controller
         return $this->deleteMessage();
     }
 
-    protected function rules($id)
+    protected function rules($id = null)
     {
         if($id) {
             return [

@@ -3,7 +3,7 @@
     <div>
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
-            <li><router-link :to="{ name: 'facultades'}">Listado</router-link></li>
+            <li><router-link :to="{ name: 'departamentos'}">Listado</router-link></li>
             <li class="active">Departamento</li>
         </ol>
         <div v-if="status === -1" class="alert alert-danger">
@@ -49,8 +49,12 @@
 </template>
 
 <script>
-  import axios from 'axios';
-  export default {
+    import {
+        INSERT_DEPARTAMENTO,
+        UPDATE_DEPARTAMENTO
+    } from '../../vuex/actions'
+    import { mapState } from 'vuex'
+    export default {
     props: {
         accion: {
             type: String,
@@ -66,56 +70,27 @@
         this.message = '';
         this.status = 0; 
     },
-    beforeCreate: function() {
-        axios.get('/api/facultades')
-            .then(response=> {
-              this.facultades = response.data;
-              this.cargando = false;
-              console.log('Facultades:',this.facultades);
-            })
-            .catch(e => {
-                this.cargando = false;
-                console.log(e);
-        });
-    },
     data () {
-        console.log(this);
         return {
-        element: (this.elemento?this.elemento:{id_facultad:''}),
-        facultades: []
+        element: (this.elemento?this.elemento:{id_facultad:''})
         }
     },
     methods: {
+        callback: function(ok = false, payload) {
+            this.mensaje = ok ? 1 : -1
+            this.element = Object.assign({}, this.element, payload)
+        },
         addElem(){
-            console.log('Voy a'+(this.accion=='Editar')?'Editar':'Crear');
             if (this.accion=='Editar') {
-               axios.put('/api/departamentos/'+this.element.id, this.element)
-                .then(response => {
-                    console.log(this.volver('departamentos', response.data))
-                    this.status = 1;
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.message = response.data;
-                    this.status = -1; 
-                }); 
+                this.$store.dispatch(UPDATE_DEPARTAMENTO, { departamento: this.element, cb: this.callback });
+                this.volver('departamentos', 'Se ha actualizado el departamento correctamente.')
             } else {
-                axios.post('/api/departamentos/', this.element)
-                .then(response => {
-                    console.log(this.volver('departamentos', response.data))
-                    this.status = 1;
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.message = response.data;
-                    this.status = -1; 
-                });
+                this.$store.dispatch(INSERT_DEPARTAMENTO, { departamento: this.element, cb: this.callback });
+                this.volver('departamentos', 'Se ha creado el departamento correctamente.')
             }   
             
-        },
-        getFacultades() {
-            
         }
-    }
+    },
+    computed: mapState(['facultades'])
   }
 </script>
