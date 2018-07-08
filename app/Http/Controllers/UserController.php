@@ -42,7 +42,7 @@ class UserController extends Controller
         $user->id_jornada = $request->jornada['id'];
         $user->id_rol = $request->rol['id'];
         $user->save();
-        return $this->creationMessage();
+        return $user;
     }
 
     /**
@@ -68,7 +68,7 @@ class UserController extends Controller
         $user->id_rol = $request->rol['id'];
         $user->save();
 
-        return $this->creationMessage();
+        return $user;
     }
 
     /**

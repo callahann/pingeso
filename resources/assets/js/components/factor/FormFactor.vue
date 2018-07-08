@@ -29,13 +29,13 @@
                     <div class="form-group col-md-6">
                         <label for="nombres">Base:</label>
                         <input v-if="editable" type="number" class="form-control" id="base"
-                            v-model="element.base">
+                            v-model="element.base" @keyup="format(element.base, 'base')" step="0.01">
                         <p v-else>{{ element.base }}</p>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="nombres">Tope:</label>
                         <input v-if="editable" type="number" class="form-control" id="tope"
-                            v-model="element.tope">
+                            v-model="element.tope" @keyup="format(element.tope, 'tope')" step="0.01">
                         <p v-else>{{ element.tope }}</p>
                     </div>
                 </div>

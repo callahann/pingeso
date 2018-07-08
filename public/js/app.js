@@ -26668,12 +26668,9 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "number", id: "base", step: "0.01" },
+                  attrs: { type: "number", id: "base" },
                   domProps: { value: _vm.element.base },
                   on: {
-                    keyup: function($event) {
-                      _vm.format(_vm.element.base, "base")
-                    },
                     input: function($event) {
                       if ($event.target.composing) {
                         return
@@ -26699,12 +26696,9 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { type: "number", id: "tope", step: "0.01" },
+                  attrs: { type: "number", id: "tope" },
                   domProps: { value: _vm.element.tope },
                   on: {
-                    keyup: function($event) {
-                      _vm.format(_vm.element.tope, "tope")
-                    },
                     input: function($event) {
                       if ($event.target.composing) {
                         return
