@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jerarquia;
 use Illuminate\Http\Request;
+use Validator;
 
 class JerarquiaController extends Controller
 {

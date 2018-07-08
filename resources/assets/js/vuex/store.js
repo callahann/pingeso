@@ -95,6 +95,26 @@ const store = new Vuex.Store({
             state.departamentos.splice(index, 1);
             callback(true, payload.data);
         },
+        [Mutations.INSERT_RANGO] (state, { payload, callback }) {
+            state.rangos.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_RANGO] (state, { payload, callback }) {
+            const index = state.rangos.findIndex(departamento => {
+                return departamento.id === payload.data.id
+            })
+            const departamento = state.rangos[index]
+            state.rangos[index] = Object.assign({}, departamento, payload.data)
+            
+            callback(true, payload.data);
+        },
+        [Mutations.DELETE_RANGO] (state, { payload, callback}) {
+            const index = state.rangos.findIndex(departamento => {
+                return departamento.id === payload.data.id
+            })
+            state.rangos.splice(index, 1);
+            callback(true, payload.data);
+        },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
             callback(false, error);
         }
@@ -262,6 +282,36 @@ const store = new Vuex.Store({
                 .delete('/api/departamentos/' + departamento.id, departamento)
                 .then(response => {
                     commit(Mutations.DELETE_DEPARTAMENTO, { payload: {data: departamento}, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_RANGO] ({ commit }, { rango, cb }) {
+            axios
+                .post('/api/rangos', rango)
+                .then(response => {
+                    commit(Mutations.INSERT_RANGO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_RANGO] ({ commit }, { rango, cb }) {
+            axios
+                .put('/api/rangos/' + rango.id, rango)
+                .then(response => {
+                    commit(Mutations.UPDATE_RANGO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DELETE_RANGO] ({ commit }, { rango, cb }) {
+            axios
+                .delete('/api/rangos/' + rango.id, rango)
+                .then(response => {
+                    commit(Mutations.DELETE_RANGO, { payload: {data: rango}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

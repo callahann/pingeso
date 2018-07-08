@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Periodo;
 use Illuminate\Http\Request;
+use Validator;
 
 class PeriodoController extends Controller
 {

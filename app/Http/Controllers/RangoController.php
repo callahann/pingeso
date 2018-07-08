@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Rango;
 use Illuminate\Http\Request;
+use Validator;
 
 class RangoController extends Controller
 {
@@ -43,7 +44,7 @@ class RangoController extends Controller
 
         $rango = Rango::create($request->all());
 
-        return $this->creationMessage();
+        return $rango;
     }
 
     /**
@@ -85,10 +86,10 @@ class RangoController extends Controller
 
         $rango = Rango::findOrFail($id);
 
-        $rango->fill($data);
+        $rango->fill($request->all());
         $rango->save();
 
-        return $this->updateMessage();
+        return $rango;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Factor;
 use Illuminate\Http\Request;
+use Validator;
 
 class FactorController extends Controller
 {
