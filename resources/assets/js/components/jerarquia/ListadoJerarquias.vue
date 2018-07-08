@@ -6,23 +6,23 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
-                Administración de facultades
+                Administración de jerarquias
             </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th class="text-center">Nombre Facultad</th>
+                        <th class="text-center">Nombre Jerarquia</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(facu,index) in facultades" v-bind:key="facu.id">
-                        <td>{{ facu.nombre }}</td>
+                    <tr v-for="(jerarquia,index) in jerarquias" v-bind:key="jerarquia.id">
+                        <td>{{ jerarquia.nombre }}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-facultad', params: {accion: 'Editar', elemento: facu} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-jerarquia', params: {accion: 'Editar', elemento: jerarquia} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
-                          <button v-on:click="deleteElem(facu.id,index,facu.nombre)" class="btn btn-xs btn-danger">
+                          <button v-on:click="deleteElem(jerarquia.id, index, jerarquia.nombre)" class="btn btn-xs btn-danger">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                           </button>
                         </td>
@@ -30,8 +30,8 @@
                 </tbody>
             </table>
             <div class="panel-footer">
-                <router-link class="btn btn-success" :to="{ name: 'crear-facultad', params: {accion: 'Crear'}}">     
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Facultad
+                <router-link class="btn btn-success" :to="{ name: 'crear-jerarquia', params: {accion: 'Crear'}}">     
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Jerarquia
                 </router-link>
             </div>
         </div>
@@ -61,12 +61,12 @@
                     console.log('FALSE');
                     return;     
                 }
-                axios.delete('/api/facultades/'+id)
+                axios.delete('/api/jerarquias/'+id)
                 .then(response=> {
-                    this.facultades.splice(index, 1);
+                    this.jerarquias.splice(index, 1);
                 });
             }
         },
-        computed: mapState(['facultades'])
+        computed: mapState(['jerarquias'])
     }
 </script>

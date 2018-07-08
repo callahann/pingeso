@@ -16,6 +16,8 @@ import ListadoDepartamentos from './components/departamento/ListadoDepartamentos
 import FormDepartamento from './components/departamento/FormDepartamento'
 import ListadoRangos from './components/rango/ListadoRangos'
 import FormRango from './components/rango/FormRango'
+import ListadoJerarquias from './components/jerarquia/ListadoJerarquias'
+import FormJerarquia from './components/jerarquia/FormJerarquia'
 
 const router = new VueRouter({
     mode: 'history',
@@ -155,6 +157,27 @@ const router = new VueRouter({
              path: '/rangos/editar',
              name: 'editar-rango',
              component: FormRango,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/jerarquias',
+             name: 'jerarquias',
+             component: ListadoJerarquias,
+             meta: { eval: 'rol === 4'},
+             props: true
+         },
+         {
+             path: '/jerarquias/crear',
+             name: 'crear-jerarquia',
+             component: FormJerarquia,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/jerarquias/editar',
+             name: 'editar-jerarquia',
+             component: FormJerarquia,
              props: true,
              meta: { eval: 'rol === 4'}
          },

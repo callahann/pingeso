@@ -3,8 +3,8 @@
     <div>
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
-            <li><router-link :to="{ name: 'facultades'}">Listado</router-link></li>
-            <li class="active">Facultad</li>
+            <li><router-link :to="{ name: 'jerarquias'}">Listado</router-link></li>
+            <li class="active">Jerarquia</li>
         </ol>
         <div v-if="status === -1" class="alert alert-danger">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
@@ -14,7 +14,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
-                {{ this.accion }} Facultad
+                {{ this.accion }} Jerarquia
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -37,8 +37,8 @@
 
 <script>
     import {
-        INSERT_FACULTAD,
-        UPDATE_FACULTAD
+        INSERT_JERARQUIA,
+        UPDATE_JERARQUIA
     } from '../../vuex/actions'
     import { mapState } from 'vuex'
     export default {
@@ -56,25 +56,28 @@
         this.editable = true;
         this.message = '';
         this.status = 0;
+        this.sentMessage = (this.accion == 'Editar')?'actualizado':'creado';
     },
     data () {
         console.log(this);
         return {
-        element: (this.elemento?this.elemento:{}),
+            element: (this.elemento?this.elemento:{}),
         }
     },
     methods: {
         callback: function(ok = false, payload) {
             this.mensaje = ok ? 1 : -1
             this.element = Object.assign({}, this.element, payload)
+            if (ok) {
+                this.volver('jerarquias', 'Se ha '+this.sentMessage+' la jerarquia correctamente.')
+            }
         },
         addElem(){
             if (this.accion=='Editar') {
-                this.$store.dispatch(UPDATE_FACULTAD, { facultad: this.element, cb: this.callback });
-                this.volver('facultades', 'Se ha actualizado la facultad correctamente.')
+                this.$store.dispatch(UPDATE_JERARQUIA, { jerarquia: this.element, cb: this.callback });
             } else {
-                this.$store.dispatch(INSERT_FACULTAD, { facultad: this.element, cb: this.callback });
-                this.volver('facultades', 'Se ha creado la facultad correctamente.')
+                this.$store.dispatch(INSERT_JERARQUIA, { jerarquia: this.element, cb: this.callback });
+                //this.volver('jerarquias', 'Se ha creado la jerarquia correctamente.')
             }   
             
         }

@@ -100,19 +100,39 @@ const store = new Vuex.Store({
             callback(true, payload.data);
         },
         [Mutations.UPDATE_RANGO] (state, { payload, callback }) {
-            const index = state.rangos.findIndex(departamento => {
-                return departamento.id === payload.data.id
+            const index = state.rangos.findIndex(rango => {
+                return rango.id === payload.data.id
             })
-            const departamento = state.rangos[index]
-            state.rangos[index] = Object.assign({}, departamento, payload.data)
+            const rango = state.rangos[index]
+            state.rangos[index] = Object.assign({}, rango, payload.data)
             
             callback(true, payload.data);
         },
         [Mutations.DELETE_RANGO] (state, { payload, callback}) {
-            const index = state.rangos.findIndex(departamento => {
-                return departamento.id === payload.data.id
+            const index = state.rangos.findIndex(rango => {
+                return rango.id === payload.data.id
             })
             state.rangos.splice(index, 1);
+            callback(true, payload.data);
+        },
+        [Mutations.INSERT_JERARQUIA] (state, { payload, callback }) {
+            state.jerarquias.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_JERARQUIA] (state, { payload, callback }) {
+            const index = state.jerarquias.findIndex(jerarquia => {
+                return jerarquia.id === payload.data.id
+            })
+            const jerarquia = state.jerarquias[index]
+            state.jerarquias[index] = Object.assign({}, jerarquia, payload.data)
+            
+            callback(true, payload.data);
+        },
+        [Mutations.DELETE_JERARQUIA] (state, { payload, callback}) {
+            const index = state.jerarquias.findIndex(jerarquia => {
+                return jerarquia.id === payload.data.id
+            })
+            state.jerarquias.splice(index, 1);
             callback(true, payload.data);
         },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
@@ -312,6 +332,36 @@ const store = new Vuex.Store({
                 .delete('/api/rangos/' + rango.id, rango)
                 .then(response => {
                     commit(Mutations.DELETE_RANGO, { payload: {data: rango}, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_JERARQUIA] ({ commit }, { jerarquia, cb }) {
+            axios
+                .post('/api/jerarquias', jerarquia)
+                .then(response => {
+                    commit(Mutations.INSERT_JERARQUIA, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_JERARQUIA] ({ commit }, { jerarquia, cb }) {
+            axios
+                .put('/api/jerarquias/' + jerarquia.id, jerarquia)
+                .then(response => {
+                    commit(Mutations.UPDATE_JERARQUIA, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DELETE_JERARQUIA] ({ commit }, { jerarquia, cb }) {
+            axios
+                .delete('/api/jerarquias/' + jerarquia.id, jerarquia)
+                .then(response => {
+                    commit(Mutations.DELETE_JERARQUIA, { payload: {data: jerarquia}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

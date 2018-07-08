@@ -44,7 +44,7 @@ class JerarquiaController extends Controller
 
         $jerarquia = Jerarquia::create($request->all());
 
-        return $this->creationMessage();
+        return $jerarquia;
     }
 
     /**
@@ -86,10 +86,10 @@ class JerarquiaController extends Controller
 
         $jerarquia = Jerarquia::findOrFail($id);
 
-        $jerarquia->fill($data);
+        $jerarquia->fill($request->all());
         $jerarquia->save();
 
-        return $this->updateMessage();
+        return $jerarquia;
     }
 
     /**
