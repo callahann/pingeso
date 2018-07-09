@@ -35,4 +35,5 @@ Route::resource('jornadas', 'JornadaController');
 Route::resource('jerarquias', 'JerarquiaController');
 Route::resource('rangos', 'RangoController');
 Route::resource('roles', 'RolController');
+Route::resource('periodos', 'PeriodoController');
 Route::resource('usuarios', 'UserController')->except(['create', 'edit']);

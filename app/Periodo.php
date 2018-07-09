@@ -11,6 +11,7 @@ class Periodo extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'nombre',
         'desde',
         'hasta',
         'etapa',

@@ -22,6 +22,8 @@ import ListadoJornadas from './components/jornada/ListadoJornadas'
 import FormJornada from './components/jornada/FormJornada'
 import ListadoFactores from './components/factor/ListadoFactores'
 import FormFactor from './components/factor/FormFactor'
+import ListadoPeriodos from './components/periodo/ListadoPeriodos'
+import FormPeriodo from './components/periodo/FormPeriodo'
 
 const router = new VueRouter({
     mode: 'history',
@@ -224,6 +226,27 @@ const router = new VueRouter({
              path: '/factores/editar',
              name: 'editar-factor',
              component: FormFactor,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/periodos',
+             name: 'periodos',
+             component: ListadoPeriodos,
+             meta: { eval: 'rol === 4'},
+             props: true
+         },
+         {
+             path: '/periodos/crear',
+             name: 'crear-periodo',
+             component: FormPeriodo,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/periodos/editar',
+             name: 'editar-periodo',
+             component: FormPeriodo,
              props: true,
              meta: { eval: 'rol === 4'}
          },

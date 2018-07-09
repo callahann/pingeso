@@ -23,6 +23,7 @@ const store = new Vuex.Store({
         roles: [],
         usuarios: [],
         departamentos: [],
+        periodos: [],
     },
     mutations: {
         [Mutations.SET_STATE_ARRAY] (state, { key, payload }) {
@@ -175,6 +176,26 @@ const store = new Vuex.Store({
             state.factores.splice(index, 1);
             callback(true, payload.data);
         },
+        [Mutations.INSERT_PERIODO] (state, { payload, callback }) {
+            state.periodos.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_PERIODO] (state, { payload, callback }) {
+            const index = state.periodos.findIndex(periodo => {
+                return periodo.id === payload.data.id
+            })
+            const periodo = state.periodos[index]
+            state.periodos[index] = Object.assign({}, periodo, payload.data)
+            
+            callback(true, payload.data);
+        },
+        [Mutations.DELETE_PERIODO] (state, { payload, callback}) {
+            const index = state.periodos.findIndex(periodo => {
+                return periodo.id === payload.data.id
+            })
+            state.periodos.splice(index, 1);
+            callback(true, payload.data);
+        },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
             callback(false, error);
         }
@@ -187,7 +208,7 @@ const store = new Vuex.Store({
 
             var request = ['descripciones', 'factores', 'rangos']
             if(rol === 2 || rol === 4)
-                request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
+                request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'roles', 'usuarios', 'periodos'])
             
             request.forEach(r => {
                 axios
@@ -462,6 +483,36 @@ const store = new Vuex.Store({
                 .delete('/api/factores/' + factor.id, factor)
                 .then(response => {
                     commit(Mutations.DELETE_FACTOR, { payload: {data: factor}, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_PERIODO] ({ commit }, { periodo, cb }) {
+            axios
+                .post('/api/periodos', periodo)
+                .then(response => {
+                    commit(Mutations.INSERT_PERIODO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_PERIODO] ({ commit }, { periodo, cb }) {
+            axios
+                .put('/api/periodos/' + periodo.id, periodo)
+                .then(response => {
+                    commit(Mutations.UPDATE_PERIODO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DELETE_PERIODO] ({ commit }, { periodo, cb }) {
+            axios
+                .delete('/api/periodos/' + periodo.id, periodo)
+                .then(response => {
+                    commit(Mutations.DELETE_PERIODO, { payload: {data: periodo}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

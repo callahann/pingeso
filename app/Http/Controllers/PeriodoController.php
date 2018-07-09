@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Periodo;
 use Illuminate\Http\Request;
 use Validator;
+use Auth;
 
 class PeriodoController extends Controller
 {
@@ -15,7 +16,8 @@ class PeriodoController extends Controller
      */
     public function index()
     {
-        return Periodo::all();
+        $id_dep = Auth::user()->id_departamento;
+        return Periodo::where('id_departamento', $id_dep)->get();
     }
 
     /**
@@ -32,11 +34,19 @@ class PeriodoController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        $anterior = Periodo::last();
-        $anterior->delete();
+        $id_dep = Auth::user()->id_departamento;
+        $anterior = Periodo::where('id_departamento', $id_dep)->first();
+        if ($anterior) {
+            $anterior->delete();
+        }
 
+        $request->merge(['id_departamento'=>$id_dep]);
         $periodo = Periodo::create($request->all());
-        return $this->creationMessage();
+        $periodo->fill($request->all());
+        $periodo->desde = $periodo->desde->modify('00:00:00');
+        $periodo->hasta = $periodo->hasta->modify('23:59:00');
+        $periodo->save();
+        return $periodo;
     }
 
     /**
@@ -56,10 +66,12 @@ class PeriodoController extends Controller
 
         $periodo = Periodo::findOrFail($id);
 
-        $periodo->fill($data);
+        $periodo->fill($request->all());
+        $periodo->desde = $periodo->desde->modify('00:00:00');
+        $periodo->hasta = $periodo->hasta->modify('23:59:00');
         $periodo->save();
 
-        return $this->updateMessage();
+        return $periodo;
     }
 
     /**
@@ -79,6 +91,7 @@ class PeriodoController extends Controller
     protected function rules()
     {
         return [
+            'nombre' => 'required',
             'desde' => 'required|date',
             'hasta' => 'required|date',
             'etapa' => 'required|numeric',

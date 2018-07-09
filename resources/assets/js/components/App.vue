@@ -18,6 +18,8 @@
                     <router-link :to="{ name: 'jerarquias' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Jerarquias</router-link>
                     <router-link :to="{ name: 'jornadas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Jornadas</router-link>
                     <router-link :to="{ name: 'factores' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Factores</router-link>
+                    <router-link :to="{ name: 'periodos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Periodos</router-link>
+
 
                     <a href="/logout" class="btn navbar-btn pull-right" role="button" active-class>Cerrar sesión</a>
                 </div>
