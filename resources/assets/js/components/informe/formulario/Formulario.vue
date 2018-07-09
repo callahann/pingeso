@@ -205,9 +205,12 @@
         computed: {
             ...mapState(['formula', 'informes']),
             apelado: function() {
-                return this.informe.apelaciones.find(apelacion => {
-                    return apelacion.actual
-                }) !== undefined
+                if (this.informe.apelaciones) {
+                    return this.informe.apelaciones.find(apelacion => {
+                        return apelacion.actual
+                    }) !== undefined
+                }
+                return false;
             }
         }
     }

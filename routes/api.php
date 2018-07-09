@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::get('/auth', function (Request $request) {
     return $request->user();
 });
+Route::get('/pdf/{id}', 'HomeController@pdf');
 Route::get('/auth/declaraciones', 'DeclaracionController@allListed');
 Route::resource('apelaciones', 'ApelacionController');
 Route::get('/apelaciones/{apelacion}/adjunto', 'ApelacionController@descargar');
