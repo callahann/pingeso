@@ -3,8 +3,8 @@
     <div>
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
-            <li><router-link :to="{ name: 'rangos'}">Listado</router-link></li>
-            <li class="active">Rango</li>
+            <li><router-link :to="{ name: 'factores'}">Listado</router-link></li>
+            <li class="active">Factor</li>
         </ol>
         <div v-if="status === -1" class="alert alert-danger">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
@@ -14,37 +14,21 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
-                {{ this.accion }} Rango
+                {{ this.accion }} Factor
             </div>
             <div class="panel-body">
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label for="nombres">Leyenda:</label>
-                        <input v-if="editable" type="text" class="form-control" id="nombres"
-                            v-model="element.leyenda">
-                        <p v-else>{{ element.leyenda }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="nombres">Base:</label>
-                        <input v-if="editable" type="number" class="form-control" id="base"
-                            v-model="element.base" @keyup="format(element.base, 'base')" step="0.01">
-                        <p v-else>{{ element.base }}</p>
+                        <label for="diferencia">Diferencia:</label>
+                        <input v-if="editable" type="number" class="form-control" id="diferencia"
+                            v-model="element.diferencia" step="0.01">
+                        <p v-else>{{ element.diferencia }}</p>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="nombres">Tope:</label>
-                        <input v-if="editable" type="number" class="form-control" id="tope"
-                            v-model="element.tope" @keyup="format(element.tope, 'tope')" step="0.01">
-                        <p v-else>{{ element.tope }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="nombres">Color:</label>
-                        <input v-if="editable" type="color" class="form-control" id="color"
-                            v-model="element.color">
-                        <p v-else>{{ element.color }}</p>
+                        <label for="factor">Factor:</label>
+                        <input v-if="editable" type="number" class="form-control" id="factor"
+                            v-model="element.factor" step="0.01">
+                        <p v-else>{{ element.factor }}</p>
                     </div>
                 </div>
             </div>
@@ -59,8 +43,8 @@
 
 <script>
     import {
-        INSERT_RANGO,
-        UPDATE_RANGO
+        INSERT_FACTOR,
+        UPDATE_FACTOR
     } from '../../vuex/actions'
     import { mapState } from 'vuex'
     export default {
@@ -78,9 +62,9 @@
         this.editable = true;
         this.message = '';
         this.status = 0;
+        this.sendMessage = (this.accion == 'Editar')?'editado':'creado';
     },
     data () {
-        console.log(this);
         return {
         element: (this.elemento?this.elemento:{}),
         }
@@ -89,26 +73,18 @@
         callback: function(ok = false, payload) {
             this.mensaje = ok ? 1 : -1
             this.element = Object.assign({}, this.element, payload)
+            if (ok) {
+                this.volver('factores', 'Se ha '+this.sendMessage+' el factor correctamente.');
+            }
         },
         addElem(){
             if (this.accion=='Editar') {
-                this.$store.dispatch(UPDATE_RANGO, { rango: this.element, cb: this.callback });
-                this.volver('rangos', 'Se ha actualizado el rango correctamente.')
+                this.$store.dispatch(UPDATE_FACTOR, { factor: this.element, cb: this.callback });
             } else {
-                this.$store.dispatch(INSERT_RANGO, { rango: this.element, cb: this.callback });
-                this.volver('rangos', 'Se ha creado el rango correctamente.')
+                this.$store.dispatch(INSERT_FACTOR, { factor: this.element, cb: this.callback });
             }   
             
         },
-        format(value, selector){
-            console.log("type", typeof value);
-            console.log("selector", selector);
-            console.log("elem", this.element[selector]);
-            if ( (typeof value) == "string" ) {
-               this.element[selector] = parseFloat(value.replace(',',"."))
-            }
-            this.element[selector] = parseFloat(value);
-        }
     }
   }
 </script>

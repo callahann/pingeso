@@ -44,7 +44,7 @@ class FactorController extends Controller
 
         $factor = Factor::create($request->all());
 
-        return $this->creationMessage();
+        return $factor;
     }
 
     /**
@@ -86,10 +86,10 @@ class FactorController extends Controller
 
         $factor = Factor::findOrFail($id);
 
-        $factor->fill($data);
+        $factor->fill($request->all());
         $factor->save();
 
-        return $this->updateMessage();
+        return $factor;
     }
 
     /**

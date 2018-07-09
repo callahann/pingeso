@@ -155,6 +155,26 @@ const store = new Vuex.Store({
             state.jornadas.splice(index, 1);
             callback(true, payload.data);
         },
+        [Mutations.INSERT_FACTOR] (state, { payload, callback }) {
+            state.factores.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_FACTOR] (state, { payload, callback }) {
+            const index = state.factores.findIndex(factor => {
+                return factor.id === payload.data.id
+            })
+            const factor = state.factores[index]
+            state.factores[index] = Object.assign({}, factor, payload.data)
+            
+            callback(true, payload.data);
+        },
+        [Mutations.DELETE_FACTOR] (state, { payload, callback}) {
+            const index = state.factores.findIndex(factor => {
+                return factor.id === payload.data.id
+            })
+            state.factores.splice(index, 1);
+            callback(true, payload.data);
+        },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
             callback(false, error);
         }
@@ -412,6 +432,36 @@ const store = new Vuex.Store({
                 .delete('/api/jornadas/' + jornada.id, jornada)
                 .then(response => {
                     commit(Mutations.DELETE_JORNADA, { payload: {data: jornada}, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_FACTOR] ({ commit }, { factor, cb }) {
+            axios
+                .post('/api/factores', factor)
+                .then(response => {
+                    commit(Mutations.INSERT_FACTOR, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_FACTOR] ({ commit }, { factor, cb }) {
+            axios
+                .put('/api/factores/' + factor.id, factor)
+                .then(response => {
+                    commit(Mutations.UPDATE_FACTOR, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DELETE_FACTOR] ({ commit }, { factor, cb }) {
+            axios
+                .delete('/api/factores/' + factor.id, factor)
+                .then(response => {
+                    commit(Mutations.DELETE_FACTOR, { payload: {data: factor}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

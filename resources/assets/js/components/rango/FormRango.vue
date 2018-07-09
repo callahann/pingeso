@@ -78,6 +78,7 @@
         this.editable = true;
         this.message = '';
         this.status = 0;
+        this.sentMessage = (this.accion == 'Editar')?'actualizado':'creado';
     },
     data () {
         console.log(this);
@@ -89,21 +90,19 @@
         callback: function(ok = false, payload) {
             this.mensaje = ok ? 1 : -1
             this.element = Object.assign({}, this.element, payload)
+            if (ok) {
+                this.volver('rangos', 'Se ha '+this.sentMessage+' el rango correctamente.')
+            }
         },
         addElem(){
             if (this.accion=='Editar') {
                 this.$store.dispatch(UPDATE_RANGO, { rango: this.element, cb: this.callback });
-                this.volver('rangos', 'Se ha actualizado el rango correctamente.')
             } else {
                 this.$store.dispatch(INSERT_RANGO, { rango: this.element, cb: this.callback });
-                this.volver('rangos', 'Se ha creado el rango correctamente.')
             }   
             
         },
         format(value, selector){
-            console.log("type", typeof value);
-            console.log("selector", selector);
-            console.log("elem", this.element[selector]);
             if ( (typeof value) == "string" ) {
                this.element[selector] = parseFloat(value.replace(',',"."))
             }
