@@ -211,9 +211,11 @@
 						<td>
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
+						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]?$elemento["observaciones"]:""}}
+							{{$elemento["observaciones"]}}
 						</td>
+						@endif
 					</tr>
 				@endforeach
 			</tbody>
@@ -276,9 +278,11 @@
 						<td>
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
+						@if(isset($elemento["observaciones"]))
 						<td>
-							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
+							{{$elemento["observaciones"]}}
 						</td>
+						@endif
 					</tr>
 				@endforeach
 			</tbody>
@@ -340,9 +344,11 @@
 						<td>
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
+						@if(isset($elemento["observaciones"]))
 						<td>
-							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
+							{{$elemento["observaciones"]}}
 						</td>
+						@endif
 					</tr>
 				@endforeach
 			</tbody>
@@ -406,9 +412,11 @@
 						<td>
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
+						@if(isset($elemento["observaciones"]))
 						<td>
-							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
+							{{$elemento["observaciones"]}}
 						</td>
+						@endif
 					</tr>
 				@endforeach
 			</tbody>
@@ -471,9 +479,11 @@
 						<td>
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
+						@if(isset($elemento["observaciones"]))
 						<td>
-							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
+							{{$elemento["observaciones"]}}
 						</td>
+						@endif
 					</tr>
 				@endforeach
 			</tbody>
@@ -538,9 +548,11 @@
 						<td>
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
+						@if(isset($elemento["observaciones"]))
 						<td>
-							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
+							{{$elemento["observaciones"]}}
 						</td>
+						@endif
 					</tr>
 				@endforeach
 			</tbody>
@@ -602,9 +614,11 @@
 						<td>
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
+						@if(isset($elemento["observaciones"]))
 						<td>
-							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
+							{{$elemento["observaciones"]}}
 						</td>
+						@endif
 					</tr>
 				@endforeach
 			</tbody>
