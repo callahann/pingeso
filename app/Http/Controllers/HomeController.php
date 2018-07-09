@@ -39,7 +39,8 @@ class HomeController extends Controller
             'declaracion' => $declaracion,
             'rangos' => $rangos
         ];
-        return view('pdf.vista', compact(['data']));
+        //dd($data["declaracion"]);
+        //return view('pdf.vista', compact(['data']));
         $pdf = PDF::loadView('pdf.vista', compact(['data']))
                 ->setPaper('a4', 'landscape');
         return $pdf->inline();

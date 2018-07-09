@@ -11,7 +11,7 @@
         <title>USACH - Declaración de Actividades Académicas</title>
 
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-        <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}">
+        <link rel="image" href="{{ asset('/images/favicon.ico') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     </head>
     <body>

@@ -30,17 +30,17 @@
 		I. Antecedentes Personales
 		<div class="container-fluid" style="border: 1px solid #000 !important; padding: 10px">
 			<div class="row">	
-				<div class="col-md-4">
+				<div class="col-xs-4">
 					<b>{{strtoupper($data["declaracion"]["usuario"]["apellido_paterno"])}}</b>
 					<br>
 					Apellido Paterno
 				</div>
-				<div class="col-md-4">		
+				<div class="col-xs-4">		
 					<b>{{strtoupper($data["declaracion"]["usuario"]["apellido_materno"])}}</b>
 					<br>
 					Apellido Materno
 				</div>
-				<div class="col-md-4">
+				<div class="col-xs-4">
 					<b>{{strtoupper($data["declaracion"]["usuario"]["nombres"])}}</b>
 					<br>
 					Nombres
@@ -48,31 +48,46 @@
 			</div>
 			<br>
 			<div class="row">			
-				<div class="col-md-3">
+				<div class="col-xs-3">
 					<b>{{strtoupper($data["declaracion"]["usuario"]["departamento"]["facultad"]["nombre"])}}</b>
 					<br>
 					Facultad
 				</div>
-				<div class="col-md-3">
+				<div class="col-xs-3">
 					<b>{{strtoupper($data["declaracion"]["usuario"]["departamento"]["nombre"])}}</b>
 					<br>
 					Departamento
 				</div>
-				<div class="col-md-3">
+				<div class="col-xs-3">
 					<b>{{strtoupper($data["declaracion"]["usuario"]["jerarquia"]["nombre"])}}</b>
 					<br>
 					Jerarquia
 				</div>
-				<div class="col-md-3">
+				<div class="col-xs-3">
 					<b>{{strtoupper($data["declaracion"]["usuario"]["jornada"]["nombre"])}}</b>
 					<br>
 					Jornada
 				</div>
 			</div>
 		</div>
-		<table class="table">
+		<br>
+		<table class="table table-bordered">
 			<thead>
-				
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th rowspan="2"><center>HORAS EQ. SEMANALES REALIZADAS</center></th>
+					<th>RESERVADO COMISION</th>
+				</tr>
+				<tr>
+					<th>RESUMEN POR ITEM</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>CALIFICACION PARCIAL</th>
+				</tr>
 			</thead>
 			<tbody>
 				
