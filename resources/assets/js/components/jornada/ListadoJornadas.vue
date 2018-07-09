@@ -6,23 +6,23 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
-                Administración de facultades
+                Administración de jornadas
             </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th class="text-center">Nombre Facultad</th>
+                        <th class="text-center">Nombre Jornada</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(facu,index) in facultades" v-bind:key="facu.id">
-                        <td>{{ facu.nombre }}</td>
+                    <tr v-for="(jornada,index) in jornadas" v-bind:key="jornada.id">
+                        <td>{{ jornada.nombre }}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-facultad', params: {accion: 'Editar', elemento: facu} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-jornada', params: {accion: 'Editar', elemento: jornada} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
-                          <button v-on:click="deleteElem(facu.id,index,facu.nombre)" class="btn btn-xs btn-danger">
+                          <button v-on:click="deleteElem(jornada.id,index,jornada.nombre)" class="btn btn-xs btn-danger">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                           </button>
                         </td>
@@ -30,8 +30,8 @@
                 </tbody>
             </table>
             <div class="panel-footer">
-                <router-link class="btn btn-success" :to="{ name: 'crear-facultad', params: {accion: 'Crear'}}">     
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Facultad
+                <router-link class="btn btn-success" :to="{ name: 'crear-jornada', params: {accion: 'Crear'}}">     
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Jornada
                 </router-link>
             </div>
         </div>
@@ -61,12 +61,12 @@
                     console.log('FALSE');
                     return;     
                 }
-                axios.delete('/api/facultades/'+id)
+                axios.delete('/api/jornadas/'+id)
                 .then(response=> {
-                    this.facultades.splice(index, 1);
+                    this.jornadas.splice(index, 1);
                 });
             }
         },
-        computed: mapState(['facultades'])
+        computed: mapState(['jornadas'])
     }
 </script>

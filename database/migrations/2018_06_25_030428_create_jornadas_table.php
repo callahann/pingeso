@@ -18,6 +18,7 @@ class CreateJornadasTable extends Migration
             $table->string('nombre');
             $table->unsignedInteger('horas');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

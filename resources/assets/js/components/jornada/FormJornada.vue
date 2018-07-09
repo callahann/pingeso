@@ -3,8 +3,8 @@
     <div>
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
-            <li><router-link :to="{ name: 'facultades'}">Listado</router-link></li>
-            <li class="active">Facultad</li>
+            <li><router-link :to="{ name: 'jornadas'}">Listado</router-link></li>
+            <li class="active">Jornada</li>
         </ol>
         <div v-if="status === -1" class="alert alert-danger">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
@@ -14,7 +14,7 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
-                {{ this.accion }} Facultad
+                {{ this.accion }} Jornada
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -23,6 +23,14 @@
                         <input v-if="editable" type="text" class="form-control" id="nombres"
                             v-model="element.nombre">
                         <p v-else>{{ element.nombre }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="horas">Horas:</label>
+                        <input v-if="editable" type="number" class="form-control" id="horas"
+                            v-model="element.horas">
+                        <p v-else>{{ element.horas }}</p>
                     </div>
                 </div>
             </div>
@@ -37,8 +45,8 @@
 
 <script>
     import {
-        INSERT_FACULTAD,
-        UPDATE_FACULTAD
+        INSERT_JORNADA,
+        UPDATE_JORNADA
     } from '../../vuex/actions'
     import { mapState } from 'vuex'
     export default {
@@ -56,6 +64,7 @@
         this.editable = true;
         this.message = '';
         this.status = 0;
+        this.sentMessage = (this.accion == 'Editar')?'actualizado':'creado';
     },
     data () {
         console.log(this);
@@ -67,14 +76,15 @@
         callback: function(ok = false, payload) {
             this.mensaje = ok ? 1 : -1
             this.element = Object.assign({}, this.element, payload)
+            if (ok) {
+                this.volver('jornadas', 'Se ha '+this.sentMessage+' la jornada correctamente.')
+            }
         },
         addElem(){
             if (this.accion=='Editar') {
-                this.$store.dispatch(UPDATE_FACULTAD, { facultad: this.element, cb: this.callback });
-                this.volver('facultades', 'Se ha actualizado la facultad correctamente.')
+                this.$store.dispatch(UPDATE_JORNADA, { jornada: this.element, cb: this.callback });
             } else {
-                this.$store.dispatch(INSERT_FACULTAD, { facultad: this.element, cb: this.callback });
-                this.volver('facultades', 'Se ha creado la facultad correctamente.')
+                this.$store.dispatch(INSERT_JORNADA, { jornada: this.element, cb: this.callback });
             }   
             
         }

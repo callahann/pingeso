@@ -135,6 +135,26 @@ const store = new Vuex.Store({
             state.jerarquias.splice(index, 1);
             callback(true, payload.data);
         },
+        [Mutations.INSERT_JORNADA] (state, { payload, callback }) {
+            state.jornadas.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_JORNADA] (state, { payload, callback }) {
+            const index = state.jornadas.findIndex(jornada => {
+                return jornada.id === payload.data.id
+            })
+            const jornada = state.jornadas[index]
+            state.jornadas[index] = Object.assign({}, jornada, payload.data)
+            
+            callback(true, payload.data);
+        },
+        [Mutations.DELETE_JORNADA] (state, { payload, callback}) {
+            const index = state.jornadas.findIndex(jornada => {
+                return jornada.id === payload.data.id
+            })
+            state.jornadas.splice(index, 1);
+            callback(true, payload.data);
+        },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
             callback(false, error);
         }
@@ -362,6 +382,36 @@ const store = new Vuex.Store({
                 .delete('/api/jerarquias/' + jerarquia.id, jerarquia)
                 .then(response => {
                     commit(Mutations.DELETE_JERARQUIA, { payload: {data: jerarquia}, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_JORNADA] ({ commit }, { jornada, cb }) {
+            axios
+                .post('/api/jornadas', jornada)
+                .then(response => {
+                    commit(Mutations.INSERT_JORNADA, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_JORNADA] ({ commit }, { jornada, cb }) {
+            axios
+                .put('/api/jornadas/' + jornada.id, jornada)
+                .then(response => {
+                    commit(Mutations.UPDATE_JORNADA, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.DELETE_JORNADA] ({ commit }, { jornada, cb }) {
+            axios
+                .delete('/api/jornadas/' + jornada.id, jornada)
+                .then(response => {
+                    commit(Mutations.DELETE_JORNADA, { payload: {data: jornada}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

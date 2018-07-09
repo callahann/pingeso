@@ -44,7 +44,7 @@ class JornadaController extends Controller
 
         $jornada = Jornada::create($request->all());
 
-        return $this->creationMessage();
+        return $jornada;
     }
 
     /**
@@ -86,10 +86,10 @@ class JornadaController extends Controller
 
         $jornada = Jornada::findOrFail($id);
 
-        $jornada->fill($data);
+        $jornada->fill($request->all());
         $jornada->save();
 
-        return $this->updateMessage();
+        return $jornada;
     }
 
     /**
@@ -110,7 +110,7 @@ class JornadaController extends Controller
     {
         return [
             'nombre' => 'required',
-            'horas' => 'required|numeric',
+            'horas' => 'required|numeric'
         ];
     }
 }

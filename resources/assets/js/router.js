@@ -18,6 +18,8 @@ import ListadoRangos from './components/rango/ListadoRangos'
 import FormRango from './components/rango/FormRango'
 import ListadoJerarquias from './components/jerarquia/ListadoJerarquias'
 import FormJerarquia from './components/jerarquia/FormJerarquia'
+import ListadoJornadas from './components/jornada/ListadoJornadas'
+import FormJornada from './components/jornada/FormJornada'
 
 const router = new VueRouter({
     mode: 'history',
@@ -178,6 +180,27 @@ const router = new VueRouter({
              path: '/jerarquias/editar',
              name: 'editar-jerarquia',
              component: FormJerarquia,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/jornadas',
+             name: 'jornadas',
+             component: ListadoJornadas,
+             meta: { eval: 'rol === 4'},
+             props: true
+         },
+         {
+             path: '/jornadas/crear',
+             name: 'crear-jornada',
+             component: FormJornada,
+             props: true,
+             meta: { eval: 'rol === 4'}
+         },
+         {
+             path: '/jornadas/editar',
+             name: 'editar-jornada',
+             component: FormJornada,
              props: true,
              meta: { eval: 'rol === 4'}
          },
