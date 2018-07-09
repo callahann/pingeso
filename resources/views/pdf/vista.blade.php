@@ -3,9 +3,16 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<style type="text/css">
+	    div.page
+	    {
+	        page-break-after: always;
+	        page-break-inside: avoid;
+	    }
+	</style>
 </head>
 <body>
-	<div class="container">	
+	<div class="container page">	
 		<link rel="icon" href="{{ asset('/images/logo_movil.png') }}" style="position: absolute; right: 0px">
 		<div class="row">
 			<h9><b>UNIVERSIDAD DE SANTIAGO DE CHILE</b></h9>
@@ -91,6 +98,515 @@
 			</thead>
 			<tbody>
 				
+			</tbody>
+		</table>
+		<br>
+		<table class="table table-bordered">
+				<tr>
+					<th colspan=6></th>
+					<th>CALIFICACION FINAL</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th>Semanales</th>
+					<th>Anuales</th>
+					<th>Semanales</th>
+					<th>Anuales</th>
+					<th rowspan="2">Semanales Realizadas</th>
+					<th></th>
+				</tr>
+				<tr>
+					<td><b>HORAS CRONOLOGICAS PROMEDIO ANUAL</b></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td><b>RANGO<b></td>
+				</tr>
+				<tr>
+					<td><b>HORAS SEMANALES EQUIVALENTES</b></td>
+					<td colspan="2"></td>
+					<td colspan="2"></td>
+					<td></td>
+					<td></td>
+				</tr>
+		</table>
+		<br>
+
+		<div class="col-xs-6">
+			<hr style="border: 1px solid #000">
+			<b><center>
+				{{strtoupper($data["declaracion"]["usuario"]["apellido_paterno"])}} {{strtoupper($data["declaracion"]["usuario"]["apellido_materno"])}}
+				{{strtoupper($data["declaracion"]["usuario"]["nombres"])}}
+			</center></b>
+			<br>
+			<b><center>{{strtoupper($data["declaracion"]["usuario"]["jerarquia"]["nombre"])}}</center></b>
+		</div>
+		<div class="col-xs-6">
+			<hr style="border: 1px solid #000">
+			<b><center>
+			{{strtoupper($data["director"]["apellido_paterno"])}}{{strtoupper($data["director"]["apellido_materno"])}}
+			{{strtoupper($data["director"]["nombres"])}}
+			</center></b>
+			<br>
+			<b><center>{{strtoupper($data["director"]["jerarquia"]["nombre"])}}</center></b>
+		</div>
+	</div>
+	<div class="container page">
+		II Descripción por Item
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th colspan="4">PRIMER SEMESTRE</th>
+					<th colspan="4">SEGUNDO SEMESTRE</th>
+					<th rowspan="3">OBSERVACIONES</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+				</tr>
+				<tr>
+					<th>DOCENCIA</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($data["declaracion"]["item_docencia"]["actividades"] as $elemento)
+					<tr>
+						<td>
+							{{$elemento["descripcion"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["observaciones"]}}
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th colspan="4">PRIMER SEMESTRE</th>
+					<th colspan="4">SEGUNDO SEMESTRE</th>
+					<th rowspan="3">OBSERVACIONES</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+				</tr>
+				<tr>
+					<th>INVESTIGACION Y DESARROLLO</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($data["declaracion"]["item_investigacion"]["actividades"] as $elemento)
+					<tr>
+						<td>
+							{{$elemento["descripcion"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["observaciones"]}}
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th colspan="4">PRIMER SEMESTRE</th>
+					<th colspan="4">SEGUNDO SEMESTRE</th>
+					<th rowspan="3">OBSERVACIONES</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+				</tr>
+				<tr>
+					<th>ADMINISTRACION ACADEMICA</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($data["declaracion"]["item_administracion"]["actividades"] as $elemento)
+					<tr>
+						<td>
+							{{$elemento["descripcion"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["observaciones"]}}
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
+	<div class="container page">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th colspan="4">PRIMER SEMESTRE</th>
+					<th colspan="4">SEGUNDO SEMESTRE</th>
+					<th rowspan="3">OBSERVACIONES</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+				</tr>
+				<tr>
+					<th>ASISTENCIA TECNICA</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($data["declaracion"]["item_asistencia"]["actividades"] as $elemento)
+					<tr>
+						<td>
+							{{$elemento["descripcion"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["observaciones"]}}
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th colspan="4">PRIMER SEMESTRE</th>
+					<th colspan="4">SEGUNDO SEMESTRE</th>
+					<th rowspan="3">OBSERVACIONES</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+				</tr>
+				<tr>
+					<th>PERFECCIONAMIENTO</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($data["declaracion"]["item_perfeccionamiento"]["actividades"] as $elemento)
+					<tr>
+						<td>
+							{{$elemento["descripcion"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["observaciones"]}}
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
+	<div class="container page">
+		
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th colspan="4">PRIMER SEMESTRE</th>
+					<th colspan="4">SEGUNDO SEMESTRE</th>
+					<th rowspan="3">OBSERVACIONES</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+				</tr>
+				<tr>
+					<th>EXTENSION</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($data["declaracion"]["item_extension"]["actividades"] as $elemento)
+					<tr>
+						<td>
+							{{$elemento["descripcion"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["observaciones"]}}
+						</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th colspan="4">PRIMER SEMESTRE</th>
+					<th colspan="4">SEGUNDO SEMESTRE</th>
+					<th rowspan="3">OBSERVACIONES</th>
+				</tr>
+				<tr>
+					<th></th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+					<th colspan="2">COMPROMETIDO</th>
+					<th colspan="2">REALIZADO</th>
+				</tr>
+				<tr>
+					<th>EDUCACION CONTINUA</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+					<th>Hrs/Semana</th>
+					<th>Hrs/Año</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($data["declaracion"]["item_educacion_continua"]["actividades"] as $elemento)
+					<tr>
+						<td>
+							{{$elemento["descripcion"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["primero"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["comprometido"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemana"]}}
+						</td>
+						<td>
+							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
+						</td>
+						<td>
+							{{$elemento["observaciones"]}}
+						</td>
+					</tr>
+				@endforeach
 			</tbody>
 		</table>
 	</div>
