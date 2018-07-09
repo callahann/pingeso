@@ -42,7 +42,9 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="facultad">Facultad:</label>
-                        <select v-if="editable" class="form-control" id="facultad" v-model="facultad">
+                        <select v-if="editable && auth.rol.id === rol.admin"
+                            class="form-control" id="facultad"
+                            v-model="facultad">
                             <option v-for="facultad in facultades"
                                 :key="facultad.id"
                                 :value="facultad">
@@ -53,7 +55,8 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="depto">Departamento:</label>
-                        <select v-if="editable" class="form-control" id="depto"
+                        <select v-if="editable && auth.rol.id === rol.admin"
+                            class="form-control" id="depto"
                             v-model="usuario.departamento">
                             <option v-if="facultad.departamentos !== undefined" 
                                 v-for="departamento in facultad.departamentos"
@@ -98,10 +101,11 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="rol">Rol:</label>
-                        <select v-if="editable" class="form-control" id="rol"
+                        <select v-if="auth.rol.id === rol.admin" class="form-control" id="rol"
                             v-model="usuario.rol">
                             <option v-for="rol in roles" :key="rol.id" :value="rol">{{ rol.nombre }}</option>
                         </select>
+                        <p v-else>{{ usuario.rol.nombre }}</p>
                     </div>
                 </div>
             </div>
@@ -117,6 +121,7 @@
     </div>
 </template>
 <script>
+    import { INSERT_USUARIO, UPDATE_USUARIO } from '../../vuex/actions'
     import { mapState } from 'vuex'
 
     export default {
@@ -133,34 +138,32 @@
                             this.usuarios.find(usuario => {
                                 return usuario.id === this.$route.params.id
                             })
-            this.usuario = Object.assign({}, this.usuario, usuario)
-            this.facultad = this.facultades.find(facultad => {
-                return facultad.id === usuario.departamento.id_facultad
-            })
+            
+            if(usuario) {
+                this.usuario = Object.assign({}, this.usuario, usuario)
+                this.setFacultad(usuario)
+            } else if(this.auth.rol.id === this.rol.director) {
+                const departamento = this.auth.departamento
+                this.usuario['departamento'] = Object.assign({}, this.usuario.departamento, departamento)
+                this.usuario['rol'] = Object.assign({}, this.usuario.rol, this.roles[0])
+                this.setFacultad(this.auth)
+            }
         },
         methods: {
+            callback: function(ok = true, payload) {
+                this.mensaje = ok ? 1: -1
+                this.usuario = Object.assign({}, this.usuario, payload)                
+            },
+            setFacultad: function(usuario) {
+                this.facultad = this.facultades.find(facultad => {
+                    return facultad.id === usuario.departamento.id_facultad
+                })
+            },
             enviar: function() {
-                this.$http
-                    .post('/api/usuarios', this.usuario)
-                    .then(response => { 
-                        console.log(this.volver('usuarios', 'Se ha registrado el usuario correctamente.'))
-                    })
-                    .catch(e => {
-                        console.log(e)
-                        this.mensaje = -1
-                    })
+                this.$store.dispatch(INSERT_USUARIO, { usuario: this.usuario, cb: this.callback })
             },
             actualizar: function() {
-                this.$http
-                    .put('/api/usuarios/' + this.$route.params.id, this.usuario)
-                    .then(response => { 
-                        this.usuario = Object.assign({}, response.data, this.usuario)
-                        this.mensaje = 1
-                    })
-                    .catch(e => {
-                        console.log(e)
-                        this.mensaje = -1
-                    })
+                this.$store.dispatch(UPDATE_USUARIO, { usuario: this.usuario, cb: this.callback })
             },
         },
         computed: mapState(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'])

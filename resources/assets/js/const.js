@@ -58,6 +58,25 @@ Vue.mixin({
                 }
             })
             return mensaje
+        },
+        copy: function(source, deep = true) {
+            var o, prop, type
+            if (typeof source != 'object' || source === null) {
+                o = source
+                return o
+            }
+        
+            o = new source.constructor();
+            for (prop in source) {
+                if (source.hasOwnProperty(prop)) {
+                    type = typeof source[prop]
+                    if (deep && type == 'object' && source[prop] !== null)
+                        o[prop] = this.copy(source[prop])
+                    else
+                        o[prop] = source[prop]
+                }
+            }
+            return o
         }
     },
     computed: {

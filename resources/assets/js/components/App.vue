@@ -2,7 +2,6 @@
     <div>
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
-                <input type="number" class="col-md-2 from-control" v-model.number="auth.rol.id"/>
                 <div class="navbar-header">
                     <!-- Branding Image -->
                     <img :src="'/images/usach.png'" class="navbar-brand">
@@ -10,17 +9,22 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse" style="padding-left: 10em">
                     <!-- Left Side Of Navbar -->
                     <router-link :to="{ name: 'inicio' }" class="btn navbar-btn" role="button" active-class>Inicio</router-link>
-                    <router-link :to="{ name: 'informes' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id < 4">Informes de Actividades</router-link>
-                    <router-link :to="{ name: 'usuarios' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 2 || auth.rol.id === 4">Usuarios</router-link>
-                    <router-link :to="{ name: 'facultades' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Facultades</router-link>
-                    <router-link :to="{ name: 'departamentos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Departamentos</router-link>
-                    <router-link :to="{ name: 'rangos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Rangos</router-link>
-                    <router-link :to="{ name: 'jerarquias' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Jerarquias</router-link>
-                    <router-link :to="{ name: 'jornadas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Jornadas</router-link>
-                    <router-link :to="{ name: 'factores' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Factores</router-link>
-                    <router-link :to="{ name: 'periodos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === 4">Periodos</router-link>
-
-
+                    <router-link :to="{ name: 'informes' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id < rol.admin">Informes de Actividades</router-link>
+                    <div class="btn-group" v-if="auth.rol.id === rol.director || auth.rol.id === rol.admin">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            Administrar <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><router-link :to="{ name: 'periodos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.director">Periodos</router-link></li>
+                            <li><router-link :to="{ name: 'factores' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Factores</router-link></li>
+                            <li><router-link :to="{ name: 'departamentos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Departamentos</router-link></li>
+                            <li><router-link :to="{ name: 'facultades' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Facultades</router-link></li>
+                            <li><router-link :to="{ name: 'jerarquias' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Jerarquias</router-link></li>
+                            <li><router-link :to="{ name: 'jornadas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Jornadas</router-link></li>
+                            <li><router-link :to="{ name: 'rangos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Rangos</router-link></li>
+                            <li><router-link :to="{ name: 'usuarios' }" class="btn navbar-btn" role="button" active-class>Usuarios</router-link></li>
+                        </ul>
+                    </div>
                     <a href="/logout" class="btn navbar-btn pull-right" role="button" active-class>Cerrar sesión</a>
                 </div>
             </div>

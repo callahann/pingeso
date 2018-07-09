@@ -29,7 +29,8 @@
                     <div class="form-group col-md-6">
                         <label for="desde">Desde:</label>
                         <input v-if="editable" type="date" class="form-control" id="desde"
-                            v-model="element.desde">
+                            :value="element.desde && element.desde.toISOString()"
+                            v-on:input="element.desde = $event.target.valueAsDate">
                         <p v-else>{{ element.desde }}</p>
                     </div>
                 </div>
@@ -37,7 +38,8 @@
                     <div class="form-group col-md-6">
                         <label for="hasta">Hasta:</label>
                         <input v-if="editable" type="date" class="form-control" id="hasta"
-                            v-model="element.hasta">
+                            :value="element.desde && element.hasta.toISOString()"
+                            v-on:input="element.hasta = $event.target.valueAsDate">
                         <p v-else>{{ element.hasta }}</p>
                     </div>
                 </div>

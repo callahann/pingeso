@@ -212,7 +212,7 @@
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]?$elemento["observaciones"]:""}}
 						</td>
 					</tr>
 				@endforeach
@@ -277,7 +277,7 @@
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
 						<td>
-							{{$elemento["observaciones"]}}
+							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
 						</td>
 					</tr>
 				@endforeach
@@ -341,7 +341,7 @@
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
 						<td>
-							{{$elemento["observaciones"]}}
+							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
 						</td>
 					</tr>
 				@endforeach
@@ -407,7 +407,7 @@
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
 						<td>
-							{{$elemento["observaciones"]}}
+							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
 						</td>
 					</tr>
 				@endforeach
@@ -472,7 +472,7 @@
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
 						<td>
-							{{$elemento["observaciones"]}}
+							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
 						</td>
 					</tr>
 				@endforeach
@@ -539,7 +539,7 @@
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
 						<td>
-							{{$elemento["observaciones"]}}
+							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
 						</td>
 					</tr>
 				@endforeach
@@ -603,7 +603,7 @@
 							{{$elemento["realizado"]["segundo"]["horasSemestre"]}}
 						</td>
 						<td>
-							{{$elemento["observaciones"]}}
+							{{($elemento["observaciones"])?$elemento["observaciones"]:""}}
 						</td>
 					</tr>
 				@endforeach

@@ -11,9 +11,10 @@ String.prototype.replaceAll = function(search, replacement) {
 
 Date.prototype.toString = function() {
     const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
-    var day = this.getDate()
-  	var monthIndex = this.getMonth()
-    return day + ' de ' + months[monthIndex]
+    const day = this.getDate()
+    const monthIndex = this.getMonth()
+    const year = this.getFullYear()
+    return day + ' de ' + months[monthIndex] + ' de ' + year
 }
 
 Date.prototype.toStringWithTime = function() {

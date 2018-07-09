@@ -196,6 +196,19 @@ const store = new Vuex.Store({
             state.periodos.splice(index, 1);
             callback(true, payload.data);
         },
+        [Mutations.INSERT_USUARIO] (state, { payload, callback }) {
+            state.usuarios.push(payload.data)
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_USUARIO] (state, { payload, callback }) {
+            const index = state.usuarios.findIndex(usuario => {
+                return usuario.id === payload.data.id
+            })
+            const usuario = state.usuarios[index]
+            state.usuarios[index] = Object.assign({}, usuario, payload.data)
+            
+            callback(true, payload.data);
+        },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
             callback(false, error);
         }
@@ -513,6 +526,26 @@ const store = new Vuex.Store({
                 .delete('/api/periodos/' + periodo.id, periodo)
                 .then(response => {
                     commit(Mutations.DELETE_PERIODO, { payload: {data: periodo}, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_USUARIO] ({ commit }, { usuario, cb }) {
+            axios
+                .post('/api/usuarios', usuario)
+                .then(response => {
+                    commit(Mutations.INSERT_USUARIO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_USUARIO] ({ commit }, { usuario, cb }) {
+            axios
+                .put('/api/usuarios/' + usuario.id, usuario)
+                .then(response => {
+                    commit(Mutations.UPDATE_USUARIO, { payload: response, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

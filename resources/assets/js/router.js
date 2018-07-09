@@ -233,7 +233,7 @@ const router = new VueRouter({
              path: '/periodos',
              name: 'periodos',
              component: ListadoPeriodos,
-             meta: { eval: 'rol === 4'},
+             meta: { eval: 'rol === 2'},
              props: true
          },
          {
@@ -241,14 +241,14 @@ const router = new VueRouter({
              name: 'crear-periodo',
              component: FormPeriodo,
              props: true,
-             meta: { eval: 'rol === 4'}
+             meta: { eval: 'rol === 2'}
          },
          {
              path: '/periodos/editar',
              name: 'editar-periodo',
              component: FormPeriodo,
              props: true,
-             meta: { eval: 'rol === 4'}
+             meta: { eval: 'rol === 2'}
          },
     ],
 })

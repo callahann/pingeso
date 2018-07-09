@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 use App\User;
 use App\Departamento;
 use App\Jerarquia;
@@ -19,7 +20,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all()->load('departamento.facultad');
+        $id_rol = Auth::user()->id_rol;
+        if($id_rol == 2) {
+            $id_depto = Auth::user()->id_departamento;
+            return User::where('id_departamento', $id_depto)
+                        ->get()
+                        ->load('departamento.facultad');
+        } else return User::all()->load('departamento.facultad');
     }
 
     /**
