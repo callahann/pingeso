@@ -18,7 +18,7 @@
 			<h9><b>UNIVERSIDAD DE SANTIAGO DE CHILE</b></h9>
 		</div>
 		<div class="row">
-			<h9><b>{{strtoupper($data["declaracion"]["usuario"]["departamento"]["nombre"])}}</b></h9>
+			<h9><b>{{strtoupper($data["declaracion"]["usuario"]["departamento"]["facultad"]["nombre"])}}</b></h9>
 		</div>
 		<div class="row">
 			<h9><b>DEPARTAMENTO DE {{strtoupper($data["declaracion"]["usuario"]["departamento"]["nombre"])}}</b></h9>
@@ -149,7 +149,7 @@
 			{{strtoupper($data["director"]["nombres"])}}
 			</center></b>
 			<br>
-			<b><center>{{strtoupper($data["director"]["jerarquia"]["nombre"])}}</center></b>
+			<b><center>{{"DIRECTOR DE DEPARTAMENTO"}}</center></b>
 		</div>
 	</div>
 	<div class="container page">
