@@ -13,6 +13,8 @@ use App\Periodo;
 use App\Rango;
 use App\Rol;
 use App\User;
+use App\Rol_Comision;
+use App\Comision;
 
 class BaseSeeder extends Seeder
 {
@@ -31,15 +33,37 @@ class BaseSeeder extends Seeder
                 'nombre' => 'Director de departamento'
             ],
             [
-                'nombre' => 'Comisión'
+                'nombre' => 'Comisión Superior'
             ],
             [
                 'nombre' => 'Administrador'
+            ],
+            [
+                'nombre' => 'Comisión de Facultad'
+            ],
+            [
+                'nombre' => 'Comisión de Departamento'
             ],
         ];
 
         foreach ($roles as $rol) {
             Rol::create($rol);
+        }
+
+        $rol_comisiones = [
+            [
+                'nombre' => 'Comisión Departamental'
+            ],
+            [
+                'nombre' => 'Comisión de Facultad'
+            ],
+            [
+                'nombre' => 'Comisión Superior'
+            ],
+        ];
+
+        foreach ($rol_comisiones as $rol_comision) {
+            Rol_Comision::create($rol_comision);
         }
 
         $dataF = [
@@ -417,7 +441,17 @@ class BaseSeeder extends Seeder
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
                 'id_jornada' => 1,
-                'id_rol' => 4
+                'id_rol' => 1
+            ],
+            [
+                'apellido_paterno' => 'Callahan',
+                'apellido_materno' => 'Apellido',
+                'nombres' => 'Nicolás',
+                'email' => 'ncallahan.test@gmail.com',
+                'id_departamento' => 3,
+                'id_jerarquia' => 5,
+                'id_jornada' => 1,
+                'id_rol' => 2
             ],
             [
                 'apellido_paterno' => 'Fuentes',

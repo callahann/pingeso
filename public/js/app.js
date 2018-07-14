@@ -23184,17 +23184,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
             });
             return mensaje;
         },
-        copy: function (_copy) {
-            function copy(_x2) {
-                return _copy.apply(this, arguments);
-            }
-
-            copy.toString = function () {
-                return _copy.toString();
-            };
-
-            return copy;
-        }(function (source) {
+        copy: function copy(source) {
             var deep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
             var o, prop, type;
@@ -23207,11 +23197,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
             for (prop in source) {
                 if (source.hasOwnProperty(prop)) {
                     type = _typeof(source[prop]);
-                    if (deep && type == 'object' && source[prop] !== null) o[prop] = copy(source[prop]);else o[prop] = source[prop];
+                    if (deep && type == 'object' && source[prop] !== null) o[prop] = this.copy(source[prop]);else o[prop] = source[prop];
                 }
             }
             return o;
-        })
+        }
     },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['auth']))
 });
