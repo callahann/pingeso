@@ -37,4 +37,6 @@ Route::resource('jerarquias', 'JerarquiaController');
 Route::resource('rangos', 'RangoController');
 Route::resource('roles', 'RolController');
 Route::resource('periodos', 'PeriodoController');
+Route::resource('comisiones', 'ComisionController');
+Route::resource('rol_comisiones', 'Rol_ComisionController');
 Route::resource('usuarios', 'UserController')->except(['create', 'edit']);

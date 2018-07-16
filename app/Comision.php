@@ -2,7 +2,7 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comision extends Model
@@ -15,6 +15,8 @@ class Comision extends Model
         'id_rol',
         'id_user',
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function departamento()
     {
