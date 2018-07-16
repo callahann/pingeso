@@ -18,7 +18,6 @@ class CreateComisionsTable extends Migration
             $table->unsignedInteger('id_departamento')->nullable();
             $table->unsignedInteger('id_facultad')->nullable();
             $table->unsignedInteger('id_rol');
-            $table->unsignedInteger('id_user');
             $table->timestamps();
             $table->softDeletes();
 
@@ -33,10 +32,6 @@ class CreateComisionsTable extends Migration
             $table->foreign('id_rol')
                 ->references('id')
                 ->on('rols')
-                ->onDelete('cascade');;
-            $table->foreign('id_user')
-                ->references('id')
-                ->on('users')
                 ->onDelete('cascade');;
         });
     }

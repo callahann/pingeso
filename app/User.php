@@ -25,6 +25,7 @@ class User extends Authenticatable
         'id_jerarquia',
         'id_jornada',
         'id_rol',
+        'id_comision',
         'remember_token',
     ];
 
@@ -35,6 +36,7 @@ class User extends Authenticatable
         'jerarquia',
         'jornada',
         'rol',
+        'comision',
     ];
 
     public function departamento()
@@ -62,6 +64,11 @@ class User extends Authenticatable
         return $this->hasMany(Declaracion::class, 'id_usuario');
     }
 
+    public function comision()
+    {
+        return $this->belongsTo(Comision::class, 'id_comision');
+    }
+
     public function getDepartamentoAttribute()
     {
         return $this->departamento()->first();
@@ -80,5 +87,10 @@ class User extends Authenticatable
     public function getRolAttribute()
     {
         return $this->rol()->first();
+    }
+
+    public function getComisionAttribute()
+    {
+        return $this->comision()->first();
     }
 }

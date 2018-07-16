@@ -15,7 +15,7 @@ class ComisionController extends Controller
      */
     public function index()
     {
-        return Comision::all();
+        return Comision::all()->load('facultad', 'departamento', 'rol_comision');
     }
 
     /**

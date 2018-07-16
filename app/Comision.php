@@ -13,7 +13,6 @@ class Comision extends Model
         'id_departamento',
         'id_facultad',
         'id_rol',
-        'id_user',
     ];
 
     protected $dates = ['deleted_at'];
@@ -33,9 +32,9 @@ class Comision extends Model
         return $this->belongsTo(Rol_Comision::class, 'id_rol');
     }
 
-    public function usuario()
+    public function usuarios()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->hasMany(User::class, 'id_user');
     }
 
     public function getDepartamentoAttribute()
@@ -51,10 +50,5 @@ class Comision extends Model
     public function getRolComisionAttribute()
     {
         return $this->rol_comision()->first();
-    }
-
-    public function getUsuarioAttribute()
-    {
-        return $this->usuario()->first();
     }
 }
