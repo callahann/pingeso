@@ -21,7 +21,7 @@
                         <td>{{ departamento.nombre }}</td>
                         <td>{{ departamento.facultad.nombre}}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-departamento', params: {accion: 'Editar', elemento: departamento} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-departamento', params: {accion: 'Editar', elemento: Object.assign({}, departamento, {})} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
                           <button v-on:click="deleteElem(departamento.id,index,departamento.nombre)" class="btn btn-xs btn-danger">
@@ -43,8 +43,10 @@
 
 
 <script>
+    import {
+        DELETE_DEPARTAMENTO
+    } from '../../vuex/actions'
     import { mapState } from 'vuex'
-    import axios from 'axios';
     export default {
         props: {
             mensaje: {
@@ -57,17 +59,16 @@
             }
         },
         methods: {
+            callback: function(ok = false, payload) {
+                this.mensaje = ok ? payload : "";
+            },
             deleteElem(id, index, nombre){
                 var c = confirm("¿Estás seguro de borrar el departamento de "+ nombre + "?");
                 if (c == false){
                     console.log('FALSE');
                     return;     
                 }
-                console.log('Index: ', index);
-                axios.delete('/api/departamentos/'+id)
-                .then(response=> {
-                    this.departamentos.splice(index, 1);
-                });
+                this.$store.dispatch(DELETE_DEPARTAMENTO, { departamento: this.departamentos[index], cb: this.callback });
                 
             }
         },

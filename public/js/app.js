@@ -1119,6 +1119,81 @@ var index_esm = {
 
 /***/ }),
 /* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return INIT_STORE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return FETCH_AUTH_USER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return FETCH_DECLARACIONES; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return INSERT_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return SEND_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DECLINE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return INSERT_APELACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return RESOLVE_APELACION; });
+/* unused harmony export FETCH_ADJUNTO */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return INSERT_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return DELETE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return INSERT_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return UPDATE_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return INSERT_JERARQUIA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_JERARQUIA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return DELETE_JERARQUIA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return INSERT_JORNADA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_JORNADA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DELETE_JORNADA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return INSERT_FACTOR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_FACTOR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return DELETE_FACTOR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return INSERT_PERIODO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return UPDATE_PERIODO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return DELETE_PERIODO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return INSERT_RANGO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return UPDATE_RANGO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return DELETE_RANGO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return INSERT_USUARIO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return UPDATE_USUARIO; });
+var INIT_STORE = 'INIT_STORE';
+var FETCH_AUTH_USER = 'GET_AUTH_USER';
+var FETCH_DECLARACIONES = 'FETCH_DECLARACIONES';
+var INSERT_DECLARACION = 'INSERT_DECLARACION';
+var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
+var SEND_DECLARACION = 'SEND_DECLARACION';
+var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
+var DECLINE_DECLARACION = 'DECLINE_DECLARACION';
+var INSERT_APELACION = 'INSERT_APELACION';
+var RESOLVE_APELACION = 'RESOLVE_APELACION';
+var INSERT_FACULTAD = 'INSERT_FACULTAD';
+var UPDATE_FACULTAD = 'UPDATE_FACULTAD';
+var DELETE_FACULTAD = 'DELETE_FACULTAD';
+var INSERT_DEPARTAMENTO = 'INSERT_DEPARTAMENTO';
+var UPDATE_DEPARTAMENTO = 'UPDATE_DEPARTAMENTO';
+var DELETE_DEPARTAMENTO = 'DELETE_DEPARTAMENTO';
+var INSERT_RANGO = 'INSERT_RANGO';
+var UPDATE_RANGO = 'UPDATE_RANGO';
+var DELETE_RANGO = 'DELETE_RANGO';
+var INSERT_JERARQUIA = 'INSERT_JERARQUIA';
+var UPDATE_JERARQUIA = 'UPDATE_JERARQUIA';
+var DELETE_JERARQUIA = 'DELETE_JERARQUIA';
+var INSERT_JORNADA = 'INSERT_JORNADA';
+var UPDATE_JORNADA = 'UPDATE_JORNADA';
+var DELETE_JORNADA = 'DELETE_JORNADA';
+var INSERT_FACTOR = 'INSERT_FACTOR';
+var UPDATE_FACTOR = 'UPDATE_FACTOR';
+var DELETE_FACTOR = 'DELETE_FACTOR';
+var INSERT_PERIODO = 'INSERT_PERIODO';
+var UPDATE_PERIODO = 'UPDATE_PERIODO';
+var DELETE_PERIODO = 'DELETE_PERIODO';
+var INSERT_USUARIO = 'INSERT_USUARIO';
+var UPDATE_USUARIO = 'UPDATE_USUARIO';
+
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1425,81 +1500,6 @@ module.exports = {
   extend: extend,
   trim: trim
 };
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return INIT_STORE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return FETCH_AUTH_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return FETCH_DECLARACIONES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return UPDATE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return SEND_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DECLINE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return INSERT_APELACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return RESOLVE_APELACION; });
-/* unused harmony export FETCH_ADJUNTO */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return INSERT_FACULTAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_FACULTAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return DELETE_FACULTAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return INSERT_DEPARTAMENTO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return UPDATE_DEPARTAMENTO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_DEPARTAMENTO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return INSERT_JERARQUIA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_JERARQUIA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return DELETE_JERARQUIA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return INSERT_JORNADA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_JORNADA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DELETE_JORNADA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return INSERT_FACTOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_FACTOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return DELETE_FACTOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return INSERT_PERIODO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return UPDATE_PERIODO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return DELETE_PERIODO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return INSERT_RANGO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return UPDATE_RANGO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return DELETE_RANGO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return INSERT_USUARIO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return UPDATE_USUARIO; });
-var INIT_STORE = 'INIT_STORE';
-var FETCH_AUTH_USER = 'GET_AUTH_USER';
-var FETCH_DECLARACIONES = 'FETCH_DECLARACIONES';
-var INSERT_DECLARACION = 'INSERT_DECLARACION';
-var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
-var SEND_DECLARACION = 'SEND_DECLARACION';
-var APPROVE_DECLARACION = 'APPROVE_DECLARACION';
-var DECLINE_DECLARACION = 'DECLINE_DECLARACION';
-var INSERT_APELACION = 'INSERT_APELACION';
-var RESOLVE_APELACION = 'RESOLVE_APELACION';
-var INSERT_FACULTAD = 'INSERT_FACULTAD';
-var UPDATE_FACULTAD = 'UPDATE_FACULTAD';
-var DELETE_FACULTAD = 'DELETE_FACULTAD';
-var INSERT_DEPARTAMENTO = 'INSERT_DEPARTAMENTO';
-var UPDATE_DEPARTAMENTO = 'UPDATE_DEPARTAMENTO';
-var DELETE_DEPARTAMENTO = 'DELETE_DEPARTAMENTO';
-var INSERT_RANGO = 'INSERT_RANGO';
-var UPDATE_RANGO = 'UPDATE_RANGO';
-var DELETE_RANGO = 'DELETE_RANGO';
-var INSERT_JERARQUIA = 'INSERT_JERARQUIA';
-var UPDATE_JERARQUIA = 'UPDATE_JERARQUIA';
-var DELETE_JERARQUIA = 'DELETE_JERARQUIA';
-var INSERT_JORNADA = 'INSERT_JORNADA';
-var UPDATE_JORNADA = 'UPDATE_JORNADA';
-var DELETE_JORNADA = 'DELETE_JORNADA';
-var INSERT_FACTOR = 'INSERT_FACTOR';
-var UPDATE_FACTOR = 'UPDATE_FACTOR';
-var DELETE_FACTOR = 'DELETE_FACTOR';
-var INSERT_PERIODO = 'INSERT_PERIODO';
-var UPDATE_PERIODO = 'UPDATE_PERIODO';
-var DELETE_PERIODO = 'DELETE_PERIODO';
-var INSERT_USUARIO = 'INSERT_USUARIO';
-var UPDATE_USUARIO = 'UPDATE_USUARIO';
-
 
 
 /***/ }),
@@ -12698,7 +12698,7 @@ process.umask = function() { return 0; };
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 var normalizeHeaderName = __webpack_require__(49);
 
 var DEFAULT_CONTENT_TYPE = {
@@ -12820,7 +12820,7 @@ module.exports = function bind(fn, thisArg) {
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 var settle = __webpack_require__(50);
 var buildURL = __webpack_require__(52);
 var parseHeaders = __webpack_require__(53);
@@ -13145,7 +13145,7 @@ module.exports = Cancel;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(2);
 
 
 var _mutations, _actions;
@@ -13250,7 +13250,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             return facultad.id === payload.data.id;
         });
         state.facultades.splice(index, 1);
-        callback(true, payload.data);
+        callback(true, payload.mensaje.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* INSERT_DEPARTAMENTO */], function (state, _ref10) {
         var payload = _ref10.payload,
             callback = _ref10.callback;
@@ -13276,7 +13276,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             return departamento.id === payload.data.id;
         });
         state.departamentos.splice(index, 1);
-        callback(true, payload.data);
+        callback(true, payload.mensaje.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["q" /* INSERT_RANGO */], function (state, _ref13) {
         var payload = _ref13.payload,
             callback = _ref13.callback;
@@ -13302,7 +13302,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             return rango.id === payload.data.id;
         });
         state.rangos.splice(index, 1);
-        callback(true, payload.data);
+        callback(true, payload.mensaje.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["n" /* INSERT_JERARQUIA */], function (state, _ref16) {
         var payload = _ref16.payload,
             callback = _ref16.callback;
@@ -13328,7 +13328,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             return jerarquia.id === payload.data.id;
         });
         state.jerarquias.splice(index, 1);
-        callback(true, payload.data);
+        callback(true, payload.mensaje.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["o" /* INSERT_JORNADA */], function (state, _ref19) {
         var payload = _ref19.payload,
             callback = _ref19.callback;
@@ -13354,7 +13354,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             return jornada.id === payload.data.id;
         });
         state.jornadas.splice(index, 1);
-        callback(true, payload.data);
+        callback(true, payload.mensaje.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* INSERT_FACTOR */], function (state, _ref22) {
         var payload = _ref22.payload,
             callback = _ref22.callback;
@@ -13380,7 +13380,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             return factor.id === payload.data.id;
         });
         state.factores.splice(index, 1);
-        callback(true, payload.data);
+        callback(true, payload.mensaje.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["p" /* INSERT_PERIODO */], function (state, _ref25) {
         var payload = _ref25.payload,
             callback = _ref25.callback;
@@ -13406,7 +13406,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             return periodo.id === payload.data.id;
         });
         state.periodos.splice(index, 1);
-        callback(true, payload.data);
+        callback(true, payload.mensaje.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["r" /* INSERT_USUARIO */], function (state, _ref28) {
         var payload = _ref28.payload,
             callback = _ref28.callback;
@@ -13605,7 +13605,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref55.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/facultades/' + facultad.id, facultad).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], { payload: { data: facultad }, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], { payload: { data: facultad, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13635,7 +13635,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref61.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/departamentos/' + departamento.id, departamento).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], { payload: { data: departamento }, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], { payload: { data: departamento, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13665,7 +13665,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref67.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/rangos/' + rango.id, rango).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], { payload: { data: rango }, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], { payload: { data: rango, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13695,7 +13695,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref73.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jerarquias/' + jerarquia.id, jerarquia).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], { payload: { data: jerarquia }, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], { payload: { data: jerarquia, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13725,7 +13725,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref79.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jornadas/' + jornada.id, jornada).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], { payload: { data: jornada }, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], { payload: { data: jornada, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13755,7 +13755,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref85.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/factores/' + factor.id, factor).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], { payload: { data: factor }, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], { payload: { data: factor, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13785,7 +13785,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             cb = _ref91.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/periodos/' + periodo.id, periodo).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], { payload: { data: periodo }, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], { payload: { data: periodo, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13854,7 +13854,7 @@ module.exports = __webpack_require__(66);
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(2);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -13997,7 +13997,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__usuario_Usuario__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__partes_ListaActividades__ = __webpack_require__(78);
@@ -14338,7 +14338,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -15238,9 +15238,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -15297,20 +15296,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
-        deleteElem: function deleteElem(id, index, nombre) {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
+            this.mensaje = ok ? payload : "";
+        },
+        deleteElem: function deleteElem(id, index, nombre) {
             var c = confirm("¿Estás seguro de borrar la " + nombre + "?");
             if (c == false) {
                 console.log('FALSE');
                 return;
             }
-            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/facultades/' + id).then(function (response) {
-                _this.facultades.splice(index, 1);
-            });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["e" /* DELETE_FACULTAD */], { facultad: this.facultades[index], cb: this.callback });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['facultades'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['facultades'])
 });
 
 /***/ }),
@@ -15318,7 +15319,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -15408,9 +15409,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -15469,21 +15469,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
-        deleteElem: function deleteElem(id, index, nombre) {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
+            this.mensaje = ok ? payload : "";
+        },
+        deleteElem: function deleteElem(id, index, nombre) {
             var c = confirm("¿Estás seguro de borrar el departamento de " + nombre + "?");
             if (c == false) {
                 console.log('FALSE');
                 return;
             }
-            console.log('Index: ', index);
-            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/departamentos/' + id).then(function (response) {
-                _this.departamentos.splice(index, 1);
-            });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["c" /* DELETE_DEPARTAMENTO */], { departamento: this.departamentos[index], cb: this.callback });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['departamentos'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['departamentos'])
 });
 
 /***/ }),
@@ -15491,7 +15492,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -15594,9 +15595,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -15649,6 +15649,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+
     props: {
         mensaje: {
             type: String,
@@ -15659,20 +15660,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
-        deleteElem: function deleteElem(id, index, nombre) {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
+            this.mensaje = ok ? payload : "";
+        },
+        deleteElem: function deleteElem(id, index, nombre) {
             var c = confirm("¿Estás seguro de borrar la " + nombre + "?");
             if (c == false) {
                 console.log('FALSE');
                 return;
             }
-            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/rangos/' + id).then(function (response) {
-                _this.rangos.splice(index, 1);
-            });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["i" /* DELETE_RANGO */], { rango: this.rangos[index], cb: this.callback });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['rangos'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['rangos'])
 });
 
 /***/ }),
@@ -15680,7 +15683,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -15800,9 +15803,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -15859,20 +15861,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
-        deleteElem: function deleteElem(id, index, nombre) {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
+            this.mensaje = ok ? payload : "";
+        },
+        deleteElem: function deleteElem(id, index, nombre) {
             var c = confirm("¿Estás seguro de borrar la " + nombre + "?");
             if (c == false) {
                 console.log('FALSE');
                 return;
             }
-            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/jerarquias/' + id).then(function (response) {
-                _this.jerarquias.splice(index, 1);
-            });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["f" /* DELETE_JERARQUIA */], { jerarquia: this.jerarquias[index], cb: this.callback });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['jerarquias'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['jerarquias'])
 });
 
 /***/ }),
@@ -15880,7 +15884,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -15973,9 +15977,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -16032,20 +16035,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
-        deleteElem: function deleteElem(id, index, nombre) {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
+            this.mensaje = ok ? payload : "";
+        },
+        deleteElem: function deleteElem(id, index, nombre) {
             var c = confirm("¿Estás seguro de borrar la " + nombre + "?");
             if (c == false) {
                 console.log('FALSE');
                 return;
             }
-            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/jornadas/' + id).then(function (response) {
-                _this.jornadas.splice(index, 1);
-            });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["g" /* DELETE_JORNADA */], { jornada: this.jornadas[index], cb: this.callback });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['jornadas'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['jornadas'])
 });
 
 /***/ }),
@@ -16053,7 +16058,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -16153,9 +16158,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -16214,20 +16218,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
-        deleteElem: function deleteElem(id, index, nombre) {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
+            this.mensaje = ok ? payload : "";
+        },
+        deleteElem: function deleteElem(id, index, nombre) {
             var c = confirm("¿Estás seguro de borrar el factor de diferencia: " + nombre + "?");
             if (c == false) {
                 console.log('FALSE');
                 return;
             }
-            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/factores/' + id).then(function (response) {
-                _this.factores.splice(index, 1);
-            });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["d" /* DELETE_FACTOR */], { factor: this.factores[index], cb: this.callback });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['factores'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['factores'])
 });
 
 /***/ }),
@@ -16235,7 +16241,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -16332,9 +16338,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -16397,17 +16402,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
-        deleteElem: function deleteElem(id, index, nombre) {
-            var _this = this;
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
 
+            this.mensaje = ok ? payload : "";
+        },
+        deleteElem: function deleteElem(id, index, nombre) {
             var c = confirm("¿Estás seguro de borrar el " + nombre + "?");
             if (c == false) {
                 console.log('FALSE');
                 return;
             }
-            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.delete('/api/periodos/' + id).then(function (response) {
-                _this.periodos.splice(index, 1);
-            });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["h" /* DELETE_PERIODO */], { periodo: this.periodos[index], cb: this.callback });
         },
         etapa: function etapa(numero) {
             switch (numero) {
@@ -16424,7 +16431,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['periodos'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['periodos'])
 });
 
 /***/ }),
@@ -16432,7 +16439,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
@@ -16581,7 +16588,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vuex_store__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router__ = __webpack_require__(69);
 /**
@@ -18106,7 +18113,7 @@ return Promise$1;
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 var bind = __webpack_require__(9);
 var Axios = __webpack_require__(48);
 var defaults = __webpack_require__(8);
@@ -18193,7 +18200,7 @@ function isSlowBuffer (obj) {
 
 
 var defaults = __webpack_require__(8);
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 var InterceptorManager = __webpack_require__(57);
 var dispatchRequest = __webpack_require__(58);
 
@@ -18278,7 +18285,7 @@ module.exports = Axios;
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -18358,7 +18365,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -18431,7 +18438,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
@@ -18491,7 +18498,7 @@ module.exports = function parseHeaders(headers) {
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -18609,7 +18616,7 @@ module.exports = btoa;
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -18669,7 +18676,7 @@ module.exports = (
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 function InterceptorManager() {
   this.handlers = [];
@@ -18728,7 +18735,7 @@ module.exports = InterceptorManager;
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 var transformData = __webpack_require__(59);
 var isCancel = __webpack_require__(12);
 var defaults = __webpack_require__(8);
@@ -18821,7 +18828,7 @@ module.exports = function dispatchRequest(config) {
 "use strict";
 
 
-var utils = __webpack_require__(2);
+var utils = __webpack_require__(3);
 
 /**
  * Transform the data for a request or a response
@@ -23184,17 +23191,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
             });
             return mensaje;
         },
-        copy: function (_copy) {
-            function copy(_x2) {
-                return _copy.apply(this, arguments);
-            }
-
-            copy.toString = function () {
-                return _copy.toString();
-            };
-
-            return copy;
-        }(function (source) {
+        copy: function copy(source) {
             var deep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
             var o, prop, type;
@@ -23207,11 +23204,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
             for (prop in source) {
                 if (source.hasOwnProperty(prop)) {
                     type = _typeof(source[prop]);
-                    if (deep && type == 'object' && source[prop] !== null) o[prop] = copy(source[prop]);else o[prop] = source[prop];
+                    if (deep && type == 'object' && source[prop] !== null) o[prop] = this.copy(source[prop]);else o[prop] = source[prop];
                 }
             }
             return o;
-        })
+        }
     },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['auth']))
 });
@@ -26887,7 +26884,10 @@ var render = function() {
                         attrs: {
                           to: {
                             name: "editar-facultad",
-                            params: { accion: "Editar", elemento: facu }
+                            params: {
+                              accion: "Editar",
+                              elemento: Object.assign({}, facu, {})
+                            }
                           }
                         }
                       },
@@ -27276,7 +27276,10 @@ var render = function() {
                         attrs: {
                           to: {
                             name: "editar-departamento",
-                            params: { accion: "Editar", elemento: departamento }
+                            params: {
+                              accion: "Editar",
+                              elemento: Object.assign({}, departamento, {})
+                            }
                           }
                         }
                       },
@@ -27740,7 +27743,10 @@ var render = function() {
                         attrs: {
                           to: {
                             name: "editar-rango",
-                            params: { accion: "Editar", elemento: rango }
+                            params: {
+                              accion: "Editar",
+                              elemento: Object.assign({}, rango, {})
+                            }
                           }
                         }
                       },
@@ -28221,7 +28227,10 @@ var render = function() {
                         attrs: {
                           to: {
                             name: "editar-jerarquia",
-                            params: { accion: "Editar", elemento: jerarquia }
+                            params: {
+                              accion: "Editar",
+                              elemento: Object.assign({}, jerarquia, {})
+                            }
                           }
                         }
                       },
@@ -28612,7 +28621,10 @@ var render = function() {
                         attrs: {
                           to: {
                             name: "editar-jornada",
-                            params: { accion: "Editar", elemento: jornada }
+                            params: {
+                              accion: "Editar",
+                              elemento: Object.assign({}, jornada, {})
+                            }
                           }
                         }
                       },
@@ -29031,7 +29043,10 @@ var render = function() {
                         attrs: {
                           to: {
                             name: "editar-factor",
-                            params: { accion: "Editar", elemento: factor }
+                            params: {
+                              accion: "Editar",
+                              elemento: Object.assign({}, factor, {})
+                            }
                           }
                         }
                       },
@@ -29456,7 +29471,10 @@ var render = function() {
                         attrs: {
                           to: {
                             name: "editar-periodo",
-                            params: { accion: "Editar", elemento: periodo }
+                            params: {
+                              accion: "Editar",
+                              elemento: Object.assign({}, periodo, {})
+                            }
                           }
                         }
                       },
@@ -29709,7 +29727,9 @@ var render = function() {
                   staticClass: "form-control",
                   attrs: { type: "date", id: "desde" },
                   domProps: {
-                    value: _vm.element.desde && _vm.element.desde.toISOString()
+                    value:
+                      _vm.element.desde &&
+                      _vm.element.desde.toISOString().split("T")[0]
                   },
                   on: {
                     input: function($event) {
@@ -29730,7 +29750,9 @@ var render = function() {
                   staticClass: "form-control",
                   attrs: { type: "date", id: "hasta" },
                   domProps: {
-                    value: _vm.element.desde && _vm.element.hasta.toISOString()
+                    value:
+                      _vm.element.desde &&
+                      _vm.element.hasta.toISOString().split("T")[0]
                   },
                   on: {
                     input: function($event) {

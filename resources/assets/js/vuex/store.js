@@ -74,7 +74,7 @@ const store = new Vuex.Store({
                 return facultad.id === payload.data.id
             })
             state.facultades.splice(index, 1);
-            callback(true, payload.data);
+            callback(true, payload.mensaje.data);
         },
         [Mutations.INSERT_DEPARTAMENTO] (state, { payload, callback }) {
             state.departamentos.push(payload.data)
@@ -94,7 +94,7 @@ const store = new Vuex.Store({
                 return departamento.id === payload.data.id
             })
             state.departamentos.splice(index, 1);
-            callback(true, payload.data);
+            callback(true, payload.mensaje.data);
         },
         [Mutations.INSERT_RANGO] (state, { payload, callback }) {
             state.rangos.push(payload.data)
@@ -114,7 +114,7 @@ const store = new Vuex.Store({
                 return rango.id === payload.data.id
             })
             state.rangos.splice(index, 1);
-            callback(true, payload.data);
+            callback(true, payload.mensaje.data);
         },
         [Mutations.INSERT_JERARQUIA] (state, { payload, callback }) {
             state.jerarquias.push(payload.data)
@@ -134,7 +134,7 @@ const store = new Vuex.Store({
                 return jerarquia.id === payload.data.id
             })
             state.jerarquias.splice(index, 1);
-            callback(true, payload.data);
+            callback(true, payload.mensaje.data);
         },
         [Mutations.INSERT_JORNADA] (state, { payload, callback }) {
             state.jornadas.push(payload.data)
@@ -154,7 +154,7 @@ const store = new Vuex.Store({
                 return jornada.id === payload.data.id
             })
             state.jornadas.splice(index, 1);
-            callback(true, payload.data);
+            callback(true, payload.mensaje.data);
         },
         [Mutations.INSERT_FACTOR] (state, { payload, callback }) {
             state.factores.push(payload.data)
@@ -174,7 +174,7 @@ const store = new Vuex.Store({
                 return factor.id === payload.data.id
             })
             state.factores.splice(index, 1);
-            callback(true, payload.data);
+            callback(true, payload.mensaje.data);
         },
         [Mutations.INSERT_PERIODO] (state, { payload, callback }) {
             state.periodos.push(payload.data)
@@ -194,7 +194,7 @@ const store = new Vuex.Store({
                 return periodo.id === payload.data.id
             })
             state.periodos.splice(index, 1);
-            callback(true, payload.data);
+            callback(true, payload.mensaje.data);
         },
         [Mutations.INSERT_USUARIO] (state, { payload, callback }) {
             state.usuarios.push(payload.data)
@@ -345,7 +345,7 @@ const store = new Vuex.Store({
             axios
                 .delete('/api/facultades/' + facultad.id, facultad)
                 .then(response => {
-                    commit(Mutations.DELETE_FACULTAD, { payload: {data: facultad}, callback: cb })
+                    commit(Mutations.DELETE_FACULTAD, { payload: {data: facultad, mensaje: response}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
@@ -375,7 +375,7 @@ const store = new Vuex.Store({
             axios
                 .delete('/api/departamentos/' + departamento.id, departamento)
                 .then(response => {
-                    commit(Mutations.DELETE_DEPARTAMENTO, { payload: {data: departamento}, callback: cb })
+                    commit(Mutations.DELETE_DEPARTAMENTO, { payload: {data: departamento, mensaje: response}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
@@ -405,7 +405,7 @@ const store = new Vuex.Store({
             axios
                 .delete('/api/rangos/' + rango.id, rango)
                 .then(response => {
-                    commit(Mutations.DELETE_RANGO, { payload: {data: rango}, callback: cb })
+                    commit(Mutations.DELETE_RANGO, { payload: {data: rango, mensaje: response}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
@@ -435,7 +435,7 @@ const store = new Vuex.Store({
             axios
                 .delete('/api/jerarquias/' + jerarquia.id, jerarquia)
                 .then(response => {
-                    commit(Mutations.DELETE_JERARQUIA, { payload: {data: jerarquia}, callback: cb })
+                    commit(Mutations.DELETE_JERARQUIA, { payload: {data: jerarquia, mensaje: response}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
@@ -465,7 +465,7 @@ const store = new Vuex.Store({
             axios
                 .delete('/api/jornadas/' + jornada.id, jornada)
                 .then(response => {
-                    commit(Mutations.DELETE_JORNADA, { payload: {data: jornada}, callback: cb })
+                    commit(Mutations.DELETE_JORNADA, { payload: {data: jornada, mensaje: response}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
@@ -495,7 +495,7 @@ const store = new Vuex.Store({
             axios
                 .delete('/api/factores/' + factor.id, factor)
                 .then(response => {
-                    commit(Mutations.DELETE_FACTOR, { payload: {data: factor}, callback: cb })
+                    commit(Mutations.DELETE_FACTOR, { payload: {data: factor, mensaje: response}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
@@ -525,7 +525,7 @@ const store = new Vuex.Store({
             axios
                 .delete('/api/periodos/' + periodo.id, periodo)
                 .then(response => {
-                    commit(Mutations.DELETE_PERIODO, { payload: {data: periodo}, callback: cb })
+                    commit(Mutations.DELETE_PERIODO, { payload: {data: periodo, mensaje: response}, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

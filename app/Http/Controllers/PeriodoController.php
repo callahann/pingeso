@@ -6,6 +6,7 @@ use App\Periodo;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
+use Carbon\Carbon;
 
 class PeriodoController extends Controller
 {
@@ -39,7 +40,8 @@ class PeriodoController extends Controller
         if ($anterior) {
             $anterior->delete();
         }
-
+        $request->merge(['desde' => Carbon::parse($request->desde), 'hasta'=> Carbon::parse($request->hasta)]);
+        
         $request->merge(['id_departamento'=>$id_dep]);
         $periodo = Periodo::create($request->all());
         $periodo->fill($request->all());
@@ -64,6 +66,7 @@ class PeriodoController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
+        $request->merge(['desde' => Carbon::parse($request->desde), 'hasta'=> Carbon::parse($request->hasta)]);
         $periodo = Periodo::findOrFail($id);
 
         $periodo->fill($request->all());

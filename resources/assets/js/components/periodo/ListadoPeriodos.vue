@@ -25,7 +25,7 @@
                         <td>{{ periodo.hasta }}</td>
                         <td>{{ etapa(periodo.etapa) }}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-periodo', params: {accion: 'Editar', elemento: periodo} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-periodo', params: {accion: 'Editar', elemento: Object.assign({}, periodo, {}) } }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
                           <button v-on:click="deleteElem(periodo.id,index,periodo.nombre)" class="btn btn-xs btn-danger">
@@ -47,8 +47,10 @@
 
 
 <script>
+    import {
+        DELETE_PERIODO
+    } from '../../vuex/actions'
     import { mapState } from 'vuex'
-    import axios from 'axios';
     export default {
         props: {
             mensaje: {
@@ -61,16 +63,16 @@
             }
         },
         methods: {
+            callback: function(ok = false, payload) {
+                this.mensaje = ok ? payload : "";
+            },
             deleteElem(id, index, nombre){
                 var c = confirm("¿Estás seguro de borrar el "+ nombre + "?");
                 if (c == false){
                     console.log('FALSE');
                     return;     
                 }
-                axios.delete('/api/periodos/'+id)
-                .then(response=> {
-                    this.periodos.splice(index, 1);
-                });
+                this.$store.dispatch(DELETE_PERIODO, { periodo: this.periodos[index], cb: this.callback });
             },
             etapa(numero) {
                 switch(numero){

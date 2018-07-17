@@ -19,7 +19,7 @@
                     <tr v-for="(facu,index) in facultades" v-bind:key="facu.id">
                         <td>{{ facu.nombre }}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-facultad', params: {accion: 'Editar', elemento: facu} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-facultad', params: {accion: 'Editar', elemento: Object.assign({}, facu, {})} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
                           <button v-on:click="deleteElem(facu.id,index,facu.nombre)" class="btn btn-xs btn-danger">
@@ -41,8 +41,10 @@
 
 
 <script>
+    import {
+        DELETE_FACULTAD
+    } from '../../vuex/actions'
     import { mapState } from 'vuex'
-    import axios from 'axios';
     export default {
         props: {
             mensaje: {
@@ -55,16 +57,16 @@
             }
         },
         methods: {
+            callback: function(ok = false, payload) {
+                this.mensaje = ok ? payload : "";
+            },
             deleteElem(id, index, nombre){
                 var c = confirm("¿Estás seguro de borrar la "+ nombre + "?");
                 if (c == false){
                     console.log('FALSE');
                     return;     
                 }
-                axios.delete('/api/facultades/'+id)
-                .then(response=> {
-                    this.facultades.splice(index, 1);
-                });
+                this.$store.dispatch(DELETE_FACULTAD, { facultad: this.facultades[index], cb: this.callback });
             }
         },
         computed: mapState(['facultades'])

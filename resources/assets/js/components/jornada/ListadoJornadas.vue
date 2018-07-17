@@ -19,7 +19,7 @@
                     <tr v-for="(jornada,index) in jornadas" v-bind:key="jornada.id">
                         <td>{{ jornada.nombre }}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-jornada', params: {accion: 'Editar', elemento: jornada} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-jornada', params: {accion: 'Editar', elemento: Object.assign({}, jornada, {})} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
                           <button v-on:click="deleteElem(jornada.id,index,jornada.nombre)" class="btn btn-xs btn-danger">
@@ -41,8 +41,10 @@
 
 
 <script>
+    import {
+        DELETE_JORNADA
+    } from '../../vuex/actions'
     import { mapState } from 'vuex'
-    import axios from 'axios';
     export default {
         props: {
             mensaje: {
@@ -55,16 +57,16 @@
             }
         },
         methods: {
+            callback: function(ok = false, payload) {
+                this.mensaje = ok ? payload : "";
+            },
             deleteElem(id, index, nombre){
                 var c = confirm("¿Estás seguro de borrar la "+ nombre + "?");
                 if (c == false){
                     console.log('FALSE');
                     return;     
                 }
-                axios.delete('/api/jornadas/'+id)
-                .then(response=> {
-                    this.jornadas.splice(index, 1);
-                });
+                this.$store.dispatch(DELETE_JORNADA, { jornada: this.jornadas[index], cb: this.callback });
             }
         },
         computed: mapState(['jornadas'])

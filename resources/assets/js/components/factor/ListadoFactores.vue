@@ -21,7 +21,7 @@
                         <td>{{ factor.diferencia }}</td>
                         <td>{{ factor.factor }}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-factor', params: {accion: 'Editar', elemento: factor} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-factor', params: {accion: 'Editar', elemento: Object.assign({}, factor, {})} }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
                           <button v-on:click="deleteElem(factor.id,index,factor.diferencia)" class="btn btn-xs btn-danger">
@@ -43,8 +43,10 @@
 
 
 <script>
+    import {
+        DELETE_FACTOR
+    } from '../../vuex/actions'
     import { mapState } from 'vuex'
-    import axios from 'axios';
     export default {
         props: {
             mensaje: {
@@ -57,16 +59,16 @@
             }
         },
         methods: {
+            callback: function(ok = false, payload) {
+                this.mensaje = ok ? payload : "";
+            },
             deleteElem(id, index, nombre){
                 var c = confirm("¿Estás seguro de borrar el factor de diferencia: "+ nombre + "?");
                 if (c == false){
                     console.log('FALSE');
                     return;     
                 }
-                axios.delete('/api/factores/'+id)
-                .then(response=> {
-                    this.factores.splice(index, 1);
-                });
+                this.$store.dispatch(DELETE_FACTOR, { factor: this.factores[index], cb: this.callback });
             }
         },
         computed: mapState(['factores'])
