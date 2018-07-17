@@ -13,7 +13,7 @@
 </head>
 <body>
 	<div class="container page">	
-		<link rel="icon" href="{{ asset('/images/logo_movil.png') }}" style="position: absolute; right: 0px">
+		<img src="{{ asset('/images/logo_movil.png') }}" style="position: absolute; right: 0px">
 		<div class="row">
 			<h9><b>UNIVERSIDAD DE SANTIAGO DE CHILE</b></h9>
 		</div>

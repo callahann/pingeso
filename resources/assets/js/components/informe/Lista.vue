@@ -61,6 +61,9 @@
                                 :to="{ name: 'apelar-informe', params: { id: informe.id }}">     
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&ensp;Ver calificación
                             </router-link>
+                            <a href="#" v-on:click="descargar(informe)">
+                                <span class="glyphicon glyphicon-download-alt"></span>
+                            </a>
                         </td>
                         <td v-else>
                             <router-link v-if="auth.rol.id === rol.academico && informe.estado === estados.aprobado && informe.periodo.etapa === 5"
@@ -68,6 +71,9 @@
                                 :to="{ name: 'apelar-informe', params: { id: informe.id }}">     
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&ensp;Ver calificación
                             </router-link>
+                            <a href="#" v-on:click="descargar(informe)">
+                                <span class="glyphicon glyphicon-download-alt"></span>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
@@ -82,6 +88,7 @@
 </template>
 <script>
     import { mapState } from 'vuex'
+    import axios from 'axios'
     import { SEND_DECLARACION } from '../../vuex/actions'
 
     export default {
@@ -115,6 +122,22 @@
                 return informe.apelaciones.find(apelacion => {
                     return apelacion.actual
                 }) !== undefined
+            },
+            descargar: function(informe) {
+                axios({
+                  url: 'api/pdf/'+informe.id,
+                  method: 'GET',
+                  responseType: 'blob', // important
+                }).then((response) => {
+                  var nombre = informe.usuario.apellido_paterno+informe.usuario.apellido_materno+'_'+String(informe.created_at).split(' ')[0]
+                  const url = window.URL.createObjectURL(new Blob([response.data]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', nombre+'.pdf');
+                  document.body.appendChild(link);
+                  link.click();
+                  link.remove();
+                });
             }
         },
         computed: {
