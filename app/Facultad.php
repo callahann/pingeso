@@ -17,4 +17,9 @@ class Facultad extends Model
     {
         return $this->hasMany('App\Departamento', 'id_facultad');
     }
+
+    public function comisionDeFacultad()
+    {
+    	return $this->hasOne(Comision::class, 'id_facultad');
+    }
 }

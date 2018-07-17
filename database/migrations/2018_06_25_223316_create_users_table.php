@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('id_jerarquia');
             $table->unsignedInteger('id_jornada');
             $table->unsignedInteger('id_rol');
+            $table->unsignedInteger('id_comision')->nullable();
             $table->string('email')->unique();
             $table->rememberToken();
             $table->timestamps();
@@ -42,6 +43,10 @@ class CreateUsersTable extends Migration
             $table->foreign('id_rol')
                 ->references('id')
                 ->on('rols')
+                ->onDelete('cascade');;
+            $table->foreign('id_comision')
+                ->references('id')
+                ->on('comisions')
                 ->onDelete('cascade');;
         });
     }

@@ -37,6 +37,11 @@ class Departamento extends Model
         return $this->hasMany(Periodo::class, 'id_departamento');
     }
 
+    public function comisionDepartamental()
+    {
+        return $this->hasOne(Comision::class, 'id_departamento');
+    }
+
     public function getPeriodoAttribute()
     {
         return $this->periodos()->first();
