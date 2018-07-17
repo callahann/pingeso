@@ -18,10 +18,10 @@
 			<h9><b>UNIVERSIDAD DE SANTIAGO DE CHILE</b></h9>
 		</div>
 		<div class="row">
-			<h9><b>{{strtoupper($data["declaracion"]["usuario"]["departamento"]["facultad"]["nombre"])}}</b></h9>
+			<h9><b>{{mb_strtoupper($data["declaracion"]["usuario"]["departamento"]["facultad"]["nombre"])}}</b></h9>
 		</div>
 		<div class="row">
-			<h9><b>DEPARTAMENTO DE {{strtoupper($data["declaracion"]["usuario"]["departamento"]["nombre"])}}</b></h9>
+			<h9><b>DEPARTAMENTO DE {{mb_strtoupper($data["declaracion"]["usuario"]["departamento"]["nombre"])}}</b></h9>
 		</div>
 		<br>
 		<div class="row">
@@ -38,17 +38,17 @@
 		<div class="container-fluid" style="border: 1px solid #000 !important; padding: 10px">
 			<div class="row">	
 				<div class="col-xs-4">
-					<b>{{strtoupper($data["declaracion"]["usuario"]["apellido_paterno"])}}</b>
+					<b>{{mb_strtoupper($data["declaracion"]["usuario"]["apellido_paterno"])}}</b>
 					<br>
 					Apellido Paterno
 				</div>
 				<div class="col-xs-4">		
-					<b>{{strtoupper($data["declaracion"]["usuario"]["apellido_materno"])}}</b>
+					<b>{{mb_strtoupper($data["declaracion"]["usuario"]["apellido_materno"])}}</b>
 					<br>
 					Apellido Materno
 				</div>
 				<div class="col-xs-4">
-					<b>{{strtoupper($data["declaracion"]["usuario"]["nombres"])}}</b>
+					<b>{{mb_strtoupper($data["declaracion"]["usuario"]["nombres"])}}</b>
 					<br>
 					Nombres
 				</div>
@@ -56,22 +56,22 @@
 			<br>
 			<div class="row">			
 				<div class="col-xs-3">
-					<b>{{strtoupper($data["declaracion"]["usuario"]["departamento"]["facultad"]["nombre"])}}</b>
+					<b>{{mb_strtoupper($data["declaracion"]["usuario"]["departamento"]["facultad"]["nombre"])}}</b>
 					<br>
 					Facultad
 				</div>
 				<div class="col-xs-3">
-					<b>{{strtoupper($data["declaracion"]["usuario"]["departamento"]["nombre"])}}</b>
+					<b>{{mb_strtoupper($data["declaracion"]["usuario"]["departamento"]["nombre"])}}</b>
 					<br>
 					Departamento
 				</div>
 				<div class="col-xs-3">
-					<b>{{strtoupper($data["declaracion"]["usuario"]["jerarquia"]["nombre"])}}</b>
+					<b>{{mb_strtoupper($data["declaracion"]["usuario"]["jerarquia"]["nombre"])}}</b>
 					<br>
 					Jerarquia
 				</div>
 				<div class="col-xs-3">
-					<b>{{strtoupper($data["declaracion"]["usuario"]["jornada"]["nombre"])}}</b>
+					<b>{{mb_strtoupper($data["declaracion"]["usuario"]["jornada"]["nombre"])}}</b>
 					<br>
 					Jornada
 				</div>
@@ -136,17 +136,17 @@
 		<div class="col-xs-6">
 			<hr style="border: 1px solid #000">
 			<b><center>
-				{{strtoupper($data["declaracion"]["usuario"]["apellido_paterno"])}} {{strtoupper($data["declaracion"]["usuario"]["apellido_materno"])}}
-				{{strtoupper($data["declaracion"]["usuario"]["nombres"])}}
+				{{mb_strtoupper($data["declaracion"]["usuario"]["apellido_paterno"])}} {{mb_strtoupper($data["declaracion"]["usuario"]["apellido_materno"])}}
+				{{mb_strtoupper($data["declaracion"]["usuario"]["nombres"])}}
 			</center></b>
 			<br>
-			<b><center>{{strtoupper($data["declaracion"]["usuario"]["jerarquia"]["nombre"])}}</center></b>
+			<b><center>{{mb_strtoupper($data["declaracion"]["usuario"]["jerarquia"]["nombre"])}}</center></b>
 		</div>
 		<div class="col-xs-6">
 			<hr style="border: 1px solid #000">
 			<b><center>
-			{{strtoupper($data["director"]["apellido_paterno"])}}{{strtoupper($data["director"]["apellido_materno"])}}
-			{{strtoupper($data["director"]["nombres"])}}
+			{{mb_strtoupper($data["director"]["apellido_paterno"])}}{{mb_strtoupper($data["director"]["apellido_materno"])}}
+			{{mb_strtoupper($data["director"]["nombres"])}}
 			</center></b>
 			<br>
 			<b><center>{{"DIRECTOR DE DEPARTAMENTO"}}</center></b>
