@@ -16,8 +16,14 @@ class CreateFacultadsTable extends Migration
         Schema::create('facultads', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
+            $table->unsignedInteger('id_comision')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('id_comision')
+                ->references('id')
+                ->on('comisions')
+                ->onDelete('cascade');;
         });
     }
 

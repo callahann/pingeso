@@ -14,6 +14,10 @@ class Departamento extends Model
         'nombre'
     ];
 
+    protected $hidden = [
+        'id_comision'
+    ];
+
     protected $guarded = [
         'id_facultad'
     ];
@@ -27,6 +31,10 @@ class Departamento extends Model
         return $this->belongsTo(Facultad::class, 'id_facultad')->withTrashed();
     }
 
+    public function comision(){
+        return $this->belongsTo(Comision::class, 'id_comision');
+    }
+
     public function usuarios()
     {
         return $this->hasMany(User::class, 'id_departamento');
@@ -37,10 +45,6 @@ class Departamento extends Model
         return $this->hasMany(Periodo::class, 'id_departamento');
     }
 
-    public function comisionDepartamental()
-    {
-        return $this->hasOne(Comision::class, 'id_departamento');
-    }
 
     public function getPeriodoAttribute()
     {

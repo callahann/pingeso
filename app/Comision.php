@@ -9,46 +9,21 @@ class Comision extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'nombre'
+    ];
+
     protected $hidden = [
-        'id_departamento',
-        'id_facultad',
-        'id_rol',
+        'id_rol'
     ];
 
     protected $dates = ['deleted_at'];
 
-    public function departamento()
-    {
-        return $this->belongsTo(Departamento::class, 'id_departamento');
+    public function departamentos(){
+        return $this->hasMany(Departamento::class, 'id_comision');
     }
 
-    public function facultad()
-    {
-        return $this->belongsTo(Facultad::class, 'id_facultad');
-    }
-
-    public function rol_comision()
-    {
-        return $this->belongsTo(Rol_Comision::class, 'id_rol');
-    }
-
-    public function usuarios()
-    {
-        return $this->hasMany(User::class, 'id_user');
-    }
-
-    public function getDepartamentoAttribute()
-    {
-        return $this->departamento()->first();
-    }
-
-    public function getFacultadAttribute()
-    {
-        return $this->facultad()->first();
-    }
-
-    public function getRolComisionAttribute()
-    {
-        return $this->rol_comision()->first();
+    public function facultades(){
+        return $this->hasMany(Facultad::class, 'id_comision');
     }
 }

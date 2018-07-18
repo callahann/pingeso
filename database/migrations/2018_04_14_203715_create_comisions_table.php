@@ -15,23 +15,14 @@ class CreateComisionsTable extends Migration
     {
         Schema::create('comisions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_departamento')->nullable();
-            $table->unsignedInteger('id_facultad')->nullable();
+            $table->string('nombre');
             $table->unsignedInteger('id_rol');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_departamento')
-                ->references('id')
-                ->on('departamentos')
-                ->onDelete('cascade');;
-            $table->foreign('id_facultad')
-                ->references('id')
-                ->on('facultads')
-                ->onDelete('cascade');;
             $table->foreign('id_rol')
                 ->references('id')
-                ->on('rols')
+                ->on('comision_rols')
                 ->onDelete('cascade');;
         });
     }

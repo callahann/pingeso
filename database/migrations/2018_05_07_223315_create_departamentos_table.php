@@ -16,6 +16,7 @@ class CreateDepartamentosTable extends Migration
         Schema::create('departamentos', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('id_facultad');
+            $table->unsignedInteger('id_comision')->nullable();
             $table->string('nombre');
             $table->timestamps();
             $table->softDeletes();
@@ -23,6 +24,10 @@ class CreateDepartamentosTable extends Migration
             $table->foreign('id_facultad')
                 ->references('id')
                 ->on('facultads')
+                ->onDelete('cascade');;
+            $table->foreign('id_comision')
+                ->references('id')
+                ->on('comisions')
                 ->onDelete('cascade');;
 
         });

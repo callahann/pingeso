@@ -10,7 +10,11 @@ class Facultad extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'nombre',
+        'nombre'
+    ];
+
+    protected $hidden = [
+        'id_comision'
     ];
 
     public function departamentos()
@@ -18,8 +22,8 @@ class Facultad extends Model
         return $this->hasMany('App\Departamento', 'id_facultad');
     }
 
-    public function comisionDeFacultad()
-    {
-    	return $this->hasOne(Comision::class, 'id_facultad');
+    public function comision(){
+        return $this->belongsTo(Comision::class, 'id_comision');
     }
+
 }
