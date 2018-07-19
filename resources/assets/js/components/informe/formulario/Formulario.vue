@@ -99,7 +99,9 @@
         props: ['etapa'],
         data: function() {
             return {
-                resumenAbierto: false,
+                /**
+                 * Estructura inicial de un informe
+                 */
                 informe: {
                     item_docencia: {
                         actividades: [],
@@ -135,7 +137,18 @@
                     usuario: undefined,
                     estado: 0
                 },
+                /**
+                 * Apelación del informe. Se guarda por separado cuando se
+                 * edita (para enviar). Cuando se recibe (comisión) viene
+                 * dentro del informe.
+                 */
                 apelacion: {},
+                /**
+                 * Código de mensaje.
+                 * 0: No mostrar
+                 * 1: Operación realizada correctamente
+                 * -1: Mensaje de error
+                 */
                 mensaje: 0,
                 mensajeVolver: ''
             }
@@ -159,38 +172,66 @@
             }
         },
         methods: {
+            /**
+             * Callback para mostrar un mensaje luego de obtener respuesta
+             * desde la API.
+             * @param ok Indica si la operación se realizó correctamente
+             * @param payload Data (respuesta) obtenida desde la API
+             */
             cbMensaje: function(ok = false, payload) {
                 this.mensaje = ok ? 1 : -1
                 this.informe = Object.assign({}, this.informe, payload)
             },
+            /**
+             * Callback para volver a la vista anterior si la operación se
+             * completó sin errores, o mostrar un mensaje de error en caso
+             * contrario.
+             * @param ok Indica si la operación se realizó correctamente
+             * @param payload Data (respuesta) obtenida desde la API
+             */
             cbVolver: function(ok = false, payload) {
                 if(ok) this.volver('informes', this.mensajeVolver)
                 this.mensaje = -1
             },
+            /**
+             * Despacha la acción para insertar un informe si no existe, o actualizarlo en caso contrario.
+             */
             actualizar: function() {
                 this.$store.dispatch(
                     this.informe.id === undefined ? INSERT_DECLARACION : UPDATE_DECLARACION,
                     { informe: this.informe, cb: this.cbMensaje }
                 )
             },
+            /**
+             * Marca un informe con el estado de "enviado"
+             */
             enviar: async function() {
                 if(confirm('¿Está seguro que desea enviar esta declaración?')) {
                     this.mensajeVolver = 'Se ha enviado la declaración al Director de Departamento'
                     this.$store.dispatch(SEND_DECLARACION, { informe: this.informe, cb: this.cbVolver })
                 }
             },
+            /**
+             * Marca un informe con el estado de "aprobado"
+             */
             aprobar: async function(estado) {
                 if(confirm('¿Está seguro que desea aprobar esta declaración?')) {
                     this.mensajeVolver = 'Se ha aprobado la declaración'
                     this.$store.dispatch(APPROVE_DECLARACION, { informe: this.informe, cb: this.cbVolver })
                 }
             },
+            /**
+             * Marca un informe con el estado de "revisar"
+             */
             revision: async function(estado) {
                 if(confirm('¿Está seguro que desea solicitar revisión para esta declaración?')) {
                     this.mensajeVolver = 'Se ha solicitado la revisión de la declaración'
                     this.$store.dispatch(DECLINE_DECLARACION, { informe: this.informe, cb: this.cbVolver })
                 }
             },
+            /**
+             * Ingresa una nueva apelación en la base de datos.
+             */
             apelar: function() {
                 this.apelacion.id_declaracion = this.informe.id;
                 let formData = this.formData(this.apelacion)
@@ -204,6 +245,9 @@
         },
         computed: {
             ...mapState(['formula', 'informes']),
+            /**
+             * Indica si una evaluación presenta apelación.
+             */
             apelado: function() {
                 if (this.informe.apelaciones) {
                     return this.informe.apelaciones.find(apelacion => {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="actividades.length == 0" class="text-center">
-            <h3 class="inline-text" v-if="etapa <= etapas.evaluando">
+            <h3 class="inline-text" v-if="etapa === etapas.declarando">
                 No se ha agregado actividades aún. Presione el botón 
                 <b class="btn-text">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar actividad
@@ -273,8 +273,18 @@
         data: function () {
             return {
                 id: 1,
+                /**
+                 * Lista de actividades de este ítem.
+                 */
                 actividades: [],
+                /**
+                 * Lista de descripciones de actividades predefinidas, disponibles
+                 * a través de una lista desplegable.
+                 */
                 descripciones: [],
+                /**
+                 * Indica para que semestre se muestran las actividades (etapa realizado)
+                 */
                 semestre: 'primero'
             }
         },
@@ -289,6 +299,10 @@
             this.descripciones = Object.assign([], this.descripciones, descripciones);
         },
         methods: {
+            /**
+             * Crea un nuevo objeto de actividad.
+             * @return Nueva actividad
+             */
             nuevoItem: function() {
                 return {
                     id: this.id++,
@@ -316,14 +330,27 @@
                     }
                 }
             },
+            /**
+             * Agrega una nueva actividad a la lista de actividades de
+             * este componente.
+             */
             agregarActividad: function() {
                 const item = this.nuevoItem()
                 item['id'] = this.id++
                 this.actividades.push(item)
             },
+            /**
+             * Quita la actividad con el índice señalado de la lista de
+             * actividades de este componente.
+             * @param index Índice de la actividad en la lista
+             */
             quitarActividad: function(index) {
                 this.actividades.splice(index, 1)
             },
+            /**
+             * Muestra la caja de texto editable si se ha seleccionado la actividad
+             * "Otras actividades..." en la lista desplegable.
+             */
             otra: function(actividad) {
                 if(actividad.descripcion === 'Otra actividad...') {
                     actividad.descripcion = ''
@@ -332,6 +359,10 @@
             }
         },
         watch: {
+            /**
+             * Observa y envía las modificaciones de la lista de actividades
+             * al componente padre.
+             */
             actividades: function(newActividades) {
                 this.$emit('actualizar', newActividades)
                 Vue.nextTick(function () {
@@ -340,6 +371,10 @@
             }
         },
         computed: {
+            /**
+             * Calcula las horas totales de las actividades ingresadas en este
+             * componente.
+             */
             totales: function() {
                 const totales = this.nuevoItem()
                 
