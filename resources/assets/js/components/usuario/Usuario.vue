@@ -103,7 +103,7 @@
                         <label for="rol">Rol:</label>
                         <select v-if="auth.rol.id === rol.admin" class="form-control" id="rol"
                             v-model="usuario.rol">
-                            <option v-for="rol in roles" :key="rol.id" :value="rol">{{ rol.nombre }}</option>
+                            <option v-for="rol in roles.slice(0,4)" :key="rol.id" :value="rol">{{ rol.nombre }}</option>
                         </select>
                         <p v-else>{{ usuario.rol.nombre }}</p>
                     </div>

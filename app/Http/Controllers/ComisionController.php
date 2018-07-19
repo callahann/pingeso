@@ -15,7 +15,7 @@ class ComisionController extends Controller
      */
     public function index()
     {
-        return Comision::all()->load('facultad', 'departamento', 'rol_comision');
+        return Comision::all()->load('usuarios');
     }
 
     /**
@@ -104,9 +104,5 @@ class ComisionController extends Controller
     }
 
     protected function rules(){
-        return [
-
-            'id_user' => 'required'
-        ];
     }
 }

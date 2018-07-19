@@ -19,11 +19,15 @@ class Comision extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function departamentos(){
-        return $this->hasMany(Departamento::class, 'id_comision');
+    public function departamento(){
+        return $this->hasOne(Departamento::class, 'id_comision');
     }
 
-    public function facultades(){
-        return $this->hasMany(Facultad::class, 'id_comision');
+    public function facultad(){
+        return $this->hasOne(Facultad::class, 'id_comision');
+    }
+
+    public function usuarios(){
+        return $this->hasMany(User::class, 'id_comision');
     }
 }
