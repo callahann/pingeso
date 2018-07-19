@@ -32,7 +32,7 @@ Vue.prototype.$http = axios
 
 import App from './components/App'
 
-import { INIT_STORE, FETCH_AUTH_USER } from './vuex/actions'
+import { INIT_STORE } from './vuex/actions'
 import store from './vuex/store'
 import { router } from './router'
 

@@ -65,7 +65,13 @@
         props: ['informe', 'etapa'],
         data: function() {
             return {
+                /**
+                 * Resumenes por ítem.
+                 */
                 resumenes: {},
+                /**
+                 * Horas totales por cada ítem.
+                 */
                 totales: {}
             }
         },
@@ -73,10 +79,20 @@
             this.actualizar()
         },
         methods: {
+            /**
+             * Calcula las horas equivalentes.
+             * @param se Horas semana
+             * @param sa Horas semestre / año
+             * @return Horas equivalentes
+             */
             equivalentes: function(se, sa) {
                 const formula = this.informe.formula.equivalente
                 return eval(formula.replaceAll('se', se).replaceAll('sa', sa))
             },
+            /**
+             * Re-calcula y actualiza este componente de acuerdo a los
+             * últimos datos disponibles en el informe de actividades.
+             */
             actualizar: function() {
                 this.totales = {
                     comprometido: {
@@ -127,6 +143,12 @@
         },
         computed: {
             ...mapState(['factores', 'rangos']),
+            /**
+             * Calificación de este informe de acuerdo a las calificaciones parciales definidas
+             * por la comisión y el factor de corrección correspondiente a la diferencia entre
+             * la calificación mínima y máxima.
+             * @return Calificación final
+             */
             calificacion: function() {
                 var formula = this.informe.formula.nota_final
                 var min = 7, max = 1
@@ -158,6 +180,10 @@
                 })
                 return calificacion * factor.factor
             },
+            /**
+             * Rango asignado de acuerdo a la calificación.
+             * @return Objeto rango.
+             */
             rango: function() {
                 let calificacion = this.calificacion
                 const rango = this.rangos.find((rango) => {
@@ -168,6 +194,11 @@
                     color: 'black'
                 }
             },
+            /**
+             * Comprueba la cantidad de horas ingresadas y la contrasta con la cantidad
+             * de horas que debería declarar la persona de acuerdo a su jornada.
+             * @return Objeto indicando un mensaje para el usuario.
+             */
             estado: function() {
                 const horas = this.auth.jornada.horas
                 const diferencia = Math.round((horas - this.totales.comprometido.equivalente) * 10) / 10

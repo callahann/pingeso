@@ -50,10 +50,17 @@
         props: ['apelaciones', 'actual'],
         data: function() {
             return {
+                /**
+                 * Objeto inicial. Se actualiza con los datos de la apelación
+                 * existente, si hubiese.
+                 */
                 apelacion: {
                     comentario: '',
                     archivo: undefined
                 },
+                /**
+                 * Listado de apelaciones anteriores [eliminar]
+                 */
                 anteriores: []
             }
         },
@@ -69,16 +76,26 @@
             this.anteriores.splice(index, 1)
         },
         methods: {
+            /**
+             * Obtiene el archivo seleccionado por el usuario.
+             */
             obtenerArchivo: function() {
                 this.apelacion.archivo = this.$refs.archivo.files[0]
             }
         },
         computed: {
+            /**
+             * Indica si la apelación es editable.
+             * @return Verdadero o falso
+             */
             editable: function() {
                 return this.apelacion.id === undefined
             }
         },
         watch: {
+            /**
+             * Observa y envía las modificaciones de la apelación al componente padre.
+             */
             apelacion:  {
                 handler(e) {
                     this.$emit('actualizar', e)
