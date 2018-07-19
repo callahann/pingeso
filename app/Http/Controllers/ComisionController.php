@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Comision;
+use App\Departamento;
+use App\Facultad;
 use Validator;
 
 class ComisionController extends Controller
@@ -17,6 +19,27 @@ class ComisionController extends Controller
     {
         return Comision::all()->load('usuarios');
     }
+
+    public function comisionDepartamento($id){
+        $departamento = Departamento::findOrFail($id);
+        return Comision::where('id', $departamento->id_comision)
+                        ->first()
+                        ->load('usuarios');
+    }
+
+    public function comisionFacultad($id){
+        $facultad = Facultad::findOrFail($id);
+        return Comision::where('id', $facultad->id_comision)
+                        ->first()
+                        ->load('usuarios');
+    }
+
+    public function comisionSuperior(){
+        return Comision::where('nombre', 'Comisión Superior')
+                        ->first()
+                        ->load('usuarios');
+    }
+
 
     /**
      * Show the form for creating a new resource.

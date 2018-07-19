@@ -29,6 +29,9 @@ Route::get('/declaraciones/{declaracion}/apelaciones', 'ApelacionController@obte
 Route::resource('departamentos', 'DepartamentoController');
 Route::get('/descripciones', 'DescripcionController@all');
 Route::get('/descripciones/{tipo}', 'DescripcionController@type');
+Route::get('/comisiones/superior', 'ComisionController@comisionSuperior');
+Route::get('/comisiones/departamento/{id}', 'ComisionController@comisionDepartamento');
+Route::get('/comisiones/facultad/{id}', 'ComisionController@comisionFacultad');
 Route::resource('factores', 'FactorController');
 Route::resource('facultades', 'FacultadController');
 Route::resource('formulas', 'FormulaController');
