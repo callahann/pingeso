@@ -44,6 +44,7 @@ class UserController extends Controller
         }
 
         $user = new User($request->all());
+        $user->id_comision = $request->comision['id'];
         $user->id_departamento = $request->departamento['id'];
         $user->id_jerarquia = $request->jerarquia['id'];
         $user->id_jornada = $request->jornada['id'];
@@ -69,6 +70,7 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->fill($request->all());
+        $user->id_comision = $request->comision['id'];
         $user->id_departamento = $request->departamento['id'];
         $user->id_jerarquia = $request->jerarquia['id'];
         $user->id_jornada = $request->jornada['id'];

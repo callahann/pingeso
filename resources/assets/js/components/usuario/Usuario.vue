@@ -160,9 +160,21 @@
                 })
             },
             enviar: function() {
+                if(this.usuario.rol.id == 3){
+                    this.usuario.comision.id = 1;
+                }
+                else{
+                    this.usuario.comision.id = null;   
+                }
                 this.$store.dispatch(INSERT_USUARIO, { usuario: this.usuario, cb: this.callback })
             },
             actualizar: function() {
+                if(this.usuario.rol.id == 3){
+                    this.usuario.comision.id = 1;
+                }
+                else{
+                    this.usuario.comision.id = null;   
+                }
                 this.$store.dispatch(UPDATE_USUARIO, { usuario: this.usuario, cb: this.callback })
             },
         },

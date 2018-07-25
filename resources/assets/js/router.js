@@ -256,6 +256,11 @@ const router = new VueRouter({
              name: 'editar-comision-departamento',
              component: ListadoComision
          },
+         {
+             path: '/comision/superior',
+             name: 'comision-superior',
+             component: ListadoComision
+         },
     ],
 })
 

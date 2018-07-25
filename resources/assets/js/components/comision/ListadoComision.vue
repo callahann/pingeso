@@ -1,30 +1,43 @@
-	<template>
-  <div :class="{ 'col-md-12': auth.rol.id >= 3, 'col-md-8 col-md-offset-2': auth.rol.id <= 2 }">
-        <div v-if="mensaje" class="alert alert-success">
-            <a href="#" class="close" aria-label="close" v-on:click="mensaje = undefined">&times;</a>
-            {{ mensaje }}
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading panel-title text-center">
-                Comisión
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center">Nombre</th>
-                        <th class="text-center">Email</th>
-                        <th class="text-center">Cargo</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <div class="panel-footer">
-            </div>
-        </div>
-    </div>
- 
+<template>
+    <div class="row">
+        <label for="facultad">Comisión Superior</label>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Cargo</th>
+                    <th>Departamento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for = "user in users">
+                    <td>{{user.nombres}} {{user.apellido_paterno}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.rol.nombre}}</td>
+                    <td>{{user.departamento.nombre}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div> 
 </template>
+
+<script>
+    import axios from 'axios';
+    export default {       
+        created: function() {
+            axios.get('/api/comisiones/superior')
+            .then(response => {
+                console.log(response.data.usuarios);
+                this.users = response.data.usuarios;
+            });
+        },
+        data () {
+            return {
+            users: []
+            }
+        }
+  }
+</script>
 
 

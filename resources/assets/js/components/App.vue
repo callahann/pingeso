@@ -23,6 +23,7 @@
                             <li><router-link :to="{ name: 'jornadas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Jornadas</router-link></li>
                             <li><router-link :to="{ name: 'rangos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol.id === rol.admin">Rangos</router-link></li>
                             <li><router-link :to="{ name: 'usuarios' }" class="btn navbar-btn" role="button" active-class>Usuarios</router-link></li>
+                            <li><router-link :to="{ name: 'comision-superior' }" class="btn navbar-btn" role="button" active-class>Comisión Superior</router-link></li>
                         </ul>
                     </div>
                     <a href="/logout" class="btn navbar-btn pull-right" role="button" active-class>Cerrar sesión</a>
