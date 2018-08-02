@@ -35,7 +35,6 @@ class User extends Authenticatable
         'departamento',
         'jerarquia',
         'jornada',
-        'rol',
         'comision',
     ];
 
@@ -52,11 +51,6 @@ class User extends Authenticatable
     public function jornada()
     {
         return $this->belongsTo(Jornada::class, 'id_jornada');
-    }
-
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'id_rol');
     }
 
     public function declaraciones()
@@ -82,11 +76,6 @@ class User extends Authenticatable
     public function getJornadaAttribute()
     {
         return $this->jornada()->first();
-    }
-
-    public function getRolAttribute()
-    {
-        return $this->rol()->first();
     }
 
     public function getComisionAttribute()

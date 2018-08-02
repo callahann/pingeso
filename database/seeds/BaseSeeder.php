@@ -11,9 +11,7 @@ use App\Jerarquia;
 use App\Jornada;
 use App\Periodo;
 use App\Rango;
-use App\Rol;
 use App\User;
-use App\Rol_Comision;
 use App\Comision;
 
 class BaseSeeder extends Seeder
@@ -25,48 +23,14 @@ class BaseSeeder extends Seeder
      */
     public function run()
     {
-        $roles = [
-            [
-                'nombre' => 'Académico'
-            ],
-            [
-                'nombre' => 'Director de departamento'
-            ],
-            [
-                'nombre' => 'Comisión Superior'
-            ],
-            [
-                'nombre' => 'Administrador'
-            ],
-            [
-                'nombre' => 'Comisión de Facultad'
-            ],
-            [
-                'nombre' => 'Comisión de Departamento'
-            ],
-            [
-                'nombre' => 'Suplente Comisión de Facultad'
-            ],
-            [
-                'nombre' => 'Suplente Comisión de Departamento'
-            ],
-        ];
-
-        foreach ($roles as $rol) {
-            Rol::create($rol);
-        }
-
-
         $dataCS = [
-            'nombre' => 'Comisión Superior',
-            'id_rol' => 3
+            'tipo' => 1
         ];
 
         Comision::create($dataCS);
 
         $dataCF = [
-            'nombre' => 'Comisión de Facultad',
-            'id_rol' => 2,
+            'tipo' => 2,
         ];
 
         $comision_facultad = Comision::create($dataCF);
@@ -77,120 +41,53 @@ class BaseSeeder extends Seeder
         ];
 
         $facultad = Facultad::create($dataF);
-
-        $dataCD1 = [
-            'nombre' => 'Comisión Departamento Ing. Eléctrica',
-            'id_rol' => 1
-        ];
-
-        $CD1 = Comision::create($dataCD1);
-
-        $dataCD2 = [
-            'nombre' => 'Comisión Departamento Ing. Geográfica',
-            'id_rol' => 1
-        ];
-
-        $CD2 = Comision::create($dataCD2);
-
-        $dataCD3 = [
-            'nombre' => 'Comisión Departamento Ing. Informática',
-            'id_rol' => 1
-        ];
-
-        $CD3 = Comision::create($dataCD3);
-
-        $dataCD4 = [
-            'nombre' => 'Comisión Departamento Ing. Industrial',
-            'id_rol' => 1
-        ];
-
-        $CD4 = Comision::create($dataCD4);
-
-        $dataCD5 = [
-            'nombre' => 'Comisión Departamento Ing. Mecánica',
-            'id_rol' => 1
-        ];
-
-        $CD5 = Comision::create($dataCD5);
-
-        $dataCD6 = [
-            'nombre' => 'Comisión Departamento Ing. Metalúrgica',
-            'id_rol' => 1
-        ];
-
-        $CD6 = Comision::create($dataCD6);
-
-        $dataCD7 = [
-            'nombre' => 'Comisión Departamento Ing. Minas',
-            'id_rol' => 1
-        ];
-
-        $CD7 = Comision::create($dataCD7);
-
-        $dataCD8 = [
-            'nombre' => 'Comisión Departamento Ing. Obras Civiles',
-            'id_rol' => 1
-        ];
-
-        $CD8 = Comision::create($dataCD8);
-
-        $dataCD9 = [
-            'nombre' => 'Comisión Departamento Ing. Química',
-            'id_rol' => 1
-        ];
-
-        $CD9 = Comision::create($dataCD9);
     
         $dataD = [
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería Eléctrica',
-                'id_comision' => $CD1->id
+                'nombre' => 'Ingeniería Eléctrica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería Geográfica',
-                'id_comision' => $CD2->id
+                'nombre' => 'Ingeniería Geográfica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería Informática',
-                'id_comision' => $CD3->id
+                'nombre' => 'Ingeniería Informática'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería Industrial',
-                'id_comision' => $CD4->id
+                'nombre' => 'Ingeniería Industrial'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería Mecánica',
-                'id_comision' => $CD5->id
+                'nombre' => 'Ingeniería Mecánica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería Metalúrgica',
-                'id_comision' => $CD6->id
+                'nombre' => 'Ingeniería Metalúrgica'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería en Minas',
-                'id_comision' => $CD7->id
+                'nombre' => 'Ingeniería en Minas'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería en Obras Civiles',
-                'id_comision' => $CD8->id
+                'nombre' => 'Ingeniería en Obras Civiles'
             ],
             [
                 'id_facultad' => $facultad->id,
-                'nombre' => 'Ingeniería Química',
-                'id_comision' => $CD9->id
+                'nombre' => 'Ingeniería Química'
             ]
         ];
 
         foreach ($dataD as $dept) {
-            Departamento::create($dept);
+            $comision = Comision::create([
+                'tipo' => 3
+            ]);
+            $depto = new Departamento($dept);
+            $depto->id_comision = $comision->id;
+            $depto->save();
         }
 
         $descripciones = [
@@ -496,40 +393,40 @@ class BaseSeeder extends Seeder
                 'apellido_materno' => 'Molina',
                 'nombres' => 'Mario Francisco',
                 'email' => 'mario.alvarez.m@usach.cl',
+                'rol' => 0,
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
-                'id_jornada' => 1,
-                'id_rol' => 1
+                'id_jornada' => 1
             ],
             [
                 'apellido_paterno' => 'Vargas',
                 'apellido_materno' => 'Mora',
                 'nombres' => 'Matías José',
                 'email' => 'matias.vargasm@usach.cl',
+                'rol' => 2,
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
-                'id_jornada' => 1,
-                'id_rol' => 4
+                'id_jornada' => 1
             ],
             [
                 'apellido_paterno' => 'Callahan',
                 'apellido_materno' => 'Apellido',
                 'nombres' => 'Nicolás',
                 'email' => 'nicolas.callahan@usach.cl',
+                'rol' => 2,
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
-                'id_jornada' => 1,
-                'id_rol' => 1
+                'id_jornada' => 1
             ],
             [
                 'apellido_paterno' => 'Fuentes',
                 'apellido_materno' => 'Apellido',
                 'nombres' => 'Héctor',
                 'email' => 'hector.fuentes@usach.cl',
+                'rol' => 2,
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
-                'id_jornada' => 1,
-                'id_rol' => 4
+                'id_jornada' => 1
             ]
         ];
 
@@ -599,8 +496,8 @@ class BaseSeeder extends Seeder
         $periodos = [
             [
                 'nombre' => '2018',
-                'desde' => '2018-07-05 00:00:00',
-                'hasta' => '2018-07-15 23:59:59',
+                'desde' => '2018-08-01 00:00:00',
+                'hasta' => '2018-08-30 23:59:59',
                 'id_departamento' => 3
             ]
         ];

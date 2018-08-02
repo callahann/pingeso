@@ -9,25 +9,24 @@ class Comision extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
-        'nombre'
-    ];
-
     protected $hidden = [
         'id_rol'
     ];
 
     protected $dates = ['deleted_at'];
 
-    public function departamento(){
+    public function departamento()
+    {
         return $this->hasOne(Departamento::class, 'id_comision');
     }
 
-    public function facultad(){
+    public function facultad()
+    {
         return $this->hasOne(Facultad::class, 'id_comision');
     }
 
-    public function usuarios(){
+    public function usuarios()
+    {
         return $this->hasMany(User::class, 'id_comision');
     }
 }

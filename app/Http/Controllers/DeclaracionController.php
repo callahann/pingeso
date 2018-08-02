@@ -71,25 +71,22 @@ class DeclaracionController extends Controller
     public function allListed()
     {
         if(Auth::check()) {
-            $id_rol = Auth::user()->id_rol;
-            switch ($id_rol) {
-                case 1: return Auth::user()
+            $rol = Auth::user()->rol;
+            switch ($rol) {
+                case 0: return Auth::user()
                                     ->declaraciones()
                                     ->orderBy('created_at', 'desc')
                                     ->get()
                                     ->load(['periodo' => function($q) {
                                         $q->withTrashed();
                                     }]);
-                case 2:
+                case 1:
                     $id_departamento = Auth::user()->id_departamento; 
                     return Declaracion::where('estado', 2)
                             ->has('periodo')
                             ->whereHas('usuario', function($q) use($id_departamento) {
                                 $q->where('id_departamento', $id_departamento);
                             })
-                            ->get();
-                case 3: return Declaracion::where('estado', 3)
-                            ->has('periodo')
                             ->get();
             }
         }

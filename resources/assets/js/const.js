@@ -56,11 +56,29 @@ Vue.mixin({
              * Códigos de rol de la plataforma. Utilizado para bloquear rutas
              * y condicionar la visualización de las vistas y componentes.
              */
-            rol: Object.freeze({
-                academico: 1,
-                director: 2,
-                comision: 3,
-                admin: 4
+            roles: Object.freeze({
+                academico: 0,
+                director: 1,
+                admin: 2,
+                etiquetas: [
+                    'Académico',
+                    'Director de departamento',
+                    'Administrador'
+                ]
+            }),
+            rolesComision: Object.freeze({
+                comision: 0,
+                suplente: 1
+            }),
+            comision: Object.freeze({
+                superior: 0,
+                facultad: 1,
+                departamental: 2,
+                etiquetas: [
+                    'Comisión superior',
+                    'Comisión de facultad',
+                    'Comisión de departamento'
+                ]
             })
         }
     },

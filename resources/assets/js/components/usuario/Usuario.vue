@@ -103,7 +103,7 @@
                         <label for="rol">Rol:</label>
                         <select v-if="auth.rol.id === rol.admin" class="form-control" id="rol"
                             v-model="usuario.rol">
-                            <option v-for="rol in roles.slice(0,4)" :key="rol.id" :value="rol">{{ rol.nombre }}</option>
+                            <option v-for="rol in roles" :key="rol" :value="rol">{{ roles.etiquetas[rol - 1] }}</option>
                         </select>
                         <p v-else>{{ usuario.rol.nombre }}</p>
                     </div>
@@ -140,7 +140,7 @@
                             })
             
             if(usuario) {
-                this.usuario = Object.assign({}, this.usuario, usuario)
+                this.usuario = Object.assign({}, this.usuario, this.copy(usuario))
                 this.setFacultad(usuario)
             } else if(this.auth.rol.id === this.rol.director) {
                 const departamento = this.auth.departamento
@@ -160,24 +160,12 @@
                 })
             },
             enviar: function() {
-                if(this.usuario.rol.id == 3){
-                    this.usuario.comision.id = 1;
-                }
-                else{
-                    this.usuario.comision.id = null;   
-                }
                 this.$store.dispatch(INSERT_USUARIO, { usuario: this.usuario, cb: this.callback })
             },
             actualizar: function() {
-                if(this.usuario.rol.id == 3){
-                    this.usuario.comision.id = 1;
-                }
-                else{
-                    this.usuario.comision.id = null;   
-                }
                 this.$store.dispatch(UPDATE_USUARIO, { usuario: this.usuario, cb: this.callback })
             },
         },
-        computed: mapState(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
+        computed: mapState(['facultades', 'jerarquias', 'jornadas', 'usuarios'])
     }
 </script>

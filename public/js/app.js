@@ -13114,6 +13114,7 @@ module.exports = Cancel;
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data: function data() {
@@ -13179,7 +13180,6 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         jerarquias: [],
         jornadas: [],
         rangos: [],
-        roles: [],
         usuarios: [],
         departamentos: [],
         periodos: []
@@ -13451,7 +13451,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
                             request = ['descripciones', 'factores', 'rangos'];
 
-                            if (rol === 2 || rol === 4) request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'roles', 'usuarios', 'periodos']);
+                            if (rol >= 1) request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'usuarios', 'periodos']);
 
                             request.forEach(function (r) {
                                 __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r).then(function (response) {
@@ -13938,16 +13938,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -13965,7 +13955,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         declarar: function declarar() {
             var enviar = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-            if (this.auth.rol.id > this.rol.academico || this.auth.departamento.periodo === null) return false;
+            if (this.auth.rol > this.roles.academico || this.auth.departamento.periodo === null) return false;
 
             var periodo = this.auth.departamento.periodo;
             if (periodo.etapa > 1) return false;
@@ -14553,7 +14543,7 @@ if (false) {(function () {
         });
 
         if (usuario) {
-            this.usuario = Object.assign({}, this.usuario, usuario);
+            this.usuario = Object.assign({}, this.usuario, this.copy(usuario));
             this.setFacultad(usuario);
         } else if (this.auth.rol.id === this.rol.director) {
             var departamento = this.auth.departamento;
@@ -14576,23 +14566,13 @@ if (false) {(function () {
             });
         },
         enviar: function enviar() {
-            if (this.usuario.rol.id == 3) {
-                this.usuario.comision.id = 1;
-            } else {
-                this.usuario.comision.id = null;
-            }
             this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["v" /* INSERT_USUARIO */], { usuario: this.usuario, cb: this.callback });
         },
         actualizar: function actualizar() {
-            if (this.usuario.rol.id == 3) {
-                this.usuario.comision.id = 1;
-            } else {
-                this.usuario.comision.id = null;
-            }
             this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["G" /* UPDATE_USUARIO */], { usuario: this.usuario, cb: this.callback });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['facultades', 'jerarquias', 'jornadas', 'roles', 'usuarios'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['facultades', 'jerarquias', 'jornadas', 'usuarios'])
 });
 
 /***/ }),
@@ -14600,6 +14580,9 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
+//
+//
 //
 //
 //
@@ -14883,11 +14866,7 @@ if (false) {(function () {
              * Lista de descripciones de actividades predefinidas, disponibles
              * a través de una lista desplegable.
              */
-            descripciones: [],
-            /**
-             * Indica para que semestre se muestran las actividades (etapa realizado)
-             */
-            semestre: 'primero'
+            descripciones: []
         };
     },
     created: function created() {
@@ -14931,6 +14910,10 @@ if (false) {(function () {
                         horasSemana: 0,
                         horasSemestre: 0
                     }
+                },
+                observaciones: {
+                    academico: '',
+                    director: ''
                 }
             };
         },
@@ -15320,7 +15303,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         estado: function estado() {
             var horas = this.auth.jornada.horas;
             var diferencia = Math.round((horas - this.totales.comprometido.equivalente) * 10) / 10;
-            var mensaje = diferencia <= 0 ? undefined : 'Aún falta declarar ' + diferencia + ' horas';
+            var mensaje = diferencia > 0 ? 'Aún falta declarar ' + diferencia + ' horas' : Math.abs(diferencia) >= 0.3 * horas ? 'Se ha declarado ' + Math.abs(diferencia) + ' horas más' : undefined;
             var clase = diferencia <= horas * 0.1 ? 'info' : diferencia <= horas * 0.4 ? 'warning' : 'danger';
             return { mensaje: mensaje, clase: clase };
         }
@@ -19358,7 +19341,7 @@ var render = function() {
               [_vm._v("Inicio")]
             ),
             _vm._v(" "),
-            _vm.auth.rol.id < _vm.rol.admin
+            _vm.auth.rol < _vm.roles.admin
               ? _c(
                   "router-link",
                   {
@@ -19373,8 +19356,8 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            _vm.auth.rol.id === _vm.rol.director ||
-            _vm.auth.rol.id === _vm.rol.admin
+            _vm.auth.rol === _vm.roles.director ||
+            _vm.auth.rol === _vm.roles.admin
               ? _c("div", { staticClass: "btn-group" }, [
                   _vm._m(0),
                   _vm._v(" "),
@@ -19385,7 +19368,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol.id === _vm.rol.director
+                          _vm.auth.rol === _vm.roles.director
                             ? _c(
                                 "router-link",
                                 {
@@ -19406,18 +19389,18 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol.id === _vm.rol.admin
+                          _vm.auth.rol === _vm.roles.admin
                             ? _c(
                                 "router-link",
                                 {
                                   staticClass: "btn navbar-btn",
                                   attrs: {
-                                    to: { name: "factores" },
+                                    to: { name: "comision-superior" },
                                     role: "button",
                                     "active-class": ""
                                   }
                                 },
-                                [_vm._v("Factores")]
+                                [_vm._v("Comisión Superior")]
                               )
                             : _vm._e()
                         ],
@@ -19427,7 +19410,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol.id === _vm.rol.admin
+                          _vm.auth.rol === _vm.roles.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19448,7 +19431,28 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol.id === _vm.rol.admin
+                          _vm.auth.rol === _vm.roles.admin
+                            ? _c(
+                                "router-link",
+                                {
+                                  staticClass: "btn navbar-btn",
+                                  attrs: {
+                                    to: { name: "factores" },
+                                    role: "button",
+                                    "active-class": ""
+                                  }
+                                },
+                                [_vm._v("Factores")]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        [
+                          _vm.auth.rol === _vm.roles.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19469,7 +19473,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol.id === _vm.rol.admin
+                          _vm.auth.rol === _vm.roles.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19490,7 +19494,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol.id === _vm.rol.admin
+                          _vm.auth.rol === _vm.roles.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19511,7 +19515,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol.id === _vm.rol.admin
+                          _vm.auth.rol === _vm.roles.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19546,25 +19550,6 @@ var render = function() {
                           )
                         ],
                         1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn navbar-btn",
-                              attrs: {
-                                to: { name: "comision-superior" },
-                                role: "button",
-                                "active-class": ""
-                              }
-                            },
-                            [_vm._v("Comisión Superior")]
-                          )
-                        ],
-                        1
                       )
                     ]
                   )
@@ -19578,7 +19563,14 @@ var render = function() {
                 attrs: { href: "/logout", role: "button", "active-class": "" }
               },
               [_vm._v("Cerrar sesión")]
-            )
+            ),
+            _vm._v(" "),
+            _c("p", { staticClass: "badge navbar-p pull-right" }, [
+              _vm._v(_vm._s(_vm.auth.nombres) + " "),
+              _c("b", [
+                _vm._v("(" + _vm._s(_vm.roles.etiquetas[_vm.auth.rol]) + ")")
+              ])
+            ])
           ],
           1
         )
@@ -20580,169 +20572,169 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
         name: 'usuarios',
         component: __WEBPACK_IMPORTED_MODULE_7__components_usuario_Lista__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 2 || rol === 4' }
+        meta: { eval: 'rol >= 1' }
     }, {
         path: '/usuarios/crear',
         name: 'nuevo-usuario',
         component: __WEBPACK_IMPORTED_MODULE_8__components_usuario_Usuario__["a" /* default */],
         props: { editable: true },
-        meta: { eval: 'rol === 2 || rol === 4' }
+        meta: { eval: 'rol >= 1' }
     }, {
         path: '/usuarios/:id',
         name: 'editar-usuario',
         component: __WEBPACK_IMPORTED_MODULE_8__components_usuario_Usuario__["a" /* default */],
         props: { editable: true },
-        meta: { eval: 'rol === 2 || rol === 4' }
+        meta: { eval: 'rol >= 1' }
     }, {
         path: '/informes',
         name: 'informes',
         component: __WEBPACK_IMPORTED_MODULE_5__components_informe_Lista__["a" /* default */],
         props: true,
-        meta: { eval: 'rol < 4' }
+        meta: { eval: 'rol < 2' }
     }, {
         path: '/informes/declarar',
         name: 'nuevo-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando },
-        meta: { eval: 'rol === 1' }
+        meta: { eval: 'rol === 0' }
     }, {
         path: '/informes/:id',
         name: 'editar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando },
-        meta: { eval: 'rol === 1' }
+        meta: { eval: 'rol === 0' }
     }, {
         path: '/informes/:id',
         name: 'aprobar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].aprobando },
-        meta: { eval: 'rol === 2' }
+        meta: { eval: 'rol === 1' }
     }, {
         path: '/informes/:id',
         name: 'realizado-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].realizado },
-        meta: { eval: 'rol === 1' }
+        meta: { eval: 'rol === 0' }
     }, {
         path: '/informes/:id',
         name: 'evaluar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].evaluando },
-        meta: { eval: 'rol === 3' }
+        meta: { eval: 'rol < 2' }
     }, {
         path: '/informes/:id',
         name: 'apelar-informe',
         component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].apelando },
-        meta: { eval: 'rol === 1' }
+        meta: { eval: 'rol === 0' }
     }, {
         path: '/facultades',
         name: 'facultades',
         component: __WEBPACK_IMPORTED_MODULE_9__components_facultad_ListadoFacultades__["a" /* default */],
-        meta: { eval: 'rol === 4' },
+        meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/facultades/crear',
         name: 'crear-facultad',
         component: __WEBPACK_IMPORTED_MODULE_10__components_facultad_FormFacultad__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/facultades/editar',
         name: 'editar-facultad',
         component: __WEBPACK_IMPORTED_MODULE_10__components_facultad_FormFacultad__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/departamentos',
         name: 'departamentos',
         component: __WEBPACK_IMPORTED_MODULE_11__components_departamento_ListadoDepartamentos__["a" /* default */],
-        meta: { eval: 'rol === 4' },
+        meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/departamentos/crear',
         name: 'crear-departamento',
         component: __WEBPACK_IMPORTED_MODULE_12__components_departamento_FormDepartamento__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/departamentos/editar',
         name: 'editar-departamento',
         component: __WEBPACK_IMPORTED_MODULE_12__components_departamento_FormDepartamento__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/rangos',
         name: 'rangos',
         component: __WEBPACK_IMPORTED_MODULE_13__components_rango_ListadoRangos__["a" /* default */],
-        meta: { eval: 'rol === 4' },
+        meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/rangos/crear',
         name: 'crear-rango',
         component: __WEBPACK_IMPORTED_MODULE_14__components_rango_FormRango__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/rangos/editar',
         name: 'editar-rango',
         component: __WEBPACK_IMPORTED_MODULE_14__components_rango_FormRango__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/jerarquias',
         name: 'jerarquias',
         component: __WEBPACK_IMPORTED_MODULE_15__components_jerarquia_ListadoJerarquias__["a" /* default */],
-        meta: { eval: 'rol === 4' },
+        meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/jerarquias/crear',
         name: 'crear-jerarquia',
         component: __WEBPACK_IMPORTED_MODULE_16__components_jerarquia_FormJerarquia__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/jerarquias/editar',
         name: 'editar-jerarquia',
         component: __WEBPACK_IMPORTED_MODULE_16__components_jerarquia_FormJerarquia__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/jornadas',
         name: 'jornadas',
         component: __WEBPACK_IMPORTED_MODULE_17__components_jornada_ListadoJornadas__["a" /* default */],
-        meta: { eval: 'rol === 4' },
+        meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/jornadas/crear',
         name: 'crear-jornada',
         component: __WEBPACK_IMPORTED_MODULE_18__components_jornada_FormJornada__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/jornadas/editar',
         name: 'editar-jornada',
         component: __WEBPACK_IMPORTED_MODULE_18__components_jornada_FormJornada__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/factores',
         name: 'factores',
         component: __WEBPACK_IMPORTED_MODULE_19__components_factor_ListadoFactores__["a" /* default */],
-        meta: { eval: 'rol === 4' },
+        meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/factores/crear',
         name: 'crear-factor',
         component: __WEBPACK_IMPORTED_MODULE_20__components_factor_FormFactor__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/factores/editar',
         name: 'editar-factor',
         component: __WEBPACK_IMPORTED_MODULE_20__components_factor_FormFactor__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 4' }
+        meta: { eval: 'rol === 2' }
     }, {
         path: '/periodos',
         name: 'periodos',
@@ -20779,7 +20771,7 @@ router.beforeEach(function (to, from, next) {
         var toEval = to.matched.find(function (record) {
             return record.meta.eval;
         }).meta.eval;
-        if (!eval(toEval.replaceAll('rol', __WEBPACK_IMPORTED_MODULE_3__vuex_store__["a" /* default */].state.auth.rol.id))) {
+        if (!eval(toEval.replaceAll('rol', __WEBPACK_IMPORTED_MODULE_3__vuex_store__["a" /* default */].state.auth.rol))) {
             next({
                 name: 'inicio'
             });
@@ -23489,11 +23481,21 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
              * Códigos de rol de la plataforma. Utilizado para bloquear rutas
              * y condicionar la visualización de las vistas y componentes.
              */
-            rol: Object.freeze({
-                academico: 1,
-                director: 2,
-                comision: 3,
-                admin: 4
+            roles: Object.freeze({
+                academico: 0,
+                director: 1,
+                admin: 2,
+                etiquetas: ['Académico', 'Director de departamento', 'Administrador']
+            }),
+            rolesComision: Object.freeze({
+                comision: 0,
+                suplente: 1
+            }),
+            comision: Object.freeze({
+                superior: 0,
+                facultad: 1,
+                departamental: 2,
+                etiquetas: ['Comisión superior', 'Comisión de facultad', 'Comisión de departamento']
             })
         };
     },
@@ -23789,7 +23791,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("th", [_vm._v("Creado el")]),
                 _vm._v(" "),
-                _vm.auth.rol.id > 1
+                _vm.auth.rol > _vm.roles.academico
                   ? _c("th", [_vm._v("Declarante")])
                   : _vm._e(),
                 _vm._v(" "),
@@ -23809,7 +23811,7 @@ var render = function() {
                     _vm._v(_vm._s(new Date(informe.created_at).toString()))
                   ]),
                   _vm._v(" "),
-                  _vm.auth.rol.id > 1
+                  _vm.auth.rol > 1
                     ? _c("td", [
                         _vm._v(
                           _vm._s(informe.usuario.apellido_paterno) +
@@ -23825,229 +23827,179 @@ var render = function() {
                     _vm._v(_vm._s(_vm.estados.etiquetas[informe.estado]))
                   ]),
                   _vm._v(" "),
-                  informe.periodo.actual
-                    ? _c(
-                        "td",
-                        { staticClass: "col-md-2" },
-                        [
-                          _vm.auth.rol.id === _vm.rol.academico &&
-                          informe.periodo.etapa === _vm.etapas.declarando &&
-                          informe.estado <= _vm.estados.revisar
-                            ? _c(
+                  _c(
+                    "td",
+                    { staticClass: "col-md-2" },
+                    [
+                      _vm.auth.rol === _vm.roles.academico &&
+                      informe.periodo.etapa === _vm.etapas.declarando &&
+                      informe.estado <= _vm.estados.revisar
+                        ? _c(
+                            "a",
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticClass: "btn btn-xs btn-info btn-block",
+                                  attrs: {
+                                    to: {
+                                      name: "editar-informe",
+                                      params: { id: informe.id }
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("span", {
+                                    staticClass: "glyphicon glyphicon-pencil",
+                                    attrs: { "aria-hidden": "true" }
+                                  }),
+                                  _vm._v(
+                                    " Editar\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
                                 "a",
-                                [
-                                  _c(
-                                    "router-link",
-                                    {
-                                      staticClass:
-                                        "btn btn-xs btn-info btn-block",
-                                      attrs: {
-                                        to: {
-                                          name: "editar-informe",
-                                          params: { id: informe.id }
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("span", {
-                                        staticClass:
-                                          "glyphicon glyphicon-pencil",
-                                        attrs: { "aria-hidden": "true" }
-                                      }),
-                                      _vm._v(
-                                        " Editar\n                            "
-                                      )
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass:
-                                        "btn btn-xs btn-success btn-block",
-                                      on: {
-                                        click: function($event) {
-                                          _vm.enviar(informe)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("span", {
-                                        staticClass: "glyphicon glyphicon-send",
-                                        attrs: { "aria-hidden": "true" }
-                                      }),
-                                      _vm._v(
-                                        " Enviar\n                            "
-                                      )
-                                    ]
-                                  )
-                                ],
-                                1
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.auth.rol.id === _vm.rol.director &&
-                          informe.periodo.etapa === _vm.etapas.declarando &&
-                          informe.estado === _vm.estados.enviado
-                            ? _c(
-                                "router-link",
                                 {
-                                  staticClass: "btn btn-xs btn-info btn-block",
-                                  attrs: {
-                                    to: {
-                                      name: "aprobar-informe",
-                                      params: { id: informe.id }
+                                  staticClass:
+                                    "btn btn-xs btn-success btn-block",
+                                  on: {
+                                    click: function($event) {
+                                      _vm.enviar(informe)
                                     }
                                   }
                                 },
                                 [
                                   _c("span", {
-                                    staticClass: "glyphicon glyphicon-eye-open",
-                                    attrs: { "aria-hidden": "true" }
-                                  }),
-                                  _vm._v(" Ver\n                        ")
-                                ]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.auth.rol.id === _vm.rol.academico &&
-                          informe.estado === _vm.estados.aprobado &&
-                          informe.periodo.etapa === _vm.etapas.realizado
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn btn-xs btn-info btn-block",
-                                  attrs: {
-                                    to: {
-                                      name: "realizado-informe",
-                                      params: { id: informe.id }
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "     \n                            Informar realizado\n                        "
-                                  )
-                                ]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.auth.rol.id === _vm.rol.comision &&
-                          (informe.periodo.etapa === _vm.etapas.evaluando ||
-                            (informe.periodo.etapa === _vm.etapas.apelando &&
-                              _vm.tieneApelacion(informe)))
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn btn-xs btn-info btn-block",
-                                  attrs: {
-                                    to: {
-                                      name: "evaluar-informe",
-                                      params: { id: informe.id }
-                                    }
-                                  }
-                                },
-                                [
-                                  _vm._v(
-                                    "     \n                            Evaluar\n                        "
-                                  )
-                                ]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.auth.rol.id === _vm.rol.academico &&
-                          informe.estado === _vm.estados.aprobado &&
-                          informe.periodo.etapa === 5
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn btn-xs btn-info btn-block",
-                                  attrs: {
-                                    to: {
-                                      name: "apelar-informe",
-                                      params: { id: informe.id }
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("span", {
-                                    staticClass: "glyphicon glyphicon-eye-open",
+                                    staticClass: "glyphicon glyphicon-send",
                                     attrs: { "aria-hidden": "true" }
                                   }),
                                   _vm._v(
-                                    " Ver calificación\n                        "
+                                    " Enviar\n                            "
                                   )
                                 ]
                               )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c(
-                            "a",
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.auth.rol === _vm.roles.director &&
+                      informe.periodo.etapa === _vm.etapas.declarando &&
+                      informe.estado === _vm.estados.enviado
+                        ? _c(
+                            "router-link",
                             {
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  _vm.descargar(informe)
+                              staticClass: "btn btn-xs btn-info btn-block",
+                              attrs: {
+                                to: {
+                                  name: "aprobar-informe",
+                                  params: { id: informe.id }
                                 }
                               }
                             },
                             [
                               _c("span", {
-                                staticClass: "glyphicon glyphicon-download-alt"
-                              })
+                                staticClass: "glyphicon glyphicon-eye-open",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(" Ver\n                        ")
                             ]
                           )
-                        ],
-                        1
-                      )
-                    : _c(
-                        "td",
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.auth.rol === _vm.roles.academico &&
+                      informe.estado === _vm.estados.aprobado &&
+                      informe.periodo.etapa === _vm.etapas.realizado
+                        ? _c(
+                            "router-link",
+                            {
+                              staticClass: "btn btn-xs btn-info btn-block",
+                              attrs: {
+                                to: {
+                                  name: "realizado-informe",
+                                  params: { id: informe.id }
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "     \n                            Informar realizado\n                        "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.auth.rol_comision ===
+                        _vm.rolesComision.departamental &&
+                      (informe.periodo.etapa === _vm.etapas.evaluando ||
+                        (informe.periodo.etapa === _vm.etapas.apelando &&
+                          _vm.tieneApelacion(informe)))
+                        ? _c(
+                            "router-link",
+                            {
+                              staticClass: "btn btn-xs btn-info btn-block",
+                              attrs: {
+                                to: {
+                                  name: "evaluar-informe",
+                                  params: { id: informe.id }
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "     \n                            Evaluar\n                        "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.auth.rol === _vm.roles.academico &&
+                      informe.estado === _vm.estados.aprobado &&
+                      informe.periodo.etapa === 5
+                        ? _c(
+                            "router-link",
+                            {
+                              staticClass: "btn btn-xs btn-info btn-block",
+                              attrs: {
+                                to: {
+                                  name: "apelar-informe",
+                                  params: { id: informe.id }
+                                }
+                              }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-eye-open",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                " Ver calificación\n                        "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              _vm.descargar(informe)
+                            }
+                          }
+                        },
                         [
-                          _vm.auth.rol.id === _vm.rol.academico &&
-                          informe.estado === _vm.estados.aprobado &&
-                          informe.periodo.etapa === 5
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn btn-xs btn-info btn-block",
-                                  attrs: {
-                                    to: {
-                                      name: "apelar-informe",
-                                      params: { id: informe.id }
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("span", {
-                                    staticClass: "glyphicon glyphicon-eye-open",
-                                    attrs: { "aria-hidden": "true" }
-                                  }),
-                                  _vm._v(
-                                    " Ver calificación\n                        "
-                                  )
-                                ]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c(
-                            "a",
-                            {
-                              attrs: { href: "#" },
-                              on: {
-                                click: function($event) {
-                                  _vm.descargar(informe)
-                                }
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-download-alt"
-                              })
-                            ]
-                          )
-                        ],
-                        1
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-download-alt"
+                          })
+                        ]
                       )
+                    ],
+                    1
+                  )
                 ])
               })
             )
@@ -24645,11 +24597,11 @@ var render = function() {
                           }
                         }
                       },
-                      _vm._l(_vm.roles.slice(0, 4), function(rol) {
+                      _vm._l(_vm.roles, function(rol) {
                         return _c(
                           "option",
-                          { key: rol.id, domProps: { value: rol } },
-                          [_vm._v(_vm._s(rol.nombre))]
+                          { key: rol, domProps: { value: rol } },
+                          [_vm._v(_vm._s(_vm.roles.etiquetas[rol - 1]))]
                         )
                       })
                     )
@@ -25055,26 +25007,35 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("td", { staticClass: "col-md-4" }, [
+                          actividad.observaciones.director.length > 0
+                            ? _c("p", [
+                                _c("b", [_vm._v("Director: ")]),
+                                _vm._v(_vm._s(actividad.observaciones.director))
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
                           _c("textarea", {
                             directives: [
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: actividad.observaciones,
-                                expression: "actividad.observaciones"
+                                value: actividad.observaciones.academico,
+                                expression: "actividad.observaciones.academico"
                               }
                             ],
                             staticClass: "form-control",
                             attrs: { rows: "1" },
-                            domProps: { value: actividad.observaciones },
+                            domProps: {
+                              value: actividad.observaciones.academico
+                            },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
                                 _vm.$set(
-                                  actividad,
-                                  "observaciones",
+                                  actividad.observaciones,
+                                  "academico",
                                   $event.target.value
                                 )
                               }
@@ -25186,26 +25147,37 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("td", { staticClass: "col-md-4" }, [
+                            actividad.observaciones.academico.length > 0
+                              ? _c("p", [
+                                  _c("b", [_vm._v("Académico: ")]),
+                                  _vm._v(
+                                    _vm._s(actividad.observaciones.academico)
+                                  )
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
                             _c("textarea", {
                               directives: [
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: actividad.observaciones,
-                                  expression: "actividad.observaciones"
+                                  value: actividad.observaciones.director,
+                                  expression: "actividad.observaciones.director"
                                 }
                               ],
                               staticClass: "form-control",
                               attrs: { rows: "1" },
-                              domProps: { value: actividad.observaciones },
+                              domProps: {
+                                value: actividad.observaciones.director
+                              },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
                                   _vm.$set(
-                                    actividad,
-                                    "observaciones",
+                                    actividad.observaciones,
+                                    "director",
                                     $event.target.value
                                   )
                                 }
@@ -25275,8 +25247,7 @@ var render = function() {
                               _vm._v(
                                 "\n                        " +
                                   _vm._s(
-                                    actividad.comprometido[_vm.semestre]
-                                      .horasSemana
+                                    actividad.comprometido.primero.horasSemana
                                   ) +
                                   "\n                    "
                               )
@@ -25289,19 +25260,16 @@ var render = function() {
                                     name: "model",
                                     rawName: "v-model.number",
                                     value:
-                                      actividad.realizado[_vm.semestre]
-                                        .horasSemana,
+                                      actividad.realizado.primero.horasSemana,
                                     expression:
-                                      "actividad.realizado[semestre].horasSemana",
+                                      "actividad.realizado.primero.horasSemana",
                                     modifiers: { number: true }
                                   }
                                 ],
                                 staticClass: "form-control",
                                 attrs: { type: "number", min: "0" },
                                 domProps: {
-                                  value:
-                                    actividad.realizado[_vm.semestre]
-                                      .horasSemana
+                                  value: actividad.realizado.primero.horasSemana
                                 },
                                 on: {
                                   input: function($event) {
@@ -25309,7 +25277,7 @@ var render = function() {
                                       return
                                     }
                                     _vm.$set(
-                                      actividad.realizado[_vm.semestre],
+                                      actividad.realizado.primero,
                                       "horasSemana",
                                       _vm._n($event.target.value)
                                     )
@@ -25325,8 +25293,7 @@ var render = function() {
                               _vm._v(
                                 "\n                        " +
                                   _vm._s(
-                                    actividad.comprometido[_vm.semestre]
-                                      .horasSemestre
+                                    actividad.comprometido.primero.horasSemestre
                                   ) +
                                   "\n                    "
                               )
@@ -25339,10 +25306,9 @@ var render = function() {
                                     name: "model",
                                     rawName: "v-model.number",
                                     value:
-                                      actividad.realizado[_vm.semestre]
-                                        .horasSemestre,
+                                      actividad.realizado.primero.horasSemestre,
                                     expression:
-                                      "actividad.realizado[semestre].horasSemestre",
+                                      "actividad.realizado.primero.horasSemestre",
                                     modifiers: { number: true }
                                   }
                                 ],
@@ -25350,8 +25316,7 @@ var render = function() {
                                 attrs: { type: "number", min: "0" },
                                 domProps: {
                                   value:
-                                    actividad.realizado[_vm.semestre]
-                                      .horasSemestre
+                                    actividad.realizado.primero.horasSemestre
                                 },
                                 on: {
                                   input: function($event) {
@@ -25359,7 +25324,7 @@ var render = function() {
                                       return
                                     }
                                     _vm.$set(
-                                      actividad.realizado[_vm.semestre],
+                                      actividad.realizado.primero,
                                       "horasSemestre",
                                       _vm._n($event.target.value)
                                     )
@@ -25371,29 +25336,94 @@ var render = function() {
                               })
                             ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "col-md-4" }, [
-                              _c("textarea", {
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido.segundo.horasSemana
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-1" }, [
+                              _c("input", {
                                 directives: [
                                   {
                                     name: "model",
-                                    rawName: "v-model",
-                                    value: actividad.observaciones,
-                                    expression: "actividad.observaciones"
+                                    rawName: "v-model.number",
+                                    value:
+                                      actividad.realizado.segundo.horasSemana,
+                                    expression:
+                                      "actividad.realizado.segundo.horasSemana",
+                                    modifiers: { number: true }
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: { rows: "1" },
-                                domProps: { value: actividad.observaciones },
+                                attrs: { type: "number", min: "0" },
+                                domProps: {
+                                  value: actividad.realizado.segundo.horasSemana
+                                },
                                 on: {
                                   input: function($event) {
                                     if ($event.target.composing) {
                                       return
                                     }
                                     _vm.$set(
-                                      actividad,
-                                      "observaciones",
-                                      $event.target.value
+                                      actividad.realizado.segundo,
+                                      "horasSemana",
+                                      _vm._n($event.target.value)
                                     )
+                                  },
+                                  blur: function($event) {
+                                    _vm.$forceUpdate()
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido.segundo.horasSemestre
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "col-md-1" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model.number",
+                                    value:
+                                      actividad.realizado.segundo.horasSemestre,
+                                    expression:
+                                      "actividad.realizado.segundo.horasSemestre",
+                                    modifiers: { number: true }
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: { type: "number", min: "0" },
+                                domProps: {
+                                  value:
+                                    actividad.realizado.segundo.horasSemestre
+                                },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      actividad.realizado.segundo,
+                                      "horasSemestre",
+                                      _vm._n($event.target.value)
+                                    )
+                                  },
+                                  blur: function($event) {
+                                    _vm.$forceUpdate()
                                   }
                                 }
                               })
@@ -25439,9 +25469,7 @@ var render = function() {
                                   .horasSemestre
                               )
                             )
-                          ]),
-                          _vm._v(" "),
-                          _c("th", { attrs: { colspan: "2" } })
+                          ])
                         ])
                       ],
                       2
@@ -25521,10 +25549,6 @@ var render = function() {
                                   actividad.realizado.segundo.horasSemestre
                                 )
                               )
-                            ]),
-                            _vm._v(" "),
-                            _c("td", { staticClass: "col-md-4" }, [
-                              _vm._v(_vm._s(actividad.observaciones))
                             ])
                           ])
                         }),
@@ -25688,9 +25712,7 @@ var render = function() {
                                   ")\n                    "
                               )
                             ]
-                          ),
-                          _vm._v(" "),
-                          _c("th")
+                          )
                         ])
                       ],
                       2
@@ -25715,54 +25737,6 @@ var render = function() {
               _vm._v(" Agregar actividad\n        ")
             ]
           )
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.etapa === _vm.etapas.realizado
-      ? _c("div", { staticClass: "panel-footer" }, [
-          _c("b", [_vm._v("Semestre: ")]),
-          _vm._v(" "),
-          _c("label", { staticClass: "radio-inline" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.semestre,
-                  expression: "semestre"
-                }
-              ],
-              attrs: { type: "radio", value: "primero" },
-              domProps: { checked: _vm._q(_vm.semestre, "primero") },
-              on: {
-                change: function($event) {
-                  _vm.semestre = "primero"
-                }
-              }
-            }),
-            _vm._v("Primero")
-          ]),
-          _vm._v(" "),
-          _c("label", { staticClass: "radio-inline" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.semestre,
-                  expression: "semestre"
-                }
-              ],
-              attrs: { type: "radio", value: "segundo" },
-              domProps: { checked: _vm._q(_vm.semestre, "segundo") },
-              on: {
-                change: function($event) {
-                  _vm.semestre = "segundo"
-                }
-              }
-            }),
-            _vm._v("Segundo")
-          ])
         ])
       : _vm._e()
   ])
@@ -25913,24 +25887,20 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
-          _vm._v(
-            "\n                        Descripción\n                        "
-          ),
-          _c(
-            "a",
-            {
-              staticClass: "badge",
-              attrs: {
-                "data-toggle": "tooltip",
-                "data-placement": "top",
-                title: "Breve descripción de la tarea a realizar"
-              }
-            },
-            [_vm._v("?")]
-          )
+        _c("th", { staticClass: "text-center", attrs: { rowspan: "3" } }, [
+          _vm._v("Descripción")
         ]),
         _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { colspan: "4" } }, [
+          _vm._v("Primer semestre")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { colspan: "4" } }, [
+          _vm._v("Segundo semestre")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
         _c("th", { staticClass: "text-center", attrs: { colspan: "2" } }, [
           _vm._v("Horas semana")
         ]),
@@ -25939,27 +25909,24 @@ var staticRenderFns = [
           _vm._v("Horas semestre")
         ]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
-          _vm._v(
-            "\n                        Observaciones\n                        "
-          ),
-          _c(
-            "a",
-            {
-              staticClass: "badge",
-              attrs: {
-                "data-toggle": "tooltip",
-                "data-placement": "top",
-                title:
-                  "Agregue una observación respecto a esta tarea para presentarla al Director de Departamento"
-              }
-            },
-            [_vm._v("?")]
-          )
+        _c("th", { staticClass: "text-center", attrs: { colspan: "2" } }, [
+          _vm._v("Horas semana")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { colspan: "2" } }, [
+          _vm._v("Horas semestre")
         ])
       ]),
       _vm._v(" "),
       _c("tr", [
+        _c("th", { staticClass: "text-center" }, [_vm._v("Declarado")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Realizado")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Declarado")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Realizado")]),
+        _vm._v(" "),
         _c("th", { staticClass: "text-center" }, [_vm._v("Declarado")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center" }, [_vm._v("Realizado")]),
@@ -26000,10 +25967,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { colspan: "4" } }, [
           _vm._v("Segundo semestre")
-        ]),
-        _vm._v(" "),
-        _c("th", { staticClass: "text-center", attrs: { rowspan: "3" } }, [
-          _vm._v("Observaciones")
         ])
       ]),
       _vm._v(" "),
@@ -26992,8 +26955,8 @@ var render = function() {
     "div",
     {
       class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
+        "col-md-12": _vm.auth.rol >= 3,
+        "col-md-8 col-md-offset-2": _vm.auth.rol <= _vm.roles.director
       }
     },
     [
@@ -27034,17 +26997,17 @@ var render = function() {
               _vm._v(" "),
               _c("th", { staticClass: "text-center" }, [_vm._v("Nombres")]),
               _vm._v(" "),
-              _vm.auth.rol.id > 2
+              _vm.auth.rol === _vm.roles.admin
                 ? _c("th", { staticClass: "text-center" }, [_vm._v("Facultad")])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.auth.rol.id > 2
+              _vm.auth.rol === _vm.roles.admin
                 ? _c("th", { staticClass: "text-center" }, [
                     _vm._v("Departamento")
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.auth.rol.id === 4
+              _vm.auth.rol === _vm.roles.admin
                 ? _c("th", { staticClass: "text-center" }, [_vm._v("Rol")])
                 : _vm._e(),
               _vm._v(" "),
@@ -27062,17 +27025,17 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(usuario.nombres))]),
                 _vm._v(" "),
-                _vm.auth.rol.id > 2
+                _vm.auth.rol === _vm.roles.admin
                   ? _c("td", [
                       _vm._v(_vm._s(usuario.departamento.facultad.nombre))
                     ])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.auth.rol.id > 2
+                _vm.auth.rol === _vm.roles.admin
                   ? _c("td", [_vm._v(_vm._s(usuario.departamento.nombre))])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.auth.rol.id === 4
+                _vm.auth.rol === _vm.roles.admin
                   ? _c("td", [_vm._v(_vm._s(usuario.rol.nombre))])
                   : _vm._e(),
                 _vm._v(" "),
@@ -27511,7 +27474,7 @@ var render = function() {
             _c(
               "tbody",
               _vm._l(_vm.users, function(user) {
-                return _c("tr", [
+                return _c("tr", { key: user.id }, [
                   _c("td", [
                     _vm._v(
                       _vm._s(user.nombres) + " " + _vm._s(user.apellido_paterno)
@@ -28018,7 +27981,7 @@ var render = function() {
             _c(
               "tbody",
               _vm._l(_vm.users, function(user) {
-                return _c("tr", [
+                return _c("tr", { key: user.id }, [
                   _c("td", [
                     _vm._v(
                       _vm._s(user.nombres) + " " + _vm._s(user.apellido_paterno)

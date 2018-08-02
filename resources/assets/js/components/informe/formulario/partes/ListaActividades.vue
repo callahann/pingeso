@@ -66,7 +66,8 @@
                             <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemestre">
                         </td>
                         <td class="col-md-4">
-                            <textarea class="form-control" rows=1 v-model="actividad.observaciones"></textarea>
+                            <p v-if="actividad.observaciones.director.length > 0"><b>Director: </b>{{ actividad.observaciones.director }}</p>
+                            <textarea class="form-control" rows=1 v-model="actividad.observaciones.academico"></textarea>
                         </td>
                         <td class="col-md-1">
                             <button type="button" class="btn btn-block btn-danger"
@@ -119,7 +120,8 @@
                         <td class="text-center">{{ actividad.comprometido.segundo.horasSemana }}</td>
                         <td class="text-center">{{ actividad.comprometido.segundo.horasSemestre }}</td>
                         <td class="col-md-4">
-                            <textarea class="form-control" rows=1 v-model="actividad.observaciones"></textarea>
+                            <p v-if="actividad.observaciones.academico.length > 0"><b>Académico: </b>{{ actividad.observaciones.academico }}</p>
+                            <textarea class="form-control" rows=1 v-model="actividad.observaciones.director"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -136,20 +138,21 @@
             <table class="table table-striped" v-else-if="etapa === etapas.realizado">
                 <thead>
                     <tr>
-                        <th class="text-center" rowspan="2">
-                            Descripción
-                            <a class="badge" data-toggle="tooltip" data-placement="top"
-                                title="Breve descripción de la tarea a realizar">?</a>
-                        </th>
-                        <th class="text-center" colspan="2">Horas semana</th>
-                        <th class="text-center" colspan="2">Horas semestre</th>
-                        <th class="text-center" rowspan="2">
-                            Observaciones
-                            <a class="badge" data-toggle="tooltip" data-placement="top"
-                                title="Agregue una observación respecto a esta tarea para presentarla al Director de Departamento">?</a>
-                        </th>
+                        <th class="text-center" rowspan="3">Descripción</th>
+                        <th class="text-center" colspan="4">Primer semestre</th>
+                        <th class="text-center" colspan="4">Segundo semestre</th>
                     </tr>
                     <tr>
+                        <th class="text-center" colspan="2">Horas semana</th>
+                        <th class="text-center" colspan="2">Horas semestre</th>
+                        <th class="text-center" colspan="2">Horas semana</th>
+                        <th class="text-center" colspan="2">Horas semestre</th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Declarado</th>
+                        <th class="text-center">Realizado</th>
+                        <th class="text-center">Declarado</th>
+                        <th class="text-center">Realizado</th>
                         <th class="text-center">Declarado</th>
                         <th class="text-center">Realizado</th>
                         <th class="text-center">Declarado</th>
@@ -162,19 +165,28 @@
                             {{ actividad.descripcion }}
                         </td>
                         <td class="col-md-1 text-center">
-                            {{ actividad.comprometido[semestre].horasSemana }}
+                            {{ actividad.comprometido.primero.horasSemana }}
                         </td>
                         <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado[semestre].horasSemana">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemana">
                         </td>
                         <td class="col-md-1 text-center">
-                            {{ actividad.comprometido[semestre].horasSemestre }}
+                            {{ actividad.comprometido.primero.horasSemestre }}
                         </td>
                         <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado[semestre].horasSemestre">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemestre">
                         </td>
-                        <td class="col-md-4">
-                            <textarea class="form-control" rows=1 v-model="actividad.observaciones"></textarea>
+                        <td class="col-md-1 text-center">
+                            {{ actividad.comprometido.segundo.horasSemana }}
+                        </td>
+                        <td class="col-md-1">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemana">
+                        </td>
+                        <td class="col-md-1 text-center">
+                            {{ actividad.comprometido.segundo.horasSemestre }}
+                        </td>
+                        <td class="col-md-1">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemestre">
                         </td>
                     </tr>
                     <tr>
@@ -183,7 +195,6 @@
                         <th class="text-center">{{ totales.realizado[semestre].horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido[semestre].horasSemestre }}</th>
                         <th class="text-center">{{ totales.realizado[semestre].horasSemestre }}</th>
-                        <th colspan="2"></th>
                     </tr>
                 </tbody>
             </table>
@@ -198,7 +209,6 @@
                         </th>
                         <th class="text-center" colspan="4">Primer semestre</th>
                         <th class="text-center" colspan="4">Segundo semestre</th>
-                        <th class="text-center" rowspan="3">Observaciones</th>
                     </tr>
                     <tr>
                         <th class="text-center" colspan="2">Comprometido</th>
@@ -230,7 +240,6 @@
                         <td class="text-center">{{ actividad.comprometido.segundo.horasSemestre }}</td>
                         <td class="text-center">{{ actividad.realizado.segundo.horasSemana }}</td>
                         <td class="text-center">{{ actividad.realizado.segundo.horasSemestre }}</td>
-                        <td class="col-md-4">{{ actividad.observaciones }}</td>
                     </tr>
                     <tr>
                         <th class="text-right">TOTAL</th>
@@ -250,7 +259,6 @@
                         <th class="text-center" :style="{ color: totales.realizado.segundo.diffSemestral >= 0 ? 'green' : 'red' }">
                             {{ totales.realizado.segundo.horasSemestre }} ({{ (totales.realizado.segundo.diffSemestral >= 0 ? '+' : '') + totales.realizado.segundo.diffSemestral }})
                         </th>
-                        <th></th>
                     </tr>
                 </tbody>
             </table>
@@ -259,11 +267,6 @@
             <button type="button" class="btn btn-success" v-on:click="agregarActividad">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar actividad
             </button>
-        </div>
-        <div class="panel-footer" v-if="etapa === etapas.realizado">
-            <b>Semestre: </b>
-            <label class="radio-inline"><input type="radio" v-model="semestre" value="primero">Primero</label>
-            <label class="radio-inline"><input type="radio" v-model="semestre" value="segundo">Segundo</label>
         </div>
     </div>
 </template>
@@ -281,11 +284,7 @@
                  * Lista de descripciones de actividades predefinidas, disponibles
                  * a través de una lista desplegable.
                  */
-                descripciones: [],
-                /**
-                 * Indica para que semestre se muestran las actividades (etapa realizado)
-                 */
-                semestre: 'primero'
+                descripciones: []
             }
         },
         created: function() {
@@ -327,6 +326,10 @@
                             horasSemana: 0,
                             horasSemestre: 0,
                         }
+                    },
+                    observaciones: {
+                        academico: '',
+                        director: ''
                     }
                 }
             },

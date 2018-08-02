@@ -18,10 +18,10 @@ class CreateUsersTable extends Migration
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
             $table->string('nombres');
+            $table->unsignedInteger('rol');
             $table->unsignedInteger('id_departamento');
             $table->unsignedInteger('id_jerarquia');
             $table->unsignedInteger('id_jornada');
-            $table->unsignedInteger('id_rol');
             $table->unsignedInteger('rol_comision')->nullable();
             $table->unsignedInteger('id_comision')->nullable();
             $table->string('email')->unique();
@@ -32,23 +32,19 @@ class CreateUsersTable extends Migration
             $table->foreign('id_departamento')
                 ->references('id')
                 ->on('departamentos')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
             $table->foreign('id_jerarquia')
                 ->references('id')
                 ->on('jerarquias')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
             $table->foreign('id_jornada')
                 ->references('id')
                 ->on('jornadas')
-                ->onDelete('cascade');;
-            $table->foreign('id_rol')
-                ->references('id')
-                ->on('rols')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
             $table->foreign('id_comision')
                 ->references('id')
                 ->on('comisions')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
         });
     }
 

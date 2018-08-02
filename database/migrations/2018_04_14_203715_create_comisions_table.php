@@ -15,8 +15,7 @@ class CreateComisionsTable extends Migration
     {
         Schema::create('comisions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
-            $table->unsignedInteger('id_rol');
+            $table->unsignedInteger('tipo');
             $table->timestamps();
             $table->softDeletes();
         });

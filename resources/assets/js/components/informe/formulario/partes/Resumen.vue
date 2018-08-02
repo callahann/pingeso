@@ -202,7 +202,8 @@
             estado: function() {
                 const horas = this.auth.jornada.horas
                 const diferencia = Math.round((horas - this.totales.comprometido.equivalente) * 10) / 10
-                const mensaje = diferencia <= 0 ? undefined : 'Aún falta declarar ' + diferencia + ' horas'
+                const mensaje = diferencia > 0 ? 'Aún falta declarar ' + diferencia + ' horas' :
+                                Math.abs(diferencia) >= 0.3 * horas ? 'Se ha declarado ' + Math.abs(diferencia) + ' horas más' : undefined
                 const clase = diferencia <= horas * 0.1 ? 'info' : diferencia <= horas * 0.4 ? 'warning' : 'danger'
                 return { mensaje, clase }
             }

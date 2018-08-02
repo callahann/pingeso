@@ -85,6 +85,12 @@ input[type="file"] {
   padding: 0.25em !important;
 }
 
+.navbar-p {
+  color: white;
+  margin-top: 1.2em;
+  margin-right: 0.6em;
+}
+
 .navbar-btn {
   color: white;
 }

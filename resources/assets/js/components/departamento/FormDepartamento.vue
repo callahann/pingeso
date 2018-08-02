@@ -50,7 +50,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for = "user in users">
+                                <tr v-for="user in users" :key="user.id">
                                     <td>{{user.nombres}} {{user.apellido_paterno}}</td>
                                     <td>{{user.email}}</td>
                                     <td>{{user.rol.nombre}}</td>

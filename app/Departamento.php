@@ -31,7 +31,8 @@ class Departamento extends Model
         return $this->belongsTo(Facultad::class, 'id_facultad')->withTrashed();
     }
 
-    public function comision(){
+    public function comision()
+    {
         return $this->belongsTo(Comision::class, 'id_comision');
     }
 

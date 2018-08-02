@@ -20,7 +20,6 @@ const store = new Vuex.Store({
         jerarquias: [],
         jornadas: [],
         rangos: [],
-        roles: [],
         usuarios: [],
         departamentos: [],
         periodos: [],
@@ -220,8 +219,8 @@ const store = new Vuex.Store({
             dispatch(Actions.FETCH_DECLARACIONES, rol)
 
             var request = ['descripciones', 'factores', 'rangos']
-            if(rol === 2 || rol === 4)
-                request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'roles', 'usuarios', 'periodos'])
+            if(rol >= 1)
+                request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'usuarios', 'periodos'])
             
             request.forEach(r => {
                 axios
