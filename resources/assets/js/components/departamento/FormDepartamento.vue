@@ -90,7 +90,8 @@
     created: function() {
         this.editable = true;
         this.message = '';
-        this.status = 0; 
+        this.status = 0;
+        //departamento.id = 4
         axios.get('/api/comisiones/departamento/4')
         .then(response => {
             console.log(response.data.usuarios);

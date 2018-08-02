@@ -56,21 +56,6 @@ class BaseSeeder extends Seeder
             Rol::create($rol);
         }
 
-        $rol_comisiones = [
-            [
-                'nombre' => 'Comisión de Departamento'
-            ],
-            [
-                'nombre' => 'Comisión de Facultad'
-            ],
-            [
-                'nombre' => 'Comisión Superior'
-            ],
-        ];
-
-        foreach ($rol_comisiones as $rol_comision) {
-            Rol_Comision::create($rol_comision);
-        }
 
         $dataCS = [
             'nombre' => 'Comisión Superior',

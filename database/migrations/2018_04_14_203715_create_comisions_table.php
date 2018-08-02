@@ -19,11 +19,6 @@ class CreateComisionsTable extends Migration
             $table->unsignedInteger('id_rol');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('id_rol')
-                ->references('id')
-                ->on('comision_rols')
-                ->onDelete('cascade');;
         });
     }
 

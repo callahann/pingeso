@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('id_jerarquia');
             $table->unsignedInteger('id_jornada');
             $table->unsignedInteger('id_rol');
+            $table->unsignedInteger('rol_comision')->nullable();
             $table->unsignedInteger('id_comision')->nullable();
             $table->string('email')->unique();
             $table->rememberToken();
