@@ -25,6 +25,7 @@ import FormFactor from './components/factor/FormFactor'
 import ListadoPeriodos from './components/periodo/ListadoPeriodos'
 import FormPeriodo from './components/periodo/FormPeriodo'
 import ListadoComision from './components/comision/ListadoComision'
+import ListadoUsuarios from './components/comision/ListadoUsuarios'
 
 const router = new VueRouter({
     mode: 'history',
@@ -252,14 +253,19 @@ const router = new VueRouter({
              meta: { eval: 'rol === 2'}
          },
          {
-             path: '/departamentos/editar/comision',
-             name: 'editar-comision-departamento',
-             component: ListadoComision
-         },
-         {
              path: '/comision/superior',
              name: 'comision-superior',
              component: ListadoComision
+         },
+         {
+             path: '/comision/:id/agregar',
+             name: 'usuarios-comision',
+             component: ListadoUsuarios
+         },
+     {
+             path: '/comision/superior/agregar',
+             name: 'usuarios-comision-superior',
+             component: ListadoUsuarios
          },
     ],
 })

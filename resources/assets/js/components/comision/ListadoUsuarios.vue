@@ -1,6 +1,9 @@
 <template>
     <div class="row">
         <label for="facultad">Comisión Superior</label>
+        <br></br>
+        <input type="text" v-model="search" placeholder="Buscar usuarios"/>
+        <br></br>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -11,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for = "user in users">
+                <tr v-for = "user in filtrar">
                     <td>{{user.nombres}} {{user.apellido_paterno}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.rol.nombre}}</td>
@@ -20,7 +23,7 @@
             </tbody>
         </table>
         <div class="panel-footer">
-                <router-link class="btn btn-success" :to="{ name: 'usuarios-comision-superior'}">     
+                <router-link class="btn btn-success" :to="{ name: 'usuarios-comision'}">     
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Usuario
                 </router-link>
         </div>
@@ -31,17 +34,26 @@
     import axios from 'axios';
     export default {       
         created: function() {
-            axios.get('/api/comisiones/superior')
+            axios.get('/api/usuarios')
             .then(response => {
-                console.log(response.data.usuarios);
-                this.users = response.data.usuarios;
+                console.log(response.data);
+                this.users = response.data;
             });
+        },
+        computed: {
+            filtrar: function(){
+                return this.users.filter((user)=>
+                {
+                    return user.nombres.toLowerCase().match(this.search.toLowerCase());
+                });
+            }
+
         },
         data () {
             return {
-            users: []
+            users: [],
+            search: ''
             }
         }
   }
 </script>
-

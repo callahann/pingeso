@@ -51,6 +51,9 @@
                 <button type="button" class="btn btn-success" v-on:click="addElem">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span> {{this.accion}}
                 </button>
+                <router-link class="btn btn-success" :to="{ name: 'usuarios-comision', params: { id: element.id }}">     
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Usuario
+                </router-link>
             </div>
         </div>
     </div>
@@ -78,7 +81,7 @@
         this.editable = true;
         this.message = '';
         this.status = 0;
-        axios.get('/api/comisiones/facultad/1')
+        axios.get('/api/comisiones/facultad/' + this.element.id)
         .then(response => {
             console.log(response.data.usuarios);
             this.users = response.data.usuarios;
@@ -88,6 +91,7 @@
         console.log(this);
         return {
         element: (this.elemento?this.elemento:{}),
+        users: []
         }
     },
     methods: {

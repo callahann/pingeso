@@ -35,7 +35,7 @@ class ComisionController extends Controller
     }
 
     public function comisionSuperior(){
-        return Comision::where('nombre', 'Comisión Superior')
+        return Comision::where('id', 1)
                         ->first()
                         ->load('usuarios');
     }
