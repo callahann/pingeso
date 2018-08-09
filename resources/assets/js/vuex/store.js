@@ -222,26 +222,29 @@ const store = new Vuex.Store({
             if(rol >= 1)
                 request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'usuarios', 'periodos'])
             
+            var promises = []
             request.forEach(r => {
-                axios
-                    .get('/api/' + r)
-                    .then(response => {
-                        commit(Mutations.SET_STATE_ARRAY, { key: r, payload: response })
-                    })
+                const promise = axios.get('/api/' + r)
+                promises.push(promise)
+                promise.then(response => {
+                    commit(Mutations.SET_STATE_ARRAY, { key: r, payload: response })
+                })
             })
 
-            axios
-                .get('/api/formulas')
-                .then(response => {
-                    commit(Mutations.SET_STATE_OBJECT, { key: 'formula', payload: response })
-                })
+            const promise = axios.get('/api/formulas')
+            promises.push(promise)
+            promise.then(response => {
+                commit(Mutations.SET_STATE_OBJECT, { key: 'formula', payload: response })
+            })
             
-            callback()
+            Promise.all(promises).then(() => {
+                callback()
+            })
         },
         async [Actions.FETCH_AUTH_USER] ({ commit }) {
             const response = await axios.get('/api/auth')
             commit(Mutations.SET_STATE_OBJECT, { key: 'auth', payload: response })
-            return response.data.rol.id
+            return response.data.rol
         },
         [Actions.FETCH_DECLARACIONES] ({ commit }, rol) {
             axios

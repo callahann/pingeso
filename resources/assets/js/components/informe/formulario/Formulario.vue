@@ -14,7 +14,7 @@
             <div class="row">
                 <resumen :informe="informe" :etapa="etapa"></resumen>
             </div>
-            <div class="row" v-if="(etapa === etapas.apelando && auth.rol.id === rol.academico) || apelado">
+            <div class="row" v-if="(etapa === etapas.apelando && auth.rol === roles.academico) || apelado">
                 <apelacion :apelaciones="informe.apelaciones" :actual="informe.periodo.actual" v-on:actualizar="apelacion = $event"></apelacion>
             </div>
             <div class="row">
@@ -67,7 +67,7 @@
                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&ensp;Aprobar
                             </button>
                         </a>
-                        <button v-if="informe.periodo.actual && etapa === etapas.apelando && auth.rol.id === rol.academico" type="button" class="btn btn-success" v-on:click="apelar">
+                        <button v-if="informe.periodo.actual && etapa === etapas.apelando && auth.rol === roles.academico" type="button" class="btn btn-success" v-on:click="apelar">
                             <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&ensp;Enviar apelación
                         </button>
                         <button v-else-if="apelado" type="button" class="btn btn-success" v-on:click="resuelto">

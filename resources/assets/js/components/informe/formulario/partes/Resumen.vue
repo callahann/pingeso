@@ -46,7 +46,7 @@
                     <th class="text-center" v-if="etapa >= etapas.realizado"><b>{{ totales.realizado.equivalente }}</b></th>
                     <td class="td-margin" v-if="etapa >= etapas.evaluando"></td>
                     <th class="text-center" :style="{ color: rango.color }" v-if="etapa >= etapas.evaluando">
-                        {{ calificacion }} - {{ rango.leyenda }}
+                        {{ calificacion }}
                     </th>
                 </tr>
             </tbody>
@@ -139,6 +139,9 @@
                         this.totales.realizado.equivalente = Math.round(this.totales.realizado.equivalente * 10) / 10
                     }
                 }
+
+                this.$store.dispatch(UPDATE_RESUMENES, { id: this.informe.id, resumenes: this.resumenes })
+                this.$store.dispatch(UPDATE_TOTALES, { id: this.informe.id, totales: this.totales })
             }
         },
         computed: {
@@ -179,20 +182,6 @@
                     return diferencia <= factor.diferencia
                 })
                 return calificacion * factor.factor
-            },
-            /**
-             * Rango asignado de acuerdo a la calificación.
-             * @return Objeto rango.
-             */
-            rango: function() {
-                let calificacion = this.calificacion
-                const rango = this.rangos.find((rango) => {
-                    return rango.base <= calificacion && calificacion <= rango.tope
-                })
-                return rango || {
-                    leyenda: 'No definido',
-                    color: 'black'
-                }
             },
             /**
              * Comprueba la cantidad de horas ingresadas y la contrasta con la cantidad

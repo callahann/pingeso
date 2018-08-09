@@ -9,25 +9,25 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse" style="padding-left: 10em">
                     <!-- Left Side Of Navbar -->
                     <router-link :to="{ name: 'inicio' }" class="btn navbar-btn" role="button" active-class>Inicio</router-link>
-                    <router-link :to="{ name: 'informes' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol < roles.admin">Informes de Actividades</router-link>
-                    <div class="btn-group" v-if="auth.rol === roles.director || auth.rol === roles.admin">
+                    <router-link :to="{ name: 'informes' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol < rol.admin">Informes de Actividades</router-link>
+                    <div class="btn-group" v-if="auth.rol === rol.director || auth.rol === rol.admin">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             Administrar <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><router-link :to="{ name: 'periodos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.director">Periodos</router-link></li>
-                            <li><router-link :to="{ name: 'comision-superior' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.admin">Comisión Superior</router-link></li>
-                            <li><router-link :to="{ name: 'departamentos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.admin">Departamentos</router-link></li>
-                            <li><router-link :to="{ name: 'factores' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.admin">Factores</router-link></li>
-                            <li><router-link :to="{ name: 'facultades' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.admin">Facultades</router-link></li>
-                            <li><router-link :to="{ name: 'jerarquias' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.admin">Jerarquias</router-link></li>
-                            <li><router-link :to="{ name: 'jornadas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.admin">Jornadas</router-link></li>
-                            <li><router-link :to="{ name: 'rangos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === roles.admin">Rangos</router-link></li>
+                            <li><router-link :to="{ name: 'periodos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.director">Periodos</router-link></li>
+                            <li><router-link :to="{ name: 'comision-superior' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Comisión Superior</router-link></li>
+                            <li><router-link :to="{ name: 'departamentos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Departamentos</router-link></li>
+                            <li><router-link :to="{ name: 'factores' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Factores</router-link></li>
+                            <li><router-link :to="{ name: 'facultades' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Facultades</router-link></li>
+                            <li><router-link :to="{ name: 'jerarquias' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Jerarquias</router-link></li>
+                            <li><router-link :to="{ name: 'jornadas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Jornadas</router-link></li>
+                            <li><router-link :to="{ name: 'rangos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Rangos</router-link></li>
                             <li><router-link :to="{ name: 'usuarios' }" class="btn navbar-btn" role="button" active-class>Usuarios</router-link></li>
                         </ul>
                     </div>
                     <a href="/logout" class="btn navbar-btn pull-right" role="button" active-class>Cerrar sesión</a>
-                    <p class="badge navbar-p pull-right">{{ auth.nombres }} <b>({{ roles.etiquetas[auth.rol] }})</b></p>
+                    <p class="badge navbar-p pull-right">{{ auth.nombres }} <b>({{ etiquetas.rol[auth.rol] }})</b></p>
                 </div>
             </div>
         </nav>

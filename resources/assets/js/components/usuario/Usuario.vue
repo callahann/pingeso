@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label for="facultad">Facultad:</label>
-                        <select v-if="editable && auth.rol.id === rol.admin"
+                        <select v-if="editable && auth.rol === rol.admin"
                             class="form-control" id="facultad"
                             v-model="facultad">
                             <option v-for="facultad in facultades"
@@ -55,7 +55,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="depto">Departamento:</label>
-                        <select v-if="editable && auth.rol.id === rol.admin"
+                        <select v-if="editable && auth.rol === rol.admin"
                             class="form-control" id="depto"
                             v-model="usuario.departamento">
                             <option v-if="facultad.departamentos !== undefined" 
@@ -101,11 +101,11 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="rol">Rol:</label>
-                        <select v-if="auth.rol.id === rol.admin" class="form-control" id="rol"
+                        <select v-if="auth.rol === rol.admin" class="form-control" id="rol"
                             v-model="usuario.rol">
-                            <option v-for="rol in roles" :key="rol" :value="rol">{{ roles.etiquetas[rol - 1] }}</option>
+                            <option v-for="rol in roles" :key="rol" :value="rol">{{ etiquetas.rol[rol] }}</option>
                         </select>
-                        <p v-else>{{ usuario.rol.nombre }}</p>
+                        <p v-else>{{ etiquetas.rol[usuario.rol] }}</p>
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@
             if(usuario) {
                 this.usuario = Object.assign({}, this.usuario, this.copy(usuario))
                 this.setFacultad(usuario)
-            } else if(this.auth.rol.id === this.rol.director) {
+            } else if(this.auth.rol === this.rol.director) {
                 const departamento = this.auth.departamento
                 this.usuario['departamento'] = Object.assign({}, this.usuario.departamento, departamento)
                 this.usuario['rol'] = Object.assign({}, this.usuario.rol, this.roles[0])

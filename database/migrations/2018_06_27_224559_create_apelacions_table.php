@@ -16,6 +16,7 @@ class CreateApelacionsTable extends Migration
         Schema::create('apelacions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('id_declaracion');
+            $table->unsignedInteger('comision');
             $table->text('comentario');
             $table->string('nombre_archivo')->nullable();
             $table->timestamps();
@@ -24,7 +25,7 @@ class CreateApelacionsTable extends Migration
             $table->foreign('id_declaracion')
                 ->references('id')
                 ->on('declaracions')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
         });
     }
 

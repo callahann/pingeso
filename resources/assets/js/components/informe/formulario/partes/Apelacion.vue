@@ -6,37 +6,40 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th class="col-md-9">Comentario</th>
-                    <th class="col-md-3">Archivo</th>
+                    <th class="col-md-3">{{ editable ? 'Dirigida a' : 'Archivo' }}</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr v-if="actual">
-                    <td>1</td>
-                    <td v-if="editable">
+            <tbody v-if="editable">
+                <tr>
+                    <td rowspan="3">
                         <textarea class="col-md-12 form-control" rows=3 v-model="apelacion.comentario"></textarea>
                     </td>
-                    <td v-else>{{ apelacion.comentario }}</td>
-                    <td v-if="editable">
+                    <td>
+                        <select v-model="apelacion.comision">
+                            <option v-for="tipo in [...Array(comision.length - 1).keys()]"
+                                :key="tipo" :value="tipo">{{ comision.etiquetas[tipo] }}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Archivo</th>
+                </tr>
+                <tr>
+                    <td>
                         <label for="input" class="btn btn-info btn-block input-file">
                             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> {{ apelacion.archivo !== undefined ? apelacion.archivo.name : 'Seleccionar archivo...' }}
                         </label>
                         <input id="input" type="file" ref="archivo" v-on:change="obtenerArchivo">
                     </td>
-                    <td v-else>
+                </tr>
+            </tbody>
+            <tbody v-else>
+                <tr>
+                    <td>{{ apelacion.comentario }}</td>
+                    <td>
                         <a :href="'/api/apelaciones/' + apelacion.id + '/adjunto'" v-if="apelacion.nombre_archivo" type="button" class="btn btn-info btn-block">
                             <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {{ apelacion.nombre_archivo }}
-                        </a>
-                        <p class="text-center" v-else>No se adjuntó archivo a esta apelación</p>
-                    </td>
-                </tr>
-                <tr v-for="(anterior, index) in apelaciones" :key="anterior.id" v-if="anterior.id !== apelacion.id">
-                    <td>{{ index + 2 }}</td>
-                    <td>{{ anterior.comentario }}</td>
-                    <td>
-                        <a :href="'/api/apelaciones/' + anterior.id + '/adjunto'" v-if="anterior.nombre_archivo" type="button" class="btn btn-info btn-block">
-                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {{ anterior.nombre_archivo }}
                         </a>
                         <p class="text-center" v-else>No se adjuntó archivo a esta apelación</p>
                     </td>
@@ -47,7 +50,7 @@
 </template>
 <script>
     export default {
-        props: ['apelaciones', 'actual'],
+        props: ['previa', 'actual'],
         data: function() {
             return {
                 /**
@@ -56,24 +59,14 @@
                  */
                 apelacion: {
                     comentario: '',
+                    comision: 0,
                     archivo: undefined
-                },
-                /**
-                 * Listado de apelaciones anteriores [eliminar]
-                 */
-                anteriores: []
+                }
             }
         },
         created: function() {
-            const index = this.apelaciones.findIndex(apelacion => {
-                return apelacion.actual === true
-            })
-            if(index === -1) return;
-
-            const actual = this.apelaciones[index]
-            this.apelacion = Object.assign({}, this.apelacion, actual)
-            this.anteriores = Object.assign([], this.anteriores, this.apelaciones)
-            this.anteriores.splice(index, 1)
+            if(this.previa === undefined) return
+            this.apelacion = this.copy(this.previa)
         },
         methods: {
             /**

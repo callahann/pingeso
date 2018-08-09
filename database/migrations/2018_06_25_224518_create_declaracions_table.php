@@ -18,6 +18,7 @@ class CreateDeclaracionsTable extends Migration
             $table->unsignedInteger('id_formula')->nullable();
             $table->unsignedInteger('id_usuario')->nullable();
             $table->unsignedInteger('id_periodo')->nullable();
+            $table->unsignedInteger('id_apelacion')->nullable();
             $table->json('item_docencia')->nullable();
             $table->json('item_investigacion')->nullable();
             $table->json('item_asistencia')->nullable();
@@ -25,6 +26,8 @@ class CreateDeclaracionsTable extends Migration
             $table->json('item_administracion')->nullable();
             $table->json('item_extension')->nullable();
             $table->json('item_educacion_continua')->nullable();
+            $table->json('resumenes')->nullable();
+            $table->json('totales')->nullable();
             $table->integer('estado')->default(0);
             $table->timestamps();
             $table->softDeletes();
@@ -32,19 +35,17 @@ class CreateDeclaracionsTable extends Migration
             $table->foreign('id_formula')
                 ->references('id')
                 ->on('formulas')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
 
             $table->foreign('id_usuario')
                 ->references('id')
                 ->on('users')
-                ->onDelete('cascade');;
+                ->onDelete('cascade');
             
             $table->foreign('id_periodo')
                 ->references('id')
                 ->on('periodos')
-                ->onDelete('cascade');;
-            
-
+                ->onDelete('cascade');
         });
     }
 

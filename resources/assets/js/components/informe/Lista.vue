@@ -19,7 +19,7 @@
                     <tr>
                         <th>Periodo</th>
                         <th>Creado el</th>
-                        <th v-if="auth.rol > roles.academico">Declarante</th>
+                        <th v-if="auth.rol > rol.academico">Declarante</th>
                         <th>Estado</th>
                         <th></th>
                     </tr>
@@ -31,7 +31,7 @@
                         <td v-if="auth.rol > 1">{{ informe.usuario.apellido_paterno }} {{ informe.usuario.apellido_materno }} {{ informe.usuario.nombres }}</td>
                         <td>{{ estados.etiquetas[informe.estado] }}</td>
                         <td class="col-md-2">
-                            <a v-if="auth.rol === roles.academico && informe.periodo.etapa === etapas.declarando && informe.estado <= estados.revisar">
+                            <a v-if="auth.rol === rol.academico && informe.periodo.etapa === etapas.declarando && informe.estado <= estados.revisar">
                                 <router-link
                                     class="btn btn-xs btn-info btn-block"
                                     :to="{ name: 'editar-informe', params: { id: informe.id }}">     
@@ -41,12 +41,12 @@
                                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&ensp;Enviar
                                 </a>
                             </a>
-                            <router-link v-if="auth.rol === roles.director && informe.periodo.etapa === etapas.declarando && informe.estado === estados.enviado"
+                            <router-link v-if="auth.rol === rol.director && informe.periodo.etapa === etapas.declarando && informe.estado === estados.enviado"
                                 class="btn btn-xs btn-info btn-block"
                                 :to="{ name: 'aprobar-informe', params: { id: informe.id }}">     
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&ensp;Ver
                             </router-link>
-                            <router-link v-if="auth.rol === roles.academico && informe.estado === estados.aprobado && informe.periodo.etapa === etapas.realizado"
+                            <router-link v-if="auth.rol === rol.academico && informe.estado === estados.aprobado && informe.periodo.etapa === etapas.realizado"
                                 class="btn btn-xs btn-info btn-block"
                                 :to="{ name: 'realizado-informe', params: { id: informe.id }}">     
                                 Informar realizado
@@ -56,7 +56,7 @@
                                 :to="{ name: 'evaluar-informe', params: { id: informe.id }}">     
                                 Evaluar
                             </router-link>
-                            <router-link v-if="auth.rol === roles.academico && informe.estado === estados.aprobado && informe.periodo.etapa === 5"
+                            <router-link v-if="auth.rol === rol.academico && informe.estado === estados.aprobado && informe.periodo.etapa === 5"
                                 class="btn btn-xs btn-info btn-block"
                                 :to="{ name: 'apelar-informe', params: { id: informe.id }}">     
                                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&ensp;Ver calificación
@@ -88,7 +88,7 @@
                 if(ok) this.mensaje = 'Se ha enviado la declaración al Director de Departamento'
             },
             declarar: function(enviar = false) {
-                if(this.auth.rol > this.roles.academico || this.auth.departamento.periodo === null) return false
+                if(this.auth.rol > this.rol.academico || this.auth.departamento.periodo === null) return false
 
                 const periodo = this.auth.departamento.periodo
                 if(periodo.etapa > 1) return false

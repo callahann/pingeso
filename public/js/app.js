@@ -13435,7 +13435,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var _ref32 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref31, callback) {
             var dispatch = _ref31.dispatch,
                 commit = _ref31.commit;
-            var rol, request;
+            var rol, request, promises, promise;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -13453,19 +13453,28 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
                             if (rol >= 1) request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'usuarios', 'periodos']);
 
+                            promises = [];
+
                             request.forEach(function (r) {
-                                __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r).then(function (response) {
+                                var promise = __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r);
+                                promises.push(promise);
+                                promise.then(function (response) {
                                     commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["s" /* SET_STATE_ARRAY */], { key: r, payload: response });
                                 });
                             });
 
-                            __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/formulas').then(function (response) {
+                            promise = __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/formulas');
+
+                            promises.push(promise);
+                            promise.then(function (response) {
                                 commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["t" /* SET_STATE_OBJECT */], { key: 'formula', payload: response });
                             });
 
-                            callback();
+                            Promise.all(promises).then(function () {
+                                callback();
+                            });
 
-                        case 9:
+                        case 12:
                         case 'end':
                             return _context.stop();
                     }
@@ -13491,7 +13500,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
                             response = _context2.sent;
 
                             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["t" /* SET_STATE_OBJECT */], { key: 'auth', payload: response });
-                            return _context2.abrupt('return', response.data.rol.id);
+                            return _context2.abrupt('return', response.data.rol);
 
                         case 5:
                         case 'end':
@@ -13955,7 +13964,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         declarar: function declarar() {
             var enviar = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-            if (this.auth.rol > this.roles.academico || this.auth.departamento.periodo === null) return false;
+            if (this.auth.rol > this.rol.academico || this.auth.departamento.periodo === null) return false;
 
             var periodo = this.auth.departamento.periodo;
             if (periodo.etapa > 1) return false;
@@ -14545,7 +14554,7 @@ if (false) {(function () {
         if (usuario) {
             this.usuario = Object.assign({}, this.usuario, this.copy(usuario));
             this.setFacultad(usuario);
-        } else if (this.auth.rol.id === this.rol.director) {
+        } else if (this.auth.rol === this.rol.director) {
             var departamento = this.auth.departamento;
             this.usuario['departamento'] = Object.assign({}, this.usuario.departamento, departamento);
             this.usuario['rol'] = Object.assign({}, this.usuario.rol, this.roles[0]);
@@ -15037,9 +15046,12 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    props: ['apelaciones', 'actual'],
+    props: ['previa', 'actual'],
     data: function data() {
         return {
             /**
@@ -15048,24 +15060,14 @@ if (false) {(function () {
              */
             apelacion: {
                 comentario: '',
+                comision: 0,
                 archivo: undefined
-            },
-            /**
-             * Listado de apelaciones anteriores [eliminar]
-             */
-            anteriores: []
+            }
         };
     },
     created: function created() {
-        var index = this.apelaciones.findIndex(function (apelacion) {
-            return apelacion.actual === true;
-        });
-        if (index === -1) return;
-
-        var actual = this.apelaciones[index];
-        this.apelacion = Object.assign({}, this.apelacion, actual);
-        this.anteriores = Object.assign([], this.anteriores, this.apelaciones);
-        this.anteriores.splice(index, 1);
+        if (this.previa === undefined) return;
+        this.apelacion = this.copy(this.previa);
     },
     methods: {
         /**
@@ -15249,6 +15251,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     this.totales.realizado.equivalente = Math.round(this.totales.realizado.equivalente * 10) / 10;
                 }
             }
+
+            this.$store.dispatch(UPDATE_RESUMENES, { id: this.informe.id, resumenes: this.resumenes });
+            this.$store.dispatch(UPDATE_TOTALES, { id: this.informe.id, totales: this.totales });
         }
     },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['factores', 'rangos']), {
@@ -15280,20 +15285,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 return diferencia <= factor.diferencia;
             });
             return calificacion * factor.factor;
-        },
-        /**
-         * Rango asignado de acuerdo a la calificación.
-         * @return Objeto rango.
-         */
-        rango: function rango() {
-            var calificacion = this.calificacion;
-            var rango = this.rangos.find(function (rango) {
-                return rango.base <= calificacion && calificacion <= rango.tope;
-            });
-            return rango || {
-                leyenda: 'No definido',
-                color: 'black'
-            };
         },
         /**
          * Comprueba la cantidad de horas ingresadas y la contrasta con la cantidad
@@ -19421,7 +19412,7 @@ var render = function() {
               [_vm._v("Inicio")]
             ),
             _vm._v(" "),
-            _vm.auth.rol < _vm.roles.admin
+            _vm.auth.rol < _vm.rol.admin
               ? _c(
                   "router-link",
                   {
@@ -19436,8 +19427,7 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
-            _vm.auth.rol === _vm.roles.director ||
-            _vm.auth.rol === _vm.roles.admin
+            _vm.auth.rol === _vm.rol.director || _vm.auth.rol === _vm.rol.admin
               ? _c("div", { staticClass: "btn-group" }, [
                   _vm._m(0),
                   _vm._v(" "),
@@ -19448,7 +19438,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.director
+                          _vm.auth.rol === _vm.rol.director
                             ? _c(
                                 "router-link",
                                 {
@@ -19469,7 +19459,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.admin
+                          _vm.auth.rol === _vm.rol.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19490,7 +19480,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.admin
+                          _vm.auth.rol === _vm.rol.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19511,7 +19501,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.admin
+                          _vm.auth.rol === _vm.rol.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19532,7 +19522,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.admin
+                          _vm.auth.rol === _vm.rol.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19553,7 +19543,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.admin
+                          _vm.auth.rol === _vm.rol.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19574,7 +19564,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.admin
+                          _vm.auth.rol === _vm.rol.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19595,7 +19585,7 @@ var render = function() {
                       _c(
                         "li",
                         [
-                          _vm.auth.rol === _vm.roles.admin
+                          _vm.auth.rol === _vm.rol.admin
                             ? _c(
                                 "router-link",
                                 {
@@ -19648,7 +19638,7 @@ var render = function() {
             _c("p", { staticClass: "badge navbar-p pull-right" }, [
               _vm._v(_vm._s(_vm.auth.nombres) + " "),
               _c("b", [
-                _vm._v("(" + _vm._s(_vm.roles.etiquetas[_vm.auth.rol]) + ")")
+                _vm._v("(" + _vm._s(_vm.etiquetas.rol[_vm.auth.rol]) + ")")
               ])
             ])
           ],
@@ -23567,11 +23557,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
              * Códigos de rol de la plataforma. Utilizado para bloquear rutas
              * y condicionar la visualización de las vistas y componentes.
              */
-            roles: Object.freeze({
+            rol: Object.freeze({
                 academico: 0,
                 director: 1,
-                admin: 2,
-                etiquetas: ['Académico', 'Director de departamento', 'Administrador']
+                admin: 2
             }),
             rolesComision: Object.freeze({
                 comision: 0,
@@ -23580,9 +23569,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
             comision: Object.freeze({
                 superior: 0,
                 facultad: 1,
-                departamental: 2,
-                etiquetas: ['Comisión superior', 'Comisión de facultad', 'Comisión de departamento']
-            })
+                departamental: 2
+            }),
+            etiquetas: {
+                comision: ['Comisión superior', 'Comisión de facultad', 'Comisión de departamento'],
+                rol: ['Académico', 'Director de departamento', 'Administrador']
+            }
         };
     },
     methods: {
@@ -23877,7 +23869,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("th", [_vm._v("Creado el")]),
                 _vm._v(" "),
-                _vm.auth.rol > _vm.roles.academico
+                _vm.auth.rol > _vm.rol.academico
                   ? _c("th", [_vm._v("Declarante")])
                   : _vm._e(),
                 _vm._v(" "),
@@ -23917,7 +23909,7 @@ var render = function() {
                     "td",
                     { staticClass: "col-md-2" },
                     [
-                      _vm.auth.rol === _vm.roles.academico &&
+                      _vm.auth.rol === _vm.rol.academico &&
                       informe.periodo.etapa === _vm.etapas.declarando &&
                       informe.estado <= _vm.estados.revisar
                         ? _c(
@@ -23971,7 +23963,7 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
-                      _vm.auth.rol === _vm.roles.director &&
+                      _vm.auth.rol === _vm.rol.director &&
                       informe.periodo.etapa === _vm.etapas.declarando &&
                       informe.estado === _vm.estados.enviado
                         ? _c(
@@ -23995,7 +23987,7 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
-                      _vm.auth.rol === _vm.roles.academico &&
+                      _vm.auth.rol === _vm.rol.academico &&
                       informe.estado === _vm.estados.aprobado &&
                       informe.periodo.etapa === _vm.etapas.realizado
                         ? _c(
@@ -24041,7 +24033,7 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
-                      _vm.auth.rol === _vm.roles.academico &&
+                      _vm.auth.rol === _vm.rol.academico &&
                       informe.estado === _vm.estados.aprobado &&
                       informe.periodo.etapa === 5
                         ? _c(
@@ -24393,7 +24385,7 @@ var render = function() {
           _c("div", { staticClass: "form-group col-md-3" }, [
             _c("label", { attrs: { for: "facultad" } }, [_vm._v("Facultad:")]),
             _vm._v(" "),
-            _vm.editable && _vm.auth.rol.id === _vm.rol.admin
+            _vm.editable && _vm.auth.rol === _vm.rol.admin
               ? _c(
                   "select",
                   {
@@ -24445,7 +24437,7 @@ var render = function() {
           _c("div", { staticClass: "form-group col-md-3" }, [
             _c("label", { attrs: { for: "depto" } }, [_vm._v("Departamento:")]),
             _vm._v(" "),
-            _vm.editable && _vm.auth.rol.id === _vm.rol.admin
+            _vm.editable && _vm.auth.rol === _vm.rol.admin
               ? _c(
                   "select",
                   {
@@ -24649,7 +24641,7 @@ var render = function() {
               _c("div", { staticClass: "form-group col-md-6" }, [
                 _c("label", { attrs: { for: "rol" } }, [_vm._v("Rol:")]),
                 _vm._v(" "),
-                _vm.auth.rol.id === _vm.rol.admin
+                _vm.auth.rol === _vm.rol.admin
                   ? _c(
                       "select",
                       {
@@ -24687,11 +24679,13 @@ var render = function() {
                         return _c(
                           "option",
                           { key: rol, domProps: { value: rol } },
-                          [_vm._v(_vm._s(_vm.roles.etiquetas[rol - 1]))]
+                          [_vm._v(_vm._s(_vm.etiquetas.rol[rol]))]
                         )
                       })
                     )
-                  : _c("p", [_vm._v(_vm._s(_vm.usuario.rol.nombre))])
+                  : _c("p", [
+                      _vm._v(_vm._s(_vm.etiquetas.rol[_vm.usuario.rol]))
+                    ])
               ])
             ])
           : _vm._e()
@@ -26174,150 +26168,158 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("table", { staticClass: "table" }, [
-      _vm._m(0),
+      _c("thead", [
+        _c("tr", [
+          _c("th", { staticClass: "col-md-9" }, [_vm._v("Comentario")]),
+          _vm._v(" "),
+          _c("th", { staticClass: "col-md-3" }, [
+            _vm._v(_vm._s(_vm.editable ? "Dirigida a" : "Archivo"))
+          ])
+        ])
+      ]),
       _vm._v(" "),
-      _c(
-        "tbody",
-        [
-          _vm.actual
-            ? _c("tr", [
-                _c("td", [_vm._v("1")]),
+      _vm.editable
+        ? _c("tbody", [
+            _c("tr", [
+              _c("td", { attrs: { rowspan: "3" } }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.apelacion.comentario,
+                      expression: "apelacion.comentario"
+                    }
+                  ],
+                  staticClass: "col-md-12 form-control",
+                  attrs: { rows: "3" },
+                  domProps: { value: _vm.apelacion.comentario },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.apelacion, "comentario", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.apelacion.comision,
+                        expression: "apelacion.comision"
+                      }
+                    ],
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.apelacion,
+                          "comision",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  _vm._l(
+                    [].concat(Array(_vm.comision.length - 1).keys()),
+                    function(tipo) {
+                      return _c(
+                        "option",
+                        { key: tipo, domProps: { value: tipo } },
+                        [_vm._v(_vm._s(_vm.comision.etiquetas[tipo]))]
+                      )
+                    }
+                  )
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(0),
+            _vm._v(" "),
+            _c("tr", [
+              _c("td", [
+                _c(
+                  "label",
+                  {
+                    staticClass: "btn btn-info btn-block input-file",
+                    attrs: { for: "input" }
+                  },
+                  [
+                    _c("span", {
+                      staticClass: "glyphicon glyphicon-paperclip",
+                      attrs: { "aria-hidden": "true" }
+                    }),
+                    _vm._v(
+                      " " +
+                        _vm._s(
+                          _vm.apelacion.archivo !== undefined
+                            ? _vm.apelacion.archivo.name
+                            : "Seleccionar archivo..."
+                        ) +
+                        "\n                    "
+                    )
+                  ]
+                ),
                 _vm._v(" "),
-                _vm.editable
-                  ? _c("td", [
-                      _c("textarea", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.apelacion.comentario,
-                            expression: "apelacion.comentario"
-                          }
-                        ],
-                        staticClass: "col-md-12 form-control",
-                        attrs: { rows: "3" },
-                        domProps: { value: _vm.apelacion.comentario },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.apelacion,
-                              "comentario",
-                              $event.target.value
-                            )
-                          }
+                _c("input", {
+                  ref: "archivo",
+                  attrs: { id: "input", type: "file" },
+                  on: { change: _vm.obtenerArchivo }
+                })
+              ])
+            ])
+          ])
+        : _c("tbody", [
+            _c("tr", [
+              _c("td", [_vm._v(_vm._s(_vm.apelacion.comentario))]),
+              _vm._v(" "),
+              _c("td", [
+                _vm.apelacion.nombre_archivo
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-info btn-block",
+                        attrs: {
+                          href:
+                            "/api/apelaciones/" + _vm.apelacion.id + "/adjunto",
+                          type: "button"
                         }
-                      })
-                    ])
-                  : _c("td", [_vm._v(_vm._s(_vm.apelacion.comentario))]),
-                _vm._v(" "),
-                _vm.editable
-                  ? _c("td", [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "btn btn-info btn-block input-file",
-                          attrs: { for: "input" }
-                        },
-                        [
-                          _c("span", {
-                            staticClass: "glyphicon glyphicon-paperclip",
-                            attrs: { "aria-hidden": "true" }
-                          }),
-                          _vm._v(
-                            " " +
-                              _vm._s(
-                                _vm.apelacion.archivo !== undefined
-                                  ? _vm.apelacion.archivo.name
-                                  : "Seleccionar archivo..."
-                              ) +
-                              "\n                    "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        ref: "archivo",
-                        attrs: { id: "input", type: "file" },
-                        on: { change: _vm.obtenerArchivo }
-                      })
-                    ])
-                  : _c("td", [
-                      _vm.apelacion.nombre_archivo
-                        ? _c(
-                            "a",
-                            {
-                              staticClass: "btn btn-info btn-block",
-                              attrs: {
-                                href:
-                                  "/api/apelaciones/" +
-                                  _vm.apelacion.id +
-                                  "/adjunto",
-                                type: "button"
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-download-alt",
-                                attrs: { "aria-hidden": "true" }
-                              }),
-                              _vm._v(
-                                " " +
-                                  _vm._s(_vm.apelacion.nombre_archivo) +
-                                  "\n                    "
-                              )
-                            ]
-                          )
-                        : _c("p", { staticClass: "text-center" }, [
-                            _vm._v("No se adjuntó archivo a esta apelación")
-                          ])
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-download-alt",
+                          attrs: { "aria-hidden": "true" }
+                        }),
+                        _vm._v(
+                          " " +
+                            _vm._s(_vm.apelacion.nombre_archivo) +
+                            "\n                    "
+                        )
+                      ]
+                    )
+                  : _c("p", { staticClass: "text-center" }, [
+                      _vm._v("No se adjuntó archivo a esta apelación")
                     ])
               ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm._l(_vm.apelaciones, function(anterior, index) {
-            return anterior.id !== _vm.apelacion.id
-              ? _c("tr", { key: anterior.id }, [
-                  _c("td", [_vm._v(_vm._s(index + 2))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(anterior.comentario))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    anterior.nombre_archivo
-                      ? _c(
-                          "a",
-                          {
-                            staticClass: "btn btn-info btn-block",
-                            attrs: {
-                              href:
-                                "/api/apelaciones/" + anterior.id + "/adjunto",
-                              type: "button"
-                            }
-                          },
-                          [
-                            _c("span", {
-                              staticClass: "glyphicon glyphicon-download-alt",
-                              attrs: { "aria-hidden": "true" }
-                            }),
-                            _vm._v(
-                              " " +
-                                _vm._s(anterior.nombre_archivo) +
-                                "\n                    "
-                            )
-                          ]
-                        )
-                      : _c("p", { staticClass: "text-center" }, [
-                          _vm._v("No se adjuntó archivo a esta apelación")
-                        ])
-                  ])
-                ])
-              : _vm._e()
-          })
-        ],
-        2
-      )
+            ])
+          ])
     ])
   ])
 }
@@ -26326,15 +26328,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("#")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "col-md-9" }, [_vm._v("Comentario")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "col-md-3" }, [_vm._v("Archivo")])
-      ])
-    ])
+    return _c("tr", [_c("th", [_vm._v("Archivo")])])
   }
 ]
 render._withStripped = true
@@ -26602,8 +26596,6 @@ var render = function() {
                     _vm._v(
                       "\n                    " +
                         _vm._s(_vm.calificacion) +
-                        " - " +
-                        _vm._s(_vm.rango.leyenda) +
                         "\n                "
                     )
                   ]
@@ -26707,7 +26699,7 @@ var render = function() {
       ),
       _vm._v(" "),
       (_vm.etapa === _vm.etapas.apelando &&
-        _vm.auth.rol.id === _vm.rol.academico) ||
+        _vm.auth.rol === _vm.roles.academico) ||
       _vm.apelado
         ? _c(
             "div",
@@ -26923,7 +26915,7 @@ var render = function() {
             _vm._v(" "),
             _vm.informe.periodo.actual &&
             _vm.etapa === _vm.etapas.apelando &&
-            _vm.auth.rol.id === _vm.rol.academico
+            _vm.auth.rol === _vm.roles.academico
               ? _c(
                   "button",
                   {
@@ -27042,7 +27034,7 @@ var render = function() {
     {
       class: {
         "col-md-12": _vm.auth.rol >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol <= _vm.roles.director
+        "col-md-8 col-md-offset-2": _vm.auth.rol <= _vm.rol.director
       }
     },
     [
@@ -27083,17 +27075,17 @@ var render = function() {
               _vm._v(" "),
               _c("th", { staticClass: "text-center" }, [_vm._v("Nombres")]),
               _vm._v(" "),
-              _vm.auth.rol === _vm.roles.admin
+              _vm.auth.rol === _vm.rol.admin
                 ? _c("th", { staticClass: "text-center" }, [_vm._v("Facultad")])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.auth.rol === _vm.roles.admin
+              _vm.auth.rol === _vm.rol.admin
                 ? _c("th", { staticClass: "text-center" }, [
                     _vm._v("Departamento")
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.auth.rol === _vm.roles.admin
+              _vm.auth.rol === _vm.rol.admin
                 ? _c("th", { staticClass: "text-center" }, [_vm._v("Rol")])
                 : _vm._e(),
               _vm._v(" "),
@@ -27111,18 +27103,18 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(usuario.nombres))]),
                 _vm._v(" "),
-                _vm.auth.rol === _vm.roles.admin
+                _vm.auth.rol === _vm.rol.admin
                   ? _c("td", [
                       _vm._v(_vm._s(usuario.departamento.facultad.nombre))
                     ])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.auth.rol === _vm.roles.admin
+                _vm.auth.rol === _vm.rol.admin
                   ? _c("td", [_vm._v(_vm._s(usuario.departamento.nombre))])
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.auth.rol === _vm.roles.admin
-                  ? _c("td", [_vm._v(_vm._s(usuario.rol.nombre))])
+                _vm.auth.rol === _vm.rol.admin
+                  ? _c("td", [_vm._v(_vm._s(_vm.etiquetas.rol[usuario.rol]))])
                   : _vm._e(),
                 _vm._v(" "),
                 _c(

@@ -38,9 +38,9 @@ class Declaracion extends Model
         'usuario'
     ];
 
-    public function apelaciones()
+    public function apelacion()
     {
-        return $this->hasMany(Apelacion::class,'id_declaracion');
+        return $this->hasOne(Apelacion::class,'id_declaracion');
     }
 
     public function formula()
@@ -58,12 +58,9 @@ class Declaracion extends Model
         return $this->belongsTo(User::class, 'id_usuario');
     }
 
-    public function getApelacionesAttribute()
+    public function getApelacionAttribute()
     {
-        return $this->apelaciones()
-                    ->withTrashed()
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+        return $this->apelacion()->first();
     }
 
     public function getFormulaAttribute()
