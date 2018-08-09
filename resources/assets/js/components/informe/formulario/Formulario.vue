@@ -134,6 +134,9 @@
                     apelaciones: undefined,
                     formula: {},
                     periodo: {},
+                    resumenes: {},
+                    totales: {},
+                    calificacion_final: 0,
                     usuario: undefined,
                     estado: 0
                 },
@@ -160,11 +163,19 @@
             'apelacion': Apelacion,
         },
         created: function() {
+            vm.$on('update-resumenes-totales', (payload) => {
+                this.informe.resumenes = payload.resumenes
+                this.informe.totales = payload.totales
+            })
+            vm.$on('update-calificacion', (calificacion) => {
+                this.informe.calificacion_final = calificacion
+            })
+
             if(this.$route.params.id) {
                 const informe = this.informes.find(informe => {
                     return informe.id === this.$route.params.id
                 })
-                this.informe = Object.assign({}, this.informe, informe)
+                this.informe = this.copy(informe)
             } else {
                 this.informe.formula = this.formula
                 this.informe.periodo = this.auth.departamento.periodo

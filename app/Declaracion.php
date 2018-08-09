@@ -32,7 +32,7 @@ class Declaracion extends Model
     ];
 
     protected $appends = [
-        'apelaciones',
+        'apelacion',
         'formula',
         'periodo',
         'usuario'

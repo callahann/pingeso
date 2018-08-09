@@ -28,6 +28,7 @@ class CreateDeclaracionsTable extends Migration
             $table->json('item_educacion_continua')->nullable();
             $table->json('resumenes')->nullable();
             $table->json('totales')->nullable();
+            $table->decimal('calificacion_final',8,3)->default(0.0);
             $table->integer('estado')->default(0);
             $table->timestamps();
             $table->softDeletes();

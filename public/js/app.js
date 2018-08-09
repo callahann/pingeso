@@ -14162,6 +14162,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 apelaciones: undefined,
                 formula: {},
                 periodo: {},
+                resumenes: {},
+                totales: {},
+                calificacion_final: 0,
                 usuario: undefined,
                 estado: 0
             },
@@ -14190,11 +14193,19 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     created: function created() {
         var _this = this;
 
+        vm.$on('update-resumenes-totales', function (payload) {
+            _this.informe.resumenes = payload.resumenes;
+            _this.informe.totales = payload.totales;
+        });
+        vm.$on('update-calificacion', function (calificacion) {
+            _this.informe.calificacion_final = calificacion;
+        });
+
         if (this.$route.params.id) {
             var informe = this.informes.find(function (informe) {
                 return informe.id === _this.$route.params.id;
             });
-            this.informe = Object.assign({}, this.informe, informe);
+            this.informe = this.copy(informe);
         } else {
             this.informe.formula = this.formula;
             this.informe.periodo = this.auth.departamento.periodo;
@@ -15105,7 +15116,8 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -15168,6 +15180,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+
 
 
 
@@ -15252,11 +15265,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 }
             }
 
-            this.$store.dispatch(UPDATE_RESUMENES, { id: this.informe.id, resumenes: this.resumenes });
-            this.$store.dispatch(UPDATE_TOTALES, { id: this.informe.id, totales: this.totales });
+            vm.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales });
         }
     },
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['factores', 'rangos']), {
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['factores', 'rangos']), {
         /**
          * Calificación de este informe de acuerdo a las calificaciones parciales definidas
          * por la comisión y el factor de corrección correspondiente a la diferencia entre
@@ -15284,7 +15296,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var factor = this.factores.find(function (factor) {
                 return diferencia <= factor.diferencia;
             });
-            return calificacion * factor.factor;
+            calificacion = calificacion * factor.factor;
+
+            vm.$emit('update-calificacion', calificacion);
+            return calificacion;
         },
         /**
          * Comprueba la cantidad de horas ingresadas y la contrasta con la cantidad
@@ -16964,7 +16979,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$http = __WEBPACK_IMPORTED
  */
 
 var app = function app() {
-    new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
+    window.vm = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
         el: '#app',
         store: __WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */],
         router: __WEBPACK_IMPORTED_MODULE_6__router__["a" /* router */],

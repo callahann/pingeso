@@ -59,6 +59,7 @@
     </div>
 </template>
 <script>
+    import { UPDATE_DECLARACION } from '../../../../vuex/actions'
     import { mapState } from 'vuex'
 
     export default {
@@ -140,8 +141,7 @@
                     }
                 }
 
-                this.$store.dispatch(UPDATE_RESUMENES, { id: this.informe.id, resumenes: this.resumenes })
-                this.$store.dispatch(UPDATE_TOTALES, { id: this.informe.id, totales: this.totales })
+                vm.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales })
             }
         },
         computed: {
@@ -181,7 +181,10 @@
                 const factor = this.factores.find(factor => {
                     return diferencia <= factor.diferencia
                 })
-                return calificacion * factor.factor
+                calificacion = calificacion * factor.factor
+
+                vm.$emit('update-calificacion', calificacion)
+                return calificacion
             },
             /**
              * Comprueba la cantidad de horas ingresadas y la contrasta con la cantidad
