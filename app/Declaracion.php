@@ -82,7 +82,7 @@ class Declaracion extends Model
         $apelaciones = [$superior, $facultad, $departamental];
         
         $i = 0;
-        while($i < 3 && $apelaciones[$i] != null && $apelaciones[$i]->resuelta) $i++;
+        while($i < 3 && ($apelaciones[$i] == null || $apelaciones[$i]->resuelta)) $i++;
         $apelado = $i < 3;
         return [
             'apelado' => $apelado,
