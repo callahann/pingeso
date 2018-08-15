@@ -213,7 +213,7 @@
 						</td>
 						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]["academico"]}}
 						</td>
 						@endif
 					</tr>
@@ -280,7 +280,7 @@
 						</td>
 						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]["academico"]}}
 						</td>
 						@endif
 					</tr>
@@ -346,7 +346,7 @@
 						</td>
 						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]["academico"]}}
 						</td>
 						@endif
 					</tr>
@@ -414,7 +414,7 @@
 						</td>
 						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]["academico"]}}
 						</td>
 						@endif
 					</tr>
@@ -481,7 +481,7 @@
 						</td>
 						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]["academico"]}}
 						</td>
 						@endif
 					</tr>
@@ -550,7 +550,7 @@
 						</td>
 						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]["academico"]}}
 						</td>
 						@endif
 					</tr>
@@ -616,7 +616,7 @@
 						</td>
 						@if(isset($elemento["observaciones"]))
 						<td>
-							{{$elemento["observaciones"]}}
+							{{$elemento["observaciones"]["academico"]}}
 						</td>
 						@endif
 					</tr>

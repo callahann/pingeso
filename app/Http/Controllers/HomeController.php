@@ -36,12 +36,13 @@ class HomeController extends Controller
     {
         $declaracion = Declaracion::findOrFail($id)->load(['usuario.departamento.facultad','usuario.jornada', 'usuario.jerarquia']);
         $rangos = Rango::all();
-        $director = User::with('jerarquia')->where('id_rol',2)->where('id_departamento', $declaracion->usuario->departamento->id)->first();
+        $director = User::with('jerarquia')->where('rol',2)->where('id_departamento', $declaracion->usuario->departamento->id)->first();
         $data = [
             'declaracion' => $declaracion,
             'rangos' => $rangos,
             'director' => $director,
         ];
+        //dd($data["declaracion"]["item_docencia"]["actividades"][0]);
         //dd($data["declaracion"]["item_docencia"]);
         //return view('pdf.vista', compact(['data']));
         $pdf = PDF::loadView('pdf.vista', compact(['data']))
