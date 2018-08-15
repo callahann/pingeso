@@ -42,6 +42,7 @@ class HomeController extends Controller
             'rangos' => $rangos,
             'director' => $director,
         ];
+        //dd($data["declaracion"]["item_docencia"]["actividades"][0]);
         //dd($data["declaracion"]["item_docencia"]);
         //return view('pdf.vista', compact(['data']));
         $pdf = PDF::loadView('pdf.vista', compact(['data']))
