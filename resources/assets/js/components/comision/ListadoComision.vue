@@ -8,14 +8,20 @@
                     <th>Email</th>
                     <th>Cargo</th>
                     <th>Departamento</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for = "user in users">
                     <td>{{user.nombres}} {{user.apellido_paterno}}</td>
                     <td>{{user.email}}</td>
-                    <td>{{user.rol.nombre}}</td>
+                    <td v-if="user.rol_comision === 1"> Fijo </td>
+                    <td v-else> Suplente </td>
                     <td>{{user.departamento.nombre}}</td>
+                    <td><button v-on:click.prevent="eliminar(user.id)" class="btn btn-xs btn-danger">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true">Quitar</span>
+                          </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -33,13 +39,31 @@
         created: function() {
             axios.get('/api/comisiones/superior')
             .then(response => {
-                console.log(response.data.usuarios);
                 this.users = response.data.usuarios;
             });
         },
+        methods: {
+            eliminar(id){
+                axios.get('/api/usuarios/' + id)
+                .then(response => {
+                    this.seleccionado = response.data;
+                    this.seleccionado.comision = null;
+                    this.seleccionado.rol_comision = null;
+                    axios.put('/api/usuarios/' + id, this.seleccionado)
+                    .then(response => {
+                        axios.get('/api/comisiones/superior')
+                        .then(response => {
+                            this.users = response.data.usuarios;
+                        });
+                    });
+                });      
+
+            }
+        },
         data () {
             return {
-            users: []
+            users: [],
+            seleccionado: {}
             }
         }
   }

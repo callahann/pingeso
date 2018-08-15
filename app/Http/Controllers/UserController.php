@@ -29,6 +29,25 @@ class UserController extends Controller
         } else return User::all()->load('departamento.facultad');
     }
 
+    public function indexComision()
+    {
+        $id_rol = Auth::user()->id_rol;
+        if($id_rol == 2) {
+            $id_depto = Auth::user()->id_departamento;
+            return User::where('id_departamento', $id_depto)
+                        ->whereNull('id_comision')
+                        ->get()
+                        ->load('departamento.facultad');
+        } else return User::whereNull('id_comision')
+                        ->get()
+                        ->load('departamento.facultad');
+    }
+
+    public function show($id){
+        return User::where('id', $id)
+                ->first();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -70,11 +89,12 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->fill($request->all());
-        $user->id_comision = $request->comision['id'];
+        $user->id_comision = $request->id_comision;
+        $user->rol_comision = $request->rol_comision;
         $user->id_departamento = $request->departamento['id'];
         $user->id_jerarquia = $request->jerarquia['id'];
         $user->id_jornada = $request->jornada['id'];
-        $user->id_rol = $request->rol['id'];
+        $user->rol = $request->rol;
         $user->save();
 
         return $user;

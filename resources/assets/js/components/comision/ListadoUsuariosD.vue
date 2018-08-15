@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <label for="facultad">Comisión Superior</label>
+        <label for="facultad">Comisión Departamental</label>
         <br></br>
         <input type="text" v-model="search" placeholder="Buscar usuarios"/>
         <br></br>
@@ -12,7 +12,6 @@
                     <th>Cargo</th>
                     <th>Departamento</th>
                     <th></th>
-
                 </tr>
             </thead>
             <tbody>
@@ -30,7 +29,6 @@
                             <span class="glyphicon glyphicon-ok" aria-hidden="true">Suplente</span>
                           </button>
                     </td>
-                    
                 </tr>
             </tbody>
         </table>
@@ -49,12 +47,21 @@
                 this.users = response.data;
             });
         },
+        computed: {
+            filtrar: function(){
+                return this.users.filter((user)=>
+                {
+                    return user.nombres.toLowerCase().match(this.search.toLowerCase());
+                });
+            }
+
+        },
         methods: {
             agregar(id, tipo){
                 axios.get('/api/usuarios/' + id)
                 .then(response => {
                     this.seleccionado = response.data;
-                    this.seleccionado.id_comision = 1;
+                    this.seleccionado.id_comision = this.$route.params.id;
                     this.seleccionado.rol_comision = tipo;
                     axios.put('/api/usuarios/' + id, this.seleccionado)
                     .then(response => {
@@ -67,20 +74,10 @@
 
             }
         },
-        computed: {
-            filtrar: function(){
-                return this.users.filter((user)=>
-                {
-                    return user.nombres.toLowerCase().match(this.search.toLowerCase());
-                });
-            }
-
-        },
         data () {
             return {
             users: [],
-            search: '',
-            seleccionado: {}
+            search: ''
             }
         }
   }

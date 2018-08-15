@@ -26,6 +26,8 @@ import ListadoPeriodos from './components/periodo/ListadoPeriodos'
 import FormPeriodo from './components/periodo/FormPeriodo'
 import ListadoComision from './components/comision/ListadoComision'
 import ListadoUsuarios from './components/comision/ListadoUsuarios'
+import ListadoUsuariosF from './components/comision/ListadoUsuariosF'
+import ListadoUsuariosD from './components/comision/ListadoUsuariosD'
 
 const router = new VueRouter({
     mode: 'history',
@@ -258,15 +260,21 @@ const router = new VueRouter({
              component: ListadoComision
          },
          {
-             path: '/comision/:id/agregar',
-             name: 'usuarios-comision',
-             component: ListadoUsuarios
-         },
-     {
              path: '/comision/superior/agregar',
              name: 'usuarios-comision-superior',
              component: ListadoUsuarios
          },
+         {
+             path: '/comision/departamento/:id/agregar',
+             name: 'usuarios-comision-departamento',
+             component: ListadoUsuariosD
+         },
+         {
+             path: '/comision/facultad/:id/agregar',
+             name: 'usuarios-comision-facultad',
+             component: ListadoUsuariosF
+         },
+         
     ],
 })
 

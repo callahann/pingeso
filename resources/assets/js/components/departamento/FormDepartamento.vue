@@ -47,14 +47,20 @@
                                     <th>Email</th>
                                     <th>Cargo</th>
                                     <th>Departamento</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="user in users" :key="user.id">
                                     <td>{{user.nombres}} {{user.apellido_paterno}}</td>
                                     <td>{{user.email}}</td>
-                                    <td>{{user.rol.nombre}}</td>
+                                    <td v-if="user.rol_comision === 1"> Fijo </td>
+                                    <td v-else> Suplente </td>
                                     <td>{{user.departamento.nombre}}</td>
+                                    <td><button v-on:click.prevent="eliminar(user.id)" class="btn btn-xs btn-danger">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true">Quitar</span>
+                                          </button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -64,7 +70,7 @@
                 <button type="button" class="btn btn-success" v-on:click="addElem">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span> {{this.accion}}
                 </button>
-                <router-link class="btn btn-success" :to="{ name: 'usuarios-comision', params: { id: element.id }}">     
+                <router-link class="btn btn-success" :to="{ name: 'usuarios-comision-departamento', params: { id: id_comision }}">     
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Usuario
                 </router-link>
             </div>
@@ -94,17 +100,18 @@
         this.editable = true;
         this.message = '';
         this.status = 0;
-        //departamento.id = 4
         axios.get('/api/comisiones/departamento/'+ this.element.id)
         .then(response => {
-            console.log(response.data.usuarios);
+            this.id_comision = response.data.id;
             this.users = response.data.usuarios;
         });
     },
     data () {
         return {
         element: (this.elemento?this.elemento:{id_facultad:''}),
-        users: []
+        users: [],
+        id_comision: {},
+        seleccionado: {}
         }
     },
     methods: {
@@ -121,7 +128,23 @@
                 this.volver('departamentos', 'Se ha creado el departamento correctamente.')
             }   
             
-        }
+        },
+        eliminar(id){
+                axios.get('/api/usuarios/' + id)
+                .then(response => {
+                    this.seleccionado = response.data;
+                    this.seleccionado.comision = null;
+                    this.seleccionado.rol_comision = null;
+                    axios.put('/api/usuarios/' + id, this.seleccionado)
+                    .then(response => {
+                        axios.get('/api/comisiones/departamento/'+ this.element.id)
+                        .then(response => {
+                            this.users = response.data.usuarios;
+                        });
+                    });
+                });      
+
+            }
     },
     computed: mapState(['facultades'])
   }
