@@ -141,6 +141,7 @@
                         <th class="text-center" rowspan="3">Descripción</th>
                         <th class="text-center" colspan="4">Primer semestre</th>
                         <th class="text-center" colspan="4">Segundo semestre</th>
+                        <th class="text-center" rowspan="3" v-if="actividades.length > cuenta"></th>
                     </tr>
                     <tr>
                         <th class="text-center" colspan="2">Horas semana</th>
@@ -160,33 +161,67 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(actividad) in actividades" v-bind:key="actividad.id">
-                        <td class="col-md-3">
+                    <tr v-for="(actividad, index) in actividades" v-bind:key="actividad.id">
+                        <td class="col-md-3" v-if="index < cuenta">
                             {{ actividad.descripcion }}
                         </td>
-                        <td class="col-md-1 text-center">
+                        <td class="col-md-3" v-else>
+                            <select class="form-control" v-if="descripciones.length > 0 && !actividad.otra"
+                                v-model="actividad.descripcion" v-on:change="otra(actividad)">
+                                <option disabled value="">Seleccionar una...</option>
+                                <option v-for="descripcion in descripciones" :key="descripcion.id">{{ descripcion.descripcion }}</option>
+                                <option>Otra actividad...</option>
+                            </select>
+                            <div v-else class="input-group">
+                                <input  class="form-control" v-model="actividad.descripcion" placeholder="Descripción de la actividad">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-info" type="button" v-on:click="actividad.otra = false">
+                                        <i class="glyphicon glyphicon-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-1 text-center" v-if="index < cuenta">
                             {{ actividad.comprometido.primero.horasSemana }}
+                        </td>
+                        <td class="col-md-1 text-center" v-else>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemana">
                         </td>
                         <td class="col-md-1">
                             <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemana">
                         </td>
-                        <td class="col-md-1 text-center">
+                        <td class="col-md-1 text-center" v-if="index < cuenta">
                             {{ actividad.comprometido.primero.horasSemestre }}
+                        </td>
+                        <td class="col-md-1 text-center" v-else>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemestre">
                         </td>
                         <td class="col-md-1">
                             <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemestre">
                         </td>
-                        <td class="col-md-1 text-center">
+                        <td class="col-md-1 text-center" v-if="index < cuenta">
                             {{ actividad.comprometido.segundo.horasSemana }}
+                        </td>
+                        <td class="col-md-1 text-center" v-else>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemana">
                         </td>
                         <td class="col-md-1">
                             <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemana">
                         </td>
-                        <td class="col-md-1 text-center">
+                        <td class="col-md-1 text-center" v-if="index < cuenta">
                             {{ actividad.comprometido.segundo.horasSemestre }}
+                        </td>
+                        <td class="col-md-1 text-center" v-else>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemestre">
                         </td>
                         <td class="col-md-1">
                             <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemestre">
+                        </td>
+                        <td v-if="actividades.length > cuenta">
+                            <button type="button" class="btn btn-block btn-danger"
+                                v-if="index >= cuenta" v-on:click="quitarActividad(index)">
+                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                            </button>
                         </td>
                     </tr>
                     <tr>
@@ -199,6 +234,7 @@
                         <th class="text-center">{{ totales.realizado.segundo.horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemestre }}</th>
                         <th class="text-center">{{ totales.realizado.segundo.horasSemestre }}</th>
+                        <th v-if="actividades.length > cuenta"></th>
                     </tr>
                 </tbody>
             </table>
@@ -267,7 +303,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="panel-footer text-right" v-if="etapa === etapas.declarando">
+        <div class="panel-footer text-right" v-if="etapa === etapas.declarando || etapa === etapas.realizado">
             <button type="button" class="btn btn-success" v-on:click="agregarActividad">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar actividad
             </button>
@@ -279,7 +315,16 @@
         props: ['previo', 'etapa', 'tipo'],
         data: function () {
             return {
+                /**
+                 * ID que se asignarán a las nuevas actividades (para v-for).
+                 * Se incrementa automáticamente.
+                 */
                 id: 1,
+                /**
+                 * Cuenta inicial de las actividades de esta sección. Se utiliza para
+                 * agregar nuevas actividades en la etapa de informar lo realizado.
+                 */
+                cuenta: 0,
                 /**
                  * Lista de actividades de este ítem.
                  */
@@ -293,8 +338,8 @@
         },
         created: function() {
             this.actividades = Object.assign([], this.actividades, this.previo)
-            const cuenta = this.actividades.length 
-            if(cuenta > 0) this.id = this.actividades[cuenta - 1].id
+            this.cuenta = this.actividades.length 
+            if(this.cuenta > 0) this.id = this.actividades[this.cuenta - 1].id
 
             const descripciones = this.$store.state.descripciones.filter(descripcion => {
                 return descripcion.tipo === this.tipo;

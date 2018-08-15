@@ -132,7 +132,12 @@
                         actividades: [],
                         calificacion: 1
                     },
-                    apelaciones: [null, null, null],
+                    apelacion: {
+                        apelado: false,
+                        apelar: false,
+                        comision: 0,
+                        apelaciones: []
+                    },
                     formula: {},
                     periodo: {},
                     resumenes: {},
