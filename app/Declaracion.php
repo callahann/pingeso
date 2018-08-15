@@ -66,7 +66,7 @@ class Declaracion extends Model
 
     public function periodo()
     {
-        return $this->belongsTo(periodo::class,'id_periodo');
+        return $this->belongsTo(Periodo::class,'id_periodo');
     }
 
     public function usuario()
@@ -82,7 +82,7 @@ class Declaracion extends Model
         $apelaciones = [$superior, $facultad, $departamental];
         
         $i = 0;
-        while($i < 3 && $apelaciones[$i]->resuelta) $i++;
+        while($i < 3 && ($apelaciones[$i] == null || $apelaciones[$i]->resuelta)) $i++;
         $apelado = $i < 3;
         return [
             'apelado' => $apelado,
