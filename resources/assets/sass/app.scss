@@ -124,7 +124,7 @@ input[type="file"] {
     font-weight: bold;
   }
 
-  &-body:nth-child(even) {
+  &-body:nth-child(odd) {
     background-color: #e0efff;
     border-top: 1px solid $gris-claro;
     border-bottom: 1px solid $gris-claro;

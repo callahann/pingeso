@@ -14134,6 +14134,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
+//
+//
 
 
 
@@ -14216,14 +14219,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     },
     created: function created() {
         var _this = this;
-
-        this.$root.$on('update-resumenes-totales', function (payload) {
-            _this.informe.resumenes = payload.resumenes;
-            _this.informe.totales = payload.totales;
-        });
-        this.$root.$on('update-calificacion', function (calificacion) {
-            _this.informe.calificacion_final = calificacion;
-        });
 
         if (this.$route.params.id) {
             var informe = this.informes.find(function (informe) {
@@ -14367,6 +14362,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             }
         },
         resuelto: function resuelto() {
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["y" /* UPDATE_DECLARACION */], { informe: this.informe, cb: function cb() {} });
             this.mensajeVolver = 'Se ha marcado como resuelto';
             this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["w" /* RESOLVE_APELACION */], { apelacion: this.apelacion, cb: this.cbVolver });
         }
@@ -15338,7 +15334,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 }
             }
 
-            this.$root.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales });
+            this.$emit('resumenes', this.resumenes);
+            this.$emit('totales', this.totales);
         }
     },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['factores', 'rangos']), {
@@ -15371,7 +15368,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             });
             calificacion *= factor.factor;
 
-            this.$root.$emit('update-calificacion', calificacion);
+            this.$emit('calificacion', calificacion);
             return calificacion;
         },
         /**
@@ -27377,7 +27374,22 @@ var render = function() {
       _c(
         "div",
         { staticClass: "row" },
-        [_c("resumen", { attrs: { informe: _vm.informe, etapa: _vm.etapa } })],
+        [
+          _c("resumen", {
+            attrs: { informe: _vm.informe, etapa: _vm.etapa },
+            on: {
+              resumenes: function($event) {
+                _vm.informe.resumenes = $event
+              },
+              totales: function($event) {
+                _vm.informe.totales = $event
+              },
+              calificacion: function($event) {
+                _vm.informe.calificacion_final = $event
+              }
+            }
+          })
+        ],
         1
       ),
       _vm._v(" "),

@@ -12,7 +12,10 @@
                 <usuario v-bind:editable="false" :declarante="informe.usuario"></usuario>
             </div>
             <div class="row">
-                <resumen :informe="informe" :etapa="etapa"></resumen>
+                <resumen :informe="informe" :etapa="etapa"
+                    v-on:resumenes="informe.resumenes = $event"
+                    v-on:totales="informe.totales = $event"
+                    v-on:calificacion="informe.calificacion_final = $event"></resumen>
             </div>
             <div class="row" v-if="(etapa === etapas.apelando && auth.rol === rol.academico) || informe.apelacion.apelado">
                 <apelacion :previo="informe.apelacion" :usuario="informe.usuario.id === auth.id"
@@ -169,14 +172,6 @@
             'apelacion': Apelacion,
         },
         created: function() {
-            this.$root.$on('update-resumenes-totales', (payload) => {
-                this.informe.resumenes = payload.resumenes
-                this.informe.totales = payload.totales
-            })
-            this.$root.$on('update-calificacion', (calificacion) => {
-                this.informe.calificacion_final = calificacion
-            })
-
             if(this.$route.params.id) {
                 const informe = this.informes.find(informe => {
                     return informe.id === this.$route.params.id
@@ -259,6 +254,7 @@
                 }
             },
             resuelto: function() {
+                this.$store.dispatch(UPDATE_DECLARACION, { informe: this.informe, cb: () => {} })
                 this.mensajeVolver = 'Se ha marcado como resuelto'
                 this.$store.dispatch(RESOLVE_APELACION, { apelacion: this.apelacion, cb: this.cbVolver })
             }

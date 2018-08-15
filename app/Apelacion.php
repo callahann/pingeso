@@ -19,6 +19,7 @@ class Apelacion extends Model
     ];
 
     protected $casts = [
+        'id' => 'integer',
         'id_declaracion' => 'integer'
     ];
 

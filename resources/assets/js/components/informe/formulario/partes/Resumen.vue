@@ -144,7 +144,8 @@
                     }
                 }
 
-                this.$root.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales })
+                this.$emit('resumenes', this.resumenes)
+                this.$emit('totales', this.totales)
             }
         },
         computed: {
@@ -186,7 +187,7 @@
                 })
                 calificacion *= factor.factor
 
-                this.$root.$emit('update-calificacion', calificacion)
+                this.$emit('calificacion', calificacion)
                 return calificacion
             },
             /**

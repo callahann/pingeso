@@ -18,6 +18,9 @@ class Declaracion extends Model
         'item_administracion',
         'item_extension',
         'item_educacion_continua',
+        'resumenes',
+        'totales',
+        'calificacion_final',
         'estado',
     ];
 
@@ -35,6 +38,8 @@ class Declaracion extends Model
         'item_administracion'=> 'array',
         'item_extension'=> 'array',
         'item_educacion_continua'=> 'array',
+        'resumenes'=> 'array',
+        'totales'=> 'array',
     ];
 
     protected $appends = [
