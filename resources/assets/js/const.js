@@ -44,13 +44,7 @@ Vue.mixin({
                 editable: 0,
                 revisar: 1,
                 enviado: 2,
-                aprobado: 3,
-                etiquetas: [
-                    'No enviado',
-                    'Revisar',
-                    'Esperando aprobación',
-                    'Aprobado'
-                ]
+                aprobado: 3
             }),
             /**
              * Códigos de rol de la plataforma. Utilizado para bloquear rutas
@@ -75,6 +69,12 @@ Vue.mixin({
                     'Comisión superior',
                     'Comisión de facultad',
                     'Comisión de departamento'
+                ],
+                estado: [
+                    'No enviado',
+                    'Revisar',
+                    'Esperando aprobación',
+                    'Aprobado'
                 ],
                 rol: [
                     'Académico',

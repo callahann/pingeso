@@ -191,10 +191,14 @@
                     </tr>
                     <tr>
                         <th class="text-right">TOTAL</th>
-                        <th class="text-center">{{ totales.comprometido[semestre].horasSemana }}</th>
-                        <th class="text-center">{{ totales.realizado[semestre].horasSemana }}</th>
-                        <th class="text-center">{{ totales.comprometido[semestre].horasSemestre }}</th>
-                        <th class="text-center">{{ totales.realizado[semestre].horasSemestre }}</th>
+                        <th class="text-center">{{ totales.comprometido.primero.horasSemana }}</th>
+                        <th class="text-center">{{ totales.realizado.primero.horasSemana }}</th>
+                        <th class="text-center">{{ totales.comprometido.primero.horasSemestre }}</th>
+                        <th class="text-center">{{ totales.realizado.primero.horasSemestre }}</th>
+                        <th class="text-center">{{ totales.comprometido.segundo.horasSemana }}</th>
+                        <th class="text-center">{{ totales.realizado.segundo.horasSemana }}</th>
+                        <th class="text-center">{{ totales.comprometido.segundo.horasSemestre }}</th>
+                        <th class="text-center">{{ totales.realizado.segundo.horasSemestre }}</th>
                     </tr>
                 </tbody>
             </table>
@@ -366,11 +370,15 @@
              * Observa y envía las modificaciones de la lista de actividades
              * al componente padre.
              */
-            actividades: function(newActividades) {
-                this.$emit('actualizar', newActividades)
-                Vue.nextTick(function () {
-                    $('[data-toggle="tooltip"]').tooltip()
-                })
+            actividades: {
+                handler(newActividades) {
+                    this.$emit('actualizar', newActividades)
+                    this.$root.$emit('activities-changed')
+                    Vue.nextTick(function () {
+                        $('[data-toggle="tooltip"]').tooltip()
+                    })
+                },
+                deep: true
             }
         },
         computed: {

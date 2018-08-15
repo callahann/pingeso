@@ -3,46 +3,52 @@
         <div class="panel-heading panel-title text-center">
             Apelación
         </div>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="col-md-9">Comentario</th>
-                    <th class="col-md-3">{{ editable ? 'Dirigida a' : 'Archivo' }}</th>
+                    <th class="text-center">Dirigida a</th>
+                    <th class="text-center">Archivo</th>
+                    <th class="text-center">Comentario</th>
+                    <th class="text-center">Respuesta</th>
                 </tr>
             </thead>
-            <tbody v-if="editable">
-                <tr>
-                    <td rowspan="3">
-                        <textarea class="col-md-12 form-control" rows=3 v-model="apelacion.comentario"></textarea>
+            <tbody>
+                <tr v-for="(apelacion, index) in previo.apelaciones" :key="index" v-if="apelacion !== null && (usuario || index === previo.comision)">
+                    <td class="col-md-2">{{ etiquetas.comision[index] }}</td>
+                    <td class="col-md-2">
+                        <a :href="'/api/apelaciones/' + apelacion.id + '/adjunto'" v-if="apelacion.nombre_archivo" type="button" class="btn btn-xs btn-default btn-block">
+                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {{ apelacion.nombre_archivo }}
+                        </a>
+                        <div v-else>No se adjuntó archivo</div>
                     </td>
-                    <td>
-                        <select v-model="apelacion.comision">
-                            <option v-for="tipo in [...Array(comision.length - 1).keys()]"
-                                :key="tipo" :value="tipo">{{ comision.etiquetas[tipo] }}</option>
+                    <td class="col-md-4">{{ apelacion.comentario }}</td>
+                    <td class="col-md-4" v-if="usuario">
+                        <div v-if="apelacion.resuelta">{{ apelacion.respuesta }}</div>
+                        <i v-else>Aún no se ha resuelto esta apelación...</i>
+                    </td>
+                    <td class="col-md-4" v-else>     
+                        <textarea class="col-md-12 form-control" rows=3 v-model="apelacion.respuesta"></textarea>                   
+                    </td>
+                </tr>
+                <tr class="panel-footer" v-if="previo.apelar">
+                    <td class="col-md-2">
+                        <select v-model="apelacion.comision" class="form-control">
+                            <option v-for="tipo in comision" :key="tipo" :value="tipo"
+                                v-if="previo.apelaciones[tipo] === null">
+                                {{ etiquetas.comision[tipo] }}
+                            </option>
                         </select>
                     </td>
-                </tr>
-                <tr>
-                    <th>Archivo</th>
-                </tr>
-                <tr>
-                    <td>
+                    <td class="col-md-2">
                         <label for="input" class="btn btn-info btn-block input-file">
                             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> {{ apelacion.archivo !== undefined ? apelacion.archivo.name : 'Seleccionar archivo...' }}
                         </label>
                         <input id="input" type="file" ref="archivo" v-on:change="obtenerArchivo">
                     </td>
-                </tr>
-            </tbody>
-            <tbody v-else>
-                <tr>
-                    <td>{{ apelacion.comentario }}</td>
-                    <td>
-                        <a :href="'/api/apelaciones/' + apelacion.id + '/adjunto'" v-if="apelacion.nombre_archivo" type="button" class="btn btn-info btn-block">
-                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {{ apelacion.nombre_archivo }}
-                        </a>
-                        <p class="text-center" v-else>No se adjuntó archivo a esta apelación</p>
+                    <td class="col-md-4">
+                        <textarea class="col-md-12 form-control" rows=3 v-model="apelacion.comentario"></textarea>
                     </td>
+                    <td class="col-md-4"></td>
                 </tr>
             </tbody>
         </table>
@@ -50,7 +56,7 @@
 </template>
 <script>
     export default {
-        props: ['previa', 'actual'],
+        props: ['previo', 'usuario'],
         data: function() {
             return {
                 /**
@@ -59,14 +65,16 @@
                  */
                 apelacion: {
                     comentario: '',
+                    respuesta: '',
                     comision: 0,
                     archivo: undefined
                 }
             }
         },
         created: function() {
-            if(this.previa === undefined) return
-            this.apelacion = this.copy(this.previa)
+            if(!this.previo.apelado) return
+            const comision = this.previo.comision
+            this.apelacion = this.previo.apelaciones[comision]
         },
         methods: {
             /**
@@ -74,15 +82,6 @@
              */
             obtenerArchivo: function() {
                 this.apelacion.archivo = this.$refs.archivo.files[0]
-            }
-        },
-        computed: {
-            /**
-             * Indica si la apelación es editable.
-             * @return Verdadero o falso
-             */
-            editable: function() {
-                return this.apelacion.id === undefined
             }
         },
         watch: {

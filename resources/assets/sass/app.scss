@@ -63,6 +63,11 @@ input[type="file"] {
   td {
     vertical-align: middle !important;
   }
+
+  td:nth-child(even) {
+    border-left: 1px solid $gris-claro;
+    border-right: 1px solid $gris-claro;
+  }
   
   th {
     background-color: $gris-claro !important;
@@ -117,6 +122,12 @@ input[type="file"] {
     background-color: $azul !important;
     color: white !important;
     font-weight: bold;
+  }
+
+  &-body:nth-child(even) {
+    background-color: #e0efff;
+    border-top: 1px solid $gris-claro;
+    border-bottom: 1px solid $gris-claro;
   }
 
   &-tabs {

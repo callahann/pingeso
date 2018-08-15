@@ -145,7 +145,7 @@ const router = new VueRouter({
              name: 'editar-departamento',
              component: FormDepartamento,
              props: true,
-             meta: { eval: 'rol === 2'}
+             meta: { eval: 'rol >= 1'}
          },
          {
              path: '/rangos',
@@ -235,7 +235,7 @@ const router = new VueRouter({
              path: '/periodos',
              name: 'periodos',
              component: ListadoPeriodos,
-             meta: { eval: 'rol === 2'},
+             meta: { eval: 'rol === 1'},
              props: true
          },
          {
@@ -243,14 +243,14 @@ const router = new VueRouter({
              name: 'crear-periodo',
              component: FormPeriodo,
              props: true,
-             meta: { eval: 'rol === 2'}
+             meta: { eval: 'rol === 1'}
          },
          {
              path: '/periodos/editar',
              name: 'editar-periodo',
              component: FormPeriodo,
              props: true,
-             meta: { eval: 'rol === 2'}
+             meta: { eval: 'rol === 1'}
          },
          {
              path: '/comision/superior',

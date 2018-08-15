@@ -13115,6 +13115,7 @@ module.exports = Cancel;
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data: function data() {
@@ -13205,7 +13206,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
         state.informes.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_DECLARACION */], function (state, _ref5) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], function (state, _ref5) {
         var payload = _ref5.payload,
             callback = _ref5.callback;
 
@@ -13218,23 +13219,41 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         callback(true, payload.data);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], function (state, _ref6) {
         var payload = _ref6.payload,
+            comision = _ref6.comision,
             callback = _ref6.callback;
 
         var index = state.informes.findIndex(function (informe) {
             return informe.id === payload.data.id_declaracion;
         });
-        state.informes[index].apelaciones.push(payload.data);
-
+        var apelacion = state.informes[index].apelacion;
+        apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data);
+        apelacion.apelado = true;
+        apelacion.apelar = false;
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* INSERT_FACULTAD */], function (state, _ref7) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_APELACION */], function (state, _ref7) {
         var payload = _ref7.payload,
             callback = _ref7.callback;
 
-        state.facultades.push(payload.data);
+        var index = state.informes.findIndex(function (informe) {
+            return informe.id === payload.data.id_declaracion;
+        });
+        var apelacion = state.informes[index].apelacion;
+        var comision = apelacion.apelaciones.findIndex(function (apelacion) {
+            return apelacion.id === payload.data.id;
+        });
+        apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data);
+        apelacion.apelado = false;
+        apelacion.apelar = apelacion.apelaciones.includes(null);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACULTAD */], function (state, _ref8) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* INSERT_FACULTAD */], function (state, _ref8) {
         var payload = _ref8.payload,
             callback = _ref8.callback;
+
+        state.facultades.push(payload.data);
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_FACULTAD */], function (state, _ref9) {
+        var payload = _ref9.payload,
+            callback = _ref9.callback;
 
         var index = state.facultades.findIndex(function (facultad) {
             return facultad.id === payload.data.id;
@@ -13243,24 +13262,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.facultades[index] = Object.assign({}, facultad, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], function (state, _ref9) {
-        var payload = _ref9.payload,
-            callback = _ref9.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], function (state, _ref10) {
+        var payload = _ref10.payload,
+            callback = _ref10.callback;
 
         var index = state.facultades.findIndex(function (facultad) {
             return facultad.id === payload.data.id;
         });
         state.facultades.splice(index, 1);
         callback(true, payload.mensaje.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* INSERT_DEPARTAMENTO */], function (state, _ref10) {
-        var payload = _ref10.payload,
-            callback = _ref10.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* INSERT_DEPARTAMENTO */], function (state, _ref11) {
+        var payload = _ref11.payload,
+            callback = _ref11.callback;
 
         state.departamentos.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DEPARTAMENTO */], function (state, _ref11) {
-        var payload = _ref11.payload,
-            callback = _ref11.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_DEPARTAMENTO */], function (state, _ref12) {
+        var payload = _ref12.payload,
+            callback = _ref12.callback;
 
         var index = state.departamentos.findIndex(function (departamento) {
             return departamento.id === payload.data.id;
@@ -13269,24 +13288,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.departamentos[index] = Object.assign({}, departamento, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], function (state, _ref12) {
-        var payload = _ref12.payload,
-            callback = _ref12.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], function (state, _ref13) {
+        var payload = _ref13.payload,
+            callback = _ref13.callback;
 
         var index = state.departamentos.findIndex(function (departamento) {
             return departamento.id === payload.data.id;
         });
         state.departamentos.splice(index, 1);
         callback(true, payload.mensaje.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["q" /* INSERT_RANGO */], function (state, _ref13) {
-        var payload = _ref13.payload,
-            callback = _ref13.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["q" /* INSERT_RANGO */], function (state, _ref14) {
+        var payload = _ref14.payload,
+            callback = _ref14.callback;
 
         state.rangos.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_RANGO */], function (state, _ref14) {
-        var payload = _ref14.payload,
-            callback = _ref14.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_RANGO */], function (state, _ref15) {
+        var payload = _ref15.payload,
+            callback = _ref15.callback;
 
         var index = state.rangos.findIndex(function (rango) {
             return rango.id === payload.data.id;
@@ -13295,24 +13314,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.rangos[index] = Object.assign({}, rango, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], function (state, _ref15) {
-        var payload = _ref15.payload,
-            callback = _ref15.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], function (state, _ref16) {
+        var payload = _ref16.payload,
+            callback = _ref16.callback;
 
         var index = state.rangos.findIndex(function (rango) {
             return rango.id === payload.data.id;
         });
         state.rangos.splice(index, 1);
         callback(true, payload.mensaje.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["n" /* INSERT_JERARQUIA */], function (state, _ref16) {
-        var payload = _ref16.payload,
-            callback = _ref16.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["n" /* INSERT_JERARQUIA */], function (state, _ref17) {
+        var payload = _ref17.payload,
+            callback = _ref17.callback;
 
         state.jerarquias.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_JERARQUIA */], function (state, _ref17) {
-        var payload = _ref17.payload,
-            callback = _ref17.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_JERARQUIA */], function (state, _ref18) {
+        var payload = _ref18.payload,
+            callback = _ref18.callback;
 
         var index = state.jerarquias.findIndex(function (jerarquia) {
             return jerarquia.id === payload.data.id;
@@ -13321,24 +13340,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.jerarquias[index] = Object.assign({}, jerarquia, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], function (state, _ref18) {
-        var payload = _ref18.payload,
-            callback = _ref18.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], function (state, _ref19) {
+        var payload = _ref19.payload,
+            callback = _ref19.callback;
 
         var index = state.jerarquias.findIndex(function (jerarquia) {
             return jerarquia.id === payload.data.id;
         });
         state.jerarquias.splice(index, 1);
         callback(true, payload.mensaje.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["o" /* INSERT_JORNADA */], function (state, _ref19) {
-        var payload = _ref19.payload,
-            callback = _ref19.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["o" /* INSERT_JORNADA */], function (state, _ref20) {
+        var payload = _ref20.payload,
+            callback = _ref20.callback;
 
         state.jornadas.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_JORNADA */], function (state, _ref20) {
-        var payload = _ref20.payload,
-            callback = _ref20.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JORNADA */], function (state, _ref21) {
+        var payload = _ref21.payload,
+            callback = _ref21.callback;
 
         var index = state.jornadas.findIndex(function (jornada) {
             return jornada.id === payload.data.id;
@@ -13347,24 +13366,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.jornadas[index] = Object.assign({}, jornada, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], function (state, _ref21) {
-        var payload = _ref21.payload,
-            callback = _ref21.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], function (state, _ref22) {
+        var payload = _ref22.payload,
+            callback = _ref22.callback;
 
         var index = state.jornadas.findIndex(function (jornada) {
             return jornada.id === payload.data.id;
         });
         state.jornadas.splice(index, 1);
         callback(true, payload.mensaje.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* INSERT_FACTOR */], function (state, _ref22) {
-        var payload = _ref22.payload,
-            callback = _ref22.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* INSERT_FACTOR */], function (state, _ref23) {
+        var payload = _ref23.payload,
+            callback = _ref23.callback;
 
         state.factores.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_FACTOR */], function (state, _ref23) {
-        var payload = _ref23.payload,
-            callback = _ref23.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACTOR */], function (state, _ref24) {
+        var payload = _ref24.payload,
+            callback = _ref24.callback;
 
         var index = state.factores.findIndex(function (factor) {
             return factor.id === payload.data.id;
@@ -13373,24 +13392,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.factores[index] = Object.assign({}, factor, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], function (state, _ref24) {
-        var payload = _ref24.payload,
-            callback = _ref24.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], function (state, _ref25) {
+        var payload = _ref25.payload,
+            callback = _ref25.callback;
 
         var index = state.factores.findIndex(function (factor) {
             return factor.id === payload.data.id;
         });
         state.factores.splice(index, 1);
         callback(true, payload.mensaje.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["p" /* INSERT_PERIODO */], function (state, _ref25) {
-        var payload = _ref25.payload,
-            callback = _ref25.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["p" /* INSERT_PERIODO */], function (state, _ref26) {
+        var payload = _ref26.payload,
+            callback = _ref26.callback;
 
         state.periodos.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_PERIODO */], function (state, _ref26) {
-        var payload = _ref26.payload,
-            callback = _ref26.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_PERIODO */], function (state, _ref27) {
+        var payload = _ref27.payload,
+            callback = _ref27.callback;
 
         var index = state.periodos.findIndex(function (periodo) {
             return periodo.id === payload.data.id;
@@ -13399,24 +13418,24 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.periodos[index] = Object.assign({}, periodo, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], function (state, _ref27) {
-        var payload = _ref27.payload,
-            callback = _ref27.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], function (state, _ref28) {
+        var payload = _ref28.payload,
+            callback = _ref28.callback;
 
         var index = state.periodos.findIndex(function (periodo) {
             return periodo.id === payload.data.id;
         });
         state.periodos.splice(index, 1);
         callback(true, payload.mensaje.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["r" /* INSERT_USUARIO */], function (state, _ref28) {
-        var payload = _ref28.payload,
-            callback = _ref28.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["r" /* INSERT_USUARIO */], function (state, _ref29) {
+        var payload = _ref29.payload,
+            callback = _ref29.callback;
 
         state.usuarios.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_USUARIO */], function (state, _ref29) {
-        var payload = _ref29.payload,
-            callback = _ref29.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_USUARIO */], function (state, _ref30) {
+        var payload = _ref30.payload,
+            callback = _ref30.callback;
 
         var index = state.usuarios.findIndex(function (usuario) {
             return usuario.id === payload.data.id;
@@ -13425,16 +13444,16 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.usuarios[index] = Object.assign({}, usuario, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], function (state, _ref30) {
-        var error = _ref30.error,
-            callback = _ref30.callback;
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], function (state, _ref31) {
+        var error = _ref31.error,
+            callback = _ref31.callback;
 
         callback(false, error);
     }), _mutations),
     actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["l" /* INIT_STORE */], function () {
-        var _ref32 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref31, callback) {
-            var dispatch = _ref31.dispatch,
-                commit = _ref31.commit;
+        var _ref33 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref32, callback) {
+            var dispatch = _ref32.dispatch,
+                commit = _ref32.commit;
             var rol, request, promises, promise;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                 while (1) {
@@ -13483,11 +13502,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x, _x2) {
-            return _ref32.apply(this, arguments);
+            return _ref33.apply(this, arguments);
         };
     }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["j" /* FETCH_AUTH_USER */], function () {
-        var _ref34 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref33) {
-            var commit = _ref33.commit;
+        var _ref35 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref34) {
+            var commit = _ref34.commit;
             var response;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                 while (1) {
@@ -13511,311 +13530,311 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x3) {
-            return _ref34.apply(this, arguments);
+            return _ref35.apply(this, arguments);
         };
-    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */], function (_ref35, rol) {
-        var commit = _ref35.commit;
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */], function (_ref36, rol) {
+        var commit = _ref36.commit;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/auth/declaraciones').then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["s" /* SET_STATE_ARRAY */], { key: 'informes', payload: response });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["n" /* INSERT_DECLARACION */], function (_ref36, _ref37) {
-        var commit = _ref36.commit;
-        var informe = _ref37.informe,
-            cb = _ref37.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["n" /* INSERT_DECLARACION */], function (_ref37, _ref38) {
+        var commit = _ref37.commit;
+        var informe = _ref38.informe,
+            cb = _ref38.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["j" /* INSERT_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["y" /* UPDATE_DECLARACION */], function (_ref38, _ref39) {
-        var commit = _ref38.commit;
-        var informe = _ref39.informe,
-            cb = _ref39.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["y" /* UPDATE_DECLARACION */], function (_ref39, _ref40) {
+        var commit = _ref39.commit;
+        var informe = _ref40.informe,
+            cb = _ref40.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id, informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["x" /* SEND_DECLARACION */], function (_ref40, _ref41) {
-        var commit = _ref40.commit;
-        var informe = _ref41.informe,
-            cb = _ref41.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["x" /* SEND_DECLARACION */], function (_ref41, _ref42) {
+        var commit = _ref41.commit;
+        var informe = _ref42.informe,
+            cb = _ref42.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/enviar', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref42, _ref43) {
-        var commit = _ref42.commit;
-        var informe = _ref43.informe,
-            cb = _ref43.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref43, _ref44) {
+        var commit = _ref43.commit;
+        var informe = _ref44.informe,
+            cb = _ref44.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/aprobar', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref44, _ref45) {
-        var commit = _ref44.commit;
-        var informe = _ref45.informe,
-            cb = _ref45.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref45, _ref46) {
+        var commit = _ref45.commit;
+        var informe = _ref46.informe,
+            cb = _ref46.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/revision', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["m" /* INSERT_APELACION */], function (_ref46, _ref47) {
-        var commit = _ref46.commit;
-        var apelacion = _ref47.apelacion,
-            cb = _ref47.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["m" /* INSERT_APELACION */], function (_ref47, _ref48) {
+        var commit = _ref47.commit;
+        var apelacion = _ref48.apelacion,
+            cb = _ref48.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/apelaciones', apelacion).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], { payload: response, comision: apelacion.comision, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["w" /* RESOLVE_APELACION */], function (_ref48, _ref49) {
-        var commit = _ref48.commit;
-        var informe = _ref49.informe,
-            cb = _ref49.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["w" /* RESOLVE_APELACION */], function (_ref49, _ref50) {
+        var commit = _ref49.commit;
+        var apelacion = _ref50.apelacion,
+            cb = _ref50.cb;
 
-        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/resolver', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/apelaciones/' + apelacion.id, apelacion).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_APELACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["q" /* INSERT_FACULTAD */], function (_ref50, _ref51) {
-        var commit = _ref50.commit;
-        var facultad = _ref51.facultad,
-            cb = _ref51.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["q" /* INSERT_FACULTAD */], function (_ref51, _ref52) {
+        var commit = _ref51.commit;
+        var facultad = _ref52.facultad,
+            cb = _ref52.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/facultades', facultad).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* INSERT_FACULTAD */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["B" /* UPDATE_FACULTAD */], function (_ref52, _ref53) {
-        var commit = _ref52.commit;
-        var facultad = _ref53.facultad,
-            cb = _ref53.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["B" /* UPDATE_FACULTAD */], function (_ref53, _ref54) {
+        var commit = _ref53.commit;
+        var facultad = _ref54.facultad,
+            cb = _ref54.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/facultades/' + facultad.id, facultad).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACULTAD */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_FACULTAD */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* DELETE_FACULTAD */], function (_ref54, _ref55) {
-        var commit = _ref54.commit;
-        var facultad = _ref55.facultad,
-            cb = _ref55.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* DELETE_FACULTAD */], function (_ref55, _ref56) {
+        var commit = _ref55.commit;
+        var facultad = _ref56.facultad,
+            cb = _ref56.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/facultades/' + facultad.id, facultad).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], { payload: { data: facultad, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["o" /* INSERT_DEPARTAMENTO */], function (_ref56, _ref57) {
-        var commit = _ref56.commit;
-        var departamento = _ref57.departamento,
-            cb = _ref57.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["o" /* INSERT_DEPARTAMENTO */], function (_ref57, _ref58) {
+        var commit = _ref57.commit;
+        var departamento = _ref58.departamento,
+            cb = _ref58.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/departamentos', departamento).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* INSERT_DEPARTAMENTO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["z" /* UPDATE_DEPARTAMENTO */], function (_ref58, _ref59) {
-        var commit = _ref58.commit;
-        var departamento = _ref59.departamento,
-            cb = _ref59.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["z" /* UPDATE_DEPARTAMENTO */], function (_ref59, _ref60) {
+        var commit = _ref59.commit;
+        var departamento = _ref60.departamento,
+            cb = _ref60.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/departamentos/' + departamento.id, departamento).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DEPARTAMENTO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_DEPARTAMENTO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* DELETE_DEPARTAMENTO */], function (_ref60, _ref61) {
-        var commit = _ref60.commit;
-        var departamento = _ref61.departamento,
-            cb = _ref61.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* DELETE_DEPARTAMENTO */], function (_ref61, _ref62) {
+        var commit = _ref61.commit;
+        var departamento = _ref62.departamento,
+            cb = _ref62.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/departamentos/' + departamento.id, departamento).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], { payload: { data: departamento, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["u" /* INSERT_RANGO */], function (_ref62, _ref63) {
-        var commit = _ref62.commit;
-        var rango = _ref63.rango,
-            cb = _ref63.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["u" /* INSERT_RANGO */], function (_ref63, _ref64) {
+        var commit = _ref63.commit;
+        var rango = _ref64.rango,
+            cb = _ref64.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/rangos', rango).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["q" /* INSERT_RANGO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["F" /* UPDATE_RANGO */], function (_ref64, _ref65) {
-        var commit = _ref64.commit;
-        var rango = _ref65.rango,
-            cb = _ref65.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["F" /* UPDATE_RANGO */], function (_ref65, _ref66) {
+        var commit = _ref65.commit;
+        var rango = _ref66.rango,
+            cb = _ref66.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/rangos/' + rango.id, rango).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_RANGO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_RANGO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* DELETE_RANGO */], function (_ref66, _ref67) {
-        var commit = _ref66.commit;
-        var rango = _ref67.rango,
-            cb = _ref67.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* DELETE_RANGO */], function (_ref67, _ref68) {
+        var commit = _ref67.commit;
+        var rango = _ref68.rango,
+            cb = _ref68.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/rangos/' + rango.id, rango).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], { payload: { data: rango, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["r" /* INSERT_JERARQUIA */], function (_ref68, _ref69) {
-        var commit = _ref68.commit;
-        var jerarquia = _ref69.jerarquia,
-            cb = _ref69.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["r" /* INSERT_JERARQUIA */], function (_ref69, _ref70) {
+        var commit = _ref69.commit;
+        var jerarquia = _ref70.jerarquia,
+            cb = _ref70.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/jerarquias', jerarquia).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["n" /* INSERT_JERARQUIA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["C" /* UPDATE_JERARQUIA */], function (_ref70, _ref71) {
-        var commit = _ref70.commit;
-        var jerarquia = _ref71.jerarquia,
-            cb = _ref71.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["C" /* UPDATE_JERARQUIA */], function (_ref71, _ref72) {
+        var commit = _ref71.commit;
+        var jerarquia = _ref72.jerarquia,
+            cb = _ref72.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/jerarquias/' + jerarquia.id, jerarquia).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_JERARQUIA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_JERARQUIA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* DELETE_JERARQUIA */], function (_ref72, _ref73) {
-        var commit = _ref72.commit;
-        var jerarquia = _ref73.jerarquia,
-            cb = _ref73.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* DELETE_JERARQUIA */], function (_ref73, _ref74) {
+        var commit = _ref73.commit;
+        var jerarquia = _ref74.jerarquia,
+            cb = _ref74.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jerarquias/' + jerarquia.id, jerarquia).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], { payload: { data: jerarquia, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["s" /* INSERT_JORNADA */], function (_ref74, _ref75) {
-        var commit = _ref74.commit;
-        var jornada = _ref75.jornada,
-            cb = _ref75.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["s" /* INSERT_JORNADA */], function (_ref75, _ref76) {
+        var commit = _ref75.commit;
+        var jornada = _ref76.jornada,
+            cb = _ref76.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/jornadas', jornada).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["o" /* INSERT_JORNADA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["D" /* UPDATE_JORNADA */], function (_ref76, _ref77) {
-        var commit = _ref76.commit;
-        var jornada = _ref77.jornada,
-            cb = _ref77.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["D" /* UPDATE_JORNADA */], function (_ref77, _ref78) {
+        var commit = _ref77.commit;
+        var jornada = _ref78.jornada,
+            cb = _ref78.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/jornadas/' + jornada.id, jornada).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_JORNADA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JORNADA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* DELETE_JORNADA */], function (_ref78, _ref79) {
-        var commit = _ref78.commit;
-        var jornada = _ref79.jornada,
-            cb = _ref79.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* DELETE_JORNADA */], function (_ref79, _ref80) {
+        var commit = _ref79.commit;
+        var jornada = _ref80.jornada,
+            cb = _ref80.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jornadas/' + jornada.id, jornada).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], { payload: { data: jornada, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["p" /* INSERT_FACTOR */], function (_ref80, _ref81) {
-        var commit = _ref80.commit;
-        var factor = _ref81.factor,
-            cb = _ref81.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["p" /* INSERT_FACTOR */], function (_ref81, _ref82) {
+        var commit = _ref81.commit;
+        var factor = _ref82.factor,
+            cb = _ref82.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/factores', factor).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* INSERT_FACTOR */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["A" /* UPDATE_FACTOR */], function (_ref82, _ref83) {
-        var commit = _ref82.commit;
-        var factor = _ref83.factor,
-            cb = _ref83.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["A" /* UPDATE_FACTOR */], function (_ref83, _ref84) {
+        var commit = _ref83.commit;
+        var factor = _ref84.factor,
+            cb = _ref84.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/factores/' + factor.id, factor).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_FACTOR */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACTOR */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* DELETE_FACTOR */], function (_ref84, _ref85) {
-        var commit = _ref84.commit;
-        var factor = _ref85.factor,
-            cb = _ref85.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* DELETE_FACTOR */], function (_ref85, _ref86) {
+        var commit = _ref85.commit;
+        var factor = _ref86.factor,
+            cb = _ref86.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/factores/' + factor.id, factor).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], { payload: { data: factor, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["t" /* INSERT_PERIODO */], function (_ref86, _ref87) {
-        var commit = _ref86.commit;
-        var periodo = _ref87.periodo,
-            cb = _ref87.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["t" /* INSERT_PERIODO */], function (_ref87, _ref88) {
+        var commit = _ref87.commit;
+        var periodo = _ref88.periodo,
+            cb = _ref88.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/periodos', periodo).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["p" /* INSERT_PERIODO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["E" /* UPDATE_PERIODO */], function (_ref88, _ref89) {
-        var commit = _ref88.commit;
-        var periodo = _ref89.periodo,
-            cb = _ref89.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["E" /* UPDATE_PERIODO */], function (_ref89, _ref90) {
+        var commit = _ref89.commit;
+        var periodo = _ref90.periodo,
+            cb = _ref90.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/periodos/' + periodo.id, periodo).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_PERIODO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_PERIODO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* DELETE_PERIODO */], function (_ref90, _ref91) {
-        var commit = _ref90.commit;
-        var periodo = _ref91.periodo,
-            cb = _ref91.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* DELETE_PERIODO */], function (_ref91, _ref92) {
+        var commit = _ref91.commit;
+        var periodo = _ref92.periodo,
+            cb = _ref92.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/periodos/' + periodo.id, periodo).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], { payload: { data: periodo, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["v" /* INSERT_USUARIO */], function (_ref92, _ref93) {
-        var commit = _ref92.commit;
-        var usuario = _ref93.usuario,
-            cb = _ref93.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["v" /* INSERT_USUARIO */], function (_ref93, _ref94) {
+        var commit = _ref93.commit;
+        var usuario = _ref94.usuario,
+            cb = _ref94.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/usuarios', usuario).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["r" /* INSERT_USUARIO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["G" /* UPDATE_USUARIO */], function (_ref94, _ref95) {
-        var commit = _ref94.commit;
-        var usuario = _ref95.usuario,
-            cb = _ref95.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["G" /* UPDATE_USUARIO */], function (_ref95, _ref96) {
+        var commit = _ref95.commit;
+        var usuario = _ref96.usuario,
+            cb = _ref96.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/usuarios/' + usuario.id, usuario).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_USUARIO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_USUARIO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -13984,10 +14003,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_2__vuex_actions__["x" /* SEND_DECLARACION */], { informe: informe, cb: this.callback });
             }
         },
-        tieneApelacion: function tieneApelacion(informe) {
-            return informe.apelaciones.find(function (apelacion) {
-                return apelacion.actual;
-            }) !== undefined;
+        evaluar: function evaluar(informe) {
+            var comision = this.auth.comision;
+            var usuario = informe.usuario;
+            var etapa = informe.periodo.etapa;
+            return usuario.id !== this.auth.id && comision !== null && (comision.tipo === this.comision.departamental && etapa === this.etapas.evaluando || informe.apelacion.apelado && comision.tipo === informe.apelacion.comision);
         },
         descargar: function descargar(informe) {
             __WEBPACK_IMPORTED_MODULE_1_axios___default()({
@@ -14030,10 +14050,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__partes_Resumen__ = __webpack_require__(84);
 
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
+//
 //
 //
 //
@@ -14159,7 +14178,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                     actividades: [],
                     calificacion: 1
                 },
-                apelaciones: undefined,
+                apelaciones: [null, null, null],
                 formula: {},
                 periodo: {},
                 resumenes: {},
@@ -14193,11 +14212,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     created: function created() {
         var _this = this;
 
-        vm.$on('update-resumenes-totales', function (payload) {
+        this.$root.$on('update-resumenes-totales', function (payload) {
             _this.informe.resumenes = payload.resumenes;
             _this.informe.totales = payload.totales;
         });
-        vm.$on('update-calificacion', function (calificacion) {
+        this.$root.$on('update-calificacion', function (calificacion) {
             _this.informe.calificacion_final = calificacion;
         });
 
@@ -14205,7 +14224,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             var informe = this.informes.find(function (informe) {
                 return informe.id === _this.$route.params.id;
             });
-            this.informe = this.copy(informe);
+            this.informe = Object.assign({}, this.informe, this.copy(informe));
         } else {
             this.informe.formula = this.formula;
             this.informe.periodo = this.auth.departamento.periodo;
@@ -14237,6 +14256,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             var payload = arguments[1];
 
+            console.log('Ok: ' + ok);
             if (ok) this.volver('informes', this.mensajeVolver);
             this.mensaje = -1;
         },
@@ -14334,29 +14354,19 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
          * Ingresa una nueva apelación en la base de datos.
          */
         apelar: function apelar() {
-            this.apelacion.id_declaracion = this.informe.id;
-            var formData = this.formData(this.apelacion);
-            this.mensajeVolver = 'Se ha registrado la apelación correctamente';
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["m" /* INSERT_APELACION */], { apelacion: formData, cb: this.cbVolver });
+            if (confirm('Sólo puede apelar una vez a cada comisión. ¿Desea continuar?')) {
+                this.apelacion.id_declaracion = this.informe.id;
+                var formData = this.formData(this.apelacion);
+                this.mensajeVolver = 'Se ha registrado la apelación correctamente';
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["m" /* INSERT_APELACION */], { apelacion: formData, cb: this.cbVolver });
+            }
         },
         resuelto: function resuelto() {
             this.mensajeVolver = 'Se ha marcado como resuelto';
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["w" /* RESOLVE_APELACION */], { informe: this.informe, cb: this.cbVolver });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["w" /* RESOLVE_APELACION */], { apelacion: this.apelacion, cb: this.cbVolver });
         }
     },
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapState */])(['formula', 'informes']), {
-        /**
-         * Indica si una evaluación presenta apelación.
-         */
-        apelado: function apelado() {
-            if (this.informe.apelaciones) {
-                return this.informe.apelaciones.find(function (apelacion) {
-                    return apelacion.actual;
-                }) !== undefined;
-            }
-            return false;
-        }
-    })
+    computed: Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapState */])(['formula', 'informes'])
 });
 
 /***/ }),
@@ -14872,6 +14882,10 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: ['previo', 'etapa', 'tipo'],
@@ -14970,11 +14984,16 @@ if (false) {(function () {
          * Observa y envía las modificaciones de la lista de actividades
          * al componente padre.
          */
-        actividades: function actividades(newActividades) {
-            this.$emit('actualizar', newActividades);
-            Vue.nextTick(function () {
-                $('[data-toggle="tooltip"]').tooltip();
-            });
+        actividades: {
+            handler: function handler(newActividades) {
+                this.$emit('actualizar', newActividades);
+                this.$root.$emit('activities-changed');
+                Vue.nextTick(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+            },
+
+            deep: true
         }
     },
     computed: {
@@ -15060,9 +15079,15 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    props: ['previa', 'actual'],
+    props: ['previo', 'usuario'],
     data: function data() {
         return {
             /**
@@ -15071,14 +15096,16 @@ if (false) {(function () {
              */
             apelacion: {
                 comentario: '',
+                respuesta: '',
                 comision: 0,
                 archivo: undefined
             }
         };
     },
     created: function created() {
-        if (this.previa === undefined) return;
-        this.apelacion = this.copy(this.previa);
+        if (!this.previo.apelado) return;
+        var comision = this.previo.comision;
+        this.apelacion = this.previo.apelaciones[comision];
     },
     methods: {
         /**
@@ -15086,15 +15113,6 @@ if (false) {(function () {
          */
         obtenerArchivo: function obtenerArchivo() {
             this.apelacion.archivo = this.$refs.archivo.files[0];
-        }
-    },
-    computed: {
-        /**
-         * Indica si la apelación es editable.
-         * @return Verdadero o falso
-         */
-        editable: function editable() {
-            return this.apelacion.id === undefined;
         }
     },
     watch: {
@@ -15199,6 +15217,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         };
     },
     created: function created() {
+        var _this = this;
+
+        this.$root.$on('activities-changed', function () {
+            _this.actualizar();
+        });
         this.actualizar();
     },
     methods: {
@@ -15217,7 +15240,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
          * últimos datos disponibles en el informe de actividades.
          */
         actualizar: function actualizar() {
-            var _this = this;
+            var _this2 = this;
 
             this.totales = {
                 comprometido: {
@@ -15248,16 +15271,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     };
 
                     ['comprometido', 'realizado'].forEach(function (parte) {
-                        _this.informe[itemKey].actividades.forEach(function (actividad) {
-                            _this.resumenes[itemKey][parte].horasSemana += (actividad[parte].primero.horasSemana + actividad[parte].segundo.horasSemana) / 2;
-                            _this.resumenes[itemKey][parte].horasAnio += actividad[parte].primero.horasSemestre + actividad[parte].segundo.horasSemestre;
+                        _this2.informe[itemKey].actividades.forEach(function (actividad) {
+                            _this2.resumenes[itemKey][parte].horasSemana += (actividad[parte].primero.horasSemana + actividad[parte].segundo.horasSemana) / 2;
+                            _this2.resumenes[itemKey][parte].horasAnio += actividad[parte].primero.horasSemestre + actividad[parte].segundo.horasSemestre;
                         });
 
-                        _this.totales[parte].semanal += _this.resumenes[itemKey][parte].horasSemana;
-                        _this.totales[parte].anual += _this.resumenes[itemKey][parte].horasAnio;
+                        _this2.totales[parte].semanal += _this2.resumenes[itemKey][parte].horasSemana;
+                        _this2.totales[parte].anual += _this2.resumenes[itemKey][parte].horasAnio;
 
-                        _this.resumenes[itemKey][parte].equivalente = _this.equivalentes(_this.resumenes[itemKey][parte].horasSemana, _this.resumenes[itemKey][parte].horasAnio);
-                        _this.totales[parte].equivalente += _this.resumenes[itemKey][parte].equivalente;
+                        _this2.resumenes[itemKey][parte].equivalente = _this2.equivalentes(_this2.resumenes[itemKey][parte].horasSemana, _this2.resumenes[itemKey][parte].horasAnio);
+                        _this2.totales[parte].equivalente += _this2.resumenes[itemKey][parte].equivalente;
                     });
 
                     this.totales.comprometido.equivalente = Math.round(this.totales.comprometido.equivalente * 10) / 10;
@@ -15265,7 +15288,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 }
             }
 
-            vm.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales });
+            this.$root.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales });
         }
     },
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['factores', 'rangos']), {
@@ -15296,9 +15319,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var factor = this.factores.find(function (factor) {
                 return diferencia <= factor.diferencia;
             });
-            calificacion = calificacion * factor.factor;
+            calificacion *= factor.factor;
 
-            vm.$emit('update-calificacion', calificacion);
+            this.$root.$emit('update-calificacion', calificacion);
             return calificacion;
         },
         /**
@@ -15313,16 +15336,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var clase = diferencia <= horas * 0.1 ? 'info' : diferencia <= horas * 0.4 ? 'warning' : 'danger';
             return { mensaje: mensaje, clase: clase };
         }
-    }),
-    watch: {
-        informe: {
-            handler: function handler() {
-                this.actualizar();
-            },
-
-            deep: true
-        }
-    }
+    })
 });
 
 /***/ }),
@@ -16979,7 +16993,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$http = __WEBPACK_IMPORTED
  */
 
 var app = function app() {
-    window.vm = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
+    new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
         el: '#app',
         store: __WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */],
         router: __WEBPACK_IMPORTED_MODULE_6__router__["a" /* router */],
@@ -19459,6 +19473,33 @@ var render = function() {
                                 {
                                   staticClass: "btn navbar-btn",
                                   attrs: {
+                                    to: {
+                                      name: "editar-departamento",
+                                      params: {
+                                        accion: "Editar",
+                                        elemento: _vm.copy(
+                                          _vm.auth.departamento
+                                        )
+                                      }
+                                    }
+                                  }
+                                },
+                                [_vm._v("Departamento")]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        [
+                          _vm.auth.rol === _vm.rol.director
+                            ? _c(
+                                "router-link",
+                                {
+                                  staticClass: "btn navbar-btn",
+                                  attrs: {
                                     to: { name: "periodos" },
                                     role: "button",
                                     "active-class": ""
@@ -19651,7 +19692,12 @@ var render = function() {
             ),
             _vm._v(" "),
             _c("p", { staticClass: "badge navbar-p pull-right" }, [
-              _vm._v(_vm._s(_vm.auth.nombres) + " "),
+              _vm._v(
+                _vm._s(_vm.auth.nombres.split(" ")[0]) +
+                  " " +
+                  _vm._s(_vm.auth.apellido_paterno) +
+                  " "
+              ),
               _c("b", [
                 _vm._v("(" + _vm._s(_vm.etiquetas.rol[_vm.auth.rol]) + ")")
               ])
@@ -20528,31 +20574,32 @@ if (hadRuntime) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return SET_STATE_OBJECT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return SET_STATE_PAGINATION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return UPDATE_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ATTACH_APELACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return UPDATE_APELACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return INSERT_FACULTAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return UPDATE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return UPDATE_FACULTAD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return DELETE_FACULTAD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return INSERT_DEPARTAMENTO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return UPDATE_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return UPDATE_DEPARTAMENTO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DELETE_DEPARTAMENTO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return INSERT_JERARQUIA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return UPDATE_JERARQUIA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_JERARQUIA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return DELETE_JERARQUIA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return INSERT_JORNADA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_JORNADA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_JORNADA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return DELETE_JORNADA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return INSERT_RANGO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_RANGO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_RANGO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return DELETE_RANGO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return INSERT_FACTOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return UPDATE_FACTOR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return UPDATE_FACTOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_FACTOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return INSERT_PERIODO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_PERIODO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_PERIODO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DELETE_PERIODO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return INSERT_USUARIO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_USUARIO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return UPDATE_USUARIO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return HANDLE_ERROR; });
 var SET_STATE_ARRAY = 'SET_STATE_ARRAY';
 var SET_STATE_OBJECT = 'SET_STATE_OBJECT';
@@ -20560,6 +20607,7 @@ var SET_STATE_PAGINATION = 'SET_STATE_PAGINATION';
 var INSERT_DECLARACION = 'INSERT_DECLARACION';
 var UPDATE_DECLARACION = 'UPDATE_DECLARACION';
 var ATTACH_APELACION = 'ATTACH_APELACION';
+var UPDATE_APELACION = 'UPDATE_APELACION';
 var INSERT_FACULTAD = 'INSERT_FACULTAD';
 var UPDATE_FACULTAD = 'UPDATE_FACULTAD';
 var DELETE_FACULTAD = 'DELETE_FACULTAD';
@@ -20749,7 +20797,7 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
         name: 'editar-departamento',
         component: __WEBPACK_IMPORTED_MODULE_12__components_departamento_FormDepartamento__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 2' }
+        meta: { eval: 'rol >= 1' }
     }, {
         path: '/rangos',
         name: 'rangos',
@@ -20826,20 +20874,20 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
         path: '/periodos',
         name: 'periodos',
         component: __WEBPACK_IMPORTED_MODULE_21__components_periodo_ListadoPeriodos__["a" /* default */],
-        meta: { eval: 'rol === 2' },
+        meta: { eval: 'rol === 1' },
         props: true
     }, {
         path: '/periodos/crear',
         name: 'crear-periodo',
         component: __WEBPACK_IMPORTED_MODULE_22__components_periodo_FormPeriodo__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 2' }
+        meta: { eval: 'rol === 1' }
     }, {
         path: '/periodos/editar',
         name: 'editar-periodo',
         component: __WEBPACK_IMPORTED_MODULE_22__components_periodo_FormPeriodo__["a" /* default */],
         props: true,
-        meta: { eval: 'rol === 2' }
+        meta: { eval: 'rol === 1' }
     }, {
         path: '/comision/superior',
         name: 'comision-superior',
@@ -23565,8 +23613,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
                 editable: 0,
                 revisar: 1,
                 enviado: 2,
-                aprobado: 3,
-                etiquetas: ['No enviado', 'Revisar', 'Esperando aprobación', 'Aprobado']
+                aprobado: 3
             }),
             /**
              * Códigos de rol de la plataforma. Utilizado para bloquear rutas
@@ -23588,6 +23635,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
             }),
             etiquetas: {
                 comision: ['Comisión superior', 'Comisión de facultad', 'Comisión de departamento'],
+                estado: ['No enviado', 'Revisar', 'Esperando aprobación', 'Aprobado'],
                 rol: ['Académico', 'Director de departamento', 'Administrador']
             }
         };
@@ -23880,17 +23928,19 @@ var render = function() {
         : _c("table", { staticClass: "table table-striped" }, [
             _c("thead", [
               _c("tr", [
-                _c("th", [_vm._v("Periodo")]),
+                _c("th", { staticClass: "text-center" }, [_vm._v("Periodo")]),
                 _vm._v(" "),
-                _c("th", [_vm._v("Creado el")]),
+                _c("th", { staticClass: "text-center" }, [_vm._v("Creado el")]),
                 _vm._v(" "),
                 _vm.auth.rol > _vm.rol.academico
-                  ? _c("th", [_vm._v("Declarante")])
+                  ? _c("th", { staticClass: "text-center" }, [
+                      _vm._v("Declarante")
+                    ])
                   : _vm._e(),
                 _vm._v(" "),
-                _c("th", [_vm._v("Estado")]),
+                _c("th", { staticClass: "text-center" }, [_vm._v("Estado")]),
                 _vm._v(" "),
-                _c("th")
+                _c("th", { staticClass: "text-center" })
               ])
             ]),
             _vm._v(" "),
@@ -23898,13 +23948,15 @@ var render = function() {
               "tbody",
               _vm._l(_vm.informes, function(informe) {
                 return _c("tr", { key: informe.id }, [
-                  _c("td", [_vm._v(_vm._s(informe.periodo.nombre))]),
+                  _c("td", { staticClass: "text-center" }, [
+                    _vm._v(_vm._s(informe.periodo.nombre))
+                  ]),
                   _vm._v(" "),
-                  _c("td", [
+                  _c("td", { staticClass: "text-center" }, [
                     _vm._v(_vm._s(new Date(informe.created_at).toString()))
                   ]),
                   _vm._v(" "),
-                  _vm.auth.rol > 1
+                  _vm.auth.rol > _vm.rol.academico
                     ? _c("td", [
                         _vm._v(
                           _vm._s(informe.usuario.apellido_paterno) +
@@ -23916,13 +23968,12 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(_vm.estados.etiquetas[informe.estado]))
+                  _c("td", { staticClass: "text-center" }, [
+                    _vm._v(_vm._s(_vm.etiquetas.estado[informe.estado]))
                   ]),
                   _vm._v(" "),
                   _c(
                     "td",
-                    { staticClass: "col-md-2" },
                     [
                       _vm.auth.rol === _vm.rol.academico &&
                       informe.periodo.etapa === _vm.etapas.declarando &&
@@ -23933,7 +23984,7 @@ var render = function() {
                               _c(
                                 "router-link",
                                 {
-                                  staticClass: "btn btn-xs btn-info btn-block",
+                                  staticClass: "btn btn-xs btn-info",
                                   attrs: {
                                     to: {
                                       name: "editar-informe",
@@ -23955,8 +24006,7 @@ var render = function() {
                               _c(
                                 "a",
                                 {
-                                  staticClass:
-                                    "btn btn-xs btn-success btn-block",
+                                  staticClass: "btn btn-xs btn-success",
                                   on: {
                                     click: function($event) {
                                       _vm.enviar(informe)
@@ -23984,7 +24034,7 @@ var render = function() {
                         ? _c(
                             "router-link",
                             {
-                              staticClass: "btn btn-xs btn-info btn-block",
+                              staticClass: "btn btn-xs btn-info",
                               attrs: {
                                 to: {
                                   name: "aprobar-informe",
@@ -24008,7 +24058,7 @@ var render = function() {
                         ? _c(
                             "router-link",
                             {
-                              staticClass: "btn btn-xs btn-info btn-block",
+                              staticClass: "btn btn-xs btn-info",
                               attrs: {
                                 to: {
                                   name: "realizado-informe",
@@ -24024,15 +24074,11 @@ var render = function() {
                           )
                         : _vm._e(),
                       _vm._v(" "),
-                      _vm.auth.rol_comision ===
-                        _vm.rolesComision.departamental &&
-                      (informe.periodo.etapa === _vm.etapas.evaluando ||
-                        (informe.periodo.etapa === _vm.etapas.apelando &&
-                          _vm.tieneApelacion(informe)))
+                      _vm.evaluar(informe)
                         ? _c(
                             "router-link",
                             {
-                              staticClass: "btn btn-xs btn-info btn-block",
+                              staticClass: "btn btn-xs btn-info",
                               attrs: {
                                 to: {
                                   name: "evaluar-informe",
@@ -24054,7 +24100,7 @@ var render = function() {
                         ? _c(
                             "router-link",
                             {
-                              staticClass: "btn btn-xs btn-info btn-block",
+                              staticClass: "btn btn-xs btn-info",
                               attrs: {
                                 to: {
                                   name: "apelar-informe",
@@ -24077,6 +24123,7 @@ var render = function() {
                       _c(
                         "a",
                         {
+                          staticClass: "btn btn-xs btn-default",
                           attrs: { href: "#" },
                           on: {
                             click: function($event) {
@@ -25534,8 +25581,21 @@ var render = function() {
                           _c("th", { staticClass: "text-center" }, [
                             _vm._v(
                               _vm._s(
-                                _vm.totales.comprometido[_vm.semestre]
-                                  .horasSemana
+                                _vm.totales.comprometido.primero.horasSemana
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(_vm.totales.realizado.primero.horasSemana)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido.primero.horasSemestre
                               )
                             )
                           ]),
@@ -25543,7 +25603,7 @@ var render = function() {
                           _c("th", { staticClass: "text-center" }, [
                             _vm._v(
                               _vm._s(
-                                _vm.totales.realizado[_vm.semestre].horasSemana
+                                _vm.totales.realizado.primero.horasSemestre
                               )
                             )
                           ]),
@@ -25551,8 +25611,21 @@ var render = function() {
                           _c("th", { staticClass: "text-center" }, [
                             _vm._v(
                               _vm._s(
-                                _vm.totales.comprometido[_vm.semestre]
-                                  .horasSemestre
+                                _vm.totales.comprometido.segundo.horasSemana
+                              )
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(_vm.totales.realizado.segundo.horasSemana)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("th", { staticClass: "text-center" }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.totales.comprometido.segundo.horasSemestre
                               )
                             )
                           ]),
@@ -25560,8 +25633,7 @@ var render = function() {
                           _c("th", { staticClass: "text-center" }, [
                             _vm._v(
                               _vm._s(
-                                _vm.totales.realizado[_vm.semestre]
-                                  .horasSemestre
+                                _vm.totales.realizado.segundo.horasSemestre
                               )
                             )
                           ])
@@ -26182,159 +26254,208 @@ var render = function() {
       _vm._v("\n        Apelación\n    ")
     ]),
     _vm._v(" "),
-    _c("table", { staticClass: "table" }, [
-      _c("thead", [
-        _c("tr", [
-          _c("th", { staticClass: "col-md-9" }, [_vm._v("Comentario")]),
-          _vm._v(" "),
-          _c("th", { staticClass: "col-md-3" }, [
-            _vm._v(_vm._s(_vm.editable ? "Dirigida a" : "Archivo"))
-          ])
-        ])
-      ]),
+    _c("table", { staticClass: "table table-striped" }, [
+      _vm._m(0),
       _vm._v(" "),
-      _vm.editable
-        ? _c("tbody", [
-            _c("tr", [
-              _c("td", { attrs: { rowspan: "3" } }, [
-                _c("textarea", {
-                  directives: [
+      _c(
+        "tbody",
+        [
+          _vm._l(_vm.previo.apelaciones, function(apelacion, index) {
+            return apelacion !== null &&
+              (_vm.usuario || index === _vm.previo.comision)
+              ? _c("tr", { key: index }, [
+                  _c("td", { staticClass: "col-md-2" }, [
+                    _vm._v(_vm._s(_vm.etiquetas.comision[index]))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "col-md-2" }, [
+                    apelacion.nombre_archivo
+                      ? _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-xs btn-default btn-block",
+                            attrs: {
+                              href:
+                                "/api/apelaciones/" + apelacion.id + "/adjunto",
+                              type: "button"
+                            }
+                          },
+                          [
+                            _c("span", {
+                              staticClass: "glyphicon glyphicon-download-alt",
+                              attrs: { "aria-hidden": "true" }
+                            }),
+                            _vm._v(
+                              " " +
+                                _vm._s(apelacion.nombre_archivo) +
+                                "\n                    "
+                            )
+                          ]
+                        )
+                      : _c("div", [_vm._v("No se adjuntó archivo")])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "col-md-4" }, [
+                    _vm._v(_vm._s(apelacion.comentario))
+                  ]),
+                  _vm._v(" "),
+                  _vm.usuario
+                    ? _c("td", { staticClass: "col-md-4" }, [
+                        apelacion.resuelta
+                          ? _c("div", [_vm._v(_vm._s(apelacion.respuesta))])
+                          : _c("i", [
+                              _vm._v("Aún no se ha resuelto esta apelación...")
+                            ])
+                      ])
+                    : _c("td", { staticClass: "col-md-4" }, [
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: apelacion.respuesta,
+                              expression: "apelacion.respuesta"
+                            }
+                          ],
+                          staticClass: "col-md-12 form-control",
+                          attrs: { rows: "3" },
+                          domProps: { value: apelacion.respuesta },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                apelacion,
+                                "respuesta",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                ])
+              : _vm._e()
+          }),
+          _vm._v(" "),
+          _vm.previo.apelar
+            ? _c("tr", { staticClass: "panel-footer" }, [
+                _c("td", { staticClass: "col-md-2" }, [
+                  _c(
+                    "select",
                     {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.apelacion.comentario,
-                      expression: "apelacion.comentario"
-                    }
-                  ],
-                  staticClass: "col-md-12 form-control",
-                  attrs: { rows: "3" },
-                  domProps: { value: _vm.apelacion.comentario },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.apelacion.comision,
+                          expression: "apelacion.comision"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.apelacion,
+                            "comision",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
                       }
-                      _vm.$set(_vm.apelacion, "comentario", $event.target.value)
-                    }
-                  }
-                })
-              ]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "select",
-                  {
+                    },
+                    _vm._l(_vm.comision, function(tipo) {
+                      return _vm.previo.apelaciones[tipo] === null
+                        ? _c(
+                            "option",
+                            { key: tipo, domProps: { value: tipo } },
+                            [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(_vm.etiquetas.comision[tipo]) +
+                                  "\n                        "
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "col-md-2" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "btn btn-info btn-block input-file",
+                      attrs: { for: "input" }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-paperclip",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(
+                        " " +
+                          _vm._s(
+                            _vm.apelacion.archivo !== undefined
+                              ? _vm.apelacion.archivo.name
+                              : "Seleccionar archivo..."
+                          ) +
+                          "\n                    "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    ref: "archivo",
+                    attrs: { id: "input", type: "file" },
+                    on: { change: _vm.obtenerArchivo }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "col-md-4" }, [
+                  _c("textarea", {
                     directives: [
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.apelacion.comision,
-                        expression: "apelacion.comision"
+                        value: _vm.apelacion.comentario,
+                        expression: "apelacion.comentario"
                       }
                     ],
+                    staticClass: "col-md-12 form-control",
+                    attrs: { rows: "3" },
+                    domProps: { value: _vm.apelacion.comentario },
                     on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
                         _vm.$set(
                           _vm.apelacion,
-                          "comision",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
+                          "comentario",
+                          $event.target.value
                         )
                       }
                     }
-                  },
-                  _vm._l(
-                    [].concat(Array(_vm.comision.length - 1).keys()),
-                    function(tipo) {
-                      return _c(
-                        "option",
-                        { key: tipo, domProps: { value: tipo } },
-                        [_vm._v(_vm._s(_vm.comision.etiquetas[tipo]))]
-                      )
-                    }
-                  )
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _vm._m(0),
-            _vm._v(" "),
-            _c("tr", [
-              _c("td", [
-                _c(
-                  "label",
-                  {
-                    staticClass: "btn btn-info btn-block input-file",
-                    attrs: { for: "input" }
-                  },
-                  [
-                    _c("span", {
-                      staticClass: "glyphicon glyphicon-paperclip",
-                      attrs: { "aria-hidden": "true" }
-                    }),
-                    _vm._v(
-                      " " +
-                        _vm._s(
-                          _vm.apelacion.archivo !== undefined
-                            ? _vm.apelacion.archivo.name
-                            : "Seleccionar archivo..."
-                        ) +
-                        "\n                    "
-                    )
-                  ]
-                ),
+                  })
+                ]),
                 _vm._v(" "),
-                _c("input", {
-                  ref: "archivo",
-                  attrs: { id: "input", type: "file" },
-                  on: { change: _vm.obtenerArchivo }
-                })
+                _c("td", { staticClass: "col-md-4" })
               ])
-            ])
-          ])
-        : _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v(_vm._s(_vm.apelacion.comentario))]),
-              _vm._v(" "),
-              _c("td", [
-                _vm.apelacion.nombre_archivo
-                  ? _c(
-                      "a",
-                      {
-                        staticClass: "btn btn-info btn-block",
-                        attrs: {
-                          href:
-                            "/api/apelaciones/" + _vm.apelacion.id + "/adjunto",
-                          type: "button"
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-download-alt",
-                          attrs: { "aria-hidden": "true" }
-                        }),
-                        _vm._v(
-                          " " +
-                            _vm._s(_vm.apelacion.nombre_archivo) +
-                            "\n                    "
-                        )
-                      ]
-                    )
-                  : _c("p", { staticClass: "text-center" }, [
-                      _vm._v("No se adjuntó archivo a esta apelación")
-                    ])
-              ])
-            ])
-          ])
+            : _vm._e()
+        ],
+        2
+      )
     ])
   ])
 }
@@ -26343,7 +26464,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", [_c("th", [_vm._v("Archivo")])])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "text-center" }, [_vm._v("Dirigida a")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Archivo")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Comentario")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Respuesta")])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -26525,7 +26656,9 @@ var render = function() {
               _vm._v(" "),
               _vm.etapa >= _vm.etapas.evaluando
                 ? _c("td", { staticClass: "col-md-2" }, [
-                    _vm.etapa === _vm.etapas.evaluando
+                    value.comprometido.equivalente > 0 &&
+                    _vm.auth.comision !== null &&
+                    _vm.etapa >= _vm.etapas.evaluando
                       ? _c("input", {
                           directives: [
                             {
@@ -26555,7 +26688,7 @@ var render = function() {
                             }
                           }
                         })
-                      : _c("p", { staticClass: "text-center" }, [
+                      : _c("div", { staticClass: "text-center" }, [
                           _vm._v(_vm._s(_vm.informe[key].calificacion))
                         ])
                   ])
@@ -26601,20 +26734,13 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             _vm.etapa >= _vm.etapas.evaluando
-              ? _c(
-                  "th",
-                  {
-                    staticClass: "text-center",
-                    style: { color: _vm.rango.color }
-                  },
-                  [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(_vm.calificacion) +
-                        "\n                "
-                    )
-                  ]
-                )
+              ? _c("th", { staticClass: "text-center" }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.calificacion) +
+                      "\n                "
+                  )
+                ])
               : _vm._e()
           ])
         ],
@@ -26714,16 +26840,16 @@ var render = function() {
       ),
       _vm._v(" "),
       (_vm.etapa === _vm.etapas.apelando &&
-        _vm.auth.rol === _vm.roles.academico) ||
-      _vm.apelado
+        _vm.auth.rol === _vm.rol.academico) ||
+      _vm.informe.apelacion.apelado
         ? _c(
             "div",
             { staticClass: "row" },
             [
               _c("apelacion", {
                 attrs: {
-                  apelaciones: _vm.informe.apelaciones,
-                  actual: _vm.informe.periodo.actual
+                  previo: _vm.informe.apelacion,
+                  usuario: _vm.informe.usuario.id === _vm.auth.id
                 },
                 on: {
                   actualizar: function($event) {
@@ -26928,9 +27054,9 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm.informe.periodo.actual &&
             _vm.etapa === _vm.etapas.apelando &&
-            _vm.auth.rol === _vm.roles.academico
+            _vm.informe.usuario.id === _vm.auth.id &&
+            _vm.informe.apelacion.apelar
               ? _c(
                   "button",
                   {
@@ -26946,7 +27072,8 @@ var render = function() {
                     _vm._v(" Enviar apelación\n                    ")
                   ]
                 )
-              : _vm.apelado
+              : _vm.informe.usuario.id !== _vm.auth.id &&
+                _vm.informe.apelacion.apelado
                 ? _c(
                     "button",
                     {
@@ -27780,7 +27907,7 @@ var render = function() {
                             name: "editar-departamento",
                             params: {
                               accion: "Editar",
-                              elemento: Object.assign({}, departamento, {})
+                              elemento: _vm.copy(departamento)
                             }
                           }
                         }

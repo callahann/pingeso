@@ -24,7 +24,6 @@ class User extends Authenticatable
         'id_departamento',
         'id_jerarquia',
         'id_jornada',
-        'id_rol',
         'id_comision',
         'remember_token',
     ];

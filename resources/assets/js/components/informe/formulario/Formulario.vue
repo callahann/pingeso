@@ -14,8 +14,9 @@
             <div class="row">
                 <resumen :informe="informe" :etapa="etapa"></resumen>
             </div>
-            <div class="row" v-if="(etapa === etapas.apelando && auth.rol === roles.academico) || apelado">
-                <apelacion :apelaciones="informe.apelaciones" :actual="informe.periodo.actual" v-on:actualizar="apelacion = $event"></apelacion>
+            <div class="row" v-if="(etapa === etapas.apelando && auth.rol === rol.academico) || informe.apelacion.apelado">
+                <apelacion :previo="informe.apelacion" :usuario="informe.usuario.id === auth.id"
+                    v-on:actualizar="apelacion = $event"></apelacion>
             </div>
             <div class="row">
                 <div class="panel panel-default">
@@ -67,10 +68,10 @@
                                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&ensp;Aprobar
                             </button>
                         </a>
-                        <button v-if="informe.periodo.actual && etapa === etapas.apelando && auth.rol === roles.academico" type="button" class="btn btn-success" v-on:click="apelar">
+                        <button v-if="etapa === etapas.apelando && informe.usuario.id === auth.id && informe.apelacion.apelar" type="button" class="btn btn-success" v-on:click="apelar">
                             <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&ensp;Enviar apelación
                         </button>
-                        <button v-else-if="apelado" type="button" class="btn btn-success" v-on:click="resuelto">
+                        <button v-else-if="informe.usuario.id !== auth.id && informe.apelacion.apelado" type="button" class="btn btn-success" v-on:click="resuelto">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&ensp;Marcar resuelto
                         </button>
                     </div>
@@ -131,7 +132,7 @@
                         actividades: [],
                         calificacion: 1
                     },
-                    apelaciones: undefined,
+                    apelaciones: [null, null, null],
                     formula: {},
                     periodo: {},
                     resumenes: {},
@@ -163,11 +164,11 @@
             'apelacion': Apelacion,
         },
         created: function() {
-            vm.$on('update-resumenes-totales', (payload) => {
+            this.$root.$on('update-resumenes-totales', (payload) => {
                 this.informe.resumenes = payload.resumenes
                 this.informe.totales = payload.totales
             })
-            vm.$on('update-calificacion', (calificacion) => {
+            this.$root.$on('update-calificacion', (calificacion) => {
                 this.informe.calificacion_final = calificacion
             })
 
@@ -175,7 +176,7 @@
                 const informe = this.informes.find(informe => {
                     return informe.id === this.$route.params.id
                 })
-                this.informe = this.copy(informe)
+                this.informe = Object.assign({}, this.informe, this.copy(informe))
             } else {
                 this.informe.formula = this.formula
                 this.informe.periodo = this.auth.departamento.periodo
@@ -201,6 +202,7 @@
              * @param payload Data (respuesta) obtenida desde la API
              */
             cbVolver: function(ok = false, payload) {
+                console.log('Ok: ' + ok)
                 if(ok) this.volver('informes', this.mensajeVolver)
                 this.mensaje = -1
             },
@@ -244,29 +246,18 @@
              * Ingresa una nueva apelación en la base de datos.
              */
             apelar: function() {
-                this.apelacion.id_declaracion = this.informe.id;
-                let formData = this.formData(this.apelacion)
-                this.mensajeVolver = 'Se ha registrado la apelación correctamente'
-                this.$store.dispatch(INSERT_APELACION, { apelacion: formData, cb: this.cbVolver })
+                if(confirm('Sólo puede apelar una vez a cada comisión. ¿Desea continuar?')) {
+                    this.apelacion.id_declaracion = this.informe.id;
+                    let formData = this.formData(this.apelacion)
+                    this.mensajeVolver = 'Se ha registrado la apelación correctamente'
+                    this.$store.dispatch(INSERT_APELACION, { apelacion: formData, cb: this.cbVolver })
+                }
             },
             resuelto: function() {
                 this.mensajeVolver = 'Se ha marcado como resuelto'
-                this.$store.dispatch(RESOLVE_APELACION, { informe: this.informe, cb: this.cbVolver })
+                this.$store.dispatch(RESOLVE_APELACION, { apelacion: this.apelacion, cb: this.cbVolver })
             }
         },
-        computed: {
-            ...mapState(['formula', 'informes']),
-            /**
-             * Indica si una evaluación presenta apelación.
-             */
-            apelado: function() {
-                if (this.informe.apelaciones) {
-                    return this.informe.apelaciones.find(apelacion => {
-                        return apelacion.actual
-                    }) !== undefined
-                }
-                return false;
-            }
-        }
+        computed: mapState(['formula', 'informes'])
     }
 </script>

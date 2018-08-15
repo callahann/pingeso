@@ -47,12 +47,27 @@ const store = new Vuex.Store({
             
             callback(true, payload.data);
         },
-        [Mutations.ATTACH_APELACION] (state, { payload, callback }) {
+        [Mutations.ATTACH_APELACION] (state, { payload, comision, callback }) {
             const index = state.informes.findIndex(informe => {
                 return informe.id === payload.data.id_declaracion
             })
-            state.informes[index].apelaciones.push(payload.data)
-            
+            const apelacion = state.informes[index].apelacion
+            apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data)
+            apelacion.apelado = true
+            apelacion.apelar = false
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_APELACION] (state, { payload, callback }) {
+            const index = state.informes.findIndex(informe => {
+                return informe.id === payload.data.id_declaracion
+            })
+            const apelacion = state.informes[index].apelacion
+            const comision = apelacion.apelaciones.findIndex(apelacion => {
+                return apelacion.id === payload.data.id
+            })
+            apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data)
+            apelacion.apelado = false
+            apelacion.apelar = apelacion.apelaciones.includes(null)
             callback(true, payload.data);
         },
         [Mutations.INSERT_FACULTAD] (state, { payload, callback }) {
@@ -307,17 +322,17 @@ const store = new Vuex.Store({
             axios
                 .post('/api/apelaciones', apelacion)
                 .then(response => {
-                    commit(Mutations.ATTACH_APELACION, { payload: response, callback: cb })
+                    commit(Mutations.ATTACH_APELACION, { payload: response, comision: apelacion.comision, callback: cb })
                 })
-                .catch(e => {
+                .catch( e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
                 })
         },
-        [Actions.RESOLVE_APELACION] ({ commit }, { informe, cb }) {
+        [Actions.RESOLVE_APELACION] ({ commit }, { apelacion, cb }) {
             axios
-                .put('/api/declaraciones/' + informe.id + '/resolver', informe)
+                .put('/api/apelaciones/' + apelacion.id, apelacion)
                 .then(response => {
-                    commit(Mutations.UPDATE_DECLARACION, { payload: response, callback: cb })
+                    commit(Mutations.UPDATE_APELACION, { payload: response, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })

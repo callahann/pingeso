@@ -9,10 +9,6 @@ class Comision extends Model
 {
     use SoftDeletes;
 
-    protected $hidden = [
-        'id_rol'
-    ];
-
     protected $dates = ['deleted_at'];
 
     public function departamento()

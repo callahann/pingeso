@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Declaracion;
 
 class Apelacion extends Model
 {
@@ -13,19 +14,16 @@ class Apelacion extends Model
         'id',
         'id_declaracion',
         'comentario',
+        'respuesta',
         'nombre_archivo',
     ];
 
-    protected $appends = [
-        'actual'
+    protected $casts = [
+        'id_declaracion' => 'integer'
     ];
 
     public function declaracion()
     {
-        return $this->belongsTo(Apelacion::class,'id_declaracion');
-    }
-
-    public function getActualAttribute() {
-        return !$this->trashed();
+        return $this->belongsTo(Declaracion::class,'id_declaracion');
     }
 }

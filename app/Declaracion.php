@@ -21,6 +21,12 @@ class Declaracion extends Model
         'estado',
     ];
 
+    protected $hidden = [
+        'id_apelacion_superior',
+        'id_apelacion_facultad',
+        'id_apelacion_departamental'
+    ];
+
     protected $casts = [
         'item_docencia'=> 'array',
         'item_investigacion'=> 'array',
@@ -38,9 +44,19 @@ class Declaracion extends Model
         'usuario'
     ];
 
-    public function apelacion()
+    public function apelacionSuperior()
     {
-        return $this->hasOne(Apelacion::class,'id_declaracion');
+        return $this->hasOne(Apelacion::class,'id','id_apelacion_superior');
+    }
+
+    public function apelacionFacultad()
+    {
+        return $this->hasOne(Apelacion::class,'id','id_apelacion_facultad');
+    }
+
+    public function apelacionDepartamental()
+    {
+        return $this->hasOne(Apelacion::class,'id','id_apelacion_departamental');
     }
 
     public function formula()
@@ -60,7 +76,20 @@ class Declaracion extends Model
 
     public function getApelacionAttribute()
     {
-        return $this->apelacion()->first();
+        $superior = $this->apelacionSuperior()->first();
+        $facultad = $this->apelacionFacultad()->first();
+        $departamental = $this->apelacionDepartamental()->first();
+        $apelaciones = [$superior, $facultad, $departamental];
+        
+        $i = 0;
+        while($i < 3 && $apelaciones[$i]->resuelta) $i++;
+        $apelado = $i < 3;
+        return [
+            'apelado' => $apelado,
+            'comision'=> $i,
+            'apelar' => !$apelado && in_array(null, $apelaciones),
+            'apelaciones' => $apelaciones
+        ];
     }
 
     public function getFormulaAttribute()

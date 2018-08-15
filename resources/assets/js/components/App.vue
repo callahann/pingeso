@@ -15,6 +15,7 @@
                             Administrar <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
+                            <li><router-link :to="{ name: 'editar-departamento', params: { accion: 'Editar', elemento: copy(auth.departamento) } }" class="btn navbar-btn" v-if="auth.rol === rol.director">Departamento</router-link></li>
                             <li><router-link :to="{ name: 'periodos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.director">Periodos</router-link></li>
                             <li><router-link :to="{ name: 'comision-superior' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Comisión Superior</router-link></li>
                             <li><router-link :to="{ name: 'departamentos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Departamentos</router-link></li>
@@ -27,7 +28,7 @@
                         </ul>
                     </div>
                     <a href="/logout" class="btn navbar-btn pull-right" role="button" active-class>Cerrar sesión</a>
-                    <p class="badge navbar-p pull-right">{{ auth.nombres }} <b>({{ etiquetas.rol[auth.rol] }})</b></p>
+                    <p class="badge navbar-p pull-right">{{ auth.nombres.split(" ")[0] }} {{ auth.apellido_paterno }} <b>({{ etiquetas.rol[auth.rol] }})</b></p>
                 </div>
             </div>
         </nav>

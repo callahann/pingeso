@@ -31,9 +31,9 @@
                     <td class="td-margin" v-if="etapa >= etapas.evaluando"></td>
                     <td class="col-md-2" v-if="etapa >= etapas.evaluando">
                         <input type="number" class="form-control" min=1 max=7 
-                            v-if="etapa === etapas.evaluando"
+                            v-if="value.comprometido.equivalente > 0 && auth.comision !== null && etapa >= etapas.evaluando"
                             v-model.number="informe[key].calificacion">
-                        <p class="text-center" v-else>{{ informe[key].calificacion }}</p>
+                        <div class="text-center" v-else>{{ informe[key].calificacion }}</div>
                     </td>
                 </tr>
                 <tr>
@@ -45,7 +45,7 @@
                     <th class="text-center" v-if="etapa >= etapas.realizado"><b>{{ totales.realizado.anual }}</b></th>
                     <th class="text-center" v-if="etapa >= etapas.realizado"><b>{{ totales.realizado.equivalente }}</b></th>
                     <td class="td-margin" v-if="etapa >= etapas.evaluando"></td>
-                    <th class="text-center" :style="{ color: rango.color }" v-if="etapa >= etapas.evaluando">
+                    <th class="text-center" v-if="etapa >= etapas.evaluando">
                         {{ calificacion }}
                     </th>
                 </tr>
@@ -76,8 +76,11 @@
                 totales: {}
             }
         },
-        created: function() {                
-            this.actualizar()
+        created: function() {
+            this.$root.$on('activities-changed', () => {
+                this.actualizar()
+            })       
+            this.actualizar()  
         },
         methods: {
             /**
@@ -141,7 +144,7 @@
                     }
                 }
 
-                vm.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales })
+                this.$root.$emit('update-resumenes-totales', { resumenes: this.resumenes, totales: this.totales })
             }
         },
         computed: {
@@ -181,9 +184,9 @@
                 const factor = this.factores.find(factor => {
                     return diferencia <= factor.diferencia
                 })
-                calificacion = calificacion * factor.factor
+                calificacion *= factor.factor
 
-                vm.$emit('update-calificacion', calificacion)
+                this.$root.$emit('update-calificacion', calificacion)
                 return calificacion
             },
             /**
@@ -198,14 +201,6 @@
                                 Math.abs(diferencia) >= 0.3 * horas ? 'Se ha declarado ' + Math.abs(diferencia) + ' horas más' : undefined
                 const clase = diferencia <= horas * 0.1 ? 'info' : diferencia <= horas * 0.4 ? 'warning' : 'danger'
                 return { mensaje, clase }
-            }
-        },
-        watch: {
-            informe: {
-                handler() {
-                    this.actualizar()
-                },
-                deep: true
             }
         }
     }

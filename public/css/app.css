@@ -64,6 +64,11 @@ input[type="file"] {
   vertical-align: middle !important;
 }
 
+.table td:nth-child(even) {
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+}
+
 .table th {
   background-color: #e0e0e0 !important;
   border-color: #B1B1B1 !important;
@@ -116,6 +121,12 @@ input[type="file"] {
   background-color: #002F6C !important;
   color: white !important;
   font-weight: bold;
+}
+
+.panel-body:nth-child(even) {
+  background-color: #e0efff;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .panel-tabs {

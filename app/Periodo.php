@@ -26,10 +26,6 @@ class Periodo extends Model
         'hasta'
     ];
 
-    protected $appends = [
-        'actual'
-    ];
-
     public function declaraciones()
     {
     	return $this->hasMany(Declaracion::class, 'id_periodo');
@@ -38,13 +34,5 @@ class Periodo extends Model
     public function departamento()
     {
         return $this->belongsTo(Departamento::class, 'id_departamento');
-    }
-
-    public function getActualAttribute()
-    {
-        $ahora = Carbon::now();
-        return !$this->trashed() &&
-                $this->desde->lte($ahora) && 
-                $this->hasta->gte($ahora);
     }
 }

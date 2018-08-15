@@ -16,9 +16,10 @@ class CreateApelacionsTable extends Migration
         Schema::create('apelacions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('id_declaracion');
-            $table->unsignedInteger('comision');
             $table->text('comentario');
+            $table->text('respuesta');
             $table->string('nombre_archivo')->nullable();
+            $table->boolean('resuelta')->default(false);
             $table->timestamps();
             $table->softDeletes();
 

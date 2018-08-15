@@ -24,13 +24,13 @@ class BaseSeeder extends Seeder
     public function run()
     {
         $dataCS = [
-            'tipo' => 1
+            'tipo' => 0
         ];
 
         Comision::create($dataCS);
 
         $dataCF = [
-            'tipo' => 2,
+            'tipo' => 1,
         ];
 
         $comision_facultad = Comision::create($dataCF);
@@ -83,7 +83,7 @@ class BaseSeeder extends Seeder
 
         foreach ($dataD as $dept) {
             $comision = Comision::create([
-                'tipo' => 3
+                'tipo' => 2
             ]);
             $depto = new Departamento($dept);
             $depto->id_comision = $comision->id;

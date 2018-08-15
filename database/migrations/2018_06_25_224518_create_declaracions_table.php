@@ -18,7 +18,9 @@ class CreateDeclaracionsTable extends Migration
             $table->unsignedInteger('id_formula')->nullable();
             $table->unsignedInteger('id_usuario')->nullable();
             $table->unsignedInteger('id_periodo')->nullable();
-            $table->unsignedInteger('id_apelacion')->nullable();
+            $table->unsignedInteger('id_apelacion_superior')->nullable();
+            $table->unsignedInteger('id_apelacion_facultad')->nullable();
+            $table->unsignedInteger('id_apelacion_departamental')->nullable();
             $table->json('item_docencia')->nullable();
             $table->json('item_investigacion')->nullable();
             $table->json('item_asistencia')->nullable();

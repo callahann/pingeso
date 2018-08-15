@@ -21,7 +21,7 @@
                         <td>{{ departamento.nombre }}</td>
                         <td>{{ departamento.facultad.nombre}}</td>
                         <td class="col-md-2">
-                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-departamento', params: {accion: 'Editar', elemento: Object.assign({}, departamento, {})} }">
+                          <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-departamento', params: {accion: 'Editar', elemento: copy(departamento) } }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                           </router-link>
                           <button v-on:click="deleteElem(departamento.id,index,departamento.nombre)" class="btn btn-xs btn-danger">

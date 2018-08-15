@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Validator;
 use App\Apelacion;
+use App\Declaracion;
 
 class ApelacionController extends Controller
 {
@@ -30,10 +31,19 @@ class ApelacionController extends Controller
             $request->merge(['nombre_archivo' => $fn]);
         }
 
-        $anterior = Apelacion::where('id_declaracion', $request->id_declaracion)->first();
-        if($anterior) $anterior->delete();
-
         $apelacion = Apelacion::create($request->all());
+        $declaracion = Declaracion::find($request->id_declaracion);
+        switch($request->comision) {
+            case 0:
+                $declaracion->id_apelacion_superior = $apelacion->id;
+                break;
+            case 1:
+                $declaracion->id_apelacion_facultad = $apelacion->id;
+                break;
+            case 2:
+                $declaracion->id_apelacion_departamental = $apelacion->id;
+        }
+        $declaracion->save();
         return $apelacion;
     }
     
@@ -52,18 +62,12 @@ class ApelacionController extends Controller
            return response()->json($validator->errors(), 422);
         }
 
-        if ($request->hasFile('archivo')) {
-            $fn = $request->id_declaracion . '_' . time() . '.' . $request->archivo->getClientOriginalExtension();
-            $request->archivo->storeAs('apelaciones',$fn);
-            $request->merge(['nombre_archivo' => $fn]);
-        }
-
         $apelacion = Apelacion::find($id);
-
         $apelacion->fill($request->all());
+        $apelacion->resuelta = true;
         $apelacion->save();
 
-        return $this->updateMessage();
+        return $apelacion;
     }
 
     /**
@@ -93,8 +97,7 @@ class ApelacionController extends Controller
     {
         return [
             'id_declaracion' => 'required',
-            'comentario' => 'required',
-            'archivo' => 'sometimes|file',
+            'comentario' => 'required'
         ];
     }   
 }

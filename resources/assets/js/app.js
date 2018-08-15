@@ -43,7 +43,7 @@ import { router } from './router'
  */
 
 const app = function() {
-    window.vm = new Vue({
+    new Vue({
         el: '#app',
         store,
         router,
