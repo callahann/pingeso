@@ -51,7 +51,7 @@ class HomeController extends Controller
         //return view('pdf.vista', compact(['data']));
         $pdf = PDF::loadView('pdf.vista', compact(['data']))
                 ->setPaper('a4', 'landscape');
-        return $pdf->inline();
-        //return $pdf->download('resumen.pdf');
+        //return $pdf->inline();
+        return $pdf->download('resumen.pdf');
     }
 }
