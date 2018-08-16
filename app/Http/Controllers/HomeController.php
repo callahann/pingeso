@@ -35,19 +35,23 @@ class HomeController extends Controller
     public function pdf($id)
     {
         $declaracion = Declaracion::findOrFail($id)->load(['usuario.departamento.facultad','usuario.jornada', 'usuario.jerarquia']);
-        $rangos = Rango::all();
+        //dd($declaracion->calificacion_final);
+        $rango = Rango::where('base','<=', $declaracion->calificacion_final)
+                        ->where('tope','>=', $declaracion->calificacion_final)->first();
         $director = User::with('jerarquia')->where('rol',2)->where('id_departamento', $declaracion->usuario->departamento->id)->first();
+        $qtd = count($declaracion->item_docencia) + count($declaracion->item_investigacion) + count($declaracion->item_asistencia) + count($declaracion->item_perfeccionamiento) + count($declaracion->item_administracion) + count($declaracion->item_extension) + count($declaracion->item_educacion_continua);
         $data = [
             'declaracion' => $declaracion,
-            'rangos' => $rangos,
+            'rango' => $rango,
             'director' => $director,
+            'cantidad' => $qtd
         ];
         //dd($data["declaracion"]["item_docencia"]["actividades"][0]);
-        //dd($data["declaracion"]["item_docencia"]);
+        //dd($data["rango"]);
         //return view('pdf.vista', compact(['data']));
         $pdf = PDF::loadView('pdf.vista', compact(['data']))
                 ->setPaper('a4', 'landscape');
-        //return $pdf->inline();
-        return $pdf->download('resumen.pdf');
+        return $pdf->inline();
+        //return $pdf->download('resumen.pdf');
     }
 }
