@@ -1126,36 +1126,38 @@ var index_esm = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return FETCH_AUTH_USER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return FETCH_DECLARACIONES; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return INSERT_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return UPDATE_DECLARACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return SEND_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return UPDATE_DECLARACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return SEND_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return APPROVE_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DECLINE_DECLARACION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return INSERT_APELACION; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return RESOLVE_APELACION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return RESOLVE_APELACION; });
 /* unused harmony export FETCH_ADJUNTO */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return INSERT_FACULTAD; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_FACULTAD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_FACULTAD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return DELETE_FACULTAD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return INSERT_DEPARTAMENTO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return UPDATE_DEPARTAMENTO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_DEPARTAMENTO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_DEPARTAMENTO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return INSERT_JERARQUIA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_JERARQUIA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return INSERT_JERARQUIA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return UPDATE_JERARQUIA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return DELETE_JERARQUIA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return INSERT_JORNADA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_JORNADA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return INSERT_JORNADA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return UPDATE_JORNADA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DELETE_JORNADA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return INSERT_FACTOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_FACTOR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_FACTOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return DELETE_FACTOR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return INSERT_PERIODO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return UPDATE_PERIODO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return INSERT_PERIODO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return UPDATE_PERIODO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return DELETE_PERIODO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return INSERT_RANGO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return UPDATE_RANGO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return INSERT_RANGO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "H", function() { return UPDATE_RANGO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return DELETE_RANGO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return INSERT_USUARIO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return UPDATE_USUARIO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return INSERT_USUARIO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I", function() { return UPDATE_USUARIO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return INSERT_FORMULA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_FORMULA; });
 var INIT_STORE = 'INIT_STORE';
 var FETCH_AUTH_USER = 'GET_AUTH_USER';
 var FETCH_DECLARACIONES = 'FETCH_DECLARACIONES';
@@ -1189,6 +1191,8 @@ var UPDATE_PERIODO = 'UPDATE_PERIODO';
 var DELETE_PERIODO = 'DELETE_PERIODO';
 var INSERT_USUARIO = 'INSERT_USUARIO';
 var UPDATE_USUARIO = 'UPDATE_USUARIO';
+var INSERT_FORMULA = 'INSERT_FORMULA';
+var UPDATE_FORMULA = 'UPDATE_FORMULA';
 
 
 
@@ -13116,6 +13120,7 @@ module.exports = Cancel;
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data: function data() {
@@ -13239,7 +13244,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         });
         var apelacion = state.informes[index].apelacion;
         var comision = apelacion.apelaciones.findIndex(function (apelacion) {
-            return apelacion.id === payload.data.id;
+            return apelacion !== null && apelacion.id === payload.data.id;
         });
         apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data);
         apelacion.apelado = false;
@@ -13303,7 +13308,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
         state.rangos.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_RANGO */], function (state, _ref15) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_RANGO */], function (state, _ref15) {
         var payload = _ref15.payload,
             callback = _ref15.callback;
 
@@ -13329,7 +13334,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
         state.jerarquias.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_JERARQUIA */], function (state, _ref18) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JERARQUIA */], function (state, _ref18) {
         var payload = _ref18.payload,
             callback = _ref18.callback;
 
@@ -13355,7 +13360,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
         state.jornadas.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JORNADA */], function (state, _ref21) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_JORNADA */], function (state, _ref21) {
         var payload = _ref21.payload,
             callback = _ref21.callback;
 
@@ -13407,7 +13412,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
         state.periodos.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_PERIODO */], function (state, _ref27) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_PERIODO */], function (state, _ref27) {
         var payload = _ref27.payload,
             callback = _ref27.callback;
 
@@ -13433,7 +13438,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
         state.usuarios.push(payload.data);
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_USUARIO */], function (state, _ref30) {
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["F" /* UPDATE_USUARIO */], function (state, _ref30) {
         var payload = _ref30.payload,
             callback = _ref30.callback;
 
@@ -13444,16 +13449,22 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         state.usuarios[index] = Object.assign({}, usuario, payload.data);
 
         callback(true, payload.data);
-    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], function (state, _ref31) {
-        var error = _ref31.error,
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], function (state, _ref31) {
+        var payload = _ref31.payload,
             callback = _ref31.callback;
+
+        state.formula = Object.assign({}, state.formula, payload.data);
+        callback(true, payload.data);
+    }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], function (state, _ref32) {
+        var error = _ref32.error,
+            callback = _ref32.callback;
 
         callback(false, error);
     }), _mutations),
     actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["l" /* INIT_STORE */], function () {
-        var _ref33 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref32, callback) {
-            var dispatch = _ref32.dispatch,
-                commit = _ref32.commit;
+        var _ref34 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref33, callback) {
+            var dispatch = _ref33.dispatch,
+                commit = _ref33.commit;
             var rol, request, promises, promise;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                 while (1) {
@@ -13502,11 +13513,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x, _x2) {
-            return _ref33.apply(this, arguments);
+            return _ref34.apply(this, arguments);
         };
     }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["j" /* FETCH_AUTH_USER */], function () {
-        var _ref35 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref34) {
-            var commit = _ref34.commit;
+        var _ref36 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref35) {
+            var commit = _ref35.commit;
             var response;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                 while (1) {
@@ -13530,311 +13541,331 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x3) {
-            return _ref35.apply(this, arguments);
+            return _ref36.apply(this, arguments);
         };
-    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */], function (_ref36, rol) {
-        var commit = _ref36.commit;
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */], function (_ref37, rol) {
+        var commit = _ref37.commit;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/auth/declaraciones').then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["s" /* SET_STATE_ARRAY */], { key: 'informes', payload: response });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["n" /* INSERT_DECLARACION */], function (_ref37, _ref38) {
-        var commit = _ref37.commit;
-        var informe = _ref38.informe,
-            cb = _ref38.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["n" /* INSERT_DECLARACION */], function (_ref38, _ref39) {
+        var commit = _ref38.commit;
+        var informe = _ref39.informe,
+            cb = _ref39.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["j" /* INSERT_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["y" /* UPDATE_DECLARACION */], function (_ref39, _ref40) {
-        var commit = _ref39.commit;
-        var informe = _ref40.informe,
-            cb = _ref40.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["z" /* UPDATE_DECLARACION */], function (_ref40, _ref41) {
+        var commit = _ref40.commit;
+        var informe = _ref41.informe,
+            cb = _ref41.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id, informe).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["x" /* SEND_DECLARACION */], function (_ref41, _ref42) {
-        var commit = _ref41.commit;
-        var informe = _ref42.informe,
-            cb = _ref42.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["y" /* SEND_DECLARACION */], function (_ref42, _ref43) {
+        var commit = _ref42.commit;
+        var informe = _ref43.informe,
+            cb = _ref43.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/enviar', informe).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref43, _ref44) {
-        var commit = _ref43.commit;
-        var informe = _ref44.informe,
-            cb = _ref44.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref44, _ref45) {
+        var commit = _ref44.commit;
+        var informe = _ref45.informe,
+            cb = _ref45.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/aprobar', informe).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref45, _ref46) {
-        var commit = _ref45.commit;
-        var informe = _ref46.informe,
-            cb = _ref46.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref46, _ref47) {
+        var commit = _ref46.commit;
+        var informe = _ref47.informe,
+            cb = _ref47.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/revision', informe).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["m" /* INSERT_APELACION */], function (_ref47, _ref48) {
-        var commit = _ref47.commit;
-        var apelacion = _ref48.apelacion,
-            cb = _ref48.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["m" /* INSERT_APELACION */], function (_ref48, _ref49) {
+        var commit = _ref48.commit;
+        var apelacion = _ref49.apelacion,
+            cb = _ref49.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/apelaciones', apelacion).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], { payload: response, comision: apelacion.comision, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["w" /* RESOLVE_APELACION */], function (_ref49, _ref50) {
-        var commit = _ref49.commit;
-        var apelacion = _ref50.apelacion,
-            cb = _ref50.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["x" /* RESOLVE_APELACION */], function (_ref50, _ref51) {
+        var commit = _ref50.commit;
+        var apelacion = _ref51.apelacion,
+            cb = _ref51.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/apelaciones/' + apelacion.id, apelacion).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_APELACION */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["q" /* INSERT_FACULTAD */], function (_ref51, _ref52) {
-        var commit = _ref51.commit;
-        var facultad = _ref52.facultad,
-            cb = _ref52.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["q" /* INSERT_FACULTAD */], function (_ref52, _ref53) {
+        var commit = _ref52.commit;
+        var facultad = _ref53.facultad,
+            cb = _ref53.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/facultades', facultad).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* INSERT_FACULTAD */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["B" /* UPDATE_FACULTAD */], function (_ref53, _ref54) {
-        var commit = _ref53.commit;
-        var facultad = _ref54.facultad,
-            cb = _ref54.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["C" /* UPDATE_FACULTAD */], function (_ref54, _ref55) {
+        var commit = _ref54.commit;
+        var facultad = _ref55.facultad,
+            cb = _ref55.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/facultades/' + facultad.id, facultad).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_FACULTAD */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* DELETE_FACULTAD */], function (_ref55, _ref56) {
-        var commit = _ref55.commit;
-        var facultad = _ref56.facultad,
-            cb = _ref56.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* DELETE_FACULTAD */], function (_ref56, _ref57) {
+        var commit = _ref56.commit;
+        var facultad = _ref57.facultad,
+            cb = _ref57.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/facultades/' + facultad.id, facultad).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], { payload: { data: facultad, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["o" /* INSERT_DEPARTAMENTO */], function (_ref57, _ref58) {
-        var commit = _ref57.commit;
-        var departamento = _ref58.departamento,
-            cb = _ref58.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["o" /* INSERT_DEPARTAMENTO */], function (_ref58, _ref59) {
+        var commit = _ref58.commit;
+        var departamento = _ref59.departamento,
+            cb = _ref59.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/departamentos', departamento).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* INSERT_DEPARTAMENTO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["z" /* UPDATE_DEPARTAMENTO */], function (_ref59, _ref60) {
-        var commit = _ref59.commit;
-        var departamento = _ref60.departamento,
-            cb = _ref60.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["A" /* UPDATE_DEPARTAMENTO */], function (_ref60, _ref61) {
+        var commit = _ref60.commit;
+        var departamento = _ref61.departamento,
+            cb = _ref61.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/departamentos/' + departamento.id, departamento).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_DEPARTAMENTO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* DELETE_DEPARTAMENTO */], function (_ref61, _ref62) {
-        var commit = _ref61.commit;
-        var departamento = _ref62.departamento,
-            cb = _ref62.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* DELETE_DEPARTAMENTO */], function (_ref62, _ref63) {
+        var commit = _ref62.commit;
+        var departamento = _ref63.departamento,
+            cb = _ref63.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/departamentos/' + departamento.id, departamento).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], { payload: { data: departamento, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["u" /* INSERT_RANGO */], function (_ref63, _ref64) {
-        var commit = _ref63.commit;
-        var rango = _ref64.rango,
-            cb = _ref64.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["v" /* INSERT_RANGO */], function (_ref64, _ref65) {
+        var commit = _ref64.commit;
+        var rango = _ref65.rango,
+            cb = _ref65.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/rangos', rango).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["q" /* INSERT_RANGO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["F" /* UPDATE_RANGO */], function (_ref65, _ref66) {
-        var commit = _ref65.commit;
-        var rango = _ref66.rango,
-            cb = _ref66.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["H" /* UPDATE_RANGO */], function (_ref66, _ref67) {
+        var commit = _ref66.commit;
+        var rango = _ref67.rango,
+            cb = _ref67.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/rangos/' + rango.id, rango).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_RANGO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_RANGO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* DELETE_RANGO */], function (_ref67, _ref68) {
-        var commit = _ref67.commit;
-        var rango = _ref68.rango,
-            cb = _ref68.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* DELETE_RANGO */], function (_ref68, _ref69) {
+        var commit = _ref68.commit;
+        var rango = _ref69.rango,
+            cb = _ref69.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/rangos/' + rango.id, rango).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], { payload: { data: rango, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["r" /* INSERT_JERARQUIA */], function (_ref69, _ref70) {
-        var commit = _ref69.commit;
-        var jerarquia = _ref70.jerarquia,
-            cb = _ref70.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["s" /* INSERT_JERARQUIA */], function (_ref70, _ref71) {
+        var commit = _ref70.commit;
+        var jerarquia = _ref71.jerarquia,
+            cb = _ref71.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/jerarquias', jerarquia).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["n" /* INSERT_JERARQUIA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["C" /* UPDATE_JERARQUIA */], function (_ref71, _ref72) {
-        var commit = _ref71.commit;
-        var jerarquia = _ref72.jerarquia,
-            cb = _ref72.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["E" /* UPDATE_JERARQUIA */], function (_ref72, _ref73) {
+        var commit = _ref72.commit;
+        var jerarquia = _ref73.jerarquia,
+            cb = _ref73.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/jerarquias/' + jerarquia.id, jerarquia).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_JERARQUIA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JERARQUIA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* DELETE_JERARQUIA */], function (_ref73, _ref74) {
-        var commit = _ref73.commit;
-        var jerarquia = _ref74.jerarquia,
-            cb = _ref74.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* DELETE_JERARQUIA */], function (_ref74, _ref75) {
+        var commit = _ref74.commit;
+        var jerarquia = _ref75.jerarquia,
+            cb = _ref75.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jerarquias/' + jerarquia.id, jerarquia).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], { payload: { data: jerarquia, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["s" /* INSERT_JORNADA */], function (_ref75, _ref76) {
-        var commit = _ref75.commit;
-        var jornada = _ref76.jornada,
-            cb = _ref76.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["t" /* INSERT_JORNADA */], function (_ref76, _ref77) {
+        var commit = _ref76.commit;
+        var jornada = _ref77.jornada,
+            cb = _ref77.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/jornadas', jornada).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["o" /* INSERT_JORNADA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["D" /* UPDATE_JORNADA */], function (_ref77, _ref78) {
-        var commit = _ref77.commit;
-        var jornada = _ref78.jornada,
-            cb = _ref78.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["F" /* UPDATE_JORNADA */], function (_ref78, _ref79) {
+        var commit = _ref78.commit;
+        var jornada = _ref79.jornada,
+            cb = _ref79.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/jornadas/' + jornada.id, jornada).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JORNADA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_JORNADA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* DELETE_JORNADA */], function (_ref79, _ref80) {
-        var commit = _ref79.commit;
-        var jornada = _ref80.jornada,
-            cb = _ref80.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* DELETE_JORNADA */], function (_ref80, _ref81) {
+        var commit = _ref80.commit;
+        var jornada = _ref81.jornada,
+            cb = _ref81.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jornadas/' + jornada.id, jornada).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], { payload: { data: jornada, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["p" /* INSERT_FACTOR */], function (_ref81, _ref82) {
-        var commit = _ref81.commit;
-        var factor = _ref82.factor,
-            cb = _ref82.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["p" /* INSERT_FACTOR */], function (_ref82, _ref83) {
+        var commit = _ref82.commit;
+        var factor = _ref83.factor,
+            cb = _ref83.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/factores', factor).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* INSERT_FACTOR */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["A" /* UPDATE_FACTOR */], function (_ref83, _ref84) {
-        var commit = _ref83.commit;
-        var factor = _ref84.factor,
-            cb = _ref84.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["B" /* UPDATE_FACTOR */], function (_ref84, _ref85) {
+        var commit = _ref84.commit;
+        var factor = _ref85.factor,
+            cb = _ref85.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/factores/' + factor.id, factor).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACTOR */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* DELETE_FACTOR */], function (_ref85, _ref86) {
-        var commit = _ref85.commit;
-        var factor = _ref86.factor,
-            cb = _ref86.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* DELETE_FACTOR */], function (_ref86, _ref87) {
+        var commit = _ref86.commit;
+        var factor = _ref87.factor,
+            cb = _ref87.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/factores/' + factor.id, factor).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], { payload: { data: factor, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["t" /* INSERT_PERIODO */], function (_ref87, _ref88) {
-        var commit = _ref87.commit;
-        var periodo = _ref88.periodo,
-            cb = _ref88.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["u" /* INSERT_PERIODO */], function (_ref88, _ref89) {
+        var commit = _ref88.commit;
+        var periodo = _ref89.periodo,
+            cb = _ref89.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/periodos', periodo).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["p" /* INSERT_PERIODO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["E" /* UPDATE_PERIODO */], function (_ref89, _ref90) {
-        var commit = _ref89.commit;
-        var periodo = _ref90.periodo,
-            cb = _ref90.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["G" /* UPDATE_PERIODO */], function (_ref90, _ref91) {
+        var commit = _ref90.commit;
+        var periodo = _ref91.periodo,
+            cb = _ref91.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/periodos/' + periodo.id, periodo).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_PERIODO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_PERIODO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* DELETE_PERIODO */], function (_ref91, _ref92) {
-        var commit = _ref91.commit;
-        var periodo = _ref92.periodo,
-            cb = _ref92.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* DELETE_PERIODO */], function (_ref92, _ref93) {
+        var commit = _ref92.commit;
+        var periodo = _ref93.periodo,
+            cb = _ref93.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/periodos/' + periodo.id, periodo).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], { payload: { data: periodo, mensaje: response }, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["v" /* INSERT_USUARIO */], function (_ref93, _ref94) {
-        var commit = _ref93.commit;
-        var usuario = _ref94.usuario,
-            cb = _ref94.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["w" /* INSERT_USUARIO */], function (_ref94, _ref95) {
+        var commit = _ref94.commit;
+        var usuario = _ref95.usuario,
+            cb = _ref95.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/usuarios', usuario).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["r" /* INSERT_USUARIO */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["G" /* UPDATE_USUARIO */], function (_ref95, _ref96) {
-        var commit = _ref95.commit;
-        var usuario = _ref96.usuario,
-            cb = _ref96.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["I" /* UPDATE_USUARIO */], function (_ref96, _ref97) {
+        var commit = _ref96.commit;
+        var usuario = _ref97.usuario,
+            cb = _ref97.cb;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/usuarios/' + usuario.id, usuario).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_USUARIO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["F" /* UPDATE_USUARIO */], { payload: response, callback: cb });
+        }).catch(function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["r" /* INSERT_FORMULA */], function (_ref98, _ref99) {
+        var commit = _ref98.commit;
+        var formula = _ref99.formula,
+            cb = _ref99.cb;
+
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.POST('/api/formulas/', formula).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], { payload: response, callback: cb });
+        }).catch(function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+        });
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["D" /* UPDATE_FORMULA */], function (_ref100, _ref101) {
+        var commit = _ref100.commit;
+        var formula = _ref101.formula,
+            cb = _ref101.cb;
+
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/formulas/' + formula.id, formula).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], { payload: response, callback: cb });
         }).catch(function (e) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
         });
@@ -14000,7 +14031,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         enviar: function enviar(informe) {
             if (confirm('¿Está seguro que desea enviar esta declaración?')) {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_2__vuex_actions__["x" /* SEND_DECLARACION */], { informe: informe, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_2__vuex_actions__["y" /* SEND_DECLARACION */], { informe: informe, cb: this.callback });
             }
         },
         evaluar: function evaluar(informe) {
@@ -14264,7 +14295,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
          * Despacha la acción para insertar un informe si no existe, o actualizarlo en caso contrario.
          */
         actualizar: function actualizar() {
-            this.$store.dispatch(this.informe.id === undefined ? __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["n" /* INSERT_DECLARACION */] : __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["y" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.cbMensaje });
+            this.$store.dispatch(this.informe.id === undefined ? __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["n" /* INSERT_DECLARACION */] : __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["z" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.cbMensaje });
         },
         /**
          * Marca un informe con el estado de "enviado"
@@ -14277,7 +14308,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                             case 0:
                                 if (confirm('¿Está seguro que desea enviar esta declaración?')) {
                                     this.mensajeVolver = 'Se ha enviado la declaración al Director de Departamento';
-                                    this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["x" /* SEND_DECLARACION */], { informe: this.informe, cb: this.cbVolver });
+                                    this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["y" /* SEND_DECLARACION */], { informe: this.informe, cb: this.cbVolver });
                                 }
 
                             case 1:
@@ -14362,9 +14393,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             }
         },
         resuelto: function resuelto() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["y" /* UPDATE_DECLARACION */], { informe: this.informe, cb: function cb() {} });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["z" /* UPDATE_DECLARACION */], { informe: this.informe, cb: function cb() {} });
             this.mensajeVolver = 'Se ha marcado como resuelto';
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["w" /* RESOLVE_APELACION */], { apelacion: this.apelacion, cb: this.cbVolver });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["x" /* RESOLVE_APELACION */], { apelacion: this.apelacion, cb: this.cbVolver });
         }
     },
     computed: Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapState */])(['formula', 'informes'])
@@ -14597,10 +14628,10 @@ if (false) {(function () {
             });
         },
         enviar: function enviar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["v" /* INSERT_USUARIO */], { usuario: this.usuario, cb: this.callback });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["w" /* INSERT_USUARIO */], { usuario: this.usuario, cb: this.callback });
         },
         actualizar: function actualizar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["G" /* UPDATE_USUARIO */], { usuario: this.usuario, cb: this.callback });
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["I" /* UPDATE_USUARIO */], { usuario: this.usuario, cb: this.callback });
         }
     },
     computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['facultades', 'jerarquias', 'jornadas', 'usuarios'])
@@ -15355,7 +15386,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     min = Math.min(min, this.informe[itemKey].calificacion);
                     max = Math.max(max, this.informe[itemKey].calificacion);
 
-                    formula = formula.replaceAll('nota_' + itemKey, this.informe[itemKey].calificacion).replaceAll('comprometido_eq_' + itemKey, this.resumenes[itemKey].comprometido.equivalente).replaceAll('realizado_eq_' + itemKey, this.resumenes[itemKey].realizado.equivalente);
+                    formula = formula.replaceAll('nota_' + itemKey, this.informe[itemKey].calificacion).replaceAll('comprometido_sem_' + itemKey, this.resumenes[itemKey].comprometido.horasSemana).replaceAll('comprometido_anio_' + itemKey, this.resumenes[itemKey].comprometido.horasAnio).replaceAll('comprometido_eq_' + itemKey, this.resumenes[itemKey].comprometido.equivalente).replaceAll('realizado_sem_' + itemKey, this.resumenes[itemKey].realizado.horasSemana).replaceAll('realizado_anio_' + itemKey, this.resumenes[itemKey].realizado.horasAnio).replaceAll('realizado_eq_' + itemKey, this.resumenes[itemKey].realizado.equivalente);
                 }
             }
 
@@ -15649,7 +15680,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["B" /* UPDATE_FACULTAD */], { facultad: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["C" /* UPDATE_FACULTAD */], { facultad: this.element, cb: this.callback });
                 this.volver('facultades', 'Se ha actualizado la facultad correctamente.');
             } else {
                 this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["q" /* INSERT_FACULTAD */], { facultad: this.element, cb: this.callback });
@@ -15890,7 +15921,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["z" /* UPDATE_DEPARTAMENTO */], { departamento: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["A" /* UPDATE_DEPARTAMENTO */], { departamento: this.element, cb: this.callback });
                 this.volver('departamentos', 'Se ha actualizado el departamento correctamente.');
             } else {
                 this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["o" /* INSERT_DEPARTAMENTO */], { departamento: this.element, cb: this.callback });
@@ -16109,9 +16140,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["F" /* UPDATE_RANGO */], { rango: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["H" /* UPDATE_RANGO */], { rango: this.element, cb: this.callback });
             } else {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["u" /* INSERT_RANGO */], { rango: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["v" /* INSERT_RANGO */], { rango: this.element, cb: this.callback });
             }
         },
         format: function format(value, selector) {
@@ -16288,9 +16319,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["C" /* UPDATE_JERARQUIA */], { jerarquia: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["E" /* UPDATE_JERARQUIA */], { jerarquia: this.element, cb: this.callback });
             } else {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["r" /* INSERT_JERARQUIA */], { jerarquia: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["s" /* INSERT_JERARQUIA */], { jerarquia: this.element, cb: this.callback });
                 //this.volver('jerarquias', 'Se ha creado la jerarquia correctamente.')
             }
         }
@@ -16470,9 +16501,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["D" /* UPDATE_JORNADA */], { jornada: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["F" /* UPDATE_JORNADA */], { jornada: this.element, cb: this.callback });
             } else {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["s" /* INSERT_JORNADA */], { jornada: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["t" /* INSERT_JORNADA */], { jornada: this.element, cb: this.callback });
             }
         }
     }
@@ -16650,7 +16681,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["A" /* UPDATE_FACTOR */], { factor: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["B" /* UPDATE_FACTOR */], { factor: this.element, cb: this.callback });
             } else {
                 this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["p" /* INSERT_FACTOR */], { factor: this.element, cb: this.callback });
             }
@@ -16875,9 +16906,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["E" /* UPDATE_PERIODO */], { periodo: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["G" /* UPDATE_PERIODO */], { periodo: this.element, cb: this.callback });
             } else {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["t" /* INSERT_PERIODO */], { periodo: this.element, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["u" /* INSERT_PERIODO */], { periodo: this.element, cb: this.callback });
             }
         },
         format: function format(elemento) {
@@ -19743,6 +19774,27 @@ var render = function() {
                                 {
                                   staticClass: "btn navbar-btn",
                                   attrs: {
+                                    to: { name: "editar-formulas" },
+                                    role: "button",
+                                    "active-class": ""
+                                  }
+                                },
+                                [_vm._v("Formulas")]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        [
+                          _vm.auth.rol === _vm.rol.admin
+                            ? _c(
+                                "router-link",
+                                {
+                                  staticClass: "btn navbar-btn",
+                                  attrs: {
                                     to: { name: "jerarquias" },
                                     role: "button",
                                     "active-class": ""
@@ -20722,22 +20774,23 @@ if (hadRuntime) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return UPDATE_DEPARTAMENTO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DELETE_DEPARTAMENTO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return INSERT_JERARQUIA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_JERARQUIA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_JERARQUIA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return DELETE_JERARQUIA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return INSERT_JORNADA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return UPDATE_JORNADA; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_JORNADA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return DELETE_JORNADA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return INSERT_RANGO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_RANGO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return UPDATE_RANGO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return DELETE_RANGO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return INSERT_FACTOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return UPDATE_FACTOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return DELETE_FACTOR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return INSERT_PERIODO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return UPDATE_PERIODO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return UPDATE_PERIODO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return DELETE_PERIODO; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return INSERT_USUARIO; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return UPDATE_USUARIO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return UPDATE_USUARIO; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return UPDATE_FORMULA; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return HANDLE_ERROR; });
 var SET_STATE_ARRAY = 'SET_STATE_ARRAY';
 var SET_STATE_OBJECT = 'SET_STATE_OBJECT';
@@ -20769,6 +20822,7 @@ var UPDATE_PERIODO = 'UPDATE_PERIODO';
 var DELETE_PERIODO = 'DELETE_PERIODO';
 var INSERT_USUARIO = 'INSERT_USUARIO';
 var UPDATE_USUARIO = 'UPDATE_USUARIO';
+var UPDATE_FORMULA = 'UPDATE_FORMULA';
 var HANDLE_ERROR = 'HANDLE_ERROR';
 
 
@@ -20807,12 +20861,14 @@ var HANDLE_ERROR = 'HANDLE_ERROR';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_comision_ListadoUsuarios__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_comision_ListadoUsuariosF__ = __webpack_require__(128);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_comision_ListadoUsuariosD__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__components_formula_Formula__ = __webpack_require__(133);
 
 
 
 
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
+
 
 
 
@@ -21046,6 +21102,11 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
         path: '/comision/facultad/:id/agregar',
         name: 'usuarios-comision-facultad',
         component: __WEBPACK_IMPORTED_MODULE_25__components_comision_ListadoUsuariosF__["a" /* default */]
+    }, {
+        path: '/formulas',
+        name: 'editar-formulas',
+        component: __WEBPACK_IMPORTED_MODULE_27__components_formula_Formula__["a" /* default */],
+        meta: { eval: 'rol === 2' }
     }]
 });
 
@@ -32130,6 +32191,1015 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-d5e14648", { render: render, staticRenderFns: staticRenderFns })
+  }
+}
+
+/***/ }),
+/* 132 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    data: function data() {
+        return {
+            formulas: {
+                equivalente: {
+                    f: '',
+                    decimales: 0
+                },
+                nota_final: {
+                    f: '',
+                    decimales: 0
+                }
+            },
+            mensaje: 0
+        };
+    },
+    created: function created() {
+        var formulas = Object.assign({}, this.form, this.copy(this.formula));
+        var subformula = formulas.equivalente.substring(11, formulas.equivalente.lenght);
+        this.formulas.equivalente.decimales = this.decimales(subformula);
+        this.formulas.equivalente.f = subformula.substring(0, subformula.length - (7 + (this.formulas.equivalente.decimales + 1) * 2));
+
+        subformula = formulas.nota_final.substring(11, formulas.nota_final.lenght);
+        this.formulas.nota_final.decimales = this.decimales(subformula);
+        this.formulas.nota_final.f = subformula.substring(0, subformula.length - (7 + (this.formulas.nota_final.decimales + 1) * 2));
+    },
+    methods: {
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
+
+            this.mensaje = ok ? 1 : -1;
+        },
+        actualizar: function actualizar() {
+            var formulas = this.construir();
+            formulas['id'] = this.formula.id;
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["D" /* UPDATE_FORMULA */], { formula: formulas, cb: this.callback });
+        },
+        crear: function crear() {
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["r" /* INSERT_FORMULA */], { formula: this.construir(), cb: this.callback });
+        },
+        decimales: function decimales(formula) {
+            var decimales = 0,
+                i = formula.length - 1;
+            while (formula[i] !== '1') {
+                decimales++;
+                i--;
+            }
+            return decimales;
+        },
+        construir: function construir() {
+            var formulas = {
+                equivalente: '',
+                nota_final: ''
+            };
+            var decimales = '1' + '0'.repeat(this.formulas.equivalente.decimales);
+            formulas.equivalente = 'Math.round(' + this.formulas.equivalente.f + ' * ' + decimales + ') / ' + decimales;
+            decimales = '1' + '0'.repeat(this.formulas.nota_final.decimales);
+            formulas.nota_final = 'Math.round(' + this.formulas.nota_final.f + ' * ' + decimales + ') / ' + decimales;
+            return formulas;
+        }
+    },
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['formula'])
+});
+
+/***/ }),
+/* 133 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Formula_vue__ = __webpack_require__(132);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e35a4354_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Formula_vue__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
+var disposed = false
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+
+var Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__["a" /* default */])(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Formula_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e35a4354_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Formula_vue__["a" /* render */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e35a4354_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Formula_vue__["b" /* staticRenderFns */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/formula/Formula.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e35a4354", Component.options)
+  } else {
+    hotAPI.reload("data-v-e35a4354", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 134 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("ol", { staticClass: "breadcrumb" }, [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: { name: "inicio" } } }, [
+            _vm._v("Inicio")
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("li", { staticClass: "active" }, [_vm._v("Fórmulas")])
+    ]),
+    _vm._v(" "),
+    _vm.mensaje === -1
+      ? _c("div", { staticClass: "alert alert-danger" }, [
+          _c(
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = 0
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v(" "),
+          _c("strong", [_vm._v("Oh no!")]),
+          _vm._v(" Ha ocurrido un error.\n    ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-3" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+            _vm._v("\n                    Horas equivalentes\n                ")
+          ]),
+          _vm._v(" "),
+          _c("table", { staticClass: "table table-striped" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("tbody", [
+              _c("tr", [
+                _c("td", [_vm._v("Horas semanales")]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-success",
+                      on: {
+                        click: function($event) {
+                          _vm.formulas.equivalente.f += "se"
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-plus",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("tr", [
+                _c("td", [_vm._v("Horas semestrales")]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-success",
+                      on: {
+                        click: function($event) {
+                          _vm.formulas.equivalente.f += "sa"
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-plus",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-footer" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "form-group col-md-12" }, [
+                _c("label", [_vm._v("Decimales:")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formulas.equivalente.decimales,
+                      expression: "formulas.equivalente.decimales"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "number", min: "0" },
+                  domProps: { value: _vm.formulas.equivalente.decimales },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.formulas.equivalente,
+                        "decimales",
+                        $event.target.value
+                      )
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "form-group col-md-12" }, [
+                _c("label", [_vm._v("Fórmula:")]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formulas.equivalente.f,
+                      expression: "formulas.equivalente.f"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "10" },
+                  domProps: { value: _vm.formulas.equivalente.f },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.formulas.equivalente,
+                        "f",
+                        $event.target.value
+                      )
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-9" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+            _vm._v("\n                    Calificación final\n                ")
+          ]),
+          _vm._v(" "),
+          _c("table", { staticClass: "table table-striped" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              [
+                _vm._l(_vm.titulos_item, function(value, key) {
+                  return _c("tr", { key: value }, [
+                    _c("td", [_vm._v(_vm._s(_vm.titulos_item[key]))]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-success",
+                          on: {
+                            click: function($event) {
+                              _vm.formulas.nota_final.f +=
+                                "comprometido_sem_" + key
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-plus",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-success",
+                          on: {
+                            click: function($event) {
+                              _vm.formulas.nota_final.f +=
+                                "comprometido_anio_" + key
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-plus",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-success",
+                          on: {
+                            click: function($event) {
+                              _vm.formulas.nota_final.f +=
+                                "comprometido_eq_" + key
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-plus",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-success",
+                          on: {
+                            click: function($event) {
+                              _vm.formulas.nota_final.f +=
+                                "realizado_sem_" + key
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-plus",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-success",
+                          on: {
+                            click: function($event) {
+                              _vm.formulas.nota_final.f +=
+                                "realizado_anio_" + key
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-plus",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-success",
+                          on: {
+                            click: function($event) {
+                              _vm.formulas.nota_final.f += "realizado_eq_" + key
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-plus",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "td-margin" }),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-center" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-success",
+                          on: {
+                            click: function($event) {
+                              _vm.formulas.nota_final.f += "nota_" + key
+                            }
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "glyphicon glyphicon-plus",
+                            attrs: { "aria-hidden": "true" }
+                          })
+                        ]
+                      )
+                    ])
+                  ])
+                }),
+                _vm._v(" "),
+                _c("tr", [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("th", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.formulas.nota_final.f += "comprometido_semanal"
+                          }
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-plus",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.formulas.nota_final.f += "comprometido_anual"
+                          }
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-plus",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.formulas.nota_final.f += "comprometido_eq"
+                          }
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-plus",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.formulas.nota_final.f += "realizado_semanal"
+                          }
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-plus",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.formulas.nota_final.f += "realizado_anual"
+                          }
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-plus",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("th", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-xs btn-success",
+                        on: {
+                          click: function($event) {
+                            _vm.formulas.nota_final.f += "realizado_eq"
+                          }
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-plus",
+                          attrs: { "aria-hidden": "true" }
+                        })
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "td-margin" }),
+                  _vm._v(" "),
+                  _c("th", { staticClass: "text-center" })
+                ])
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-footer" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "form-group col-md-2" }, [
+                _c("label", [_vm._v("Decimales:")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formulas.nota_final.decimales,
+                      expression: "formulas.nota_final.decimales"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "number", min: "0" },
+                  domProps: { value: _vm.formulas.nota_final.decimales },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.formulas.nota_final,
+                        "decimales",
+                        $event.target.value
+                      )
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group col-md-10" }, [
+                _c("label", [_vm._v("Fórmula:")]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.formulas.nota_final.f,
+                      expression: "formulas.nota_final.f"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { rows: "10" },
+                  domProps: { value: _vm.formulas.nota_final.f },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.formulas.nota_final,
+                        "f",
+                        $event.target.value
+                      )
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.mensaje === 1
+      ? _c("div", { staticClass: "alert alert-success" }, [
+          _c(
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = 0
+                }
+              }
+            },
+            [_vm._v("[Cerrar ×]")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.volver("inicio")
+                }
+              }
+            },
+            [_vm._v("[Volver] ")]
+          ),
+          _vm._v(" "),
+          _c("strong", [_vm._v("Bien!")]),
+          _vm._v(" Se han guardado los cambios.\n    ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info",
+            attrs: { type: "button" },
+            on: { click: _vm.actualizar }
+          },
+          [
+            _c("span", {
+              staticClass: "glyphicon glyphicon-floppy-disk",
+              attrs: { "aria-hidden": "true" }
+            }),
+            _vm._v(" Guardar\n            ")
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: { type: "button" },
+            on: { click: _vm.crear }
+          },
+          [
+            _c("span", {
+              staticClass: "glyphicon glyphicon-plus",
+              attrs: { "aria-hidden": "true" }
+            }),
+            _vm._v(" Crear\n            ")
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "text-center" }, [_vm._v("Item")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "text-center", attrs: { rowspan: "2" } }, [
+          _vm._v("Item")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { colspan: "3" } }, [
+          _vm._v("Comprometido")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center", attrs: { colspan: "3" } }, [
+          _vm._v("Realizado")
+        ]),
+        _vm._v(" "),
+        _c("td", { staticClass: "td-margin", attrs: { rowspan: "2" } }),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Reservado comisión")])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { staticClass: "text-center" }, [_vm._v("Horas semana")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Horas año")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [
+          _vm._v("Horas equivalentes")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Horas semana")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Horas año")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [
+          _vm._v("Horas equivalentes")
+        ]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [
+          _vm._v("Calificación parcial")
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("th", { staticClass: "text-right" }, [_c("b", [_vm._v("TOTAL")])])
+  }
+]
+render._withStripped = true
+
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e35a4354", { render: render, staticRenderFns: staticRenderFns })
   }
 }
 

@@ -167,7 +167,11 @@
 
                         formula = formula
                                         .replaceAll('nota_' + itemKey, this.informe[itemKey].calificacion)
+                                        .replaceAll('comprometido_sem_' + itemKey, this.resumenes[itemKey].comprometido.horasSemana)
+                                        .replaceAll('comprometido_anio_' + itemKey, this.resumenes[itemKey].comprometido.horasAnio)
                                         .replaceAll('comprometido_eq_' + itemKey, this.resumenes[itemKey].comprometido.equivalente)
+                                        .replaceAll('realizado_sem_' + itemKey, this.resumenes[itemKey].realizado.horasSemana)
+                                        .replaceAll('realizado_anio_' + itemKey, this.resumenes[itemKey].realizado.horasAnio)
                                         .replaceAll('realizado_eq_' + itemKey, this.resumenes[itemKey].realizado.equivalente)
                     }
                 }

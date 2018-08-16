@@ -21,6 +21,7 @@
                             <li><router-link :to="{ name: 'departamentos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Departamentos</router-link></li>
                             <li><router-link :to="{ name: 'factores' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Factores</router-link></li>
                             <li><router-link :to="{ name: 'facultades' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Facultades</router-link></li>
+                            <li><router-link :to="{ name: 'editar-formulas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Formulas</router-link></li>
                             <li><router-link :to="{ name: 'jerarquias' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Jerarquias</router-link></li>
                             <li><router-link :to="{ name: 'jornadas' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Jornadas</router-link></li>
                             <li><router-link :to="{ name: 'rangos' }" class="btn navbar-btn" role="button" active-class v-if="auth.rol === rol.admin">Rangos</router-link></li>

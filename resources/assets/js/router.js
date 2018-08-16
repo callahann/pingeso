@@ -28,6 +28,7 @@ import ListadoComision from './components/comision/ListadoComision'
 import ListadoUsuarios from './components/comision/ListadoUsuarios'
 import ListadoUsuariosF from './components/comision/ListadoUsuariosF'
 import ListadoUsuariosD from './components/comision/ListadoUsuariosD'
+import Formula from './components/formula/Formula'
 
 const router = new VueRouter({
     mode: 'history',
@@ -273,6 +274,12 @@ const router = new VueRouter({
              path: '/comision/facultad/:id/agregar',
              name: 'usuarios-comision-facultad',
              component: ListadoUsuariosF
+         },
+         {
+             path: '/formulas',
+             name: 'editar-formulas',
+             component: Formula,
+             meta: { eval: 'rol === 2'}
          },
          
     ],

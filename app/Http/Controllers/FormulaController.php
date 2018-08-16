@@ -19,16 +19,6 @@ class FormulaController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return $this->notDefined();
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -44,31 +34,7 @@ class FormulaController extends Controller
 
         $formula = Formula::create($request->all());
 
-        return $this->creationMessage();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Formula  $formula
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $formula = Formula::findOrFail($id);
         return $formula;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Formula  $formula
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $formula = Formula::findOrFail($id);
-        return $this->notDefined();
     }
 
     /**
@@ -88,10 +54,10 @@ class FormulaController extends Controller
 
         $formula = Formula::findOrFail($id);
 
-        $formula->fill($data);
+        $formula->fill($request->all());
         $formula->save();
 
-        return $this->updateMessage();
+        return $formula;
     }
 
     /**

@@ -51,7 +51,7 @@ const store = new Vuex.Store({
             const index = state.informes.findIndex(informe => {
                 return informe.id === payload.data.id_declaracion
             })
-            const apelacion = state.informes[index].apelacion
+            var apelacion = state.informes[index].apelacion
             apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data)
             apelacion.apelado = true
             apelacion.apelar = false
@@ -61,9 +61,9 @@ const store = new Vuex.Store({
             const index = state.informes.findIndex(informe => {
                 return informe.id === payload.data.id_declaracion
             })
-            const apelacion = state.informes[index].apelacion
+            var apelacion = state.informes[index].apelacion
             const comision = apelacion.apelaciones.findIndex(apelacion => {
-                return apelacion.id === payload.data.id
+                return apelacion !== null && apelacion.id === payload.data.id
             })
             apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data)
             apelacion.apelado = false
@@ -221,6 +221,10 @@ const store = new Vuex.Store({
             const usuario = state.usuarios[index]
             state.usuarios[index] = Object.assign({}, usuario, payload.data)
             
+            callback(true, payload.data);
+        },
+        [Mutations.UPDATE_FORMULA] (state, { payload, callback }) {
+            state.formula = Object.assign({}, state.formula, payload.data)
             callback(true, payload.data);
         },
         [Mutations.HANDLE_ERROR] (state, { error, callback }) {
@@ -563,6 +567,26 @@ const store = new Vuex.Store({
                 .put('/api/usuarios/' + usuario.id, usuario)
                 .then(response => {
                     commit(Mutations.UPDATE_USUARIO, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.INSERT_FORMULA] ({ commit }, { formula, cb }) {
+            axios
+                .POST('/api/formulas/', formula)
+                .then(response => {
+                    commit(Mutations.UPDATE_FORMULA, { payload: response, callback: cb })
+                })
+                .catch(e => {
+                    commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
+                })
+        },
+        [Actions.UPDATE_FORMULA] ({ commit }, { formula, cb }) {
+            axios
+                .put('/api/formulas/' + formula.id, formula)
+                .then(response => {
+                    commit(Mutations.UPDATE_FORMULA, { payload: response, callback: cb })
                 })
                 .catch(e => {
                     commit(Mutations.HANDLE_ERROR, { error: e, callback: cb })
