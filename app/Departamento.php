@@ -15,13 +15,10 @@ class Departamento extends Model
     ];
 
     protected $hidden = [
-        'id_comision'
-    ];
-
-    protected $guarded = [
+        'id_comision',
         'id_facultad'
     ];
-
+    
     protected $appends = [
         'periodo'
     ];

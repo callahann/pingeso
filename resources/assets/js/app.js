@@ -23,6 +23,7 @@ Date.prototype.toStringWithTime = function() {
     return this.toString() + ' a las ' + (hours < 10 ? '0': '') + hours + ':' + (mins < 10 ? '0': '') + mins
 }
 
+
 window.Vue = require('vue')
 
 import Vue from 'vue'
@@ -35,6 +36,14 @@ import App from './components/App'
 import { INIT_STORE } from './vuex/actions'
 import store from './vuex/store'
 import { router } from './router'
+
+Vue.directive('tooltip', function(el, binding){
+    $(el).tooltip({
+        title: binding.value,
+        placement: binding.arg,
+        trigger: 'hover'             
+    })
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -51,4 +60,10 @@ const app = function() {
     })
 }
 
-store.dispatch(INIT_STORE, app)
+var current = 0
+const step = function(total) {
+    const progress = document.getElementById('progress')
+    progress.style.width = ++current / total * 100 + '%'
+}
+
+store.dispatch(INIT_STORE, { step, callback: app })

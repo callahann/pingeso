@@ -44,26 +44,26 @@
                                 <option v-for="descripcion in descripciones" :key="descripcion.id">{{ descripcion.descripcion }}</option>
                                 <option>Otra actividad...</option>
                             </select>
-                            <div v-else class="input-group">
-                                <input  class="form-control" v-model="actividad.descripcion" placeholder="Descripción de la actividad">
-                                <div class="input-group-btn">
+                            <div v-else class="group">
+                                <input input  class="form-control" v-model="actividad.descripcion" placeholder="Descripción de la actividad">
+                                <div class="group-btn"> input
                                     <button class="btn btn-info" type="button" v-on:click="actividad.otra = false">
                                         <i class="glyphicon glyphicon-list"></i>
                                     </button>
                                 </div>
                             </div>
                         </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemana">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemana" required>
                         </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemestre">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemestre" required>
                         </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemana">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemana" required>
                         </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemestre">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemestre" required>
                         </td>
                         <td class="col-md-4">
                             <p v-if="actividad.observaciones.director.length > 0"><b>Director: </b>{{ actividad.observaciones.director }}</p>
@@ -151,13 +151,13 @@
                     </tr>
                     <tr>
                         <th class="text-center">Declarado</th>
-                        <th class="text-center">Realizado</th>
+                        <th class="text-center input">Realizado</th>
                         <th class="text-center">Declarado</th>
-                        <th class="text-center">Realizado</th>
+                        <th class="text-center input">Realizado</th>
                         <th class="text-center">Declarado</th>
-                        <th class="text-center">Realizado</th>
+                        <th class="text-center input">Realizado</th>
                         <th class="text-center">Declarado</th>
-                        <th class="text-center">Realizado</th>
+                        <th class="text-center input">Realizado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -172,50 +172,38 @@
                                 <option v-for="descripcion in descripciones" :key="descripcion.id">{{ descripcion.descripcion }}</option>
                                 <option>Otra actividad...</option>
                             </select>
-                            <div v-else class="input-group">
-                                <input  class="form-control" v-model="actividad.descripcion" placeholder="Descripción de la actividad">
-                                <div class="input-group-btn">
+                            <div v-else class="group">
+                                <input input  class="form-control" v-model="actividad.descripcion" placeholder="Descripción de la actividad">
+                                <div class="group-btn"> input
                                     <button class="btn btn-info" type="button" v-on:click="actividad.otra = false">
                                         <i class="glyphicon glyphicon-list"></i>
                                     </button>
                                 </div>
                             </div>
                         </td>
-                        <td class="col-md-1 text-center" v-if="index < cuenta">
+                        <td class="col-md-1 text-center">
                             {{ actividad.comprometido.primero.horasSemana }}
                         </td>
-                        <td class="col-md-1 text-center" v-else>
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemana">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemana" required>
                         </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemana">
-                        </td>
-                        <td class="col-md-1 text-center" v-if="index < cuenta">
+                        <td class="col-md-1 text-center">
                             {{ actividad.comprometido.primero.horasSemestre }}
                         </td>
-                        <td class="col-md-1 text-center" v-else>
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemestre">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemestre" required>
                         </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemestre">
-                        </td>
-                        <td class="col-md-1 text-center" v-if="index < cuenta">
+                        <td class="col-md-1 text-center">
                             {{ actividad.comprometido.segundo.horasSemana }}
                         </td>
-                        <td class="col-md-1 text-center" v-else>
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemana">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemana" required>
                         </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemana">
-                        </td>
-                        <td class="col-md-1 text-center" v-if="index < cuenta">
+                        <td class="col-md-1 text-center">
                             {{ actividad.comprometido.segundo.horasSemestre }}
                         </td>
-                        <td class="col-md-1 text-center" v-else>
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemestre">
-                        </td>
-                        <td class="col-md-1">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemestre">
+                        <td class="col-md-1 input">
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemestre" required>
                         </td>
                         <td v-if="actividades.length > cuenta">
                             <button type="button" class="btn btn-block btn-danger"
@@ -227,13 +215,13 @@
                     <tr>
                         <th class="text-right">TOTAL</th>
                         <th class="text-center">{{ totales.comprometido.primero.horasSemana }}</th>
-                        <th class="text-center">{{ totales.realizado.primero.horasSemana }}</th>
+                        <th class="text-center input">{{ totales.realizado.primero.horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido.primero.horasSemestre }}</th>
-                        <th class="text-center">{{ totales.realizado.primero.horasSemestre }}</th>
+                        <th class="text-center input">{{ totales.realizado.primero.horasSemestre }}</th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemana }}</th>
-                        <th class="text-center">{{ totales.realizado.segundo.horasSemana }}</th>
+                        <th class="text-center input">{{ totales.realizado.segundo.horasSemana }}</th>
                         <th class="text-center">{{ totales.comprometido.segundo.horasSemestre }}</th>
-                        <th class="text-center">{{ totales.realizado.segundo.horasSemestre }}</th>
+                        <th class="text-center input">{{ totales.realizado.segundo.horasSemestre }}</th>
                         <th v-if="actividades.length > cuenta"></th>
                     </tr>
                 </tbody>

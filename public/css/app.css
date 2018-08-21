@@ -64,6 +64,16 @@ input[type="file"] {
   vertical-align: middle !important;
 }
 
+.table td.input {
+  background-color: #ebf4f9 !important;
+}
+
+.table td-margin {
+  width: 2em !important;
+  border: none !important;
+  background-color: white !important;
+}
+
 .table td:nth-child(even) {
   border-left: 1px solid #e0e0e0;
   border-right: 1px solid #e0e0e0;
@@ -74,10 +84,13 @@ input[type="file"] {
   border-color: #B1B1B1 !important;
 }
 
-.table .td-margin {
-  width: 2em !important;
-  border: none !important;
-  background-color: white !important;
+.table th.input {
+  background-color: #aecfe0 !important;
+}
+
+.table th:nth-child(even) {
+  border-left: 1px solid #B1B1B1;
+  border-right: 1px solid #B1B1B1;
 }
 
 .navbar {
@@ -97,6 +110,7 @@ input[type="file"] {
 }
 
 .navbar-btn {
+  background-color: transparent;
   color: white;
 }
 
@@ -109,7 +123,7 @@ input[type="file"] {
 }
 
 .navbar-btn:hover {
-  background-color: #B1B1B1;
+  background-color: #EA7600;
   color: white;
 }
 
@@ -123,8 +137,7 @@ input[type="file"] {
   font-weight: bold;
 }
 
-.panel-body:nth-child(odd) {
-  background-color: #e0efff;
+.panel-body:nth-child(even) {
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
 }
@@ -157,5 +170,24 @@ input[type="file"] {
 .panel-tabs a:hover {
   background-color: #007FC6 !important;
   color: white !important;
+}
+
+.dash {
+  padding: 0 !important;
+}
+
+.dash-btn {
+  color: #007FC6;
+  padding: 1.5em !important;
+  border: 1px solid #e0e0e0;
+}
+
+.dash-btn-grid i {
+  font-size: 2.5em;
+}
+
+.dash-btn:hover {
+  background-color: #007FC6;
+  color: white;
 }
 

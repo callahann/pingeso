@@ -68,7 +68,13 @@ Vue.mixin({
                 comision: [
                     'Comisión superior',
                     'Comisión de facultad',
-                    'Comisión de departamento'
+                    'Comisión departamental'
+                ],
+                etapa: [
+                    'Declaración / Aprobación',
+                    'Informar trabajo realizado',
+                    'Evaluación',
+                    'Apelación'
                 ],
                 estado: [
                     'No enviado',
@@ -80,23 +86,15 @@ Vue.mixin({
                     'Académico',
                     'Director de departamento',
                     'Administrador'
+                ],
+                rolComision: [
+                    'Fijo',
+                    'Suplente'
                 ]
             }
         }
     },
     methods: {
-        /**
-         * Genera un objeto FormData para enviar a la API. Esto es necesario
-         * cuando se envían archivos (como en el caso de la Apelación).
-         * @param object Objeto para el cual se creará el objeto FormData
-         */
-        formData: function(object) {
-            let formData = new FormData()
-            for (var key in object) {
-                formData.append(key, object[key])
-            }
-            return formData
-        },
         /**
          * Redirige a la ruta indicada, con un mensaje para mostrar
          * en la vista a la cual se redirige.
@@ -105,10 +103,8 @@ Vue.mixin({
          * @return el mensaje, para ser utilizado, por ejemplo, con console.log
          */
         volver: function(route, mensaje = undefined) {
-            this.$router.push({
-                name: route,
-                params: { mensaje }
-            })
+            this.$router.push({ name: route })
+            this.$root.$emit('alert', { mensaje, class: 'success' })
             return mensaje
         },
         /**

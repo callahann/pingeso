@@ -4,7 +4,6 @@
             <div class="row">
                 <ol class="breadcrumb">
                     <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
-                    <li><router-link :to="{ name: 'informes'}">Listado</router-link></li>
                     <li class="active">Informe de Actividades</li>
                 </ol>
             </div>
@@ -39,18 +38,6 @@
                                 v-on:actualizar="value.actividades = $event"></lista-actividades>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- Mensajes -->
-            <div class="row">
-                <div v-if="mensaje === 1" class="alert alert-success">
-                    <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">[Cerrar &times;]</a>
-                    <a href="#" class="close" aria-label="close" v-on:click="volver('informes')">[Volver] </a>
-                    <strong>Bien!</strong> Se han guardado los cambios.
-                </div>
-                <div v-if="mensaje === -1" class="alert alert-danger">
-                    <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
-                    <strong>Oh no!</strong> Ha ocurrido un error.
                 </div>
             </div>
             <!--Footer -->
@@ -155,13 +142,6 @@
                  * dentro del informe.
                  */
                 apelacion: {},
-                /**
-                 * Código de mensaje.
-                 * 0: No mostrar
-                 * 1: Operación realizada correctamente
-                 * -1: Mensaje de error
-                 */
-                mensaje: 0,
                 mensajeVolver: ''
             }
         },
@@ -173,7 +153,8 @@
         },
         created: function() {
             if(this.$route.params.id) {
-                const informe = this.informes.find(informe => {
+                const informes = this.informes.usuario.concat(this.informes.comision)
+                const informe = informes.find(informe => {
                     return informe.id === this.$route.params.id
                 })
                 this.informe = Object.assign({}, this.informe, this.copy(informe))
@@ -190,73 +171,88 @@
              * @param ok Indica si la operación se realizó correctamente
              * @param payload Data (respuesta) obtenida desde la API
              */
-            cbMensaje: function(ok = false, payload) {
-                this.mensaje = ok ? 1 : -1
-                this.informe = Object.assign({}, this.informe, payload)
-            },
-            /**
-             * Callback para volver a la vista anterior si la operación se
-             * completó sin errores, o mostrar un mensaje de error en caso
-             * contrario.
-             * @param ok Indica si la operación se realizó correctamente
-             * @param payload Data (respuesta) obtenida desde la API
-             */
-            cbVolver: function(ok = false, payload) {
-                console.log('Ok: ' + ok)
-                if(ok) this.volver('informes', this.mensajeVolver)
-                this.mensaje = -1
+            callback: function(ok = false, payload) {
+                this.$root.$emit('alert', {
+                    mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                    class: ok ? 'success' : 'danger'
+                })
+                this.informe = Object.assign({}, this.informe, payload.data)
+                if(payload.volver && ok) this.$router.push({ name: 'inicio' })
             },
             /**
              * Despacha la acción para insertar un informe si no existe, o actualizarlo en caso contrario.
              */
             actualizar: function() {
+                const payload = {
+                    mensaje: '<strong>¡Bien!</strong> Se ha registrado los cambios.',
+                    volver: false
+                }
                 this.$store.dispatch(
                     this.informe.id === undefined ? INSERT_DECLARACION : UPDATE_DECLARACION,
-                    { informe: this.informe, cb: this.cbMensaje }
+                    { informe: this.informe, cb: this.callback, payload }
                 )
             },
             /**
              * Marca un informe con el estado de "enviado"
              */
-            enviar: async function() {
-                if(confirm('¿Está seguro que desea enviar esta declaración?')) {
-                    this.mensajeVolver = 'Se ha enviado la declaración al Director de Departamento'
-                    this.$store.dispatch(SEND_DECLARACION, { informe: this.informe, cb: this.cbVolver })
+            enviar: function() {
+                this.$root.$emit('dismiss')
+                if(confirm('Se enviará esta declaración al Director de Departamento. ¿Continuar?')) {
+                    const payload = {
+                        mensaje: 'Se ha enviado la declaración al Director de Departamento',
+                        volver: true
+                    }
+                    this.$store.dispatch(SEND_DECLARACION, { informe: this.informe, cb: this.callback, payload })
                 }
             },
             /**
              * Marca un informe con el estado de "aprobado"
              */
-            aprobar: async function(estado) {
-                if(confirm('¿Está seguro que desea aprobar esta declaración?')) {
-                    this.mensajeVolver = 'Se ha aprobado la declaración'
-                    this.$store.dispatch(APPROVE_DECLARACION, { informe: this.informe, cb: this.cbVolver })
+            aprobar: function() {
+                this.$root.$emit('dismiss')
+                if(confirm('Se aprobará esta declaración. ¿Continuar?')) {
+                    const payload = {
+                        mensaje: 'Se ha aprobado la declaración',
+                        volver: true
+                    }
+                    this.$store.dispatch(APPROVE_DECLARACION, { informe: this.informe, cb: this.callback, payload })
                 }
             },
             /**
              * Marca un informe con el estado de "revisar"
              */
-            revision: async function(estado) {
-                if(confirm('¿Está seguro que desea solicitar revisión para esta declaración?')) {
-                    this.mensajeVolver = 'Se ha solicitado la revisión de la declaración'
-                    this.$store.dispatch(DECLINE_DECLARACION, { informe: this.informe, cb: this.cbVolver })
+            revision: function() {
+                this.$root.$emit('dismiss')
+                if(confirm('Se solicitará revisión de esta declaración al académico. ¿Continuar?')) {
+                    const payload = {
+                        mensaje: 'Se ha solicitado la revisión de la declaración',
+                        volver: true
+                    }
+                    this.$store.dispatch(DECLINE_DECLARACION, { informe: this.informe, cb: this.callback, payload })
                 }
             },
             /**
              * Ingresa una nueva apelación en la base de datos.
              */
             apelar: function() {
-                if(confirm('Sólo puede apelar una vez a cada comisión. ¿Desea continuar?')) {
+                this.$root.$emit('dismiss')
+                if(confirm('Recuerde: sólo puede apelar una vez a cada comisión. ¿Continuar?')) {
                     this.apelacion.id_declaracion = this.informe.id;
-                    let formData = this.formData(this.apelacion)
-                    this.mensajeVolver = 'Se ha registrado la apelación correctamente'
-                    this.$store.dispatch(INSERT_APELACION, { apelacion: formData, cb: this.cbVolver })
+                    const payload = {
+                        mensaje: 'Se ha registrado la apelación correctamente',
+                        volver: true
+                    }
+                    this.$store.dispatch(INSERT_APELACION, { apelacion: this.apelacion, cb: this.callback, payload })
                 }
             },
             resuelto: function() {
+                this.$root.$emit('dismiss')
                 this.$store.dispatch(UPDATE_DECLARACION, { informe: this.informe, cb: () => {} })
-                this.mensajeVolver = 'Se ha marcado como resuelto'
-                this.$store.dispatch(RESOLVE_APELACION, { apelacion: this.apelacion, cb: this.cbVolver })
+                const payload = {
+                    mensaje: 'Se ha marcado la apelación como resuelta.',
+                    volver: true
+                }
+                this.$store.dispatch(RESOLVE_APELACION, { apelacion: this.apelacion, cb: this.callback, payload })
             }
         },
         computed: mapState(['formula', 'informes'])

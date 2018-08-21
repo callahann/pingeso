@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/auth', function (Request $request) {
-    return $request->user();
+    return $request->user()->load('departamento.facultad');
 });
 Route::get('/pdf/{id}', 'HomeController@pdf');
 Route::get('/auth/declaraciones', 'DeclaracionController@allListed');

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 42);
+/******/ 	return __webpack_require__(__webpack_require__.s = 45);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1204,7 +1204,7 @@ var UPDATE_FORMULA = 'UPDATE_FORMULA';
 
 
 var bind = __webpack_require__(9);
-var isBuffer = __webpack_require__(49);
+var isBuffer = __webpack_require__(52);
 
 /*global toString:true*/
 
@@ -1510,7 +1510,7 @@ module.exports = {
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(48);
+module.exports = __webpack_require__(51);
 
 /***/ }),
 /* 5 */
@@ -12476,7 +12476,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(44).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(47).setImmediate))
 
 /***/ }),
 /* 6 */
@@ -12703,7 +12703,7 @@ process.umask = function() { return 0; };
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(3);
-var normalizeHeaderName = __webpack_require__(51);
+var normalizeHeaderName = __webpack_require__(54);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -12825,12 +12825,12 @@ module.exports = function bind(fn, thisArg) {
 
 
 var utils = __webpack_require__(3);
-var settle = __webpack_require__(52);
-var buildURL = __webpack_require__(54);
-var parseHeaders = __webpack_require__(55);
-var isURLSameOrigin = __webpack_require__(56);
+var settle = __webpack_require__(55);
+var buildURL = __webpack_require__(57);
+var parseHeaders = __webpack_require__(58);
+var isURLSameOrigin = __webpack_require__(59);
 var createError = __webpack_require__(11);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(57);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(60);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -12927,7 +12927,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(58);
+      var cookies = __webpack_require__(61);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -13011,7 +13011,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(53);
+var enhanceError = __webpack_require__(56);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -13101,26 +13101,6 @@ module.exports = Cancel;
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     data: function data() {
@@ -13129,13 +13109,36 @@ module.exports = Cancel;
                 mensaje: '',
                 class: '',
                 abierto: false
-            }
+            },
+            interval: undefined
         };
     },
+    created: function created() {
+        var _this = this;
+
+        this.$root.$on('dismiss', function () {
+            _this.dismiss();
+        });
+
+        this.$root.$on('alert', function (alert) {
+            _this.dismiss();
+
+            _this.alert = Object.assign({}, _this.alert, alert);
+            _this.alert.abierto = true;
+
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+
+            _this.interval = setInterval(function () {
+                _this.alert.abierto = false;
+                clearInterval(_this.interval);
+            }, 5000);
+        });
+    },
     methods: {
-        mensaje: function mensaje(alert) {
-            this.alert = Object.assign({}, this.alert, alert);
-            this.alert.abierto = true;
+        dismiss: function dismiss() {
+            if (this.interval) clearInterval(this.interval);
+            this.alert.abierto = false;
         }
     }
 });
@@ -13152,9 +13155,11 @@ module.exports = Cancel;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(2);
 
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _mutations, _actions;
 
@@ -13170,10 +13175,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 __WEBPACK_IMPORTED_MODULE_1_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */]);
 
-var asArray = function asArray(data) {
-    return Object.keys(data).map(function (key) {
-        return data[key];
-    });
+/**
+ * Genera un objeto FormData para enviar a la API. Esto es necesario
+ * cuando se envían archivos (como en el caso de la Apelación).
+ * @param object Objeto para el cual se creará el objeto FormData
+ */
+var formData = function formData(object) {
+    var formData = new FormData();
+    for (var key in object) {
+        formData.append(key, object[key]);
+    }
+    return formData;
 };
 
 var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
@@ -13209,53 +13221,68 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var payload = _ref4.payload,
             callback = _ref4.callback;
 
-        state.informes.push(payload.data);
-        callback(true, payload.data);
+        state.informes.usuario.push(payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], function (state, _ref5) {
         var payload = _ref5.payload,
             callback = _ref5.callback;
 
-        var index = state.informes.findIndex(function (informe) {
-            return informe.id === payload.data.id;
-        });
-        var informe = state.informes[index];
-        state.informes[index] = Object.assign({}, informe, payload.data);
+        ['usuario', 'comision'].forEach(function (key) {
+            var index = state.informes[key].findIndex(function (informe) {
+                return informe.id === payload.data.id;
+            });
 
-        callback(true, payload.data);
+            if (index >= 0) {
+                var informe = state.informes[key][index];
+                state.informes[key][index] = Object.assign({}, informe, payload.data);
+            }
+        });
+
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], function (state, _ref6) {
         var payload = _ref6.payload,
             comision = _ref6.comision,
             callback = _ref6.callback;
 
-        var index = state.informes.findIndex(function (informe) {
-            return informe.id === payload.data.id_declaracion;
+        var index = -1;
+        var tipo = ['usuario', 'comision'].find(function (key) {
+            index = state.informes[key].findIndex(function (informe) {
+                return informe.id === payload.data.id_declaracion;
+            });
+            return index >= 0;
         });
-        var apelacion = state.informes[index].apelacion;
-        apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data);
+
+        var apelacion = state.informes[tipo][index].apelacion;
+        __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(apelacion.apelaciones, comision, payload.data);
         apelacion.apelado = true;
         apelacion.apelar = false;
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_APELACION */], function (state, _ref7) {
         var payload = _ref7.payload,
             callback = _ref7.callback;
 
-        var index = state.informes.findIndex(function (informe) {
-            return informe.id === payload.data.id_declaracion;
+        var index = -1;
+        var tipo = ['usuario', 'comision'].find(function (key) {
+            index = state.informes[key].findIndex(function (informe) {
+                return informe.id === payload.data.id_declaracion;
+            });
+            return index >= 0;
         });
-        var apelacion = state.informes[index].apelacion;
+
+        var apelacion = state.informes[tipo][index].apelacion;
         var comision = apelacion.apelaciones.findIndex(function (apelacion) {
             return apelacion !== null && apelacion.id === payload.data.id;
         });
-        apelacion.apelaciones[comision] = Object.assign({}, apelacion.apelaciones[comision], payload.data);
+        __WEBPACK_IMPORTED_MODULE_1_vue___default.a.set(apelacion.apelaciones, comision, payload.data);
         apelacion.apelado = false;
         apelacion.apelar = apelacion.apelaciones.includes(null);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* INSERT_FACULTAD */], function (state, _ref8) {
         var payload = _ref8.payload,
             callback = _ref8.callback;
 
         state.facultades.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_FACULTAD */], function (state, _ref9) {
         var payload = _ref9.payload,
             callback = _ref9.callback;
@@ -13266,7 +13293,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var facultad = state.facultades[index];
         state.facultades[index] = Object.assign({}, facultad, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], function (state, _ref10) {
         var payload = _ref10.payload,
             callback = _ref10.callback;
@@ -13281,7 +13308,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             callback = _ref11.callback;
 
         state.departamentos.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_DEPARTAMENTO */], function (state, _ref12) {
         var payload = _ref12.payload,
             callback = _ref12.callback;
@@ -13292,7 +13319,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var departamento = state.departamentos[index];
         state.departamentos[index] = Object.assign({}, departamento, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], function (state, _ref13) {
         var payload = _ref13.payload,
             callback = _ref13.callback;
@@ -13307,7 +13334,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             callback = _ref14.callback;
 
         state.rangos.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_RANGO */], function (state, _ref15) {
         var payload = _ref15.payload,
             callback = _ref15.callback;
@@ -13318,7 +13345,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var rango = state.rangos[index];
         state.rangos[index] = Object.assign({}, rango, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], function (state, _ref16) {
         var payload = _ref16.payload,
             callback = _ref16.callback;
@@ -13333,7 +13360,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             callback = _ref17.callback;
 
         state.jerarquias.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JERARQUIA */], function (state, _ref18) {
         var payload = _ref18.payload,
             callback = _ref18.callback;
@@ -13344,7 +13371,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var jerarquia = state.jerarquias[index];
         state.jerarquias[index] = Object.assign({}, jerarquia, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], function (state, _ref19) {
         var payload = _ref19.payload,
             callback = _ref19.callback;
@@ -13359,7 +13386,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             callback = _ref20.callback;
 
         state.jornadas.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_JORNADA */], function (state, _ref21) {
         var payload = _ref21.payload,
             callback = _ref21.callback;
@@ -13370,7 +13397,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var jornada = state.jornadas[index];
         state.jornadas[index] = Object.assign({}, jornada, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], function (state, _ref22) {
         var payload = _ref22.payload,
             callback = _ref22.callback;
@@ -13385,7 +13412,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             callback = _ref23.callback;
 
         state.factores.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACTOR */], function (state, _ref24) {
         var payload = _ref24.payload,
             callback = _ref24.callback;
@@ -13396,7 +13423,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var factor = state.factores[index];
         state.factores[index] = Object.assign({}, factor, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], function (state, _ref25) {
         var payload = _ref25.payload,
             callback = _ref25.callback;
@@ -13411,7 +13438,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             callback = _ref26.callback;
 
         state.periodos.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_PERIODO */], function (state, _ref27) {
         var payload = _ref27.payload,
             callback = _ref27.callback;
@@ -13422,7 +13449,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var periodo = state.periodos[index];
         state.periodos[index] = Object.assign({}, periodo, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], function (state, _ref28) {
         var payload = _ref28.payload,
             callback = _ref28.callback;
@@ -13437,7 +13464,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
             callback = _ref29.callback;
 
         state.usuarios.push(payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["F" /* UPDATE_USUARIO */], function (state, _ref30) {
         var payload = _ref30.payload,
             callback = _ref30.callback;
@@ -13448,24 +13475,26 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         var usuario = state.usuarios[index];
         state.usuarios[index] = Object.assign({}, usuario, payload.data);
 
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], function (state, _ref31) {
         var payload = _ref31.payload,
             callback = _ref31.callback;
 
         state.formula = Object.assign({}, state.formula, payload.data);
-        callback(true, payload.data);
+        callback(true, payload);
     }), _defineProperty(_mutations, __WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], function (state, _ref32) {
-        var error = _ref32.error,
+        var payload = _ref32.payload,
             callback = _ref32.callback;
 
-        callback(false, error);
+        callback(false, payload);
     }), _mutations),
     actions: (_actions = {}, _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["l" /* INIT_STORE */], function () {
-        var _ref34 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref33, callback) {
+        var _ref35 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee(_ref33, _ref34) {
             var dispatch = _ref33.dispatch,
                 commit = _ref33.commit;
-            var rol, request, promises, promise;
+            var step = _ref34.step,
+                callback = _ref34.callback;
+            var rol, promises, request, promise;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
@@ -13475,21 +13504,20 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 
                         case 2:
                             rol = _context.sent;
+                            promises = [];
 
-
-                            dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */], rol);
+                            promises.push(dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */]));
 
                             request = ['descripciones', 'factores', 'rangos'];
 
                             if (rol >= 1) request = request.concat(['facultades', 'departamentos', 'jerarquias', 'jornadas', 'usuarios', 'periodos']);
-
-                            promises = [];
 
                             request.forEach(function (r) {
                                 var promise = __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/' + r);
                                 promises.push(promise);
                                 promise.then(function (response) {
                                     commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["s" /* SET_STATE_ARRAY */], { key: r, payload: response });
+                                    step(promises.length);
                                 });
                             });
 
@@ -13498,6 +13526,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
                             promises.push(promise);
                             promise.then(function (response) {
                                 commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["t" /* SET_STATE_OBJECT */], { key: 'formula', payload: response });
+                                step(promises.length);
                             });
 
                             Promise.all(promises).then(function () {
@@ -13513,11 +13542,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x, _x2) {
-            return _ref34.apply(this, arguments);
+            return _ref35.apply(this, arguments);
         };
     }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["j" /* FETCH_AUTH_USER */], function () {
-        var _ref36 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref35) {
-            var commit = _ref35.commit;
+        var _ref37 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(_ref36) {
+            var commit = _ref36.commit;
             var response;
             return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
                 while (1) {
@@ -13541,333 +13570,365 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
         }));
 
         return function (_x3) {
-            return _ref36.apply(this, arguments);
+            return _ref37.apply(this, arguments);
         };
-    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */], function (_ref37, rol) {
-        var commit = _ref37.commit;
+    }()), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["k" /* FETCH_DECLARACIONES */], function (_ref38) {
+        var commit = _ref38.commit;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.get('/api/auth/declaraciones').then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["s" /* SET_STATE_ARRAY */], { key: 'informes', payload: response });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["n" /* INSERT_DECLARACION */], function (_ref38, _ref39) {
-        var commit = _ref38.commit;
-        var informe = _ref39.informe,
-            cb = _ref39.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["n" /* INSERT_DECLARACION */], function (_ref39, _ref40) {
+        var commit = _ref39.commit;
+        var informe = _ref40.informe,
+            cb = _ref40.cb,
+            payload = _ref40.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/declaraciones', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["j" /* INSERT_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["j" /* INSERT_DECLARACION */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["z" /* UPDATE_DECLARACION */], function (_ref40, _ref41) {
-        var commit = _ref40.commit;
-        var informe = _ref41.informe,
-            cb = _ref41.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["z" /* UPDATE_DECLARACION */], function (_ref41, _ref42) {
+        var commit = _ref41.commit;
+        var informe = _ref42.informe,
+            cb = _ref42.cb,
+            payload = _ref42.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id, informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["y" /* SEND_DECLARACION */], function (_ref42, _ref43) {
-        var commit = _ref42.commit;
-        var informe = _ref43.informe,
-            cb = _ref43.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["y" /* SEND_DECLARACION */], function (_ref43, _ref44) {
+        var commit = _ref43.commit;
+        var informe = _ref44.informe,
+            cb = _ref44.cb,
+            payload = _ref44.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/enviar', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref44, _ref45) {
-        var commit = _ref44.commit;
-        var informe = _ref45.informe,
-            cb = _ref45.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["a" /* APPROVE_DECLARACION */], function (_ref45, _ref46) {
+        var commit = _ref45.commit;
+        var informe = _ref46.informe,
+            cb = _ref46.cb,
+            payload = _ref46.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/aprobar', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref46, _ref47) {
-        var commit = _ref46.commit;
-        var informe = _ref47.informe,
-            cb = _ref47.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["b" /* DECLINE_DECLARACION */], function (_ref47, _ref48) {
+        var commit = _ref47.commit;
+        var informe = _ref48.informe,
+            cb = _ref48.cb,
+            payload = _ref48.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/declaraciones/' + informe.id + '/revision', informe).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["w" /* UPDATE_DECLARACION */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["m" /* INSERT_APELACION */], function (_ref48, _ref49) {
-        var commit = _ref48.commit;
-        var apelacion = _ref49.apelacion,
-            cb = _ref49.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["m" /* INSERT_APELACION */], function (_ref49, _ref50) {
+        var commit = _ref49.commit;
+        var apelacion = _ref50.apelacion,
+            cb = _ref50.cb,
+            payload = _ref50.payload;
 
-        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/apelaciones', apelacion).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], { payload: response, comision: apelacion.comision, callback: cb });
-        }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+        __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/apelaciones', formData(apelacion)).then(function (response) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["a" /* ATTACH_APELACION */], { payload: _extends({}, payload, { data: response.data }), comision: apelacion.comision, callback: cb });
+        }, function (e) {
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["x" /* RESOLVE_APELACION */], function (_ref50, _ref51) {
-        var commit = _ref50.commit;
-        var apelacion = _ref51.apelacion,
-            cb = _ref51.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["x" /* RESOLVE_APELACION */], function (_ref51, _ref52) {
+        var commit = _ref51.commit;
+        var apelacion = _ref52.apelacion,
+            cb = _ref52.cb,
+            payload = _ref52.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/apelaciones/' + apelacion.id, apelacion).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_APELACION */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["v" /* UPDATE_APELACION */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["q" /* INSERT_FACULTAD */], function (_ref52, _ref53) {
-        var commit = _ref52.commit;
-        var facultad = _ref53.facultad,
-            cb = _ref53.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["q" /* INSERT_FACULTAD */], function (_ref53, _ref54) {
+        var commit = _ref53.commit;
+        var facultad = _ref54.facultad,
+            cb = _ref54.cb,
+            payload = _ref54.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/facultades', facultad).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* INSERT_FACULTAD */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["m" /* INSERT_FACULTAD */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["C" /* UPDATE_FACULTAD */], function (_ref54, _ref55) {
-        var commit = _ref54.commit;
-        var facultad = _ref55.facultad,
-            cb = _ref55.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["C" /* UPDATE_FACULTAD */], function (_ref55, _ref56) {
+        var commit = _ref55.commit;
+        var facultad = _ref56.facultad,
+            cb = _ref56.cb,
+            payload = _ref56.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/facultades/' + facultad.id, facultad).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_FACULTAD */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["z" /* UPDATE_FACULTAD */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* DELETE_FACULTAD */], function (_ref56, _ref57) {
-        var commit = _ref56.commit;
-        var facultad = _ref57.facultad,
-            cb = _ref57.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* DELETE_FACULTAD */], function (_ref57, _ref58) {
+        var commit = _ref57.commit;
+        var facultad = _ref58.facultad,
+            cb = _ref58.cb,
+            payload = _ref58.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/facultades/' + facultad.id, facultad).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["d" /* DELETE_FACULTAD */], { payload: { data: facultad, mensaje: response }, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["o" /* INSERT_DEPARTAMENTO */], function (_ref58, _ref59) {
-        var commit = _ref58.commit;
-        var departamento = _ref59.departamento,
-            cb = _ref59.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["o" /* INSERT_DEPARTAMENTO */], function (_ref59, _ref60) {
+        var commit = _ref59.commit;
+        var departamento = _ref60.departamento,
+            cb = _ref60.cb,
+            payload = _ref60.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/departamentos', departamento).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* INSERT_DEPARTAMENTO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["k" /* INSERT_DEPARTAMENTO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["A" /* UPDATE_DEPARTAMENTO */], function (_ref60, _ref61) {
-        var commit = _ref60.commit;
-        var departamento = _ref61.departamento,
-            cb = _ref61.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["A" /* UPDATE_DEPARTAMENTO */], function (_ref61, _ref62) {
+        var commit = _ref61.commit;
+        var departamento = _ref62.departamento,
+            cb = _ref62.cb,
+            payload = _ref62.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/departamentos/' + departamento.id, departamento).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_DEPARTAMENTO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["x" /* UPDATE_DEPARTAMENTO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* DELETE_DEPARTAMENTO */], function (_ref62, _ref63) {
-        var commit = _ref62.commit;
-        var departamento = _ref63.departamento,
-            cb = _ref63.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["c" /* DELETE_DEPARTAMENTO */], function (_ref63, _ref64) {
+        var commit = _ref63.commit;
+        var departamento = _ref64.departamento,
+            cb = _ref64.cb,
+            payload = _ref64.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/departamentos/' + departamento.id, departamento).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["b" /* DELETE_DEPARTAMENTO */], { payload: { data: departamento, mensaje: response }, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["v" /* INSERT_RANGO */], function (_ref64, _ref65) {
-        var commit = _ref64.commit;
-        var rango = _ref65.rango,
-            cb = _ref65.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["v" /* INSERT_RANGO */], function (_ref65, _ref66) {
+        var commit = _ref65.commit;
+        var rango = _ref66.rango,
+            cb = _ref66.cb,
+            payload = _ref66.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/rangos', rango).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["q" /* INSERT_RANGO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["q" /* INSERT_RANGO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["H" /* UPDATE_RANGO */], function (_ref66, _ref67) {
-        var commit = _ref66.commit;
-        var rango = _ref67.rango,
-            cb = _ref67.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["H" /* UPDATE_RANGO */], function (_ref67, _ref68) {
+        var commit = _ref67.commit;
+        var rango = _ref68.rango,
+            cb = _ref68.cb,
+            payload = _ref68.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/rangos/' + rango.id, rango).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_RANGO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["E" /* UPDATE_RANGO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* DELETE_RANGO */], function (_ref68, _ref69) {
-        var commit = _ref68.commit;
-        var rango = _ref69.rango,
-            cb = _ref69.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["i" /* DELETE_RANGO */], function (_ref69, _ref70) {
+        var commit = _ref69.commit;
+        var rango = _ref70.rango,
+            cb = _ref70.cb,
+            payload = _ref70.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/rangos/' + rango.id, rango).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["h" /* DELETE_RANGO */], { payload: { data: rango, mensaje: response }, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["s" /* INSERT_JERARQUIA */], function (_ref70, _ref71) {
-        var commit = _ref70.commit;
-        var jerarquia = _ref71.jerarquia,
-            cb = _ref71.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["s" /* INSERT_JERARQUIA */], function (_ref71, _ref72) {
+        var commit = _ref71.commit;
+        var jerarquia = _ref72.jerarquia,
+            cb = _ref72.cb,
+            payload = _ref72.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/jerarquias', jerarquia).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["n" /* INSERT_JERARQUIA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["n" /* INSERT_JERARQUIA */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["E" /* UPDATE_JERARQUIA */], function (_ref72, _ref73) {
-        var commit = _ref72.commit;
-        var jerarquia = _ref73.jerarquia,
-            cb = _ref73.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["E" /* UPDATE_JERARQUIA */], function (_ref73, _ref74) {
+        var commit = _ref73.commit;
+        var jerarquia = _ref74.jerarquia,
+            cb = _ref74.cb,
+            payload = _ref74.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/jerarquias/' + jerarquia.id, jerarquia).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JERARQUIA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["B" /* UPDATE_JERARQUIA */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* DELETE_JERARQUIA */], function (_ref74, _ref75) {
-        var commit = _ref74.commit;
-        var jerarquia = _ref75.jerarquia,
-            cb = _ref75.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* DELETE_JERARQUIA */], function (_ref75, _ref76) {
+        var commit = _ref75.commit;
+        var jerarquia = _ref76.jerarquia,
+            cb = _ref76.cb,
+            payload = _ref76.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jerarquias/' + jerarquia.id, jerarquia).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["e" /* DELETE_JERARQUIA */], { payload: { data: jerarquia, mensaje: response }, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["t" /* INSERT_JORNADA */], function (_ref76, _ref77) {
-        var commit = _ref76.commit;
-        var jornada = _ref77.jornada,
-            cb = _ref77.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["t" /* INSERT_JORNADA */], function (_ref77, _ref78) {
+        var commit = _ref77.commit;
+        var jornada = _ref78.jornada,
+            cb = _ref78.cb,
+            payload = _ref78.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/jornadas', jornada).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["o" /* INSERT_JORNADA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["o" /* INSERT_JORNADA */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["F" /* UPDATE_JORNADA */], function (_ref78, _ref79) {
-        var commit = _ref78.commit;
-        var jornada = _ref79.jornada,
-            cb = _ref79.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["F" /* UPDATE_JORNADA */], function (_ref79, _ref80) {
+        var commit = _ref79.commit;
+        var jornada = _ref80.jornada,
+            cb = _ref80.cb,
+            payload = _ref80.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/jornadas/' + jornada.id, jornada).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_JORNADA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["C" /* UPDATE_JORNADA */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* DELETE_JORNADA */], function (_ref80, _ref81) {
-        var commit = _ref80.commit;
-        var jornada = _ref81.jornada,
-            cb = _ref81.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["g" /* DELETE_JORNADA */], function (_ref81, _ref82) {
+        var commit = _ref81.commit;
+        var jornada = _ref82.jornada,
+            cb = _ref82.cb,
+            payload = _ref82.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/jornadas/' + jornada.id, jornada).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["f" /* DELETE_JORNADA */], { payload: { data: jornada, mensaje: response }, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["p" /* INSERT_FACTOR */], function (_ref82, _ref83) {
-        var commit = _ref82.commit;
-        var factor = _ref83.factor,
-            cb = _ref83.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["p" /* INSERT_FACTOR */], function (_ref83, _ref84) {
+        var commit = _ref83.commit;
+        var factor = _ref84.factor,
+            cb = _ref84.cb,
+            payload = _ref84.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/factores', factor).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* INSERT_FACTOR */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["l" /* INSERT_FACTOR */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["B" /* UPDATE_FACTOR */], function (_ref84, _ref85) {
-        var commit = _ref84.commit;
-        var factor = _ref85.factor,
-            cb = _ref85.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["B" /* UPDATE_FACTOR */], function (_ref85, _ref86) {
+        var commit = _ref85.commit;
+        var factor = _ref86.factor,
+            cb = _ref86.cb,
+            payload = _ref86.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/factores/' + factor.id, factor).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACTOR */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["y" /* UPDATE_FACTOR */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* DELETE_FACTOR */], function (_ref86, _ref87) {
-        var commit = _ref86.commit;
-        var factor = _ref87.factor,
-            cb = _ref87.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* DELETE_FACTOR */], function (_ref87, _ref88) {
+        var commit = _ref87.commit;
+        var factor = _ref88.factor,
+            cb = _ref88.cb,
+            payload = _ref88.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/factores/' + factor.id, factor).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["c" /* DELETE_FACTOR */], { payload: { data: factor, mensaje: response }, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["u" /* INSERT_PERIODO */], function (_ref88, _ref89) {
-        var commit = _ref88.commit;
-        var periodo = _ref89.periodo,
-            cb = _ref89.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["u" /* INSERT_PERIODO */], function (_ref89, _ref90) {
+        var commit = _ref89.commit;
+        var periodo = _ref90.periodo,
+            cb = _ref90.cb,
+            payload = _ref90.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/periodos', periodo).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["p" /* INSERT_PERIODO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["p" /* INSERT_PERIODO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["G" /* UPDATE_PERIODO */], function (_ref90, _ref91) {
-        var commit = _ref90.commit;
-        var periodo = _ref91.periodo,
-            cb = _ref91.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["G" /* UPDATE_PERIODO */], function (_ref91, _ref92) {
+        var commit = _ref91.commit;
+        var periodo = _ref92.periodo,
+            cb = _ref92.cb,
+            payload = _ref92.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/periodos/' + periodo.id, periodo).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_PERIODO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["D" /* UPDATE_PERIODO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* DELETE_PERIODO */], function (_ref92, _ref93) {
-        var commit = _ref92.commit;
-        var periodo = _ref93.periodo,
-            cb = _ref93.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["h" /* DELETE_PERIODO */], function (_ref93, _ref94) {
+        var commit = _ref93.commit;
+        var periodo = _ref94.periodo,
+            cb = _ref94.cb,
+            payload = _ref94.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.delete('/api/periodos/' + periodo.id, periodo).then(function (response) {
             commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["g" /* DELETE_PERIODO */], { payload: { data: periodo, mensaje: response }, callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["w" /* INSERT_USUARIO */], function (_ref94, _ref95) {
-        var commit = _ref94.commit;
-        var usuario = _ref95.usuario,
-            cb = _ref95.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["w" /* INSERT_USUARIO */], function (_ref95, _ref96) {
+        var commit = _ref95.commit;
+        var usuario = _ref96.usuario,
+            cb = _ref96.cb,
+            payload = _ref96.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.post('/api/usuarios', usuario).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["r" /* INSERT_USUARIO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["r" /* INSERT_USUARIO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["I" /* UPDATE_USUARIO */], function (_ref96, _ref97) {
-        var commit = _ref96.commit;
-        var usuario = _ref97.usuario,
-            cb = _ref97.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["I" /* UPDATE_USUARIO */], function (_ref97, _ref98) {
+        var commit = _ref97.commit;
+        var usuario = _ref98.usuario,
+            cb = _ref98.cb,
+            payload = _ref98.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/usuarios/' + usuario.id, usuario).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["F" /* UPDATE_USUARIO */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["F" /* UPDATE_USUARIO */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["r" /* INSERT_FORMULA */], function (_ref98, _ref99) {
-        var commit = _ref98.commit;
-        var formula = _ref99.formula,
-            cb = _ref99.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["r" /* INSERT_FORMULA */], function (_ref99, _ref100) {
+        var commit = _ref99.commit;
+        var formula = _ref100.formula,
+            cb = _ref100.cb,
+            payload = _ref100.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.POST('/api/formulas/', formula).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
-    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["D" /* UPDATE_FORMULA */], function (_ref100, _ref101) {
-        var commit = _ref100.commit;
-        var formula = _ref101.formula,
-            cb = _ref101.cb;
+    }), _defineProperty(_actions, __WEBPACK_IMPORTED_MODULE_5__actions__["D" /* UPDATE_FORMULA */], function (_ref101, _ref102) {
+        var commit = _ref101.commit;
+        var formula = _ref102.formula,
+            cb = _ref102.cb,
+            payload = _ref102.payload;
 
         __WEBPACK_IMPORTED_MODULE_3_axios___default.a.put('/api/formulas/' + formula.id, formula).then(function (response) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], { payload: response, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["A" /* UPDATE_FORMULA */], { payload: _extends({}, payload, { data: response.data }), callback: cb });
         }).catch(function (e) {
-            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { error: e, callback: cb });
+            commit(__WEBPACK_IMPORTED_MODULE_4__mutations__["i" /* HANDLE_ERROR */], { payload: _extends({}, payload, { error: e }), callback: cb });
         });
     }), _actions)
 });
@@ -13878,7 +13939,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(68);
+module.exports = __webpack_require__(71);
 
 
 /***/ }),
@@ -13886,6 +13947,8 @@ module.exports = __webpack_require__(68);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__informe_Lista__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
 //
 //
 //
@@ -13905,20 +13968,6 @@ module.exports = __webpack_require__(68);
 //
 //
 //
-
-/* harmony default export */ __webpack_exports__["a"] = ({});
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__vuex_actions__ = __webpack_require__(2);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 //
 //
 //
@@ -13990,27 +14039,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     props: ['mensaje'],
+    components: {
+        'lista-informes': __WEBPACK_IMPORTED_MODULE_0__informe_Lista__["a" /* default */]
+    },
     methods: {
-        callback: function callback() {
-            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-            var payload = arguments[1];
-
-            if (ok) this.mensaje = 'Se ha enviado la declaración al Director de Departamento';
-        },
         declarar: function declarar() {
             var enviar = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -14024,14 +14062,105 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             var hasta = Date.parse(periodo.hasta);
             if (desde > ahora || ahora > hasta) return false;
 
-            var informe = this.informes.find(function (informe) {
+            var informe = this.informes.usuario.find(function (informe) {
                 return informe.periodo.id === periodo.id;
             });
             return informe === undefined || enviar && informe.estado <= 1;
+        }
+    },
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['informes'])
+});
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    props: ['declarar', 'informes'],
+    methods: {
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var payload = arguments[1];
+
+            this.$root.$emit('alert', {
+                mensaje: ok ? 'Se ha enviado la declaración al Director de Departamento.' : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
+            });
         },
         enviar: function enviar(informe) {
             if (confirm('¿Está seguro que desea enviar esta declaración?')) {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_2__vuex_actions__["y" /* SEND_DECLARACION */], { informe: informe, cb: this.callback });
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["y" /* SEND_DECLARACION */], { informe: informe, cb: this.callback });
             }
         },
         evaluar: function evaluar(informe) {
@@ -14041,7 +14170,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return usuario.id !== this.auth.id && comision !== null && (comision.tipo === this.comision.departamental && etapa === this.etapas.evaluando || informe.apelacion.apelado && comision.tipo === informe.apelacion.comision);
         },
         descargar: function descargar(informe) {
-            __WEBPACK_IMPORTED_MODULE_1_axios___default()({
+            axios({
                 url: 'api/pdf/' + informe.id,
                 method: 'GET',
                 responseType: 'blob' // important
@@ -14056,14 +14185,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 link.remove();
             });
         }
-    },
-    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapState */])(['informes']), {
-        hasta: function hasta() {
-            var hastaStr = this.auth.departamento.periodo.hasta;
-            var hasta = new Date(hastaStr);
-            return hasta.toStringWithTime();
-        }
-    })
+    }
 });
 
 /***/ }),
@@ -14071,31 +14193,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__vuex_actions__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__usuario_Usuario__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__partes_ListaActividades__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__partes_Apelacion__ = __webpack_require__(82);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__partes_Resumen__ = __webpack_require__(84);
-
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__usuario_Usuario__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__partes_ListaActividades__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__partes_Apelacion__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__partes_Resumen__ = __webpack_require__(87);
 //
 //
 //
@@ -14232,27 +14335,21 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
              * dentro del informe.
              */
             apelacion: {},
-            /**
-             * Código de mensaje.
-             * 0: No mostrar
-             * 1: Operación realizada correctamente
-             * -1: Mensaje de error
-             */
-            mensaje: 0,
             mensajeVolver: ''
         };
     },
     components: {
-        'usuario': __WEBPACK_IMPORTED_MODULE_3__usuario_Usuario__["a" /* default */],
-        'lista-actividades': __WEBPACK_IMPORTED_MODULE_4__partes_ListaActividades__["a" /* default */],
-        'resumen': __WEBPACK_IMPORTED_MODULE_6__partes_Resumen__["a" /* default */],
-        'apelacion': __WEBPACK_IMPORTED_MODULE_5__partes_Apelacion__["a" /* default */]
+        'usuario': __WEBPACK_IMPORTED_MODULE_2__usuario_Usuario__["a" /* default */],
+        'lista-actividades': __WEBPACK_IMPORTED_MODULE_3__partes_ListaActividades__["a" /* default */],
+        'resumen': __WEBPACK_IMPORTED_MODULE_5__partes_Resumen__["a" /* default */],
+        'apelacion': __WEBPACK_IMPORTED_MODULE_4__partes_Apelacion__["a" /* default */]
     },
     created: function created() {
         var _this = this;
 
         if (this.$route.params.id) {
-            var informe = this.informes.find(function (informe) {
+            var informes = this.informes.usuario.concat(this.informes.comision);
+            var informe = informes.find(function (informe) {
                 return informe.id === _this.$route.params.id;
             });
             this.informe = Object.assign({}, this.informe, this.copy(informe));
@@ -14269,136 +14366,91 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
          * @param ok Indica si la operación se realizó correctamente
          * @param payload Data (respuesta) obtenida desde la API
          */
-        cbMensaje: function cbMensaje() {
+        callback: function callback() {
             var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             var payload = arguments[1];
 
-            this.mensaje = ok ? 1 : -1;
-            this.informe = Object.assign({}, this.informe, payload);
-        },
-        /**
-         * Callback para volver a la vista anterior si la operación se
-         * completó sin errores, o mostrar un mensaje de error en caso
-         * contrario.
-         * @param ok Indica si la operación se realizó correctamente
-         * @param payload Data (respuesta) obtenida desde la API
-         */
-        cbVolver: function cbVolver() {
-            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-            var payload = arguments[1];
-
-            console.log('Ok: ' + ok);
-            if (ok) this.volver('informes', this.mensajeVolver);
-            this.mensaje = -1;
+            this.$root.$emit('alert', {
+                mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
+            });
+            this.informe = Object.assign({}, this.informe, payload.data);
+            if (payload.volver && ok) this.$router.push({ name: 'inicio' });
         },
         /**
          * Despacha la acción para insertar un informe si no existe, o actualizarlo en caso contrario.
          */
         actualizar: function actualizar() {
-            this.$store.dispatch(this.informe.id === undefined ? __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["n" /* INSERT_DECLARACION */] : __WEBPACK_IMPORTED_MODULE_1__vuex_actions__["z" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.cbMensaje });
+            var payload = {
+                mensaje: '<strong>¡Bien!</strong> Se ha registrado los cambios.',
+                volver: false
+            };
+            this.$store.dispatch(this.informe.id === undefined ? __WEBPACK_IMPORTED_MODULE_0__vuex_actions__["n" /* INSERT_DECLARACION */] : __WEBPACK_IMPORTED_MODULE_0__vuex_actions__["z" /* UPDATE_DECLARACION */], { informe: this.informe, cb: this.callback, payload: payload });
         },
         /**
          * Marca un informe con el estado de "enviado"
          */
-        enviar: function () {
-            var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
-                    while (1) {
-                        switch (_context.prev = _context.next) {
-                            case 0:
-                                if (confirm('¿Está seguro que desea enviar esta declaración?')) {
-                                    this.mensajeVolver = 'Se ha enviado la declaración al Director de Departamento';
-                                    this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["y" /* SEND_DECLARACION */], { informe: this.informe, cb: this.cbVolver });
-                                }
-
-                            case 1:
-                            case 'end':
-                                return _context.stop();
-                        }
-                    }
-                }, _callee, this);
-            }));
-
-            function enviar() {
-                return _ref.apply(this, arguments);
+        enviar: function enviar() {
+            this.$root.$emit('dismiss');
+            if (confirm('Se enviará esta declaración al Director de Departamento. ¿Continuar?')) {
+                var payload = {
+                    mensaje: 'Se ha enviado la declaración al Director de Departamento',
+                    volver: true
+                };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["y" /* SEND_DECLARACION */], { informe: this.informe, cb: this.callback, payload: payload });
             }
-
-            return enviar;
-        }(),
+        },
         /**
          * Marca un informe con el estado de "aprobado"
          */
-        aprobar: function () {
-            var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee2(estado) {
-                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
-                    while (1) {
-                        switch (_context2.prev = _context2.next) {
-                            case 0:
-                                if (confirm('¿Está seguro que desea aprobar esta declaración?')) {
-                                    this.mensajeVolver = 'Se ha aprobado la declaración';
-                                    this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["a" /* APPROVE_DECLARACION */], { informe: this.informe, cb: this.cbVolver });
-                                }
-
-                            case 1:
-                            case 'end':
-                                return _context2.stop();
-                        }
-                    }
-                }, _callee2, this);
-            }));
-
-            function aprobar(_x3) {
-                return _ref2.apply(this, arguments);
+        aprobar: function aprobar() {
+            this.$root.$emit('dismiss');
+            if (confirm('Se aprobará esta declaración. ¿Continuar?')) {
+                var payload = {
+                    mensaje: 'Se ha aprobado la declaración',
+                    volver: true
+                };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["a" /* APPROVE_DECLARACION */], { informe: this.informe, cb: this.callback, payload: payload });
             }
-
-            return aprobar;
-        }(),
+        },
         /**
          * Marca un informe con el estado de "revisar"
          */
-        revision: function () {
-            var _ref3 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee3(estado) {
-                return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee3$(_context3) {
-                    while (1) {
-                        switch (_context3.prev = _context3.next) {
-                            case 0:
-                                if (confirm('¿Está seguro que desea solicitar revisión para esta declaración?')) {
-                                    this.mensajeVolver = 'Se ha solicitado la revisión de la declaración';
-                                    this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["b" /* DECLINE_DECLARACION */], { informe: this.informe, cb: this.cbVolver });
-                                }
-
-                            case 1:
-                            case 'end':
-                                return _context3.stop();
-                        }
-                    }
-                }, _callee3, this);
-            }));
-
-            function revision(_x4) {
-                return _ref3.apply(this, arguments);
+        revision: function revision() {
+            this.$root.$emit('dismiss');
+            if (confirm('Se solicitará revisión de esta declaración al académico. ¿Continuar?')) {
+                var payload = {
+                    mensaje: 'Se ha solicitado la revisión de la declaración',
+                    volver: true
+                };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["b" /* DECLINE_DECLARACION */], { informe: this.informe, cb: this.callback, payload: payload });
             }
-
-            return revision;
-        }(),
+        },
         /**
          * Ingresa una nueva apelación en la base de datos.
          */
         apelar: function apelar() {
-            if (confirm('Sólo puede apelar una vez a cada comisión. ¿Desea continuar?')) {
+            this.$root.$emit('dismiss');
+            if (confirm('Recuerde: sólo puede apelar una vez a cada comisión. ¿Continuar?')) {
                 this.apelacion.id_declaracion = this.informe.id;
-                var formData = this.formData(this.apelacion);
-                this.mensajeVolver = 'Se ha registrado la apelación correctamente';
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["m" /* INSERT_APELACION */], { apelacion: formData, cb: this.cbVolver });
+                var payload = {
+                    mensaje: 'Se ha registrado la apelación correctamente',
+                    volver: true
+                };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["m" /* INSERT_APELACION */], { apelacion: this.apelacion, cb: this.callback, payload: payload });
             }
         },
         resuelto: function resuelto() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["z" /* UPDATE_DECLARACION */], { informe: this.informe, cb: function cb() {} });
-            this.mensajeVolver = 'Se ha marcado como resuelto';
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["x" /* RESOLVE_APELACION */], { apelacion: this.apelacion, cb: this.cbVolver });
+            this.$root.$emit('dismiss');
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["z" /* UPDATE_DECLARACION */], { informe: this.informe, cb: function cb() {} });
+            var payload = {
+                mensaje: 'Se ha marcado la apelación como resuelta.',
+                volver: true
+            };
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["x" /* RESOLVE_APELACION */], { apelacion: this.apelacion, cb: this.callback, payload: payload });
         }
     },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapState */])(['formula', 'informes'])
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['formula', 'informes'])
 });
 
 /***/ }),
@@ -14408,7 +14460,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Usuario_vue__ = __webpack_require__(21);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2a7b91e6_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Usuario_vue__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2a7b91e6_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Usuario_vue__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -14575,15 +14627,6 @@ if (false) {(function () {
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -14592,7 +14635,11 @@ if (false) {(function () {
     props: ['editable', 'declarante'],
     data: function data() {
         return {
-            usuario: {},
+            usuario: {
+                departamento: {
+                    facultad: undefined
+                }
+            },
             facultad: {},
             mensaje: 0
         };
@@ -14600,38 +14647,45 @@ if (false) {(function () {
     created: function created() {
         var _this = this;
 
-        var usuario = this.declarante ? this.declarante : this.usuarios.find(function (usuario) {
-            return usuario.id === _this.$route.params.id;
-        });
+        var usuario = this.editable && this.$route.params.id ? this.usuarios.find(function (usuario) {
+            console.log(usuario);
+            return usuario.id == _this.$route.params.id;
+        }) : this.declarante;
 
         if (usuario) {
             this.usuario = Object.assign({}, this.usuario, this.copy(usuario));
-            this.setFacultad(usuario);
+            this.facultad = Object.assign({}, this.facultad, this.copy(usuario.departamento.facultad));
         } else if (this.auth.rol === this.rol.director) {
             var departamento = this.auth.departamento;
-            this.usuario['departamento'] = Object.assign({}, this.usuario.departamento, departamento);
-            this.usuario['rol'] = Object.assign({}, this.usuario.rol, this.roles[0]);
-            this.setFacultad(this.auth);
+            Vue.set(this.usuario, 'departamento', departamento);
+            Vue.set(this.usuario, 'rol', 0);
+            this.facultad = Object.assign({}, this.facultad, this.copy(this.auth.departamento.facultad));
         }
     },
     methods: {
+        /**
+         * Callback para mostrar un mensaje luego de obtener respuesta
+         * desde la API.
+         * @param ok Indica si la operación se realizó correctamente
+         * @param payload Data (respuesta) obtenida desde la API
+         */
         callback: function callback() {
-            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             var payload = arguments[1];
 
-            this.mensaje = ok ? 1 : -1;
-            this.usuario = Object.assign({}, this.usuario, payload);
-        },
-        setFacultad: function setFacultad(usuario) {
-            this.facultad = this.facultades.find(function (facultad) {
-                return facultad.id === usuario.departamento.id_facultad;
+            this.$root.$emit('alert', {
+                mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
             });
+            this.usuario = Object.assign({}, this.usuario, payload.data);
         },
         enviar: function enviar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["w" /* INSERT_USUARIO */], { usuario: this.usuario, cb: this.callback });
+            var payload = { mensaje: '<strong>¡Bien!</strong> Se ha creado el usuario.' };
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["w" /* INSERT_USUARIO */], { usuario: this.usuario, cb: this.callback, payload: payload });
         },
         actualizar: function actualizar() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["I" /* UPDATE_USUARIO */], { usuario: this.usuario, cb: this.callback });
+            var payload = { mensaje: '<strong>¡Bien!</strong> Se ha guardado los cambios.' };
+            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["I" /* UPDATE_USUARIO */], { usuario: this.usuario, cb: this.callback, payload: payload });
         }
     },
     computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['facultades', 'jerarquias', 'jornadas', 'usuarios'])
@@ -14642,18 +14696,6 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -15873,9 +15915,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
+
 
 
 
@@ -15894,38 +15934,43 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     created: function created() {
         var _this = this;
 
-        this.editable = true;
-        this.message = '';
-        this.status = 0;
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/departamento/' + this.element.id).then(function (response) {
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/departamento/' + this.departamento.id).then(function (response) {
             _this.id_comision = response.data.id;
             _this.users = response.data.usuarios;
         });
     },
     data: function data() {
         return {
-            element: this.elemento ? this.elemento : { id_facultad: '' },
+            departamento: this.elemento ? this.elemento : { id_facultad: '' },
             users: [],
             id_comision: {},
             seleccionado: {}
         };
     },
-
     methods: {
+        /**
+         * Callback para mostrar un mensaje luego de obtener respuesta
+         * desde la API.
+         * @param ok Indica si la operación se realizó correctamente
+         * @param payload Data (respuesta) obtenida desde la API
+         */
         callback: function callback() {
             var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             var payload = arguments[1];
 
-            this.mensaje = ok ? 1 : -1;
-            this.element = Object.assign({}, this.element, payload);
+            this.$root.$emit('alert', {
+                mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
+            });
+            this.departamento = Object.assign({}, this.departamento, payload.data);
         },
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["A" /* UPDATE_DEPARTAMENTO */], { departamento: this.element, cb: this.callback });
-                this.volver('departamentos', 'Se ha actualizado el departamento correctamente.');
+                var payload = { mensaje: '<strong>¡Bien!</strong> Se ha registrado los cambios.' };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["A" /* UPDATE_DEPARTAMENTO */], { departamento: this.departamento, cb: this.callback, payload: payload });
             } else {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["o" /* INSERT_DEPARTAMENTO */], { departamento: this.element, cb: this.callback });
-                this.volver('departamentos', 'Se ha creado el departamento correctamente.');
+                var _payload = { mensaje: '<strong>¡Bien!</strong> Se ha registrado el nuevo departamento.' };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_1__vuex_actions__["o" /* INSERT_DEPARTAMENTO */], { departamento: this.departamento, cb: this.callback, payload: _payload });
             }
         },
         eliminar: function eliminar(id) {
@@ -15936,7 +15981,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 _this2.seleccionado.comision = null;
                 _this2.seleccionado.rol_comision = null;
                 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this2.seleccionado).then(function (response) {
-                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/departamento/' + _this2.element.id).then(function (response) {
+                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/departamento/' + _this2.departamento.id).then(function (response) {
                         _this2.users = response.data.usuarios;
                     });
                 });
@@ -16758,32 +16803,25 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {};
     },
     methods: {
+        /**
+         * Callback para mostrar un mensaje luego de obtener respuesta
+         * desde la API.
+         * @param ok Indica si la operación se realizó correctamente
+         * @param payload Data (respuesta) obtenida desde la API
+         */
         callback: function callback() {
             var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             var payload = arguments[1];
 
-            this.mensaje = ok ? payload : "";
+            this.$root.$emit('alert', {
+                mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
+            });
         },
         deleteElem: function deleteElem(id, index, nombre) {
-            var c = confirm("¿Estás seguro de borrar el " + nombre + "?");
-            if (c == false) {
-                console.log('FALSE');
-                return;
-            }
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["h" /* DELETE_PERIODO */], { periodo: this.periodos[index], cb: this.callback });
-        },
-        etapa: function etapa(numero) {
-            switch (numero) {
-                case 1:
-                    return "Declaración";
-                case 2:
-                    return "Aprobación";
-                case 3:
-                    return "Información";
-                case 4:
-                    return "Evaluación";
-                case 5:
-                    return "Apelación";
+            if (confirm("Se eliminará el periodo \"" + nombre + "\". ¿Continuar?")) {
+                var payload = { mensaje: 'Se ha eliminado el periodo <strong>' + nombre + '</strong>' };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["h" /* DELETE_PERIODO */], { periodo: this.periodos[index], cb: this.callback, payload: payload });
             }
         }
     },
@@ -16797,21 +16835,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -16879,46 +16902,50 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             required: false
         }
     },
-    created: function created() {
-        this.editable = true;
-        this.message = '';
-        this.status = 0;
-        this.etapas = [{ id: 1, nombre: "Etapa de Declaracion" }, { id: 3, nombre: "Etapa de Informar trabajo realizado" }, { id: 4, nombre: "Etapa de Evaluación" }, { id: 5, nombre: "Etapa de Apelación" }];
-        this.sentMessage = this.accion == 'Editar' ? 'actualizado' : 'creado';
-    },
     data: function data() {
-        console.log(this);
         return {
-            element: this.elemento ? this.format(this.elemento) : {}
+            periodo: this.elemento ? this.format(this.elemento) : {},
+            etapas: [{ id: 1, nombre: "Etapa de Declaracion" }, { id: 3, nombre: "Etapa de Informar trabajo realizado" }, { id: 4, nombre: "Etapa de Evaluación" }, { id: 5, nombre: "Etapa de Apelación" }]
         };
     },
-
     methods: {
+        /**
+         * Callback para mostrar un mensaje luego de obtener respuesta
+         * desde la API.
+         * @param ok Indica si la operación se realizó correctamente
+         * @param payload Data (respuesta) obtenida desde la API
+         */
         callback: function callback() {
             var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             var payload = arguments[1];
 
-            this.mensaje = ok ? 1 : -1;
-            this.element = Object.assign({}, this.element, payload);
-            if (ok) {
-                this.volver('periodos', 'Se ha ' + this.sentMessage + ' el periodo correctamente.');
-            }
+            this.$root.$emit('alert', {
+                mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
+            });
+            this.periodo = Object.assign({}, this.periodo, payload.data);
         },
+        /**
+         * Crea o actualiza un objeto de periodo.
+         */
         addElem: function addElem() {
             if (this.accion == 'Editar') {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["G" /* UPDATE_PERIODO */], { periodo: this.element, cb: this.callback });
+                var payload = { mensaje: '<strong>¡Bien!</strong> Se ha registrado los cambios. Debe <strong>actualizar la página</strong> para reflejar los cambios.' };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["G" /* UPDATE_PERIODO */], { periodo: this.periodo, cb: this.callback, payload: payload });
             } else {
-                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["u" /* INSERT_PERIODO */], { periodo: this.element, cb: this.callback });
+                var _payload = { mensaje: '<strong>¡Bien!</strong> Se ha creado el periodo.' };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["u" /* INSERT_PERIODO */], { periodo: this.periodo, cb: this.callback, payload: _payload });
             }
         },
-        format: function format(elemento) {
-            console.log('Elemento', elemento.hasta);
-            console.log('ElementoD', elemento.desde);
-            elemento.hasta = new Date(elemento.hasta);
-            elemento.desde = new Date(elemento.desde);
-            console.log('Elemento2', elemento.hasta);
-            console.log('ElementoD2', elemento.desde);
-            return elemento;
+        /**
+         * Instancia las fechas de este objeto periodo como un objeto Date.
+         * @param periodo Periodo para el cual se "formatearan" las fechas.
+         * @return periodo con fechas de tipo Date.
+         */
+        format: function format(periodo) {
+            periodo.hasta = new Date(periodo.hasta);
+            periodo.desde = new Date(periodo.desde);
+            return periodo;
         }
     }
 });
@@ -17095,28 +17122,508 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 /***/ }),
 /* 42 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-__webpack_require__(43);
-module.exports = __webpack_require__(121);
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    created: function created() {
+        var _this = this;
+
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
+            _this.users = response.data;
+        });
+    },
+    computed: {
+        filtrar: function filtrar() {
+            var _this2 = this;
+
+            return this.users.filter(function (user) {
+                return user.nombres.toLowerCase().match(_this2.search.toLowerCase());
+            });
+        }
+
+    },
+    methods: {
+        agregar: function agregar(id, tipo) {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/' + id).then(function (response) {
+                _this3.seleccionado = response.data;
+                _this3.seleccionado.id_comision = _this3.$route.params.id;
+                _this3.seleccionado.rol_comision = tipo;
+                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this3.seleccionado).then(function (response) {
+                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
+                        _this3.users = response.data;
+                    });
+                });
+            });
+        }
+    },
+    data: function data() {
+        return {
+            users: [],
+            search: ''
+        };
+    }
+});
 
 /***/ }),
 /* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    created: function created() {
+        var _this = this;
+
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
+            _this.users = response.data;
+        });
+    },
+    computed: {
+        filtrar: function filtrar() {
+            var _this2 = this;
+
+            return this.users.filter(function (user) {
+                return user.nombres.toLowerCase().match(_this2.search.toLowerCase());
+            });
+        }
+
+    },
+    methods: {
+        agregar: function agregar(id, tipo) {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/' + id).then(function (response) {
+                _this3.seleccionado = response.data;
+                _this3.seleccionado.id_comision = _this3.$route.params.id;
+                _this3.seleccionado.rol_comision = tipo;
+                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this3.seleccionado).then(function (response) {
+                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
+                        _this3.users = response.data;
+                    });
+                });
+            });
+        }
+    },
+    data: function data() {
+        return {
+            users: [],
+            search: ''
+        };
+    }
+});
+
+/***/ }),
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    data: function data() {
+        return {
+            formulas: {
+                equivalente: {
+                    f: '',
+                    decimales: 0
+                },
+                nota_final: {
+                    f: '',
+                    decimales: 0
+                }
+            }
+        };
+    },
+    created: function created() {
+        // Crea una copia de las fórmulas actuales
+        var formulas = Object.assign({}, this.form, this.copy(this.formula));
+
+        // Descompone la fórmula para horas equivalentes
+        var subformula = formulas.equivalente.substring(11, formulas.equivalente.lenght);
+        this.formulas.equivalente.decimales = this.decimales(subformula);
+        this.formulas.equivalente.f = subformula.substring(0, subformula.length - (7 + (this.formulas.equivalente.decimales + 1) * 2));
+
+        // Descompone la fórmula para calificación final
+        subformula = formulas.nota_final.substring(11, formulas.nota_final.lenght);
+        this.formulas.nota_final.decimales = this.decimales(subformula);
+        this.formulas.nota_final.f = subformula.substring(0, subformula.length - (7 + (this.formulas.nota_final.decimales + 1) * 2));
+    },
+    methods: {
+        /**
+         * Callback para mostrar un mensaje luego de obtener respuesta
+         * desde la API.
+         * @param ok Indica si la operación se realizó correctamente
+         * @param payload Data (respuesta) obtenida desde la API
+         */
+        callback: function callback() {
+            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+            var payload = arguments[1];
+
+            this.$root.$emit('alert', {
+                mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
+            });
+        },
+        /**
+         * Actualiza el objeto fórmula actual en la base de datos
+         */
+        actualizar: function actualizar() {
+            if (confirm('ATENCIÓN: actualizar la fórmula actual afectará al cálculo de la calificación y horas equivalentes de todos los informes que la utilicen. ¿Continuar?')) {
+                var formulas = this.construir();
+                formulas['id'] = this.formula.id;
+                var payload = {
+                    mensaje: '<strong>¡Bien!</strong> Se ha actualizado las fórmulas.',
+                    volver: false
+                };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["D" /* UPDATE_FORMULA */], { formula: formulas, cb: this.callback, payload: payload });
+            }
+        },
+        /**
+         * Ingresa un nuevo objeto fórmula en la base de datos.
+         */
+        crear: function crear() {
+            if (confirm('ATENCIÓN: al crear una nueva fórmula, ésta se aplicará a todos los informes que se creen a partir de ese momento. ¿Continuar?')) {
+                var payload = {
+                    mensaje: '<strong>¡Bien!</strong> Se ha ingresado las nuevas fórmulas.',
+                    volver: false
+                };
+                this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["r" /* INSERT_FORMULA */], { formula: this.construir(), cb: this.callback, payload: payload });
+            }
+        },
+        /**
+         * Determina la cantidad de decimales que utiliza la fórmula dada
+         * @return Cantidad de decimales
+         */
+        decimales: function decimales(formula) {
+            var decimales = 0,
+                i = formula.length - 1;
+            while (formula[i] !== '1') {
+                decimales++;
+                i--;
+            }
+            return decimales;
+        },
+        /**
+         * Construye el objeto "formula" que se almacenará en la base de datos. Este objeto
+         * incluye las fórmulas finales en formato String.
+         * @return Objeto formula
+         */
+        construir: function construir() {
+            var formulas = {
+                equivalente: '',
+                nota_final: ''
+            };
+            var decimales = '1' + '0'.repeat(this.formulas.equivalente.decimales);
+            formulas.equivalente = 'Math.round(' + this.formulas.equivalente.f + ' * ' + decimales + ') / ' + decimales;
+            decimales = '1' + '0'.repeat(this.formulas.nota_final.decimales);
+            formulas.nota_final = 'Math.round(' + this.formulas.nota_final.f + ' * ' + decimales + ') / ' + decimales;
+            return formulas;
+        }
+    },
+    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['formula'])
+});
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(46);
+module.exports = __webpack_require__(130);
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_es6_promise_auto___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_es6_promise_auto__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_App__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__vuex_store__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router__ = __webpack_require__(74);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -17155,6 +17662,14 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$http = __WEBPACK_IMPORTED
 
 
 
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.directive('tooltip', function (el, binding) {
+    $(el).tooltip({
+        title: binding.value,
+        placement: binding.arg,
+        trigger: 'hover'
+    });
+});
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -17170,10 +17685,16 @@ var app = function app() {
     });
 };
 
-__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["l" /* INIT_STORE */], app);
+var current = 0;
+var step = function step(total) {
+    var progress = document.getElementById('progress');
+    progress.style.width = ++current / total * 100 + '%';
+};
+
+__WEBPACK_IMPORTED_MODULE_5__vuex_store__["a" /* default */].dispatch(__WEBPACK_IMPORTED_MODULE_4__vuex_actions__["l" /* INIT_STORE */], { step: step, callback: app });
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -17229,7 +17750,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(45);
+__webpack_require__(48);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -17243,7 +17764,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -17436,18 +17957,18 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(7)))
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 // This file can be required in Browserify and Node.js for automatic polyfill
 // To use it:  require('es6-promise/auto');
 
-module.exports = __webpack_require__(47).polyfill();
+module.exports = __webpack_require__(50).polyfill();
 
 
 /***/ }),
-/* 47 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, global) {/*!
@@ -18633,7 +19154,7 @@ return Promise$1;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(6)))
 
 /***/ }),
-/* 48 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18641,7 +19162,7 @@ return Promise$1;
 
 var utils = __webpack_require__(3);
 var bind = __webpack_require__(9);
-var Axios = __webpack_require__(50);
+var Axios = __webpack_require__(53);
 var defaults = __webpack_require__(8);
 
 /**
@@ -18676,14 +19197,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(13);
-axios.CancelToken = __webpack_require__(64);
+axios.CancelToken = __webpack_require__(67);
 axios.isCancel = __webpack_require__(12);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(65);
+axios.spread = __webpack_require__(68);
 
 module.exports = axios;
 
@@ -18692,7 +19213,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 49 */
+/* 52 */
 /***/ (function(module, exports) {
 
 /*!
@@ -18719,7 +19240,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 50 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18727,8 +19248,8 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(8);
 var utils = __webpack_require__(3);
-var InterceptorManager = __webpack_require__(59);
-var dispatchRequest = __webpack_require__(60);
+var InterceptorManager = __webpack_require__(62);
+var dispatchRequest = __webpack_require__(63);
 
 /**
  * Create a new instance of Axios
@@ -18805,7 +19326,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18824,7 +19345,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 52 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18857,7 +19378,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 53 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18885,7 +19406,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 54 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18958,7 +19479,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19018,7 +19539,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19093,7 +19614,7 @@ module.exports = (
 
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19136,7 +19657,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19196,7 +19717,7 @@ module.exports = (
 
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19255,18 +19776,18 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(3);
-var transformData = __webpack_require__(61);
+var transformData = __webpack_require__(64);
 var isCancel = __webpack_require__(12);
 var defaults = __webpack_require__(8);
-var isAbsoluteURL = __webpack_require__(62);
-var combineURLs = __webpack_require__(63);
+var isAbsoluteURL = __webpack_require__(65);
+var combineURLs = __webpack_require__(66);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -19348,7 +19869,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19375,7 +19896,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19396,7 +19917,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19417,7 +19938,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19481,7 +20002,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19515,13 +20036,13 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(14);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8142f38c_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8142f38c_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -19569,7 +20090,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -19582,12 +20103,40 @@ var render = function() {
   return _c("div", [
     _c("nav", { staticClass: "navbar navbar-default navbar-static-top" }, [
       _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "navbar-header" }, [
-          _c("img", {
-            staticClass: "navbar-brand",
-            attrs: { src: "/images/usach.png" }
-          })
-        ]),
+        _c(
+          "div",
+          { staticClass: "navbar-header" },
+          [
+            _c(
+              "button",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.$route.name !== "inicio",
+                    expression: "$route.name !== 'inicio'"
+                  }
+                ],
+                staticClass: "btn navbar-btn",
+                on: {
+                  click: function($event) {
+                    _vm.$router.back()
+                  }
+                }
+              },
+              [_c("i", { staticClass: "fas fa-arrow-left" })]
+            ),
+            _vm._v(" "),
+            _c("router-link", { attrs: { to: { name: "inicio" } } }, [
+              _c("img", {
+                staticClass: "navbar-brand",
+                attrs: { src: "/images/usach.png" }
+              })
+            ])
+          ],
+          1
+        ),
         _vm._v(" "),
         _c(
           "div",
@@ -19597,281 +20146,6 @@ var render = function() {
             attrs: { id: "app-navbar-collapse" }
           },
           [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn navbar-btn",
-                attrs: {
-                  to: { name: "inicio" },
-                  role: "button",
-                  "active-class": ""
-                }
-              },
-              [_vm._v("Inicio")]
-            ),
-            _vm._v(" "),
-            _vm.auth.rol < _vm.rol.admin
-              ? _c(
-                  "router-link",
-                  {
-                    staticClass: "btn navbar-btn",
-                    attrs: {
-                      to: { name: "informes" },
-                      role: "button",
-                      "active-class": ""
-                    }
-                  },
-                  [_vm._v("Informes de Actividades")]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.auth.rol === _vm.rol.director || _vm.auth.rol === _vm.rol.admin
-              ? _c("div", { staticClass: "btn-group" }, [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c(
-                    "ul",
-                    { staticClass: "dropdown-menu", attrs: { role: "menu" } },
-                    [
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.director
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: {
-                                      name: "editar-departamento",
-                                      params: {
-                                        accion: "Editar",
-                                        elemento: _vm.copy(
-                                          _vm.auth.departamento
-                                        )
-                                      }
-                                    }
-                                  }
-                                },
-                                [_vm._v("Departamento")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.director
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "periodos" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Periodos")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "comision-superior" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Comisión Superior")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "departamentos" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Departamentos")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "factores" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Factores")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "facultades" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Facultades")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "editar-formulas" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Formulas")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "jerarquias" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Jerarquias")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "jornadas" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Jornadas")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _vm.auth.rol === _vm.rol.admin
-                            ? _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn navbar-btn",
-                                  attrs: {
-                                    to: { name: "rangos" },
-                                    role: "button",
-                                    "active-class": ""
-                                  }
-                                },
-                                [_vm._v("Rangos")]
-                              )
-                            : _vm._e()
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "li",
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn navbar-btn",
-                              attrs: {
-                                to: { name: "usuarios" },
-                                role: "button",
-                                "active-class": ""
-                              }
-                            },
-                            [_vm._v("Usuarios")]
-                          )
-                        ],
-                        1
-                      )
-                    ]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
             _c(
               "a",
               {
@@ -19892,8 +20166,7 @@ var render = function() {
                 _vm._v("(" + _vm._s(_vm.etiquetas.rol[_vm.auth.rol]) + ")")
               ])
             ])
-          ],
-          1
+          ]
         )
       ])
     ]),
@@ -19902,45 +20175,25 @@ var render = function() {
       "div",
       { staticClass: "container" },
       [
-        _c("div", { staticClass: "col-md-12" }, [
-          _vm.alert.abierto
-            ? _c(
-                "div",
-                { class: "alert alert-" + _vm.alert.class },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "close",
-                      attrs: { href: "#", "aria-label": "close" },
-                      on: {
-                        click: function($event) {
-                          _vm.alert.abierto = false
-                        }
-                      }
-                    },
-                    [_vm._v("[Cerrar ×]")]
-                  ),
-                  _vm._v(" "),
-                  _vm._l(_vm.alert.botones, function(boton) {
-                    return _c(
-                      "a",
-                      {
-                        key: boton.texto,
-                        staticClass: "close",
-                        attrs: { href: "#", "aria-label": "close" },
-                        on: { click: boton.enlace }
-                      },
-                      [_vm._v("[" + _vm._s(boton.texto) + "] ")]
-                    )
-                  }),
-                  _vm._v(" "),
-                  _c("p", { attrs: { html: _vm.alert.mensaje } })
-                ],
-                2
-              )
-            : _vm._e()
-        ]),
+        _vm.alert.abierto
+          ? _c("div", { class: "alert alert-" + _vm.alert.class }, [
+              _c(
+                "a",
+                {
+                  staticClass: "close",
+                  attrs: { href: "#", "aria-label": "close" },
+                  on: {
+                    click: function($event) {
+                      _vm.alert.abierto = false
+                    }
+                  }
+                },
+                [_vm._v("[Cerrar ×]")]
+              ),
+              _vm._v(" "),
+              _c("div", { domProps: { innerHTML: _vm._s(_vm.alert.mensaje) } })
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _c("router-view", {
           on: {
@@ -19954,24 +20207,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn btn-primary dropdown-toggle",
-        attrs: { type: "button", "data-toggle": "dropdown" }
-      },
-      [
-        _vm._v("\n                        Administrar "),
-        _c("span", { staticClass: "caret" })
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 if (false) {
@@ -19982,7 +20218,7 @@ if (false) {
 }
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -20007,7 +20243,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(69);
+module.exports = __webpack_require__(72);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -20023,7 +20259,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, exports) {
 
 /**
@@ -20756,7 +20992,7 @@ if (hadRuntime) {
 
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20828,40 +21064,39 @@ var HANDLE_ERROR = 'HANDLE_ERROR';
 
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return router; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(72);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__const__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__const__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__vuex_store__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Inicio__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_informe_Lista__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_usuario_Lista__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_usuario_Usuario__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_facultad_ListadoFacultades__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_facultad_FormFacultad__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_departamento_ListadoDepartamentos__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_departamento_FormDepartamento__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_rango_ListadoRangos__ = __webpack_require__(97);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_rango_FormRango__ = __webpack_require__(99);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_jerarquia_ListadoJerarquias__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__components_jerarquia_FormJerarquia__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_jornada_ListadoJornadas__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_jornada_FormJornada__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_factor_ListadoFactores__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_factor_FormFactor__ = __webpack_require__(111);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_periodo_ListadoPeriodos__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_periodo_FormPeriodo__ = __webpack_require__(115);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_comision_ListadoComision__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_comision_ListadoUsuarios__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_comision_ListadoUsuariosF__ = __webpack_require__(128);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_comision_ListadoUsuariosD__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__components_formula_Formula__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_Inicio__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_informe_formulario_Formulario__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_usuario_Lista__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_usuario_Usuario__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_facultad_ListadoFacultades__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_facultad_FormFacultad__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_departamento_ListadoDepartamentos__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_departamento_FormDepartamento__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_rango_ListadoRangos__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_rango_FormRango__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_jerarquia_ListadoJerarquias__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_jerarquia_FormJerarquia__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__components_jornada_ListadoJornadas__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_jornada_FormJornada__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_factor_ListadoFactores__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_factor_FormFactor__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_periodo_ListadoPeriodos__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_periodo_FormPeriodo__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_comision_ListadoComision__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_comision_ListadoUsuarios__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_comision_ListadoUsuariosF__ = __webpack_require__(124);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_comision_ListadoUsuariosD__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_formula_Formula__ = __webpack_require__(128);
 
 
 
@@ -20893,219 +21128,213 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 
 
 
-
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
     mode: 'history',
     routes: [{
         path: '/inicio',
         name: 'inicio',
-        component: __WEBPACK_IMPORTED_MODULE_4__components_Inicio__["a" /* default */]
+        component: __WEBPACK_IMPORTED_MODULE_4__components_Inicio__["a" /* default */],
+        props: true
     }, {
         path: '/usuarios',
         name: 'usuarios',
-        component: __WEBPACK_IMPORTED_MODULE_7__components_usuario_Lista__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_6__components_usuario_Lista__["a" /* default */],
         props: true,
         meta: { eval: 'rol >= 1' }
     }, {
         path: '/usuarios/crear',
         name: 'nuevo-usuario',
-        component: __WEBPACK_IMPORTED_MODULE_8__components_usuario_Usuario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_7__components_usuario_Usuario__["a" /* default */],
         props: { editable: true },
         meta: { eval: 'rol >= 1' }
     }, {
         path: '/usuarios/:id',
         name: 'editar-usuario',
-        component: __WEBPACK_IMPORTED_MODULE_8__components_usuario_Usuario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_7__components_usuario_Usuario__["a" /* default */],
         props: { editable: true },
         meta: { eval: 'rol >= 1' }
     }, {
-        path: '/informes',
-        name: 'informes',
-        component: __WEBPACK_IMPORTED_MODULE_5__components_informe_Lista__["a" /* default */],
-        props: true,
-        meta: { eval: 'rol < 2' }
-    }, {
         path: '/informes/declarar',
         name: 'nuevo-informe',
-        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_5__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando },
         meta: { eval: 'rol === 0' }
     }, {
         path: '/informes/:id',
         name: 'editar-informe',
-        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_5__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].declarando },
         meta: { eval: 'rol === 0' }
     }, {
         path: '/informes/:id',
         name: 'aprobar-informe',
-        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_5__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].aprobando },
         meta: { eval: 'rol === 1' }
     }, {
         path: '/informes/:id',
         name: 'realizado-informe',
-        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_5__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].realizado },
         meta: { eval: 'rol === 0' }
     }, {
         path: '/informes/:id',
         name: 'evaluar-informe',
-        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_5__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].evaluando },
         meta: { eval: 'rol < 2' }
     }, {
         path: '/informes/:id',
         name: 'apelar-informe',
-        component: __WEBPACK_IMPORTED_MODULE_6__components_informe_formulario_Formulario__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_5__components_informe_formulario_Formulario__["a" /* default */],
         props: { etapa: __WEBPACK_IMPORTED_MODULE_2__const__["a" /* EtapasEnum */].apelando },
         meta: { eval: 'rol === 0' }
     }, {
         path: '/facultades',
         name: 'facultades',
-        component: __WEBPACK_IMPORTED_MODULE_9__components_facultad_ListadoFacultades__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_8__components_facultad_ListadoFacultades__["a" /* default */],
         meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/facultades/crear',
         name: 'crear-facultad',
-        component: __WEBPACK_IMPORTED_MODULE_10__components_facultad_FormFacultad__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_9__components_facultad_FormFacultad__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/facultades/editar',
         name: 'editar-facultad',
-        component: __WEBPACK_IMPORTED_MODULE_10__components_facultad_FormFacultad__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_9__components_facultad_FormFacultad__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/departamentos',
         name: 'departamentos',
-        component: __WEBPACK_IMPORTED_MODULE_11__components_departamento_ListadoDepartamentos__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_10__components_departamento_ListadoDepartamentos__["a" /* default */],
         meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/departamentos/crear',
         name: 'crear-departamento',
-        component: __WEBPACK_IMPORTED_MODULE_12__components_departamento_FormDepartamento__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_11__components_departamento_FormDepartamento__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/departamentos/editar',
         name: 'editar-departamento',
-        component: __WEBPACK_IMPORTED_MODULE_12__components_departamento_FormDepartamento__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_11__components_departamento_FormDepartamento__["a" /* default */],
         props: true,
         meta: { eval: 'rol >= 1' }
     }, {
         path: '/rangos',
         name: 'rangos',
-        component: __WEBPACK_IMPORTED_MODULE_13__components_rango_ListadoRangos__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_12__components_rango_ListadoRangos__["a" /* default */],
         meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/rangos/crear',
         name: 'crear-rango',
-        component: __WEBPACK_IMPORTED_MODULE_14__components_rango_FormRango__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_13__components_rango_FormRango__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/rangos/editar',
         name: 'editar-rango',
-        component: __WEBPACK_IMPORTED_MODULE_14__components_rango_FormRango__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_13__components_rango_FormRango__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/jerarquias',
         name: 'jerarquias',
-        component: __WEBPACK_IMPORTED_MODULE_15__components_jerarquia_ListadoJerarquias__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_14__components_jerarquia_ListadoJerarquias__["a" /* default */],
         meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/jerarquias/crear',
         name: 'crear-jerarquia',
-        component: __WEBPACK_IMPORTED_MODULE_16__components_jerarquia_FormJerarquia__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_15__components_jerarquia_FormJerarquia__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/jerarquias/editar',
         name: 'editar-jerarquia',
-        component: __WEBPACK_IMPORTED_MODULE_16__components_jerarquia_FormJerarquia__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_15__components_jerarquia_FormJerarquia__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/jornadas',
         name: 'jornadas',
-        component: __WEBPACK_IMPORTED_MODULE_17__components_jornada_ListadoJornadas__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_16__components_jornada_ListadoJornadas__["a" /* default */],
         meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/jornadas/crear',
         name: 'crear-jornada',
-        component: __WEBPACK_IMPORTED_MODULE_18__components_jornada_FormJornada__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_17__components_jornada_FormJornada__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/jornadas/editar',
         name: 'editar-jornada',
-        component: __WEBPACK_IMPORTED_MODULE_18__components_jornada_FormJornada__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_17__components_jornada_FormJornada__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/factores',
         name: 'factores',
-        component: __WEBPACK_IMPORTED_MODULE_19__components_factor_ListadoFactores__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_18__components_factor_ListadoFactores__["a" /* default */],
         meta: { eval: 'rol === 2' },
         props: true
     }, {
         path: '/factores/crear',
         name: 'crear-factor',
-        component: __WEBPACK_IMPORTED_MODULE_20__components_factor_FormFactor__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_19__components_factor_FormFactor__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/factores/editar',
         name: 'editar-factor',
-        component: __WEBPACK_IMPORTED_MODULE_20__components_factor_FormFactor__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_19__components_factor_FormFactor__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 2' }
     }, {
         path: '/periodos',
         name: 'periodos',
-        component: __WEBPACK_IMPORTED_MODULE_21__components_periodo_ListadoPeriodos__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_20__components_periodo_ListadoPeriodos__["a" /* default */],
         meta: { eval: 'rol === 1' },
         props: true
     }, {
         path: '/periodos/crear',
         name: 'crear-periodo',
-        component: __WEBPACK_IMPORTED_MODULE_22__components_periodo_FormPeriodo__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_21__components_periodo_FormPeriodo__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 1' }
     }, {
         path: '/periodos/editar',
         name: 'editar-periodo',
-        component: __WEBPACK_IMPORTED_MODULE_22__components_periodo_FormPeriodo__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_21__components_periodo_FormPeriodo__["a" /* default */],
         props: true,
         meta: { eval: 'rol === 1' }
     }, {
         path: '/comision/superior',
         name: 'comision-superior',
-        component: __WEBPACK_IMPORTED_MODULE_23__components_comision_ListadoComision__["a" /* default */]
+        component: __WEBPACK_IMPORTED_MODULE_22__components_comision_ListadoComision__["a" /* default */]
     }, {
         path: '/comision/superior/agregar',
         name: 'usuarios-comision-superior',
-        component: __WEBPACK_IMPORTED_MODULE_24__components_comision_ListadoUsuarios__["a" /* default */]
+        component: __WEBPACK_IMPORTED_MODULE_23__components_comision_ListadoUsuarios__["a" /* default */]
     }, {
         path: '/comision/departamento/:id/agregar',
         name: 'usuarios-comision-departamento',
-        component: __WEBPACK_IMPORTED_MODULE_26__components_comision_ListadoUsuariosD__["a" /* default */]
+        component: __WEBPACK_IMPORTED_MODULE_25__components_comision_ListadoUsuariosD__["a" /* default */]
     }, {
         path: '/comision/facultad/:id/agregar',
         name: 'usuarios-comision-facultad',
-        component: __WEBPACK_IMPORTED_MODULE_25__components_comision_ListadoUsuariosF__["a" /* default */]
+        component: __WEBPACK_IMPORTED_MODULE_24__components_comision_ListadoUsuariosF__["a" /* default */]
     }, {
         path: '/formulas',
         name: 'editar-formulas',
-        component: __WEBPACK_IMPORTED_MODULE_27__components_formula_Formula__["a" /* default */],
+        component: __WEBPACK_IMPORTED_MODULE_26__components_formula_Formula__["a" /* default */],
         meta: { eval: 'rol === 2' }
     }]
 });
@@ -21132,7 +21361,7 @@ router.beforeEach(function (to, from, next) {
 
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23762,7 +23991,7 @@ if (inBrowser && window.Vue) {
 
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23841,25 +24070,15 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
                 departamental: 2
             }),
             etiquetas: {
-                comision: ['Comisión superior', 'Comisión de facultad', 'Comisión de departamento'],
+                comision: ['Comisión superior', 'Comisión de facultad', 'Comisión departamental'],
+                etapa: ['Declaración / Aprobación', 'Informar trabajo realizado', 'Evaluación', 'Apelación'],
                 estado: ['No enviado', 'Revisar', 'Esperando aprobación', 'Aprobado'],
-                rol: ['Académico', 'Director de departamento', 'Administrador']
+                rol: ['Académico', 'Director de departamento', 'Administrador'],
+                rolComision: ['Fijo', 'Suplente']
             }
         };
     },
     methods: {
-        /**
-         * Genera un objeto FormData para enviar a la API. Esto es necesario
-         * cuando se envían archivos (como en el caso de la Apelación).
-         * @param object Objeto para el cual se creará el objeto FormData
-         */
-        formData: function formData(object) {
-            var formData = new FormData();
-            for (var key in object) {
-                formData.append(key, object[key]);
-            }
-            return formData;
-        },
         /**
          * Redirige a la ruta indicada, con un mensaje para mostrar
          * en la vista a la cual se redirige.
@@ -23870,10 +24089,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
         volver: function volver(route) {
             var mensaje = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
-            this.$router.push({
-                name: route,
-                params: { mensaje: mensaje }
-            });
+            this.$router.push({ name: route });
+            this.$root.$emit('alert', { mensaje: mensaje, class: 'success' });
             return mensaje;
         },
         /**
@@ -23907,13 +24124,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.mixin({
 
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Inicio_vue__ = __webpack_require__(17);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_589008dc_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Inicio_vue__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_589008dc_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Inicio_vue__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -23961,81 +24178,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 75 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-12" }, [
-    _c("h1", [
-      _vm._v("Sistema de evaluación y calificación de desempeño académico")
-    ]),
-    _vm._v(" "),
-    _c("h2", [_vm._v("Bienvenido/a " + _vm._s(_vm.auth.avatar))]),
-    _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("blockquote", [
-        _c("h3", [
-          _vm._v(
-            "Plataforma de gestión de distribución de tiempo académica, cuyas principales funciones son:"
-          )
-        ]),
-        _vm._v(" "),
-        _c("ul", [
-          _c("li", [_vm._v("Crear convenio de académico.")]),
-          _vm._v(" "),
-          _c("li", [_vm._v("Renegociar convenios.")]),
-          _vm._v(" "),
-          _c("li", [
-            _vm._v(
-              "Revisión de convenios a la finalización del periodo lectivo."
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _vm._v(
-              "Edición de la evaluación de la distribución de tiempo académica."
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", [_vm._v("Pre-evaluación de convenios.")]),
-          _vm._v(" "),
-          _c("li", [_vm._v("Justificación sobre las actividades.")])
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-589008dc", { render: render, staticRenderFns: staticRenderFns })
-  }
-}
-
-/***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Lista_vue__ = __webpack_require__(18);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c807dae_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Lista_vue__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5c807dae_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Lista_vue__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -24083,7 +24232,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24093,7 +24242,274 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+  return _c("div", [
+    _vm.informes.length === 0
+      ? _c("div", { staticClass: "text-center" }, [
+          _c("h3", [
+            _vm._v("No se ha ingresado nuevos informes de actividades")
+          ])
+        ])
+      : _c("table", { staticClass: "table table-striped" }, [
+          _c("thead", [
+            _c("tr", [
+              _c("th", { staticClass: "text-center" }, [_vm._v("Periodo")]),
+              _vm._v(" "),
+              _c("th", { staticClass: "text-center" }, [_vm._v("Creado el")]),
+              _vm._v(" "),
+              _vm.auth.rol > _vm.rol.academico
+                ? _c("th", { staticClass: "text-center" }, [
+                    _vm._v("Declarante")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _c("th", { staticClass: "text-center" }, [_vm._v("Estado")]),
+              _vm._v(" "),
+              _c("th", { staticClass: "text-center" })
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.informes, function(informe) {
+              return _c("tr", { key: informe.id }, [
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(informe.periodo.nombre))
+                ]),
+                _vm._v(" "),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(new Date(informe.created_at).toString()))
+                ]),
+                _vm._v(" "),
+                _vm.auth.rol > _vm.rol.academico
+                  ? _c("td", [
+                      _vm._v(
+                        _vm._s(informe.usuario.apellido_paterno) +
+                          " " +
+                          _vm._s(informe.usuario.apellido_materno) +
+                          " " +
+                          _vm._s(informe.usuario.nombres)
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(_vm.etiquetas.estado[informe.estado]))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  [
+                    _vm.auth.rol === _vm.rol.academico &&
+                    informe.periodo.etapa === _vm.etapas.declarando &&
+                    informe.estado <= _vm.estados.revisar
+                      ? _c(
+                          "a",
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                staticClass: "btn btn-xs btn-info",
+                                attrs: {
+                                  to: {
+                                    name: "editar-informe",
+                                    params: { id: informe.id }
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", {
+                                  staticClass: "glyphicon glyphicon-pencil",
+                                  attrs: { "aria-hidden": "true" }
+                                }),
+                                _vm._v(" Editar\n                        ")
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-xs btn-success",
+                                on: {
+                                  click: function($event) {
+                                    _vm.enviar(informe)
+                                  }
+                                }
+                              },
+                              [
+                                _c("span", {
+                                  staticClass: "glyphicon glyphicon-send",
+                                  attrs: { "aria-hidden": "true" }
+                                }),
+                                _vm._v(" Enviar\n                        ")
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.auth.rol === _vm.rol.director &&
+                    informe.periodo.etapa === _vm.etapas.declarando &&
+                    informe.estado === _vm.estados.enviado
+                      ? _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-xs btn-info",
+                            attrs: {
+                              to: {
+                                name: "aprobar-informe",
+                                params: { id: informe.id }
+                              }
+                            }
+                          },
+                          [
+                            _c("span", {
+                              staticClass: "glyphicon glyphicon-eye-open",
+                              attrs: { "aria-hidden": "true" }
+                            }),
+                            _vm._v(" Ver\n                    ")
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.auth.rol === _vm.rol.academico &&
+                    informe.estado === _vm.estados.aprobado &&
+                    informe.periodo.etapa === _vm.etapas.realizado
+                      ? _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-xs btn-info",
+                            attrs: {
+                              to: {
+                                name: "realizado-informe",
+                                params: { id: informe.id }
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "     \n                        Informar realizado\n                    "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.evaluar(informe)
+                      ? _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-xs btn-info",
+                            attrs: {
+                              to: {
+                                name: "evaluar-informe",
+                                params: { id: informe.id }
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "     \n                        Evaluar\n                    "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.auth.rol === _vm.rol.academico &&
+                    informe.estado === _vm.estados.aprobado &&
+                    informe.periodo.etapa === 5
+                      ? _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-xs btn-info",
+                            attrs: {
+                              to: {
+                                name: "apelar-informe",
+                                params: { id: informe.id }
+                              }
+                            }
+                          },
+                          [
+                            _c("span", {
+                              staticClass: "glyphicon glyphicon-eye-open",
+                              attrs: { "aria-hidden": "true" }
+                            }),
+                            _vm._v(" Ver calificación\n                    ")
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-xs btn-default",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            _vm.descargar(informe)
+                          }
+                        }
+                      },
+                      [
+                        _c("span", {
+                          staticClass: "glyphicon glyphicon-download-alt"
+                        })
+                      ]
+                    )
+                  ],
+                  1
+                )
+              ])
+            })
+          )
+        ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "panel-footer" },
+      [
+        _vm.declarar
+          ? _c(
+              "router-link",
+              {
+                staticClass: "btn btn-success text-right",
+                attrs: { to: { name: "nuevo-informe" } }
+              },
+              [
+                _c("span", {
+                  staticClass: "glyphicon glyphicon-plus",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(" Agregar informe\n        ")
+              ]
+            )
+          : _vm._e()
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5c807dae", { render: render, staticRenderFns: staticRenderFns })
+  }
+}
+
+/***/ }),
+/* 80 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-md-12" }, [
     _vm.mensaje !== undefined
       ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
@@ -24113,289 +24529,359 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.declarar(true)
-      ? _c("div", { staticClass: "alert alert-warning" }, [
-          _c("strong", [_vm._v("Atención: ")]),
-          _vm._v(" Puede enviar su declaración hasta el "),
-          _c("b", [_vm._v(_vm._s(_vm.hasta))])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-        _vm._v("\n            Informes de actividades\n        ")
-      ]),
-      _vm._v(" "),
-      _vm.informes.length === 0
-        ? _c("div", { staticClass: "text-center" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-body" }, [
             _c("h3", [
-              _vm._v("No se ha ingresado nuevos informes de actividades")
-            ])
-          ])
-        : _c("table", { staticClass: "table table-striped" }, [
-            _c("thead", [
-              _c("tr", [
-                _c("th", { staticClass: "text-center" }, [_vm._v("Periodo")]),
-                _vm._v(" "),
-                _c("th", { staticClass: "text-center" }, [_vm._v("Creado el")]),
-                _vm._v(" "),
-                _vm.auth.rol > _vm.rol.academico
-                  ? _c("th", { staticClass: "text-center" }, [
-                      _vm._v("Declarante")
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("th", { staticClass: "text-center" }, [_vm._v("Estado")]),
-                _vm._v(" "),
-                _c("th", { staticClass: "text-center" })
-              ])
+              _vm._v(
+                "Bienvenid@ " +
+                  _vm._s(_vm.auth.nombres.split(" ")[0]) +
+                  " " +
+                  _vm._s(_vm.auth.apellido_paterno)
+              )
             ]),
             _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.informes, function(informe) {
-                return _c("tr", { key: informe.id }, [
-                  _c("td", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(informe.periodo.nombre))
+            _c("p", [
+              _vm._v("Usted tiene el rol de "),
+              _c("b", [_vm._v(_vm._s(_vm.etiquetas.rol[_vm.auth.rol]))])
+            ]),
+            _vm._v(" "),
+            _vm.auth.comision !== null
+              ? _c("p", [
+                  _vm._v("Además, pertenece a "),
+                  _c("b", [
+                    _vm._v(
+                      _vm._s(_vm.etiquetas.comision[_vm.auth.comision.tipo])
+                    )
                   ]),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(new Date(informe.created_at).toString()))
-                  ]),
-                  _vm._v(" "),
-                  _vm.auth.rol > _vm.rol.academico
-                    ? _c("td", [
-                        _vm._v(
-                          _vm._s(informe.usuario.apellido_paterno) +
-                            " " +
-                            _vm._s(informe.usuario.apellido_materno) +
-                            " " +
-                            _vm._s(informe.usuario.nombres)
-                        )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("td", { staticClass: "text-center" }, [
-                    _vm._v(_vm._s(_vm.etiquetas.estado[informe.estado]))
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "td",
-                    [
-                      _vm.auth.rol === _vm.rol.academico &&
-                      informe.periodo.etapa === _vm.etapas.declarando &&
-                      informe.estado <= _vm.estados.revisar
-                        ? _c(
-                            "a",
-                            [
-                              _c(
-                                "router-link",
-                                {
-                                  staticClass: "btn btn-xs btn-info",
-                                  attrs: {
-                                    to: {
-                                      name: "editar-informe",
-                                      params: { id: informe.id }
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("span", {
-                                    staticClass: "glyphicon glyphicon-pencil",
-                                    attrs: { "aria-hidden": "true" }
-                                  }),
-                                  _vm._v(
-                                    " Editar\n                            "
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "btn btn-xs btn-success",
-                                  on: {
-                                    click: function($event) {
-                                      _vm.enviar(informe)
-                                    }
-                                  }
-                                },
-                                [
-                                  _c("span", {
-                                    staticClass: "glyphicon glyphicon-send",
-                                    attrs: { "aria-hidden": "true" }
-                                  }),
-                                  _vm._v(
-                                    " Enviar\n                            "
-                                  )
-                                ]
-                              )
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.auth.rol === _vm.rol.director &&
-                      informe.periodo.etapa === _vm.etapas.declarando &&
-                      informe.estado === _vm.estados.enviado
-                        ? _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-xs btn-info",
-                              attrs: {
-                                to: {
-                                  name: "aprobar-informe",
-                                  params: { id: informe.id }
-                                }
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-eye-open",
-                                attrs: { "aria-hidden": "true" }
-                              }),
-                              _vm._v(" Ver\n                        ")
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.auth.rol === _vm.rol.academico &&
-                      informe.estado === _vm.estados.aprobado &&
-                      informe.periodo.etapa === _vm.etapas.realizado
-                        ? _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-xs btn-info",
-                              attrs: {
-                                to: {
-                                  name: "realizado-informe",
-                                  params: { id: informe.id }
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "     \n                            Informar realizado\n                        "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.evaluar(informe)
-                        ? _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-xs btn-info",
-                              attrs: {
-                                to: {
-                                  name: "evaluar-informe",
-                                  params: { id: informe.id }
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "     \n                            Evaluar\n                        "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.auth.rol === _vm.rol.academico &&
-                      informe.estado === _vm.estados.aprobado &&
-                      informe.periodo.etapa === 5
-                        ? _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-xs btn-info",
-                              attrs: {
-                                to: {
-                                  name: "apelar-informe",
-                                  params: { id: informe.id }
-                                }
-                              }
-                            },
-                            [
-                              _c("span", {
-                                staticClass: "glyphicon glyphicon-eye-open",
-                                attrs: { "aria-hidden": "true" }
-                              }),
-                              _vm._v(
-                                " Ver calificación\n                        "
-                              )
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "btn btn-xs btn-default",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              _vm.descargar(informe)
-                            }
-                          }
-                        },
-                        [
-                          _c("span", {
-                            staticClass: "glyphicon glyphicon-download-alt"
-                          })
-                        ]
+                  _vm._v(
+                    " " +
+                      _vm._s(
+                        _vm.auth.comision.tipo === _vm.comision.departamental
+                          ? "del departamento de " +
+                            _vm.auth.departamento.nombre
+                          : _vm.auth.comision.tipo === _vm.comision.facultad
+                            ? "de la " + _vm.auth.departamento.facultad.nombre
+                            : ""
                       )
-                    ],
-                    1
                   )
                 ])
-              })
-            )
-          ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "panel-footer" },
-        [
-          _vm.declarar()
-            ? _c(
-                "router-link",
-                {
-                  staticClass: "btn btn-success text-right",
-                  attrs: { to: { name: "nuevo-informe" } }
-                },
+              : _vm._e()
+          ])
+        ]),
+        _vm._v(" "),
+        _vm.auth.rol === _vm.rol.director
+          ? _c("div", { staticClass: "panel panel-default" }, [
+              _c(
+                "div",
+                { staticClass: "panel-heading panel-title text-center" },
+                [_vm._v("Administrar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "panel-body dash" },
                 [
-                  _c("span", {
-                    staticClass: "glyphicon glyphicon-plus",
-                    attrs: { "aria-hidden": "true" }
-                  }),
-                  _vm._v(" Agregar informe\n            ")
-                ]
+                  _c(
+                    "router-link",
+                    {
+                      directives: [
+                        {
+                          name: "tooltip",
+                          rawName: "v-tooltip:bottom",
+                          value: "Departamento",
+                          expression: "'Departamento'",
+                          arg: "bottom"
+                        }
+                      ],
+                      staticClass: "btn dash-btn dash-btn-grid col-md-4",
+                      attrs: {
+                        to: {
+                          name: "editar-departamento",
+                          params: {
+                            accion: "Editar",
+                            elemento: _vm.copy(_vm.auth.departamento)
+                          }
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-building" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      directives: [
+                        {
+                          name: "tooltip",
+                          rawName: "v-tooltip:bottom",
+                          value: "Periodos",
+                          expression: "'Periodos'",
+                          arg: "bottom"
+                        }
+                      ],
+                      staticClass: "btn dash-btn dash-btn-grid col-md-4",
+                      attrs: { to: { name: "periodos" } }
+                    },
+                    [_c("i", { staticClass: "far fa-calendar-alt" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      directives: [
+                        {
+                          name: "tooltip",
+                          rawName: "v-tooltip:bottom",
+                          value: "Usuarios",
+                          expression: "'Usuarios'",
+                          arg: "bottom"
+                        }
+                      ],
+                      staticClass: "btn dash-btn dash-btn-grid col-md-4",
+                      attrs: { to: { name: "usuarios" } }
+                    },
+                    [_c("i", { staticClass: "fas fa-user-cog" })]
+                  )
+                ],
+                1
               )
-            : _vm._e()
-        ],
-        1
-      )
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-8" }, [
+        _vm.declarar(true)
+          ? _c("div", { staticClass: "alert alert-warning" }, [
+              _c("strong", [_vm._v("¡Atención!")]),
+              _vm._v(
+                " Puede enviar su declaración hasta el " +
+                  _vm._s(
+                    new Date(
+                      _vm.auth.departamento.periodo.hasta
+                    ).toStringWithTime()
+                  ) +
+                  "\n            "
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.auth.rol === _vm.rol.admin
+          ? _c("div", { staticClass: "panel panel-default" }, [
+              _c(
+                "div",
+                { staticClass: "panel-heading panel-title text-center" },
+                [_vm._v("Administrar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "panel-body dash" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "comision-superior" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-users" }),
+                      _vm._v(" Comisión superior\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "departamentos" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-building" }),
+                      _vm._v(" Departamentos\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "factores" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-superscript" }),
+                      _vm._v(" Factores\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "facultades" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-university" }),
+                      _vm._v(" Facultades\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "editar-formulas" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-calculator" }),
+                      _vm._v(" Fórmulas\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "jerarquias" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-sitemap" }),
+                      _vm._v(" Jerarquías\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "jornadas" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-user-clock" }),
+                      _vm._v(" Jornadas\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "rangos" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-signal" }),
+                      _vm._v(" Rangos\n                    ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn dash-btn col-md-6",
+                      attrs: { to: { name: "usuarios" } }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-user-cog" }),
+                      _vm._v(" Usuarios\n                    ")
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          : _c("div", { staticClass: "panel panel-default" }, [
+              _vm.auth.comision != null
+                ? _c("div", { staticClass: "panel-heading panel-tabs" }, [
+                    _vm._m(0)
+                  ])
+                : _c(
+                    "div",
+                    { staticClass: "panel-heading panel-title text-center" },
+                    [
+                      _vm._v(
+                        "\n                    Informes de actividades\n                "
+                      )
+                    ]
+                  ),
+              _vm._v(" "),
+              _c("div", { staticClass: "tab-content" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "tab-pane fade in active",
+                    attrs: { id: "usuario" }
+                  },
+                  [
+                    _c("lista-informes", {
+                      attrs: {
+                        informes: _vm.informes.usuario,
+                        declarar: _vm.declarar()
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "tab-pane fade in",
+                    attrs: { id: "comision" }
+                  },
+                  [
+                    _c("lista-informes", {
+                      attrs: {
+                        informes: _vm.informes.comision,
+                        declarar: false
+                      }
+                    })
+                  ],
+                  1
+                )
+              ])
+            ])
+      ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "nav nav-tabs text-center" }, [
+      _c("li", { staticClass: "active" }, [
+        _c("a", { attrs: { "data-toggle": "tab", href: "#usuario" } }, [
+          _vm._v("Usuario")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("li", [
+        _c("a", { attrs: { "data-toggle": "tab", href: "#comision" } }, [
+          _vm._v("Comisión")
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5c807dae", { render: render, staticRenderFns: staticRenderFns })
+    require("vue-hot-reload-api")      .rerender("data-v-589008dc", { render: render, staticRenderFns: staticRenderFns })
   }
 }
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Formulario_vue__ = __webpack_require__(19);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ba6be15_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Formulario_vue__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1ba6be15_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Formulario_vue__ = __webpack_require__(89);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -24443,7 +24929,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24477,62 +24963,6 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("li", { staticClass: "active" }, [_vm._v("Usuario")])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.mensaje === 1
-      ? _c("div", { staticClass: "alert alert-success" }, [
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.mensaje = 0
-                }
-              }
-            },
-            [_vm._v("[Cerrar ×]")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.volver("usuarios")
-                }
-              }
-            },
-            [_vm._v("[Volver] ")]
-          ),
-          _vm._v(" "),
-          _c("strong", [_vm._v("Bien!")]),
-          _vm._v(" Se han guardado los cambios.\n    ")
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.mensaje === -1
-      ? _c("div", { staticClass: "alert alert-danger" }, [
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.mensaje = 0
-                }
-              }
-            },
-            [_vm._v("×")]
-          ),
-          _vm._v(" "),
-          _c("strong", [_vm._v("Oh no!")]),
-          _vm._v(" Ha ocurrido un error.\n    ")
         ])
       : _vm._e(),
     _vm._v(" "),
@@ -25009,13 +25439,13 @@ if (false) {
 }
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListaActividades_vue__ = __webpack_require__(22);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_570a15c3_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListaActividades_vue__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_570a15c3_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListaActividades_vue__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -25063,7 +25493,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25158,7 +25588,7 @@ var render = function() {
                                 ],
                                 2
                               )
-                            : _c("div", { staticClass: "input-group" }, [
+                            : _c("div", { staticClass: "group" }, [
                                 _c("input", {
                                   directives: [
                                     {
@@ -25170,6 +25600,7 @@ var render = function() {
                                   ],
                                   staticClass: "form-control",
                                   attrs: {
+                                    input: "",
                                     placeholder: "Descripción de la actividad"
                                   },
                                   domProps: { value: actividad.descripcion },
@@ -25187,7 +25618,10 @@ var render = function() {
                                   }
                                 }),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "input-group-btn" }, [
+                                _c("div", { staticClass: "group-btn" }, [
+                                  _vm._v(
+                                    " input\n                                "
+                                  ),
                                   _c(
                                     "button",
                                     {
@@ -25209,7 +25643,7 @@ var render = function() {
                               ])
                         ]),
                         _vm._v(" "),
-                        _c("td", { staticClass: "col-md-1" }, [
+                        _c("td", { staticClass: "col-md-1 input" }, [
                           _c("input", {
                             directives: [
                               {
@@ -25223,7 +25657,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0" },
+                            attrs: { type: "number", min: "0", required: "" },
                             domProps: {
                               value: actividad.comprometido.primero.horasSemana
                             },
@@ -25245,7 +25679,7 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c("td", { staticClass: "col-md-1" }, [
+                        _c("td", { staticClass: "col-md-1 input" }, [
                           _c("input", {
                             directives: [
                               {
@@ -25259,7 +25693,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0" },
+                            attrs: { type: "number", min: "0", required: "" },
                             domProps: {
                               value:
                                 actividad.comprometido.primero.horasSemestre
@@ -25282,7 +25716,7 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c("td", { staticClass: "col-md-1" }, [
+                        _c("td", { staticClass: "col-md-1 input" }, [
                           _c("input", {
                             directives: [
                               {
@@ -25296,7 +25730,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0" },
+                            attrs: { type: "number", min: "0", required: "" },
                             domProps: {
                               value: actividad.comprometido.segundo.horasSemana
                             },
@@ -25318,7 +25752,7 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _c("td", { staticClass: "col-md-1" }, [
+                        _c("td", { staticClass: "col-md-1 input" }, [
                           _c("input", {
                             directives: [
                               {
@@ -25332,7 +25766,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0" },
+                            attrs: { type: "number", min: "0", required: "" },
                             domProps: {
                               value:
                                 actividad.comprometido.segundo.horasSemestre
@@ -25710,129 +26144,81 @@ var render = function() {
                                         ],
                                         2
                                       )
-                                    : _c(
-                                        "div",
-                                        { staticClass: "input-group" },
-                                        [
-                                          _c("input", {
-                                            directives: [
-                                              {
-                                                name: "model",
-                                                rawName: "v-model",
-                                                value: actividad.descripcion,
-                                                expression:
-                                                  "actividad.descripcion"
-                                              }
-                                            ],
-                                            staticClass: "form-control",
-                                            attrs: {
-                                              placeholder:
-                                                "Descripción de la actividad"
-                                            },
-                                            domProps: {
-                                              value: actividad.descripcion
-                                            },
-                                            on: {
-                                              input: function($event) {
-                                                if ($event.target.composing) {
-                                                  return
-                                                }
-                                                _vm.$set(
-                                                  actividad,
-                                                  "descripcion",
-                                                  $event.target.value
-                                                )
-                                              }
+                                    : _c("div", { staticClass: "group" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: actividad.descripcion,
+                                              expression:
+                                                "actividad.descripcion"
                                             }
-                                          }),
-                                          _vm._v(" "),
-                                          _c(
-                                            "div",
-                                            { staticClass: "input-group-btn" },
-                                            [
-                                              _c(
-                                                "button",
-                                                {
-                                                  staticClass: "btn btn-info",
-                                                  attrs: { type: "button" },
-                                                  on: {
-                                                    click: function($event) {
-                                                      actividad.otra = false
-                                                    }
-                                                  }
-                                                },
-                                                [
-                                                  _c("i", {
-                                                    staticClass:
-                                                      "glyphicon glyphicon-list"
-                                                  })
-                                                ]
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            input: "",
+                                            placeholder:
+                                              "Descripción de la actividad"
+                                          },
+                                          domProps: {
+                                            value: actividad.descripcion
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                actividad,
+                                                "descripcion",
+                                                $event.target.value
                                               )
-                                            ]
-                                          )
-                                        ]
-                                      )
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "group-btn" },
+                                          [
+                                            _vm._v(
+                                              " input\n                                "
+                                            ),
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass: "btn btn-info",
+                                                attrs: { type: "button" },
+                                                on: {
+                                                  click: function($event) {
+                                                    actividad.otra = false
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "glyphicon glyphicon-list"
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
                                 ]),
                             _vm._v(" "),
-                            index < _vm.cuenta
-                              ? _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _vm._v(
-                                      "\n                        " +
-                                        _vm._s(
-                                          actividad.comprometido.primero
-                                            .horasSemana
-                                        ) +
-                                        "\n                    "
-                                    )
-                                  ]
-                                )
-                              : _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model.number",
-                                          value:
-                                            actividad.comprometido.primero
-                                              .horasSemana,
-                                          expression:
-                                            "actividad.comprometido.primero.horasSemana",
-                                          modifiers: { number: true }
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "number", min: "0" },
-                                      domProps: {
-                                        value:
-                                          actividad.comprometido.primero
-                                            .horasSemana
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            actividad.comprometido.primero,
-                                            "horasSemana",
-                                            _vm._n($event.target.value)
-                                          )
-                                        },
-                                        blur: function($event) {
-                                          _vm.$forceUpdate()
-                                        }
-                                      }
-                                    })
-                                  ]
-                                ),
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido.primero.horasSemana
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1" }, [
+                            _c("td", { staticClass: "col-md-1 input" }, [
                               _c("input", {
                                 directives: [
                                   {
@@ -25846,7 +26232,11 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: { type: "number", min: "0" },
+                                attrs: {
+                                  type: "number",
+                                  min: "0",
+                                  required: ""
+                                },
                                 domProps: {
                                   value: actividad.realizado.primero.horasSemana
                                 },
@@ -25868,65 +26258,17 @@ var render = function() {
                               })
                             ]),
                             _vm._v(" "),
-                            index < _vm.cuenta
-                              ? _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _vm._v(
-                                      "\n                        " +
-                                        _vm._s(
-                                          actividad.comprometido.primero
-                                            .horasSemestre
-                                        ) +
-                                        "\n                    "
-                                    )
-                                  ]
-                                )
-                              : _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model.number",
-                                          value:
-                                            actividad.comprometido.primero
-                                              .horasSemestre,
-                                          expression:
-                                            "actividad.comprometido.primero.horasSemestre",
-                                          modifiers: { number: true }
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "number", min: "0" },
-                                      domProps: {
-                                        value:
-                                          actividad.comprometido.primero
-                                            .horasSemestre
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            actividad.comprometido.primero,
-                                            "horasSemestre",
-                                            _vm._n($event.target.value)
-                                          )
-                                        },
-                                        blur: function($event) {
-                                          _vm.$forceUpdate()
-                                        }
-                                      }
-                                    })
-                                  ]
-                                ),
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido.primero.horasSemestre
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1" }, [
+                            _c("td", { staticClass: "col-md-1 input" }, [
                               _c("input", {
                                 directives: [
                                   {
@@ -25940,7 +26282,11 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: { type: "number", min: "0" },
+                                attrs: {
+                                  type: "number",
+                                  min: "0",
+                                  required: ""
+                                },
                                 domProps: {
                                   value:
                                     actividad.realizado.primero.horasSemestre
@@ -25963,65 +26309,17 @@ var render = function() {
                               })
                             ]),
                             _vm._v(" "),
-                            index < _vm.cuenta
-                              ? _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _vm._v(
-                                      "\n                        " +
-                                        _vm._s(
-                                          actividad.comprometido.segundo
-                                            .horasSemana
-                                        ) +
-                                        "\n                    "
-                                    )
-                                  ]
-                                )
-                              : _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model.number",
-                                          value:
-                                            actividad.comprometido.segundo
-                                              .horasSemana,
-                                          expression:
-                                            "actividad.comprometido.segundo.horasSemana",
-                                          modifiers: { number: true }
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "number", min: "0" },
-                                      domProps: {
-                                        value:
-                                          actividad.comprometido.segundo
-                                            .horasSemana
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            actividad.comprometido.segundo,
-                                            "horasSemana",
-                                            _vm._n($event.target.value)
-                                          )
-                                        },
-                                        blur: function($event) {
-                                          _vm.$forceUpdate()
-                                        }
-                                      }
-                                    })
-                                  ]
-                                ),
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido.segundo.horasSemana
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1" }, [
+                            _c("td", { staticClass: "col-md-1 input" }, [
                               _c("input", {
                                 directives: [
                                   {
@@ -26035,7 +26333,11 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: { type: "number", min: "0" },
+                                attrs: {
+                                  type: "number",
+                                  min: "0",
+                                  required: ""
+                                },
                                 domProps: {
                                   value: actividad.realizado.segundo.horasSemana
                                 },
@@ -26057,65 +26359,17 @@ var render = function() {
                               })
                             ]),
                             _vm._v(" "),
-                            index < _vm.cuenta
-                              ? _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _vm._v(
-                                      "\n                        " +
-                                        _vm._s(
-                                          actividad.comprometido.segundo
-                                            .horasSemestre
-                                        ) +
-                                        "\n                    "
-                                    )
-                                  ]
-                                )
-                              : _c(
-                                  "td",
-                                  { staticClass: "col-md-1 text-center" },
-                                  [
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model.number",
-                                          value:
-                                            actividad.comprometido.segundo
-                                              .horasSemestre,
-                                          expression:
-                                            "actividad.comprometido.segundo.horasSemestre",
-                                          modifiers: { number: true }
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: { type: "number", min: "0" },
-                                      domProps: {
-                                        value:
-                                          actividad.comprometido.segundo
-                                            .horasSemestre
-                                      },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            actividad.comprometido.segundo,
-                                            "horasSemestre",
-                                            _vm._n($event.target.value)
-                                          )
-                                        },
-                                        blur: function($event) {
-                                          _vm.$forceUpdate()
-                                        }
-                                      }
-                                    })
-                                  ]
-                                ),
+                            _c("td", { staticClass: "col-md-1 text-center" }, [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(
+                                    actividad.comprometido.segundo.horasSemestre
+                                  ) +
+                                  "\n                    "
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("td", { staticClass: "col-md-1" }, [
+                            _c("td", { staticClass: "col-md-1 input" }, [
                               _c("input", {
                                 directives: [
                                   {
@@ -26129,7 +26383,11 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: { type: "number", min: "0" },
+                                attrs: {
+                                  type: "number",
+                                  min: "0",
+                                  required: ""
+                                },
                                 domProps: {
                                   value:
                                     actividad.realizado.segundo.horasSemestre
@@ -26194,7 +26452,7 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
+                          _c("th", { staticClass: "text-center input" }, [
                             _vm._v(
                               _vm._s(_vm.totales.realizado.primero.horasSemana)
                             )
@@ -26208,7 +26466,7 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
+                          _c("th", { staticClass: "text-center input" }, [
                             _vm._v(
                               _vm._s(
                                 _vm.totales.realizado.primero.horasSemestre
@@ -26224,7 +26482,7 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
+                          _c("th", { staticClass: "text-center input" }, [
                             _vm._v(
                               _vm._s(_vm.totales.realizado.segundo.horasSemana)
                             )
@@ -26238,7 +26496,7 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _c("th", { staticClass: "text-center" }, [
+                          _c("th", { staticClass: "text-center input" }, [
                             _vm._v(
                               _vm._s(
                                 _vm.totales.realizado.segundo.horasSemestre
@@ -26689,19 +26947,19 @@ var staticRenderFns = [
     return _c("tr", [
       _c("th", { staticClass: "text-center" }, [_vm._v("Declarado")]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Realizado")]),
+      _c("th", { staticClass: "text-center input" }, [_vm._v("Realizado")]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center" }, [_vm._v("Declarado")]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Realizado")]),
+      _c("th", { staticClass: "text-center input" }, [_vm._v("Realizado")]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center" }, [_vm._v("Declarado")]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Realizado")]),
+      _c("th", { staticClass: "text-center input" }, [_vm._v("Realizado")]),
       _vm._v(" "),
       _c("th", { staticClass: "text-center" }, [_vm._v("Declarado")]),
       _vm._v(" "),
-      _c("th", { staticClass: "text-center" }, [_vm._v("Realizado")])
+      _c("th", { staticClass: "text-center input" }, [_vm._v("Realizado")])
     ])
   },
   function() {
@@ -26785,13 +27043,13 @@ if (false) {
 }
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Apelacion_vue__ = __webpack_require__(23);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8c688776_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Apelacion_vue__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8c688776_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Apelacion_vue__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -26839,7 +27097,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27087,13 +27345,13 @@ if (false) {
 }
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Resumen_vue__ = __webpack_require__(24);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3de3c796_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Resumen_vue__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3de3c796_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Resumen_vue__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -27141,7 +27399,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27206,7 +27464,7 @@ var render = function() {
             : _vm._e(),
           _vm._v(" "),
           _vm.etapa >= _vm.etapas.evaluando
-            ? _c("th", { staticClass: "text-center" }, [
+            ? _c("th", { staticClass: "text-center input" }, [
                 _vm._v("Calificación parcial")
               ])
             : _vm._e()
@@ -27255,7 +27513,7 @@ var render = function() {
                 : _vm._e(),
               _vm._v(" "),
               _vm.etapa >= _vm.etapas.evaluando
-                ? _c("td", { staticClass: "col-md-2" }, [
+                ? _c("td", { staticClass: "col-md-2 input" }, [
                     value.comprometido.equivalente > 0 &&
                     _vm.auth.comision !== null &&
                     _vm.etapa >= _vm.etapas.evaluando
@@ -27334,7 +27592,7 @@ var render = function() {
               : _vm._e(),
             _vm._v(" "),
             _vm.etapa >= _vm.etapas.evaluando
-              ? _c("th", { staticClass: "text-center" }, [
+              ? _c("th", { staticClass: "text-center input" }, [
                   _vm._v(
                     "\n                    " +
                       _vm._s(_vm.calificacion) +
@@ -27378,7 +27636,7 @@ if (false) {
 }
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27397,16 +27655,6 @@ var render = function() {
             [
               _c("router-link", { attrs: { to: { name: "inicio" } } }, [
                 _vm._v("Inicio")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            [
-              _c("router-link", { attrs: { to: { name: "informes" } } }, [
-                _vm._v("Listado")
               ])
             ],
             1
@@ -27537,64 +27785,6 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _vm.mensaje === 1
-          ? _c("div", { staticClass: "alert alert-success" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "close",
-                  attrs: { href: "#", "aria-label": "close" },
-                  on: {
-                    click: function($event) {
-                      _vm.mensaje = 0
-                    }
-                  }
-                },
-                [_vm._v("[Cerrar ×]")]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "close",
-                  attrs: { href: "#", "aria-label": "close" },
-                  on: {
-                    click: function($event) {
-                      _vm.volver("informes")
-                    }
-                  }
-                },
-                [_vm._v("[Volver] ")]
-              ),
-              _vm._v(" "),
-              _c("strong", [_vm._v("Bien!")]),
-              _vm._v(" Se han guardado los cambios.\n            ")
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.mensaje === -1
-          ? _c("div", { staticClass: "alert alert-danger" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "close",
-                  attrs: { href: "#", "aria-label": "close" },
-                  on: {
-                    click: function($event) {
-                      _vm.mensaje = 0
-                    }
-                  }
-                },
-                [_vm._v("×")]
-              ),
-              _vm._v(" "),
-              _c("strong", [_vm._v("Oh no!")]),
-              _vm._v(" Ha ocurrido un error.\n            ")
-            ])
-          : _vm._e()
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "panel panel-default" }, [
           _c("div", { staticClass: "panel-footer" }, [
             _vm.etapa < _vm.etapas.apelando
@@ -27722,13 +27912,13 @@ if (false) {
 }
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Lista_vue__ = __webpack_require__(25);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c51bd08a_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Lista_vue__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c51bd08a_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Lista_vue__ = __webpack_require__(91);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -27776,7 +27966,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 88 */
+/* 91 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27940,13 +28130,13 @@ if (false) {
 }
 
 /***/ }),
-/* 89 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoFacultades_vue__ = __webpack_require__(26);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_36d34e34_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoFacultades_vue__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_36d34e34_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoFacultades_vue__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -27994,7 +28184,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 90 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28148,13 +28338,13 @@ if (false) {
 }
 
 /***/ }),
-/* 91 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_FormFacultad_vue__ = __webpack_require__(27);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_f22902a8_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormFacultad_vue__ = __webpack_require__(92);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_f22902a8_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormFacultad_vue__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -28202,7 +28392,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 92 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28430,13 +28620,13 @@ if (false) {
 }
 
 /***/ }),
-/* 93 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoDepartamentos_vue__ = __webpack_require__(28);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ba656f6_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoDepartamentos_vue__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ba656f6_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoDepartamentos_vue__ = __webpack_require__(97);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -28484,7 +28674,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 94 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28651,13 +28841,13 @@ if (false) {
 }
 
 /***/ }),
-/* 95 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_FormDepartamento_vue__ = __webpack_require__(29);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1a506dac_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormDepartamento_vue__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1a506dac_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormDepartamento_vue__ = __webpack_require__(99);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -28705,7 +28895,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 96 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28715,55 +28905,30 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.editable
-      ? _c("ol", { staticClass: "breadcrumb" }, [
-          _c(
-            "li",
-            [
-              _c("router-link", { attrs: { to: { name: "inicio" } } }, [
-                _vm._v("Inicio")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            [
-              _c("router-link", { attrs: { to: { name: "departamentos" } } }, [
-                _vm._v("Listado")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("li", { staticClass: "active" }, [_vm._v("Departamento")])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.status === -1
-      ? _c("div", { staticClass: "alert alert-danger" }, [
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.mensaje = 0
-                }
-              }
-            },
-            [_vm._v("×")]
-          ),
-          _vm._v(" "),
-          _c("strong", [_vm._v("Oh no!")]),
-          _vm._v(" Ha ocurrido un error.\n        "),
-          _c("br"),
-          _vm._v("\n        " + _vm._s(this.message) + "\n    ")
-        ])
-      : _vm._e(),
+  return _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+    _c("ol", { staticClass: "breadcrumb" }, [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: { name: "inicio" } } }, [
+            _vm._v("Inicio")
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: { name: "departamentos" } } }, [
+            _vm._v("Listado")
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("li", { staticClass: "active" }, [_vm._v("Departamento")])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
       _c("div", { staticClass: "panel-heading panel-title text-center" }, [
@@ -28777,37 +28942,35 @@ var render = function() {
           _c("div", { staticClass: "form-group col-md-6" }, [
             _c("label", { attrs: { for: "nombres" } }, [_vm._v("Nombre:")]),
             _vm._v(" "),
-            _vm.editable
+            _vm.auth.rol === _vm.rol.admin
               ? _c("input", {
                   directives: [
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.element.nombre,
-                      expression: "element.nombre"
+                      value: _vm.departamento.nombre,
+                      expression: "departamento.nombre"
                     }
                   ],
                   staticClass: "form-control",
                   attrs: { type: "text", id: "nombres" },
-                  domProps: { value: _vm.element.nombre },
+                  domProps: { value: _vm.departamento.nombre },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.$set(_vm.element, "nombre", $event.target.value)
+                      _vm.$set(_vm.departamento, "nombre", $event.target.value)
                     }
                   }
                 })
-              : _c("p", [_vm._v(_vm._s(_vm.element.nombre))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "form-group col-md-3" }, [
+              : _c("p", [_vm._v(_vm._s(_vm.departamento.nombre))])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-6" }, [
             _c("label", { attrs: { for: "facultad" } }, [_vm._v("Facultad:")]),
             _vm._v(" "),
-            _vm.editable
+            _vm.auth.rol === _vm.rol.admin
               ? _c(
                   "select",
                   {
@@ -28815,8 +28978,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.element.id_facultad,
-                        expression: "element.id_facultad"
+                        value: _vm.departamento.id_facultad,
+                        expression: "departamento.id_facultad"
                       }
                     ],
                     staticClass: "form-control",
@@ -28832,7 +28995,7 @@ var render = function() {
                             return val
                           })
                         _vm.$set(
-                          _vm.element,
+                          _vm.departamento,
                           "id_facultad",
                           $event.target.multiple
                             ? $$selectedVal
@@ -28855,65 +29018,70 @@ var render = function() {
                     )
                   })
                 )
-              : _c("p", [_vm._v(_vm._s(_vm.usuario.facultad.nombre))])
+              : _c("p", [_vm._v(_vm._s(_vm.departamento.facultad.nombre))])
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("label", { attrs: { for: "facultad" } }, [
-            _vm._v("Comisión Departamental")
-          ]),
-          _vm._v(" "),
-          _c("table", { staticClass: "table table-striped" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.users, function(user) {
-                return _c("tr", { key: user.id }, [
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(user.nombres) + " " + _vm._s(user.apellido_paterno)
-                    )
-                  ]),
+        _vm.auth.rol === _vm.rol.director
+          ? _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "form-group col-md-12" }, [
+                _c("label", { attrs: { for: "facultad" } }, [
+                  _vm._v("Comisión Departamental")
+                ]),
+                _vm._v(" "),
+                _c("table", { staticClass: "table table-striped" }, [
+                  _vm._m(0),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(user.email))]),
-                  _vm._v(" "),
-                  user.rol_comision === 1
-                    ? _c("td", [_vm._v(" Fijo ")])
-                    : _c("td", [_vm._v(" Suplente ")]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(user.departamento.nombre))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            _vm.eliminar(user.id)
-                          }
-                        }
-                      },
-                      [
-                        _c(
-                          "span",
-                          {
-                            staticClass: "glyphicon glyphicon-remove",
-                            attrs: { "aria-hidden": "true" }
-                          },
-                          [_vm._v("Quitar")]
-                        )
-                      ]
-                    )
-                  ])
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.users, function(user) {
+                      return _c("tr", { key: user.id }, [
+                        _c("td", [_vm._v(_vm._s(user.apellido_paterno))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.apellido_materno))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.nombres))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.email))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(_vm.etiquetas.rolComision[user.rol_comision])
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(user.departamento.nombre))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-xs btn-danger",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.eliminar(user.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", {
+                                staticClass: "glyphicon glyphicon-remove",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                " Quitar\n                                    "
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    })
+                  )
                 ])
-              })
-            )
-          ])
-        ])
+              ])
+            ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c(
@@ -28932,7 +29100,7 @@ var render = function() {
                 staticClass: "glyphicon glyphicon-send",
                 attrs: { "aria-hidden": "true" }
               }),
-              _vm._v(" " + _vm._s(this.accion) + "\n            ")
+              _vm._v(" " + _vm._s(this.accion) + "\n            ")
             ]
           ),
           _vm._v(" "),
@@ -28952,7 +29120,7 @@ var render = function() {
                 staticClass: "glyphicon glyphicon-plus",
                 attrs: { "aria-hidden": "true" }
               }),
-              _vm._v(" Usuario\n            ")
+              _vm._v(" Usuario\n            ")
             ]
           )
         ],
@@ -28968,13 +29136,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Nombre")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Apellido paterno")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Email")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Apellido materno")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Cargo")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Nombres")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Departamento")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Cargo")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Departamento")]),
         _vm._v(" "),
         _c("th")
       ])
@@ -28991,13 +29163,13 @@ if (false) {
 }
 
 /***/ }),
-/* 97 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoRangos_vue__ = __webpack_require__(30);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_472f1bcb_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoRangos_vue__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_472f1bcb_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoRangos_vue__ = __webpack_require__(101);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -29045,7 +29217,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 98 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29213,13 +29385,13 @@ if (false) {
 }
 
 /***/ }),
-/* 99 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_FormRango_vue__ = __webpack_require__(31);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e9245498_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormRango_vue__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e9245498_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormRango_vue__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -29267,7 +29439,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 100 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29483,13 +29655,13 @@ if (false) {
 }
 
 /***/ }),
-/* 101 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoJerarquias_vue__ = __webpack_require__(32);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_f07a3baa_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoJerarquias_vue__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_f07a3baa_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoJerarquias_vue__ = __webpack_require__(105);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -29537,7 +29709,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 102 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29695,13 +29867,13 @@ if (false) {
 }
 
 /***/ }),
-/* 103 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_FormJerarquia_vue__ = __webpack_require__(33);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_451f7a24_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormJerarquia_vue__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_451f7a24_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormJerarquia_vue__ = __webpack_require__(107);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -29749,7 +29921,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 104 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29877,13 +30049,13 @@ if (false) {
 }
 
 /***/ }),
-/* 105 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoJornadas_vue__ = __webpack_require__(34);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c1f1c6ea_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoJornadas_vue__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_c1f1c6ea_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoJornadas_vue__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -29931,7 +30103,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 106 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30085,13 +30257,13 @@ if (false) {
 }
 
 /***/ }),
-/* 107 */
+/* 110 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_FormJornada_vue__ = __webpack_require__(35);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_643b4420_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormJornada_vue__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_643b4420_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormJornada_vue__ = __webpack_require__(111);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -30139,7 +30311,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 108 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30297,13 +30469,13 @@ if (false) {
 }
 
 /***/ }),
-/* 109 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoFactores_vue__ = __webpack_require__(36);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6735ac22_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoFactores_vue__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6735ac22_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoFactores_vue__ = __webpack_require__(113);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -30351,7 +30523,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 110 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30509,13 +30681,13 @@ if (false) {
 }
 
 /***/ }),
-/* 111 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_FormFactor_vue__ = __webpack_require__(37);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5a8dc98c_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormFactor_vue__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5a8dc98c_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormFactor_vue__ = __webpack_require__(115);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -30563,7 +30735,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 112 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30721,13 +30893,13 @@ if (false) {
 }
 
 /***/ }),
-/* 113 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoPeriodos_vue__ = __webpack_require__(38);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_14d566aa_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoPeriodos_vue__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_14d566aa_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoPeriodos_vue__ = __webpack_require__(117);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -30775,7 +30947,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 114 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30785,53 +30957,56 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
-      }
-    },
-    [
-      _vm.mensaje
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = undefined
-                  }
-                }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-          _vm._v("\n              Administración de periodos\n          ")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+  return _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+    _vm.mensaje
+      ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.periodos, function(periodo, index) {
-              return _c("tr", { key: periodo.id }, [
-                _c("td", [_vm._v(_vm._s(periodo.nombre))]),
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = undefined
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n              Administración de periodos\n          ")
+      ]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.periodos, function(periodo, index) {
+            return _c(
+              "tr",
+              { key: periodo.id, class: { active: index === 0 } },
+              [
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(periodo.nombre))
+                ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(periodo.desde))]),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(new Date(periodo.desde).toString()))
+                ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(periodo.hasta))]),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(new Date(periodo.hasta).toString()))
+                ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(_vm.etapa(periodo.etapa)))]),
+                _c("td", { staticClass: "text-center" }, [
+                  _vm._v(_vm._s(_vm.etiquetas.etapa[periodo.etapa]))
+                ]),
                 _vm._v(" "),
                 _c(
                   "td",
@@ -30879,37 +31054,37 @@ var render = function() {
                   ],
                   1
                 )
-              ])
-            })
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "panel-footer" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-success",
-                attrs: {
-                  to: { name: "crear-periodo", params: { accion: "Crear" } }
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "glyphicon glyphicon-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
-                _vm._v(" Periodo\n              ")
               ]
             )
-          ],
-          1
+          })
         )
-      ])
-    ]
-  )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: { name: "crear-periodo", params: { accion: "Crear" } }
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Periodo\n              ")
+            ]
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -30924,7 +31099,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { staticClass: "text-center" }, [_vm._v("Hasta")]),
         _vm._v(" "),
-        _c("th", { staticClass: "text-center" }, [_vm._v("Etapas")]),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Etapa")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center" }, [_vm._v("Acciones")])
       ])
@@ -30941,13 +31116,13 @@ if (false) {
 }
 
 /***/ }),
-/* 115 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_FormPeriodo_vue__ = __webpack_require__(39);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_59db6c7c_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormPeriodo_vue__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_59db6c7c_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_FormPeriodo_vue__ = __webpack_require__(119);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -30995,7 +31170,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 116 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31005,55 +31180,30 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.editable
-      ? _c("ol", { staticClass: "breadcrumb" }, [
-          _c(
-            "li",
-            [
-              _c("router-link", { attrs: { to: { name: "inicio" } } }, [
-                _vm._v("Inicio")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            [
-              _c("router-link", { attrs: { to: { name: "periodos" } } }, [
-                _vm._v("Listado")
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("li", { staticClass: "active" }, [_vm._v("Periodo")])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.status === -1
-      ? _c("div", { staticClass: "alert alert-danger" }, [
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.mensaje = 0
-                }
-              }
-            },
-            [_vm._v("×")]
-          ),
-          _vm._v(" "),
-          _c("strong", [_vm._v("Oh no!")]),
-          _vm._v(" Ha ocurrido un error.\n        "),
-          _c("br"),
-          _vm._v("\n        " + _vm._s(this.message) + "\n    ")
-        ])
-      : _vm._e(),
+  return _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+    _c("ol", { staticClass: "breadcrumb" }, [
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: { name: "inicio" } } }, [
+            _vm._v("Inicio")
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        [
+          _c("router-link", { attrs: { to: { name: "periodos" } } }, [
+            _vm._v("Listado")
+          ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("li", { staticClass: "active" }, [_vm._v("Periodo")])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
       _c("div", { staticClass: "panel-heading panel-title text-center" }, [
@@ -31065,29 +31215,77 @@ var render = function() {
           _c("div", { staticClass: "form-group col-md-6" }, [
             _c("label", { attrs: { for: "nombre" } }, [_vm._v("Nombre:")]),
             _vm._v(" "),
-            _vm.editable
-              ? _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.element.nombre,
-                      expression: "element.nombre"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { type: "text", id: "nombre" },
-                  domProps: { value: _vm.element.nombre },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(_vm.element, "nombre", $event.target.value)
-                    }
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.periodo.nombre,
+                  expression: "periodo.nombre"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", id: "nombre" },
+              domProps: { value: _vm.periodo.nombre },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
                   }
-                })
-              : _c("p", [_vm._v(_vm._s(_vm.element.nombre))])
+                  _vm.$set(_vm.periodo, "nombre", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-md-6" }, [
+            _c("label", { attrs: { for: "etapa" } }, [_vm._v("Etapa:")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.periodo.etapa,
+                    expression: "periodo.etapa"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { id: "etapa" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.periodo,
+                      "etapa",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              _vm._l(_vm.etapas, function(etapa) {
+                return _c(
+                  "option",
+                  { key: etapa.id, domProps: { value: etapa.id } },
+                  [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(etapa.nombre) +
+                        "\n                        "
+                    )
+                  ]
+                )
+              })
+            )
           ])
         ]),
         _vm._v(" "),
@@ -31095,101 +31293,39 @@ var render = function() {
           _c("div", { staticClass: "form-group col-md-6" }, [
             _c("label", { attrs: { for: "desde" } }, [_vm._v("Desde:")]),
             _vm._v(" "),
-            _vm.editable
-              ? _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "date", id: "desde" },
-                  domProps: {
-                    value:
-                      _vm.element.desde &&
-                      _vm.element.desde.toISOString().split("T")[0]
-                  },
-                  on: {
-                    input: function($event) {
-                      _vm.element.desde = $event.target.valueAsDate
-                    }
-                  }
-                })
-              : _c("p", [_vm._v(_vm._s(_vm.element.desde))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
+            _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "date", id: "desde" },
+              domProps: {
+                value:
+                  _vm.periodo.desde &&
+                  _vm.periodo.desde.toISOString().split("T")[0]
+              },
+              on: {
+                input: function($event) {
+                  _vm.periodo.desde = $event.target.valueAsDate
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
           _c("div", { staticClass: "form-group col-md-6" }, [
             _c("label", { attrs: { for: "hasta" } }, [_vm._v("Hasta:")]),
             _vm._v(" "),
-            _vm.editable
-              ? _c("input", {
-                  staticClass: "form-control",
-                  attrs: { type: "date", id: "hasta" },
-                  domProps: {
-                    value:
-                      _vm.element.desde &&
-                      _vm.element.hasta.toISOString().split("T")[0]
-                  },
-                  on: {
-                    input: function($event) {
-                      _vm.element.hasta = $event.target.valueAsDate
-                    }
-                  }
-                })
-              : _c("p", [_vm._v(_vm._s(_vm.element.hasta))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "form-group col-md-3" }, [
-            _c("label", { attrs: { for: "etapa" } }, [_vm._v("Etapa:")]),
-            _vm._v(" "),
-            _vm.editable
-              ? _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.element.etapa,
-                        expression: "element.etapa"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: { id: "etapa" },
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.element,
-                          "etapa",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      }
-                    }
-                  },
-                  _vm._l(_vm.etapas, function(etapa) {
-                    return _c(
-                      "option",
-                      { key: etapa.id, domProps: { value: etapa.id } },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(etapa.nombre) +
-                            "\n                        "
-                        )
-                      ]
-                    )
-                  })
-                )
-              : _c("p", [_vm._v(_vm._s(_vm.element.etapa))])
+            _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "date", id: "hasta" },
+              domProps: {
+                value:
+                  _vm.periodo.desde &&
+                  _vm.periodo.hasta.toISOString().split("T")[0]
+              },
+              on: {
+                input: function($event) {
+                  _vm.periodo.hasta = $event.target.valueAsDate
+                }
+              }
+            })
           ])
         ])
       ]),
@@ -31225,13 +31361,13 @@ if (false) {
 }
 
 /***/ }),
-/* 117 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoComision_vue__ = __webpack_require__(40);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1d7dfd60_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoComision_vue__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_1d7dfd60_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoComision_vue__ = __webpack_require__(121);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -31279,7 +31415,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 118 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31393,13 +31529,13 @@ if (false) {
 }
 
 /***/ }),
-/* 119 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoUsuarios_vue__ = __webpack_require__(41);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_67dec698_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoUsuarios_vue__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_67dec698_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoUsuarios_vue__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -31447,7 +31583,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 120 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31595,205 +31731,13 @@ if (false) {
 }
 
 /***/ }),
-/* 121 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 122 */,
-/* 123 */,
-/* 124 */,
-/* 125 */,
-/* 126 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    created: function created() {
-        var _this = this;
-
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
-            _this.users = response.data;
-        });
-    },
-    computed: {
-        filtrar: function filtrar() {
-            var _this2 = this;
-
-            return this.users.filter(function (user) {
-                return user.nombres.toLowerCase().match(_this2.search.toLowerCase());
-            });
-        }
-
-    },
-    methods: {
-        agregar: function agregar(id, tipo) {
-            var _this3 = this;
-
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/' + id).then(function (response) {
-                _this3.seleccionado = response.data;
-                _this3.seleccionado.id_comision = _this3.$route.params.id;
-                _this3.seleccionado.rol_comision = tipo;
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this3.seleccionado).then(function (response) {
-                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
-                        _this3.users = response.data;
-                    });
-                });
-            });
-        }
-    },
-    data: function data() {
-        return {
-            users: [],
-            search: ''
-        };
-    }
-});
-
-/***/ }),
-/* 127 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    created: function created() {
-        var _this = this;
-
-        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
-            _this.users = response.data;
-        });
-    },
-    computed: {
-        filtrar: function filtrar() {
-            var _this2 = this;
-
-            return this.users.filter(function (user) {
-                return user.nombres.toLowerCase().match(_this2.search.toLowerCase());
-            });
-        }
-
-    },
-    methods: {
-        agregar: function agregar(id, tipo) {
-            var _this3 = this;
-
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/' + id).then(function (response) {
-                _this3.seleccionado = response.data;
-                _this3.seleccionado.id_comision = _this3.$route.params.id;
-                _this3.seleccionado.rol_comision = tipo;
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this3.seleccionado).then(function (response) {
-                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision').then(function (response) {
-                        _this3.users = response.data;
-                    });
-                });
-            });
-        }
-    },
-    data: function data() {
-        return {
-            users: [],
-            search: ''
-        };
-    }
-});
-
-/***/ }),
-/* 128 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoUsuariosF_vue__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoUsuariosF_vue__ = __webpack_require__(42);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d5a8e844_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoUsuariosF_vue__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d5a8e844_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoUsuariosF_vue__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -31841,7 +31785,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 129 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31991,13 +31935,13 @@ if (false) {
 }
 
 /***/ }),
-/* 130 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoUsuariosD_vue__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_ListadoUsuariosD_vue__ = __webpack_require__(43);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d5e14648_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoUsuariosD_vue__ = __webpack_require__(131);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_d5e14648_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListadoUsuariosD_vue__ = __webpack_require__(127);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -32045,7 +31989,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 131 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32195,281 +32139,13 @@ if (false) {
 }
 
 /***/ }),
-/* 132 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    data: function data() {
-        return {
-            formulas: {
-                equivalente: {
-                    f: '',
-                    decimales: 0
-                },
-                nota_final: {
-                    f: '',
-                    decimales: 0
-                }
-            },
-            mensaje: 0
-        };
-    },
-    created: function created() {
-        var formulas = Object.assign({}, this.form, this.copy(this.formula));
-        var subformula = formulas.equivalente.substring(11, formulas.equivalente.lenght);
-        this.formulas.equivalente.decimales = this.decimales(subformula);
-        this.formulas.equivalente.f = subformula.substring(0, subformula.length - (7 + (this.formulas.equivalente.decimales + 1) * 2));
-
-        subformula = formulas.nota_final.substring(11, formulas.nota_final.lenght);
-        this.formulas.nota_final.decimales = this.decimales(subformula);
-        this.formulas.nota_final.f = subformula.substring(0, subformula.length - (7 + (this.formulas.nota_final.decimales + 1) * 2));
-    },
-    methods: {
-        callback: function callback() {
-            var ok = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-            var payload = arguments[1];
-
-            this.mensaje = ok ? 1 : -1;
-        },
-        actualizar: function actualizar() {
-            var formulas = this.construir();
-            formulas['id'] = this.formula.id;
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["D" /* UPDATE_FORMULA */], { formula: formulas, cb: this.callback });
-        },
-        crear: function crear() {
-            this.$store.dispatch(__WEBPACK_IMPORTED_MODULE_0__vuex_actions__["r" /* INSERT_FORMULA */], { formula: this.construir(), cb: this.callback });
-        },
-        decimales: function decimales(formula) {
-            var decimales = 0,
-                i = formula.length - 1;
-            while (formula[i] !== '1') {
-                decimales++;
-                i--;
-            }
-            return decimales;
-        },
-        construir: function construir() {
-            var formulas = {
-                equivalente: '',
-                nota_final: ''
-            };
-            var decimales = '1' + '0'.repeat(this.formulas.equivalente.decimales);
-            formulas.equivalente = 'Math.round(' + this.formulas.equivalente.f + ' * ' + decimales + ') / ' + decimales;
-            decimales = '1' + '0'.repeat(this.formulas.nota_final.decimales);
-            formulas.nota_final = 'Math.round(' + this.formulas.nota_final.f + ' * ' + decimales + ') / ' + decimales;
-            return formulas;
-        }
-    },
-    computed: Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapState */])(['formula'])
-});
-
-/***/ }),
-/* 133 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Formula_vue__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_cacheDirectory_true_presets_env_modules_false_targets_browsers_2_uglify_true_plugins_transform_object_rest_spread_transform_runtime_polyfill_false_helpers_false_node_modules_vue_loader_lib_selector_type_script_index_0_Formula_vue__ = __webpack_require__(44);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e35a4354_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Formula_vue__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e35a4354_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Formula_vue__ = __webpack_require__(129);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(0);
 var disposed = false
 /* script */
@@ -32517,7 +32193,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 134 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32541,27 +32217,6 @@ var render = function() {
       _vm._v(" "),
       _c("li", { staticClass: "active" }, [_vm._v("Fórmulas")])
     ]),
-    _vm._v(" "),
-    _vm.mensaje === -1
-      ? _c("div", { staticClass: "alert alert-danger" }, [
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.mensaje = 0
-                }
-              }
-            },
-            [_vm._v("×")]
-          ),
-          _vm._v(" "),
-          _c("strong", [_vm._v("Oh no!")]),
-          _vm._v(" Ha ocurrido un error.\n    ")
-        ])
-      : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-3" }, [
@@ -33056,41 +32711,6 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm.mensaje === 1
-      ? _c("div", { staticClass: "alert alert-success" }, [
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.mensaje = 0
-                }
-              }
-            },
-            [_vm._v("[Cerrar ×]")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "close",
-              attrs: { href: "#", "aria-label": "close" },
-              on: {
-                click: function($event) {
-                  _vm.volver("inicio")
-                }
-              }
-            },
-            [_vm._v("[Volver] ")]
-          ),
-          _vm._v(" "),
-          _c("strong", [_vm._v("Bien!")]),
-          _vm._v(" Se han guardado los cambios.\n    ")
-        ])
-      : _vm._e(),
-    _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
       _c("div", { staticClass: "panel-footer" }, [
         _c(
@@ -33202,6 +32822,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-e35a4354", { render: render, staticRenderFns: staticRenderFns })
   }
 }
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

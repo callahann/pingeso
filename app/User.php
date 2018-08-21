@@ -16,9 +16,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
         'apellido_paterno',
         'apellido_materno',
-        'email'
+        'email',
+        'rol',
+        'rol_comision'
     ];
     protected $hidden = [
         'id_departamento',

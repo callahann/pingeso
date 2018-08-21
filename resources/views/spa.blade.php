@@ -27,6 +27,9 @@
                                         <p>Cargando...</p>
                                     </h3>
                                 </div>
+                                <div class="progress" style="margin: 0">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progress"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -5,15 +5,6 @@
             <li><router-link :to="{ name: 'usuarios'}">Listado</router-link></li>
             <li class="active">Usuario</li>
         </ol>
-        <div v-if="mensaje === 1" class="alert alert-success">
-            <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">[Cerrar &times;]</a>
-            <a href="#" class="close" aria-label="close" v-on:click="volver('usuarios')">[Volver] </a>
-            <strong>Bien!</strong> Se han guardado los cambios.
-        </div>
-        <div v-if="mensaje === -1" class="alert alert-danger">
-            <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
-            <strong>Oh no!</strong> Ha ocurrido un error.
-        </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
                 {{ !editable ? 'Datos personales' : usuario.id === undefined ? 'Agregar usuario' : 'Modificar usuario' }}
@@ -128,42 +119,53 @@
         props: ['editable', 'declarante'],
         data: function() {
             return {
-                usuario: {},
+                usuario: {
+                    departamento: {
+                        facultad: undefined
+                    }
+                },
                 facultad: {},
                 mensaje: 0
             }
         },
         created: function() {
-            const usuario = this.declarante ? this.declarante : 
+            const usuario = this.editable && this.$route.params.id ? 
                             this.usuarios.find(usuario => {
-                                return usuario.id === this.$route.params.id
-                            })
+                                console.log(usuario)
+                                return usuario.id == this.$route.params.id
+                            }) : this.declarante
             
             if(usuario) {
                 this.usuario = Object.assign({}, this.usuario, this.copy(usuario))
-                this.setFacultad(usuario)
+                this.facultad = Object.assign({}, this.facultad, this.copy(usuario.departamento.facultad))
             } else if(this.auth.rol === this.rol.director) {
                 const departamento = this.auth.departamento
-                this.usuario['departamento'] = Object.assign({}, this.usuario.departamento, departamento)
-                this.usuario['rol'] = Object.assign({}, this.usuario.rol, this.roles[0])
-                this.setFacultad(this.auth)
+                Vue.set(this.usuario, 'departamento', departamento)
+                Vue.set(this.usuario, 'rol', 0)
+                this.facultad = Object.assign({}, this.facultad, this.copy(this.auth.departamento.facultad))
             }
         },
         methods: {
-            callback: function(ok = true, payload) {
-                this.mensaje = ok ? 1: -1
-                this.usuario = Object.assign({}, this.usuario, payload)                
-            },
-            setFacultad: function(usuario) {
-                this.facultad = this.facultades.find(facultad => {
-                    return facultad.id === usuario.departamento.id_facultad
+            /**
+             * Callback para mostrar un mensaje luego de obtener respuesta
+             * desde la API.
+             * @param ok Indica si la operación se realizó correctamente
+             * @param payload Data (respuesta) obtenida desde la API
+             */
+            callback: function(ok = false, payload) {
+                this.$root.$emit('alert', {
+                    mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                    class: ok ? 'success' : 'danger'
                 })
+                this.usuario = Object.assign({}, this.usuario, payload.data)
             },
             enviar: function() {
-                this.$store.dispatch(INSERT_USUARIO, { usuario: this.usuario, cb: this.callback })
+                const payload = { mensaje: '<strong>¡Bien!</strong> Se ha creado el usuario.' }
+                this.$store.dispatch(INSERT_USUARIO, { usuario: this.usuario, cb: this.callback, payload })
             },
             actualizar: function() {
-                this.$store.dispatch(UPDATE_USUARIO, { usuario: this.usuario, cb: this.callback })
+                const payload = { mensaje: '<strong>¡Bien!</strong> Se ha guardado los cambios.' }
+                this.$store.dispatch(UPDATE_USUARIO, { usuario: this.usuario, cb: this.callback, payload })
             },
         },
         computed: mapState(['facultades', 'jerarquias', 'jornadas', 'usuarios'])

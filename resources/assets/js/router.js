@@ -6,7 +6,6 @@ import store from './vuex/store'
 Vue.use(VueRouter)
 
 import Inicio from './components/Inicio'
-import ListaInformes from './components/informe/Lista'
 import Formulario from './components/informe/formulario/Formulario'
 import ListaUsuarios from './components/usuario/Lista'
 import Usuario from './components/usuario/Usuario'
@@ -37,6 +36,7 @@ const router = new VueRouter({
             path: '/inicio',
             name: 'inicio',
             component: Inicio,
+            props: true
         },
         {
             path: '/usuarios',
@@ -58,13 +58,6 @@ const router = new VueRouter({
             component: Usuario,
             props: { editable: true },
             meta: { eval: 'rol >= 1' }
-        },
-        {
-            path: '/informes',
-            name: 'informes',
-            component: ListaInformes,
-            props: true,
-            meta: { eval: 'rol < 2' }
         },
         {
             path: '/informes/declarar',

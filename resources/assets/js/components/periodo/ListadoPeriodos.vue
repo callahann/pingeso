@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'col-md-12': auth.rol.id >= 3, 'col-md-8 col-md-offset-2': auth.rol.id <= 2 }">
+  <div class="col-md-10 col-md-offset-1">
         <div v-if="mensaje" class="alert alert-success">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = undefined">&times;</a>
             {{ mensaje }}
@@ -14,16 +14,16 @@
                         <th class="text-center">Nombre Periodo</th>
                         <th class="text-center">Desde</th>
                         <th class="text-center">Hasta</th>
-                        <th class="text-center">Etapas</th>
+                        <th class="text-center">Etapa</th>
                         <th class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(periodo,index) in periodos" v-bind:key="periodo.id">
-                        <td>{{ periodo.nombre }}</td>
-                        <td>{{ periodo.desde }}</td>
-                        <td>{{ periodo.hasta }}</td>
-                        <td>{{ etapa(periodo.etapa) }}</td>
+                    <tr v-for="(periodo, index) in periodos" v-bind:key="periodo.id" :class="{ 'active' : index === 0 }">
+                        <td class="text-center">{{ periodo.nombre }}</td>
+                        <td class="text-center">{{ new Date(periodo.desde).toString() }}</td>
+                        <td class="text-center">{{ new Date(periodo.hasta).toString() }}</td>
+                        <td class="text-center">{{ etiquetas.etapa[periodo.etapa] }}</td>
                         <td class="col-md-2">
                           <router-link class="btn btn-xs btn-info" :to="{ name: 'editar-periodo', params: {accion: 'Editar', elemento: Object.assign({}, periodo, {}) } }">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
@@ -63,29 +63,22 @@
             }
         },
         methods: {
+            /**
+             * Callback para mostrar un mensaje luego de obtener respuesta
+             * desde la API.
+             * @param ok Indica si la operación se realizó correctamente
+             * @param payload Data (respuesta) obtenida desde la API
+             */
             callback: function(ok = false, payload) {
-                this.mensaje = ok ? payload : "";
+                this.$root.$emit('alert', {
+                    mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                    class: ok ? 'success' : 'danger'
+                })
             },
             deleteElem(id, index, nombre){
-                var c = confirm("¿Estás seguro de borrar el "+ nombre + "?");
-                if (c == false){
-                    console.log('FALSE');
-                    return;     
-                }
-                this.$store.dispatch(DELETE_PERIODO, { periodo: this.periodos[index], cb: this.callback });
-            },
-            etapa(numero) {
-                switch(numero){
-                    case 1:
-                            return "Declaración";
-                    case 2:
-                            return "Aprobación";
-                    case 3:
-                            return "Información";
-                    case 4:
-                            return "Evaluación";
-                    case 5:
-                            return "Apelación";
+                if (confirm("Se eliminará el periodo \"" + nombre + "\". ¿Continuar?")) {
+                    const payload = { mensaje: 'Se ha eliminado el periodo <strong>' + nombre + '</strong>' }
+                    this.$store.dispatch(DELETE_PERIODO, { periodo: this.periodos[index], cb: this.callback, payload })
                 }
             }
         },

@@ -1,17 +1,10 @@
-<template>  
-
-    <div>
-        <ol class="breadcrumb" v-if="editable">
+<template>
+    <div class="col-md-8 col-md-offset-2">
+        <ol class="breadcrumb">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
             <li><router-link :to="{ name: 'periodos'}">Listado</router-link></li>
             <li class="active">Periodo</li>
         </ol>
-        <div v-if="status === -1" class="alert alert-danger">
-            <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
-            <strong>Oh no!</strong> Ha ocurrido un error.
-            <br>
-            {{this.message}}
-        </div>
         <div class="panel panel-default">
             <div class="panel-heading panel-title text-center">
                 {{ this.accion }} Periodo
@@ -20,40 +13,32 @@
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="nombre">Nombre:</label>
-                        <input v-if="editable" type="text" class="form-control" id="nombre"
-                            v-model="element.nombre">
-                        <p v-else>{{ element.nombre }}</p>
+                        <input type="text" class="form-control" id="nombre"
+                            v-model="periodo.nombre">
                     </div>
-                </div>
-                <div class="row">
                     <div class="form-group col-md-6">
-                        <label for="desde">Desde:</label>
-                        <input v-if="editable" type="date" class="form-control" id="desde"
-                            :value="element.desde && element.desde.toISOString().split('T')[0]"
-                            v-on:input="element.desde = $event.target.valueAsDate">
-                        <p v-else>{{ element.desde }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="hasta">Hasta:</label>
-                        <input v-if="editable" type="date" class="form-control" id="hasta"
-                            :value="element.desde && element.hasta.toISOString().split('T')[0]"
-                            v-on:input="element.hasta = $event.target.valueAsDate">
-                        <p v-else>{{ element.hasta }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-3">
                         <label for="etapa">Etapa:</label>
-                        <select v-if="editable" class="form-control" id="etapa" v-model="element.etapa">
+                        <select class="form-control" id="etapa" v-model="periodo.etapa">
                             <option v-for="etapa in etapas"
                                 :key="etapa.id"
                                 :value="etapa.id">
                                 {{ etapa.nombre }}
                             </option>
                         </select>
-                        <p v-else>{{ element.etapa }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="desde">Desde:</label>
+                        <input type="date" class="form-control" id="desde"
+                            :value="periodo.desde && periodo.desde.toISOString().split('T')[0]"
+                            v-on:input="periodo.desde = $event.target.valueAsDate">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="hasta">Hasta:</label>
+                        <input type="date" class="form-control" id="hasta"
+                            :value="periodo.desde && periodo.hasta.toISOString().split('T')[0]"
+                            v-on:input="periodo.hasta = $event.target.valueAsDate">
                     </div>
                 </div>
             </div>
@@ -83,48 +68,53 @@
             required: false
         }
     },
-    created: function() {
-        this.editable = true;
-        this.message = '';
-        this.status = 0;
-        this.etapas = [
-            {id: 1, nombre: "Etapa de Declaracion"},
-            {id: 3, nombre: "Etapa de Informar trabajo realizado"},
-            {id: 4, nombre: "Etapa de Evaluación"},
-            {id: 5, nombre: "Etapa de Apelación"}
-        ];
-        this.sentMessage = (this.accion == 'Editar')?'actualizado':'creado';
-    },
-    data () {
-        console.log(this);
+    data: function() {
         return {
-        element: (this.elemento?this.format(this.elemento):{}),
+            periodo: this.elemento? this.format(this.elemento) : {},
+            etapas: [
+                { id: 1, nombre: "Etapa de Declaracion" },
+                { id: 3, nombre: "Etapa de Informar trabajo realizado" },
+                { id: 4, nombre: "Etapa de Evaluación" },
+                { id: 5, nombre: "Etapa de Apelación" }
+            ]
         }
     },
     methods: {
+        /**
+         * Callback para mostrar un mensaje luego de obtener respuesta
+         * desde la API.
+         * @param ok Indica si la operación se realizó correctamente
+         * @param payload Data (respuesta) obtenida desde la API
+         */
         callback: function(ok = false, payload) {
-            this.mensaje = ok ? 1 : -1
-            this.element = Object.assign({}, this.element, payload)
-            if (ok) {
-                this.volver('periodos', 'Se ha '+this.sentMessage+' el periodo correctamente.')
-            }
+            this.$root.$emit('alert', {
+                mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                class: ok ? 'success' : 'danger'
+            })
+            this.periodo = Object.assign({}, this.periodo, payload.data)
         },
-        addElem(){
+        /**
+         * Crea o actualiza un objeto de periodo.
+         */
+        addElem: function() {
             if (this.accion=='Editar') {
-                this.$store.dispatch(UPDATE_PERIODO, { periodo: this.element, cb: this.callback });
+                const payload = { mensaje: '<strong>¡Bien!</strong> Se ha registrado los cambios. Debe <strong>actualizar la página</strong> para reflejar los cambios.' }
+                this.$store.dispatch(UPDATE_PERIODO, { periodo: this.periodo, cb: this.callback, payload })
             } else {
-                this.$store.dispatch(INSERT_PERIODO, { periodo: this.element, cb: this.callback });
+                const payload = { mensaje: '<strong>¡Bien!</strong> Se ha creado el periodo.' }
+                this.$store.dispatch(INSERT_PERIODO, { periodo: this.periodo, cb: this.callback, payload })
             }   
             
         },
-        format(elemento){
-            console.log('Elemento', elemento.hasta);
-            console.log('ElementoD', elemento.desde);
-            elemento.hasta = new Date(elemento.hasta);
-            elemento.desde = new Date(elemento.desde);
-            console.log('Elemento2', elemento.hasta);
-            console.log('ElementoD2', elemento.desde);
-            return elemento;
+        /**
+         * Instancia las fechas de este objeto periodo como un objeto Date.
+         * @param periodo Periodo para el cual se "formatearan" las fechas.
+         * @return periodo con fechas de tipo Date.
+         */
+        format: function(periodo) {
+            periodo.hasta = new Date(periodo.hasta)
+            periodo.desde = new Date(periodo.desde)
+            return periodo
         }
     }
   }

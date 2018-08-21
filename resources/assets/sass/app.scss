@@ -62,6 +62,16 @@ input[type="file"] {
 
   td {
     vertical-align: middle !important;
+
+    &.input {
+      background-color: #ebf4f9 !important;
+    }
+
+    &-margin {
+      width: 2em !important;
+      border: none !important;
+      background-color: white !important;
+    }
   }
 
   td:nth-child(even) {
@@ -72,12 +82,15 @@ input[type="file"] {
   th {
     background-color: $gris-claro !important;
     border-color: $gris !important;
+
+    &.input {
+      background-color: #aecfe0 !important;
+    }
   }
 
-  .td-margin {
-    width: 2em !important;
-    border: none !important;
-    background-color: white !important;
+  th:nth-child(even) {
+    border-left: 1px solid $gris;
+    border-right: 1px solid $gris;
   }
 }
 
@@ -97,6 +110,7 @@ input[type="file"] {
   }
 
   &-btn {
+    background-color: transparent;
     color: white;
     
     &.router-link-active,
@@ -108,7 +122,7 @@ input[type="file"] {
   }
 
   &-btn:hover {
-    background-color: $gris;
+    background-color: $naranjo;
     color: white;
   }
 }
@@ -124,8 +138,7 @@ input[type="file"] {
     font-weight: bold;
   }
 
-  &-body:nth-child(odd) {
-    background-color: #e0efff;
+  &-body:nth-child(even) {
     border-top: 1px solid $gris-claro;
     border-bottom: 1px solid $gris-claro;
   }
@@ -157,5 +170,26 @@ input[type="file"] {
       background-color: $celeste !important;
       color: white !important;
     }
+  }
+}
+
+.dash {
+  padding: 0 !important;
+
+  &-btn {
+    color: $celeste;
+    padding: 1.5em !important;
+    border: 1px solid $gris-claro;
+
+    &-grid {
+      i {
+        font-size: 2.5em;
+      }
+    }
+  }
+
+  &-btn:hover {
+    background-color: $celeste;
+    color: white;
   }
 }

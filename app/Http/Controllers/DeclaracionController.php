@@ -89,9 +89,9 @@ class DeclaracionController extends Controller
                         ->get();
             }
 
+            $otras = [];
             if(Auth::user()->id_comision != null) {
                 $comision = Auth::user()->comision()->first();
-                $otras = [];
                 switch($comision->tipo) {
                     case 0:
                         $otras = Declaracion::has('apelacionSuperior')->get();
@@ -108,9 +108,11 @@ class DeclaracionController extends Controller
                             })
                             ->get();
                 }
-                $declaraciones = $declaraciones->toBase()->merge($otras);
             }
-            return $declaraciones;
+            return [
+                'usuario' => $declaraciones,
+                'comision' => $otras,
+            ];
         }
 
         return response()->json([]);

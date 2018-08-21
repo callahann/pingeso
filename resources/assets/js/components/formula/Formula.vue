@@ -4,10 +4,6 @@
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
             <li class="active">Fórmulas</li>
         </ol>
-        <div v-if="mensaje === -1" class="alert alert-danger">
-            <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">&times;</a>
-            <strong>Oh no!</strong> Ha ocurrido un error.
-        </div>
         <div class="row">
             <div class="col-md-3">
                 <div class="panel panel-default">
@@ -172,11 +168,6 @@
                 </div>
             </div>
         </div>
-        <div v-if="mensaje === 1" class="alert alert-success">
-            <a href="#" class="close" aria-label="close" v-on:click="mensaje = 0">[Cerrar &times;]</a>
-            <a href="#" class="close" aria-label="close" v-on:click="volver('inicio')">[Volver] </a>
-            <strong>Bien!</strong> Se han guardado los cambios.
-        </div>
         <div class="panel panel-default">
             <div class="panel-footer">
                 <button type="button" class="btn btn-info" v-on:click="actualizar">
@@ -209,32 +200,66 @@
                         f: '',
                         decimales: 0
                     },
-                },
-                mensaje: 0
+                }
             }
         },
         created: function() {
+            // Crea una copia de las fórmulas actuales
             const formulas = Object.assign({}, this.form, this.copy(this.formula))
+            
+            // Descompone la fórmula para horas equivalentes
             var subformula = formulas.equivalente.substring(11, formulas.equivalente.lenght)
             this.formulas.equivalente.decimales = this.decimales(subformula) 
             this.formulas.equivalente.f = subformula.substring(0, subformula.length - (7 + (this.formulas.equivalente.decimales + 1) * 2))
 
+            // Descompone la fórmula para calificación final
             subformula = formulas.nota_final.substring(11, formulas.nota_final.lenght)
             this.formulas.nota_final.decimales = this.decimales(subformula)
             this.formulas.nota_final.f = subformula.substring(0, subformula.length - (7 + (this.formulas.nota_final.decimales + 1) * 2))
         },
         methods: {
+            /**
+             * Callback para mostrar un mensaje luego de obtener respuesta
+             * desde la API.
+             * @param ok Indica si la operación se realizó correctamente
+             * @param payload Data (respuesta) obtenida desde la API
+             */
             callback: function(ok = false, payload) {
-                this.mensaje = ok ? 1 : -1
+                this.$root.$emit('alert', {
+                    mensaje: ok ? payload.mensaje : '<strong>Oh no!</strong> Ha ocurrido un error.',
+                    class: ok ? 'success' : 'danger'
+                })
             },
+            /**
+             * Actualiza el objeto fórmula actual en la base de datos
+             */
             actualizar: function() {
-                var formulas = this.construir()
-                formulas['id'] = this.formula.id
-                this.$store.dispatch(UPDATE_FORMULA, { formula: formulas, cb: this.callback })
+                if(confirm('ATENCIÓN: actualizar la fórmula actual afectará al cálculo de la calificación y horas equivalentes de todos los informes que la utilicen. ¿Continuar?')) {
+                    var formulas = this.construir()
+                    formulas['id'] = this.formula.id
+                    const payload = {
+                        mensaje: '<strong>¡Bien!</strong> Se ha actualizado las fórmulas.',
+                        volver: false
+                    }
+                    this.$store.dispatch(UPDATE_FORMULA, { formula: formulas, cb: this.callback, payload })
+                }
             },
+            /**
+             * Ingresa un nuevo objeto fórmula en la base de datos.
+             */
             crear: function() {
-                this.$store.dispatch(INSERT_FORMULA, { formula: this.construir(), cb: this.callback }) 
+                if(confirm('ATENCIÓN: al crear una nueva fórmula, ésta se aplicará a todos los informes que se creen a partir de ese momento. ¿Continuar?')) {
+                    const payload = {
+                        mensaje: '<strong>¡Bien!</strong> Se ha ingresado las nuevas fórmulas.',
+                        volver: false
+                    }
+                    this.$store.dispatch(INSERT_FORMULA, { formula: this.construir(), cb: this.callback, payload }) 
+                }
             },
+            /**
+             * Determina la cantidad de decimales que utiliza la fórmula dada
+             * @return Cantidad de decimales
+             */
             decimales: function(formula) {
                 var decimales = 0, i = formula.length - 1
                 while(formula[i] !== '1') {
@@ -243,6 +268,11 @@
                 }
                 return decimales
             },
+            /**
+             * Construye el objeto "formula" que se almacenará en la base de datos. Este objeto
+             * incluye las fórmulas finales en formato String.
+             * @return Objeto formula
+             */
             construir: function() {
                 var formulas = {
                     equivalente: '',

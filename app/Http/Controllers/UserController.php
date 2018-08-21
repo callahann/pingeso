@@ -20,10 +20,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $id_rol = Auth::user()->id_rol;
-        if($id_rol == 2) {
-            $id_depto = Auth::user()->id_departamento;
-            return User::where('id_departamento', $id_depto)
+        if(Auth::user()->rol == 1) {
+            return User::where('id_departamento', Auth::user()->id_departamento)
                         ->get()
                         ->load('departamento.facultad');
         } else return User::all()->load('departamento.facultad');
@@ -31,21 +29,14 @@ class UserController extends Controller
 
     public function indexComision()
     {
-        $id_rol = Auth::user()->id_rol;
-        if($id_rol == 2) {
-            $id_depto = Auth::user()->id_departamento;
-            return User::where('id_departamento', $id_depto)
+        if(Auth::user()->rol == 2) {
+            return User::where('id_departamento', Auth::user()->id_departamento)
                         ->whereNull('id_comision')
                         ->get()
                         ->load('departamento.facultad');
         } else return User::whereNull('id_comision')
                         ->get()
                         ->load('departamento.facultad');
-    }
-
-    public function show($id){
-        return User::where('id', $id)
-                ->first();
     }
 
     /**

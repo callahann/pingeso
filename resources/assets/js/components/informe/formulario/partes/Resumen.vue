@@ -16,7 +16,7 @@
                     <th class="text-center" v-if="etapa >= etapas.realizado">Horas semana</th>
                     <th class="text-center" v-if="etapa >= etapas.realizado">Horas año</th>
                     <th class="text-center" v-if="etapa >= etapas.realizado">Horas equivalentes</th>
-                    <th class="text-center" v-if="etapa >= etapas.evaluando">Calificación parcial</th>
+                    <th class="text-center input" v-if="etapa >= etapas.evaluando">Calificación parcial</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                     <td class="text-center" v-if="etapa >= etapas.realizado">{{ value.realizado.horasAnio }}</td>
                     <td class="text-center" v-if="etapa >= etapas.realizado">{{ value.realizado.equivalente }}</td>
                     <td class="td-margin" v-if="etapa >= etapas.evaluando"></td>
-                    <td class="col-md-2" v-if="etapa >= etapas.evaluando">
+                    <td class="col-md-2 input" v-if="etapa >= etapas.evaluando">
                         <input type="number" class="form-control" min=1 max=7 
                             v-if="value.comprometido.equivalente > 0 && auth.comision !== null && etapa >= etapas.evaluando"
                             v-model.number="informe[key].calificacion">
@@ -45,7 +45,7 @@
                     <th class="text-center" v-if="etapa >= etapas.realizado"><b>{{ totales.realizado.anual }}</b></th>
                     <th class="text-center" v-if="etapa >= etapas.realizado"><b>{{ totales.realizado.equivalente }}</b></th>
                     <td class="td-margin" v-if="etapa >= etapas.evaluando"></td>
-                    <th class="text-center" v-if="etapa >= etapas.evaluando">
+                    <th class="text-center input" v-if="etapa >= etapas.evaluando">
                         {{ calificacion }}
                     </th>
                 </tr>
