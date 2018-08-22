@@ -53,7 +53,7 @@
                                     <td>{{ etiquetas.rolComision[user.rol_comision] }}</td>
                                     <td>{{ user.departamento.nombre }}</td>
                                     <td>
-                                        <button v-on:click.prevent="eliminar(user.id)" class="btn btn-xs btn-danger">
+                                        <button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&ensp;Quitar
                                         </button>
                                     </td>
@@ -67,16 +67,39 @@
                 <button type="button" class="btn btn-success" v-on:click="addElem">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span>&ensp;{{this.accion}}
                 </button>
-                <router-link class="btn btn-success" :to="{ name: 'usuarios-comision-departamento', params: { id: id_comision }}">     
+                <!--<router-link class="btn btn-success" :to="{ name: 'usuarios-comision-departamento', params: { id: id_comision }}">     
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&ensp;Usuario
-                </router-link>
+                </router-link>-->
+                <button type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar">Agregar Usuario</button>
             </div>
+        </div>
+    
+        <!-- Modal -->
+        <div id="agregar" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+              </div>
+              <div class="modal-body"></div>
+              <agregar-usuario></agregar-usuario>
+              <br/>
+              <div class="modal-footer">
+              </div>
+            </div>
+
+          </div>
         </div>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
+    import ListadoUsuariosD from '../comision/ListadoUsuariosD'
     import {
         INSERT_DEPARTAMENTO,
         UPDATE_DEPARTAMENTO
@@ -100,6 +123,7 @@
             .then(response => {
                 this.id_comision = response.data.id
                 this.users = response.data.usuarios
+                console.log(this.users)
             })
     },
     data: function() {
@@ -109,6 +133,9 @@
             id_comision: {},
             seleccionado: {}
         }
+    },
+    components: {
+        'agregar-usuario': ListadoUsuariosD,
     },
     methods: {
         /**
@@ -134,7 +161,7 @@
             }   
             
         },
-        eliminar: function(id) {
+        eliminarUsuario: function(id) {
             axios
                 .get('/api/usuarios/' + id)
                 .then(response => {
@@ -154,3 +181,9 @@
     computed: mapState(['facultades'])
   }
 </script>
+<style type="text/css">
+    .modal-xl{
+        width: 95%;
+        max-width: 1250px;
+    }
+</style>

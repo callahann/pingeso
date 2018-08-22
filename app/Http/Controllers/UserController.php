@@ -39,6 +39,11 @@ class UserController extends Controller
                         ->load('departamento.facultad');
     }
 
+    public function show($id){  
+        return User::where('id', $id)   
+                ->first();  
+    }
+
     /**
      * Store a newly created resource in storage.
      *

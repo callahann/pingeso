@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="col-md-10 col-md-offset-1">
         <label for="facultad">Comisión Departamental</label>
         <br></br>
         <input type="text" v-model="search" placeholder="Buscar usuarios"/>
