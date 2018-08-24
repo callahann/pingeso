@@ -89,7 +89,8 @@ Vue.mixin({
                 ],
                 rolComision: [
                     'Fijo',
-                    'Suplente'
+                    'Suplente',
+                    'Externo'
                 ]
             }
         }

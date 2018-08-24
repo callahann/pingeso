@@ -32,7 +32,7 @@ Route::get('/descripciones/{tipo}', 'DescripcionController@type');
 Route::get('/comisiones/superior', 'ComisionController@comisionSuperior');
 Route::get('/comisiones/departamento/{id}', 'ComisionController@comisionDepartamento');
 Route::get('/comisiones/facultad/{id}', 'ComisionController@comisionFacultad');
-Route::get('/usuarios/comision', 'UserController@indexComision');
+Route::get('/usuarios/comision/{tipo_usuario}/{id_entidad}/{tipo_entidad}', 'UserController@indexComision');
 Route::resource('factores', 'FactorController');
 Route::resource('facultades', 'FacultadController');
 Route::resource('formulas', 'FormulaController');

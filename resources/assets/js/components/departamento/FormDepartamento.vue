@@ -71,7 +71,11 @@
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&ensp;Usuario
                 </router-link>-->
                 <button type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar">Agregar Usuario</button>
+                 data-target="#agregar">Agregar Fijo</button>
+                 <button type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar">Agregar Suplente</button>
+                 <button type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar">Agregar Externo</button>
             </div>
         </div>
     
@@ -83,10 +87,15 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
+                <h4 class="modal-title">Agregar a comisión</h4>
               </div>
               <div class="modal-body"></div>
-              <agregar-usuario></agregar-usuario>
+              <agregar-usuario
+              v-bind:id_comision="id_comision"
+              v-bind:tipo_usuario="0"
+              v-bind:id_entidad="this.departamento.id"
+              v-bind:tipo_entidad="2"
+              ></agregar-usuario>
               <br/>
               <div class="modal-footer">
               </div>
@@ -99,7 +108,7 @@
 
 <script>
     import axios from 'axios'
-    import ListadoUsuariosD from '../comision/ListadoUsuariosD'
+    import ListadoUsuarios from '../comision/ListadoUsuarios'
     import {
         INSERT_DEPARTAMENTO,
         UPDATE_DEPARTAMENTO
@@ -135,7 +144,7 @@
         }
     },
     components: {
-        'agregar-usuario': ListadoUsuariosD,
+        'agregar-usuario': ListadoUsuarios,
     },
     methods: {
         /**
@@ -177,6 +186,7 @@
                     })
                 })
         }
+
     },
     computed: mapState(['facultades'])
   }

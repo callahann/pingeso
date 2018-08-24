@@ -27,16 +27,50 @@ class UserController extends Controller
         } else return User::all()->load('departamento.facultad');
     }
 
-    public function indexComision()
+    public function indexComision($tipo_usuario, $id_entidad, $tipo_entidad)
     {
-        if(Auth::user()->rol == 2) {
-            return User::where('id_departamento', Auth::user()->id_departamento)
-                        ->whereNull('id_comision')
-                        ->get()
-                        ->load('departamento.facultad');
-        } else return User::whereNull('id_comision')
-                        ->get()
-                        ->load('departamento.facultad');
+
+        if($tipo_usuario == 0 or $tipo_usuario == 1){
+            if ($tipo_entidad == 0) {
+                return User::whereNull('id_comision')
+                    ->get()
+                    ->load('departamento.facultad');                    
+            }
+            elseif($tipo_entidad == 1){
+                return User::whereNull('id_comision')
+                    ->whereHas('departamento', function($q) use($id_entidad){
+                    $q->where('id_facultad', $id_entidad);})
+                    ->get()
+                    ->load('departamento.facultad');   
+            }
+            else{
+                return User::whereNull('id_comision')
+                    ->where('id_departamento', $id_entidad)
+                    ->get()
+                    ->load('departamento.facultad'); 
+            }
+        }
+        else{
+            if ($tipo_entidad == 0) {
+                return User::whereNull('id_comision')
+                    ->get()
+                    ->load('departamento.facultad');                    
+            }
+            elseif($tipo_entidad == 1){
+                return User::whereNull('id_comision')
+                    ->whereHas('departamento', function($q) use($id_entidad){
+                    $q->where('id_facultad', '!=', $id_entidad);})
+                    ->get()
+                    ->load('departamento.facultad');   
+            }
+            else{
+                return User::whereNull('id_comision')
+                    ->where('id_departamento', '!=', $id_entidad)
+                    ->get()
+                    ->load('departamento.facultad'); 
+            }
+        }
+        
     }
 
     public function show($id){  

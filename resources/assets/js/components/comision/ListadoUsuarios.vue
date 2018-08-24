@@ -1,7 +1,5 @@
 <template>
-    <div class="row">
-        <label for="facultad">Comisión Superior</label>
-        <br></br>
+    <div class="col-md-10 col-md-offset-1">
         <input type="text" v-model="search" placeholder="Buscar usuarios"/>
         <br></br>
         <table class="table table-striped">
@@ -12,7 +10,6 @@
                     <th>Cargo</th>
                     <th>Departamento</th>
                     <th></th>
-
                 </tr>
             </thead>
             <tbody>
@@ -23,14 +20,13 @@
                     <td v-if="user.rol === 1"> Director Departamento</td>
                     <td v-if="user.rol === 2"> Administrador</td>
                     <td>{{user.departamento.nombre}}</td>
-                    <td><button v-on:click.prevent="agregar(user.id, 1)" class="btn btn-xs btn-success">
-                            <span class="glyphicon glyphicon-check" aria-hidden="true">Fijo</span>
+                    <td><button v-on:click.prevent="agregar(user.id, tipo_usuario)" class="btn btn-xs btn-success" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-check" aria-hidden="true">Agregar</span>
                           </button>
-                          <button v-on:click.prevent="agregar(user.id, 2)" class="btn btn-xs btn-success">
+                          <!--<button v-on:click.prevent="agregar(user.id, 2)" class="btn btn-xs btn-success" data-dismiss="modal">
                             <span class="glyphicon glyphicon-ok" aria-hidden="true">Suplente</span>
-                          </button>
+                          </button> -->
                     </td>
-                    
                 </tr>
             </tbody>
         </table>
@@ -42,30 +38,15 @@
 
 <script>
     import axios from 'axios';
-    export default {       
+    export default {
+        props: ['id_comision', 'tipo_usuario', 'id_entidad', 'tipo_entidad'],       
         created: function() {
-            axios.get('/api/usuarios/comision')
+            axios.get('/api/usuarios/comision/'
+             + this.tipo_usuario+'/'+this.id_entidad+'/'+ this.tipo_entidad)
             .then(response => {
                 this.users = response.data;
+                console.log(this.users);
             });
-        },
-        methods: {
-            agregar(id, tipo){
-                axios.get('/api/usuarios/' + id)
-                .then(response => {
-                    this.seleccionado = response.data;
-                    this.seleccionado.id_comision = 1;
-                    this.seleccionado.rol_comision = tipo;
-                    axios.put('/api/usuarios/' + id, this.seleccionado)
-                    .then(response => {
-                        axios.get('/api/usuarios/comision')
-                        .then(response => {
-                            this.users = response.data;
-                        });
-                    });
-                });      
-
-            }
         },
         computed: {
             filtrar: function(){
@@ -76,11 +57,29 @@
             }
 
         },
+        methods: {
+            agregar(user_id, tipo){
+                axios.get('/api/usuarios/' + user_id)
+                .then(response => {
+                    this.seleccionado = response.data;
+                    this.seleccionado.id_comision = this.id_comision;
+                    this.seleccionado.rol_comision = this.tipo_usuario;
+                    axios.put('/api/usuarios/' + user_id, this.seleccionado)
+                    .then(response => {
+                        axios.get('/api/usuarios/comision/'
+                        + this.tipo_usuario+'/'+this.id_entidad+'/'+ this.tipo_entidad)
+                        .then(response => {
+                            this.users = response.data;
+                        });
+                    });
+                });      
+
+            }
+        },
         data () {
             return {
             users: [],
-            search: '',
-            seleccionado: {}
+            search: ''
             }
         }
   }

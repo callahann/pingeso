@@ -44,7 +44,7 @@
                                     <td v-if="user.rol_comision === 1"> Fijo </td>
                                     <td v-else> Suplente </td>
                                     <td>{{user.departamento.nombre}}</td>
-                                    <td><button v-on:click.prevent="eliminar(user.id)" class="btn btn-xs btn-danger">
+                                    <td><button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true">Quitar</span>
                                           </button>
                                     </td>
@@ -57,16 +57,47 @@
                 <button type="button" class="btn btn-success" v-on:click="addElem">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span> {{this.accion}}
                 </button>
-                <router-link class="btn btn-success" :to="{ name: 'usuarios-comision-facultad', params: { id: id_comision }}">     
+                <!--<router-link class="btn btn-success" :to="{ name: 'usuarios-comision-facultad', params: { id: id_comision }}">     
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Usuario
-                </router-link>
+                </router-link>-->
+                <button type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar">Agregar Fijo</button>
+                 <button type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar">Agregar Suplente</button>
+                 <button type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar">Agregar Externo</button>
             </div>
+        </div>
+        <!-- Modal -->
+        <div id="agregar" class="modal fade" role="dialog">
+          <div class="modal-dialog modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Agregar a comisión</h4>
+              </div>
+              <div class="modal-body"></div>
+              <agregar-usuario
+              v-bind:id_comision="id_comision"
+              v-bind:tipo_usuario="0"
+              v-bind:id_entidad="this.element.id"
+              v-bind:tipo_entidad="1"
+              ></agregar-usuario>
+              <br/>
+              <div class="modal-footer">
+              </div>
+            </div>
+
+          </div>
         </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
+    import axios from 'axios'
+    import ListadoUsuarios from '../comision/ListadoUsuarios'
     import {
         INSERT_FACULTAD,
         UPDATE_FACULTAD
@@ -102,6 +133,9 @@
         seleccionado: {}
         }
     },
+    components: {
+        'agregar-usuario': ListadoUsuarios,
+    },
     methods: {
         callback: function(ok = false, payload) {
             this.mensaje = ok ? 1 : -1
@@ -117,7 +151,7 @@
             }   
             
         },
-        eliminar(id){
+        eliminarUsuario(id){
                 axios.get('/api/usuarios/' + id)
                 .then(response => {
                     this.seleccionado = response.data;
@@ -136,3 +170,9 @@
     }
   }
 </script>
+<style type="text/css">
+    .modal-xl{
+        width: 95%;
+        max-width: 1250px;
+    }
+</style>
