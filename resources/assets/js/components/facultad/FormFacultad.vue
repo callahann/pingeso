@@ -60,33 +60,34 @@
                 <!--<router-link class="btn btn-success" :to="{ name: 'usuarios-comision-facultad', params: { id: id_comision }}">     
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Usuario
                 </router-link>-->
-                <button type="button" class="btn btn-default" data-toggle="modal"
+                <button v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
                  data-target="#agregar">Agregar Fijo</button>
-                 <button type="button" class="btn btn-default" data-toggle="modal"
+                 <button v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
                  data-target="#agregar">Agregar Suplente</button>
-                 <button type="button" class="btn btn-default" data-toggle="modal"
+                 <button  v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
                  data-target="#agregar">Agregar Externo</button>
             </div>
         </div>
         <!-- Modal -->
-        <div id="agregar" class="modal fade" role="dialog">
+        <div v-if="abierto" id="agregar" class="modal fade" role="dialog">
           <div class="modal-dialog modal-xl">
 
             <!-- Modal content-->
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Agregar a comisión</h4>
               </div>
               <div class="modal-body"></div>
               <agregar-usuario
               v-bind:id_comision="id_comision"
-              v-bind:tipo_usuario="0"
+              v-bind:tipo_usuario="this.tipo_usuario"
               v-bind:id_entidad="this.element.id"
               v-bind:tipo_entidad="1"
               ></agregar-usuario>
               <br/>
               <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                    v-on:click="actualizar">Cerrar</button>
               </div>
             </div>
 
@@ -130,7 +131,9 @@
         element: (this.elemento?this.elemento:{}),
         users: [],
         id_comision: {},
-        seleccionado: {}
+        seleccionado: {},
+        abierto: false,
+        tipo_usuario: {}
         }
     },
     components: {
@@ -166,7 +169,33 @@
                     });
                 });      
 
-            }
+            },
+        agregarFijo: function(){
+            this.abierto = true;
+            this.tipo_usuario = 0;
+
+        },
+        agregarSuplente: function(){
+            this.abierto = true;
+            this.tipo_usuario = 1;
+
+        },
+        agregarExterno: function(){
+            this.abierto = true;
+            this.tipo_usuario = 2;
+
+        },
+        cerrar: function(){
+            this.abierto = false;
+        },
+        actualizar: function(){
+            axios.get('/api/comisiones/facultad/' + this.element.id)
+            .then(response => {
+                this.id_comision = response.data.id;
+                this.users = response.data.usuarios;
+            });
+            this.abierto = false;
+        }
     }
   }
 </script>

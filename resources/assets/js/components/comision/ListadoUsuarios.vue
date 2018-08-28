@@ -20,12 +20,13 @@
                     <td v-if="user.rol === 1"> Director Departamento</td>
                     <td v-if="user.rol === 2"> Administrador</td>
                     <td>{{user.departamento.nombre}}</td>
-                    <td><button v-on:click.prevent="agregar(user.id, tipo_usuario)" class="btn btn-xs btn-success" data-dismiss="modal">
+                    <td>
+                        <button v-if="desactivar == false" v-on:click.prevent="agregar(user.id, tipo_usuario)" class="btn btn-xs btn-success">
                             <span class="glyphicon glyphicon-check" aria-hidden="true">Agregar</span>
-                          </button>
-                          <!--<button v-on:click.prevent="agregar(user.id, 2)" class="btn btn-xs btn-success" data-dismiss="modal">
-                            <span class="glyphicon glyphicon-ok" aria-hidden="true">Suplente</span>
-                          </button> -->
+                        </button>
+                        <button v-else class="btn btn-xs btn-success disabled">
+                            <span class="glyphicon glyphicon-check" aria-hidden="true">Agregar</span>
+                        </button>       
                     </td>
                 </tr>
             </tbody>
@@ -70,6 +71,8 @@
                         + this.tipo_usuario+'/'+this.id_entidad+'/'+ this.tipo_entidad)
                         .then(response => {
                             this.users = response.data;
+                            this.desactivar = true;
+
                         });
                     });
                 });      
@@ -79,7 +82,8 @@
         data () {
             return {
             users: [],
-            search: ''
+            search: '',
+            desactivar: false
             }
         }
   }

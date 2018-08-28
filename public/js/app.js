@@ -16068,6 +16068,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -16101,7 +16102,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             element: this.elemento ? this.elemento : {},
             users: [],
             id_comision: {},
-            seleccionado: {}
+            seleccionado: {},
+            abierto: false,
+            tipo_usuario: {}
         };
     },
 
@@ -16138,6 +16141,31 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     });
                 });
             });
+        },
+
+        agregarFijo: function agregarFijo() {
+            this.abierto = true;
+            this.tipo_usuario = 0;
+        },
+        agregarSuplente: function agregarSuplente() {
+            this.abierto = true;
+            this.tipo_usuario = 1;
+        },
+        agregarExterno: function agregarExterno() {
+            this.abierto = true;
+            this.tipo_usuario = 2;
+        },
+        cerrar: function cerrar() {
+            this.abierto = false;
+        },
+        actualizar: function actualizar() {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/facultad/' + this.element.id).then(function (response) {
+                _this3.id_comision = response.data.id;
+                _this3.users = response.data.usuarios;
+            });
+            this.abierto = false;
         }
     }
 });
@@ -16149,6 +16177,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+//
 //
 //
 //
@@ -16220,6 +16249,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + user_id, _this3.seleccionado).then(function (response) {
                     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision/' + _this3.tipo_usuario + '/' + _this3.id_entidad + '/' + _this3.tipo_entidad).then(function (response) {
                         _this3.users = response.data;
+                        _this3.desactivar = true;
                     });
                 });
             });
@@ -16228,7 +16258,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     data: function data() {
         return {
             users: [],
-            search: ''
+            search: '',
+            desactivar: false
         };
     }
 });
@@ -16434,6 +16465,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -16465,7 +16497,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             departamento: this.elemento ? this.elemento : { id_facultad: '' },
             users: [],
             id_comision: {},
-            seleccionado: {}
+            seleccionado: {},
+            abierto: false,
+            tipo_usuario: {}
         };
     },
     components: {
@@ -16510,6 +16544,31 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     });
                 });
             });
+        },
+        agregarFijo: function agregarFijo() {
+            this.abierto = true;
+            this.tipo_usuario = 0;
+        },
+        agregarSuplente: function agregarSuplente() {
+            this.abierto = true;
+            this.tipo_usuario = 1;
+        },
+        agregarExterno: function agregarExterno() {
+            this.abierto = true;
+            this.tipo_usuario = 2;
+        },
+        cerrar: function cerrar() {
+            this.abierto = false;
+        },
+        actualizar: function actualizar() {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/departamento/' + this.departamento.id).then(function (response) {
+                _this3.id_comision = response.data.id;
+                _this3.users = response.data.usuarios;
+                console.log(_this3.users);
+            });
+            this.abierto = false;
         }
 
     },
@@ -17548,6 +17607,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -17573,6 +17633,30 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     });
                 });
             });
+        },
+
+        agregarFijo: function agregarFijo() {
+            this.abierto = true;
+            this.tipo_usuario = 0;
+        },
+        agregarSuplente: function agregarSuplente() {
+            this.abierto = true;
+            this.tipo_usuario = 1;
+        },
+        agregarExterno: function agregarExterno() {
+            this.abierto = true;
+            this.tipo_usuario = 2;
+        },
+        cerrar: function cerrar() {
+            this.abierto = false;
+        },
+        actualizar: function actualizar() {
+            var _this3 = this;
+
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/superior').then(function (response) {
+                _this3.users = response.data.usuarios;
+            });
+            this.abierto = false;
         }
     },
     components: {
@@ -17581,7 +17665,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     data: function data() {
         return {
             users: [],
-            seleccionado: {}
+            seleccionado: {},
+            abierto: false,
+            tipo_usuario: {}
         };
     }
 });
@@ -28810,29 +28896,43 @@ var render = function() {
             _c("td", [_vm._v(_vm._s(user.departamento.nombre))]),
             _vm._v(" "),
             _c("td", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-xs btn-success",
-                  attrs: { "data-dismiss": "modal" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      _vm.agregar(user.id, _vm.tipo_usuario)
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "span",
+              _vm.desactivar == false
+                ? _c(
+                    "button",
                     {
-                      staticClass: "glyphicon glyphicon-check",
-                      attrs: { "aria-hidden": "true" }
+                      staticClass: "btn btn-xs btn-success",
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.agregar(user.id, _vm.tipo_usuario)
+                        }
+                      }
                     },
-                    [_vm._v("Agregar")]
+                    [
+                      _c(
+                        "span",
+                        {
+                          staticClass: "glyphicon glyphicon-check",
+                          attrs: { "aria-hidden": "true" }
+                        },
+                        [_vm._v("Agregar")]
+                      )
+                    ]
                   )
-                ]
-              )
+                : _c(
+                    "button",
+                    { staticClass: "btn btn-xs btn-success disabled" },
+                    [
+                      _c(
+                        "span",
+                        {
+                          staticClass: "glyphicon glyphicon-check",
+                          attrs: { "aria-hidden": "true" }
+                        },
+                        [_vm._v("Agregar")]
+                      )
+                    ]
+                  )
             ])
           ])
         })
@@ -29050,7 +29150,8 @@ var render = function() {
               type: "button",
               "data-toggle": "modal",
               "data-target": "#agregar"
-            }
+            },
+            on: { click: _vm.agregarFijo }
           },
           [_vm._v("Agregar Fijo")]
         ),
@@ -29063,7 +29164,8 @@ var render = function() {
               type: "button",
               "data-toggle": "modal",
               "data-target": "#agregar"
-            }
+            },
+            on: { click: _vm.agregarSuplente }
           },
           [_vm._v("Agregar Suplente")]
         ),
@@ -29076,44 +29178,60 @@ var render = function() {
               type: "button",
               "data-toggle": "modal",
               "data-target": "#agregar"
-            }
+            },
+            on: { click: _vm.agregarExterno }
           },
           [_vm._v("Agregar Externo")]
         )
       ])
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "modal fade", attrs: { id: "agregar", role: "dialog" } },
-      [
-        _c("div", { staticClass: "modal-dialog modal-xl" }, [
-          _c(
-            "div",
-            { staticClass: "modal-content" },
-            [
-              _vm._m(1),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }),
-              _vm._v(" "),
-              _c("agregar-usuario", {
-                attrs: {
-                  id_comision: _vm.id_comision,
-                  tipo_usuario: 0,
-                  id_entidad: this.element.id,
-                  tipo_entidad: 1
-                }
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" })
-            ],
-            1
-          )
-        ])
-      ]
-    )
+    _vm.abierto
+      ? _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: { id: "agregar", role: "dialog" }
+          },
+          [
+            _c("div", { staticClass: "modal-dialog modal-xl" }, [
+              _c(
+                "div",
+                { staticClass: "modal-content" },
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }),
+                  _vm._v(" "),
+                  _c("agregar-usuario", {
+                    attrs: {
+                      id_comision: _vm.id_comision,
+                      tipo_usuario: this.tipo_usuario,
+                      id_entidad: this.element.id,
+                      tipo_entidad: 1
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-default",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                        on: { click: _vm.actualizar }
+                      },
+                      [_vm._v("Cerrar")]
+                    )
+                  ])
+                ],
+                1
+              )
+            ])
+          ]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -29140,15 +29258,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("×")]
-      ),
-      _vm._v(" "),
       _c("h4", { staticClass: "modal-title" }, [_vm._v("Agregar a comisión")])
     ])
   }
@@ -29697,7 +29806,8 @@ var render = function() {
               type: "button",
               "data-toggle": "modal",
               "data-target": "#agregar"
-            }
+            },
+            on: { click: _vm.agregarFijo }
           },
           [_vm._v("Agregar Fijo")]
         ),
@@ -29710,7 +29820,8 @@ var render = function() {
               type: "button",
               "data-toggle": "modal",
               "data-target": "#agregar"
-            }
+            },
+            on: { click: _vm.agregarSuplente }
           },
           [_vm._v("Agregar Suplente")]
         ),
@@ -29723,44 +29834,60 @@ var render = function() {
               type: "button",
               "data-toggle": "modal",
               "data-target": "#agregar"
-            }
+            },
+            on: { click: _vm.agregarExterno }
           },
           [_vm._v("Agregar Externo")]
         )
       ])
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "modal fade", attrs: { id: "agregar", role: "dialog" } },
-      [
-        _c("div", { staticClass: "modal-dialog modal-xl" }, [
-          _c(
-            "div",
-            { staticClass: "modal-content" },
-            [
-              _vm._m(1),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }),
-              _vm._v(" "),
-              _c("agregar-usuario", {
-                attrs: {
-                  id_comision: _vm.id_comision,
-                  tipo_usuario: 0,
-                  id_entidad: this.departamento.id,
-                  tipo_entidad: 2
-                }
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" })
-            ],
-            1
-          )
-        ])
-      ]
-    )
+    _vm.abierto
+      ? _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: { id: "agregar", role: "dialog" }
+          },
+          [
+            _c("div", { staticClass: "modal-dialog modal-xl" }, [
+              _c(
+                "div",
+                { staticClass: "modal-content" },
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }),
+                  _vm._v(" "),
+                  _c("agregar-usuario", {
+                    attrs: {
+                      id_comision: _vm.id_comision,
+                      tipo_usuario: this.tipo_usuario,
+                      id_entidad: this.departamento.id,
+                      tipo_entidad: 2
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-default",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                        on: { click: _vm.actualizar }
+                      },
+                      [_vm._v("Cerrar")]
+                    )
+                  ])
+                ],
+                1
+              )
+            ])
+          ]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -29791,15 +29918,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("×")]
-      ),
-      _vm._v(" "),
       _c("h4", { staticClass: "modal-title" }, [_vm._v("Agregar a comisión")])
     ])
   }
@@ -32172,39 +32290,96 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(1),
+    _c("div", { staticClass: "panel-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-default",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": "#agregar"
+          },
+          on: { click: _vm.agregarFijo }
+        },
+        [_vm._v("Agregar Fijo")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-default",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": "#agregar"
+          },
+          on: { click: _vm.agregarSuplente }
+        },
+        [_vm._v("Agregar Suplente")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-default",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": "#agregar"
+          },
+          on: { click: _vm.agregarExterno }
+        },
+        [_vm._v("Agregar Externo")]
+      )
+    ]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "modal fade", attrs: { id: "agregar", role: "dialog" } },
-      [
-        _c("div", { staticClass: "modal-dialog modal-xl" }, [
-          _c(
-            "div",
-            { staticClass: "modal-content" },
-            [
-              _vm._m(2),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }),
-              _vm._v(" "),
-              _c("agregar-usuario", {
-                attrs: {
-                  id_comision: 1,
-                  tipo_usuario: 0,
-                  id_entidad: 0,
-                  tipo_entidad: 0
-                }
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" })
-            ],
-            1
-          )
-        ])
-      ]
-    )
+    _vm.abierto
+      ? _c(
+          "div",
+          {
+            staticClass: "modal fade",
+            attrs: { id: "agregar", role: "dialog" }
+          },
+          [
+            _c("div", { staticClass: "modal-dialog modal-xl" }, [
+              _c(
+                "div",
+                { staticClass: "modal-content" },
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }),
+                  _vm._v(" "),
+                  _c("agregar-usuario", {
+                    attrs: {
+                      id_comision: 1,
+                      tipo_usuario: this.tipo_usuario,
+                      id_entidad: 0,
+                      tipo_entidad: 0
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-default",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                        on: { click: _vm.actualizar }
+                      },
+                      [_vm._v("Cerrar")]
+                    )
+                  ])
+                ],
+                1
+              )
+            ])
+          ]
+        )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -32230,61 +32405,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "panel-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-default",
-          attrs: {
-            type: "button",
-            "data-toggle": "modal",
-            "data-target": "#agregar"
-          }
-        },
-        [_vm._v("Agregar Fijo")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-default",
-          attrs: {
-            type: "button",
-            "data-toggle": "modal",
-            "data-target": "#agregar"
-          }
-        },
-        [_vm._v("Agregar Suplente")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-default",
-          attrs: {
-            type: "button",
-            "data-toggle": "modal",
-            "data-target": "#agregar"
-          }
-        },
-        [_vm._v("Agregar Externo")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("×")]
-      ),
-      _vm._v(" "),
       _c("h4", { staticClass: "modal-title" }, [_vm._v("Agregar a comisión")])
     ])
   }
