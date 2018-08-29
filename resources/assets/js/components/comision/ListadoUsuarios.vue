@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-12 col-lg-12">
         <input type="text" v-model="search" placeholder="Buscar usuarios"/>
         <br></br>
         <table class="table table-striped">

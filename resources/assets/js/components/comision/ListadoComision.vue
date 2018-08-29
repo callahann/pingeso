@@ -54,7 +54,7 @@
               ></agregar-usuario>
               <br/>
               <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                    <button type="button" class="btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2"  data-dismiss="modal"
                     v-on:click="actualizar">Cerrar</button>
               </div>
             </div>
@@ -134,5 +134,20 @@
     .modal-xl{
         width: 95%;
         max-width: 1250px;
+    }
+    .btn-default:hover{
+        background-color: #002F6C;
+        width: auto;
+        text-align: center;
+    }
+    .btn-default .active{
+        background-color: #002F6C;
+        width: auto;
+        text-align: center;
+    }
+    .btn-default{
+        width: auto;
+        text-align: center;
+        background-color: #004299;
     }
 </style>

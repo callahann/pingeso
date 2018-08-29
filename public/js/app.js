@@ -16069,6 +16069,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
 
 
 
@@ -28796,7 +28798,7 @@ exports = module.exports = __webpack_require__(10)(false);
 
 
 // module
-exports.push([module.i, "\n.modal-xl{\n    width: 95%;\n    max-width: 1250px;\n}\n", ""]);
+exports.push([module.i, "\n.modal-xl{\n    width: 95%;\n    max-width: 1250px;\n}\n.btn-default:hover{\n    background-color: #002F6C;\n    width: auto;\n    text-align: center;\n}\n.btn-default .active{\n    background-color: #002F6C;\n    width: auto;\n    text-align: center;\n}\n.btn-default{\n    width: auto;\n    text-align: center;\n    background-color: #004299;\n}\n", ""]);
 
 // exports
 
@@ -28847,7 +28849,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+  return _c("div", { staticClass: "col-md-12 col-lg-12" }, [
     _c("input", {
       directives: [
         {
@@ -29195,39 +29197,42 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-dialog modal-xl" }, [
-              _c(
-                "div",
-                { staticClass: "modal-content" },
-                [
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-body" }),
-                  _vm._v(" "),
-                  _c("agregar-usuario", {
-                    attrs: {
-                      id_comision: _vm.id_comision,
-                      tipo_usuario: this.tipo_usuario,
-                      id_entidad: this.element.id,
-                      tipo_entidad: 1
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-footer" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-default",
-                        attrs: { type: "button", "data-dismiss": "modal" },
-                        on: { click: _vm.actualizar }
-                      },
-                      [_vm._v("Cerrar")]
-                    )
-                  ])
-                ],
-                1
-              )
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "modal-content" },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-body" }),
+                    _vm._v(" "),
+                    _c("agregar-usuario", {
+                      attrs: {
+                        id_comision: _vm.id_comision,
+                        tipo_usuario: this.tipo_usuario,
+                        id_entidad: this.element.id,
+                        tipo_entidad: 1
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "modal-footer" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                          on: { click: _vm.actualizar }
+                        },
+                        [_vm._v("Cerrar")]
+                      )
+                    ])
+                  ],
+                  1
+                )
+              ])
             ])
           ]
         )
@@ -29586,7 +29591,7 @@ exports = module.exports = __webpack_require__(10)(false);
 
 
 // module
-exports.push([module.i, "\n.modal-xl{\n    width: 95%;\n    max-width: 1250px;\n}\n", ""]);
+exports.push([module.i, "\n.modal-xl{\n    width: 95%;\n    max-width: 1250px;\n}\n.btn-default:hover{\n    background-color: #002F6C;\n    width: auto;\n    text-align: center;\n}\n.btn-default .active{\n    background-color: #002F6C;\n    width: auto;\n    text-align: center;\n}\n.btn-default{\n    width: auto;\n    text-align: center;\n    background-color: #004299;\n}\n", ""]);
 
 // exports
 
@@ -29874,7 +29879,8 @@ var render = function() {
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-default",
+                        staticClass:
+                          "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
                         attrs: { type: "button", "data-dismiss": "modal" },
                         on: { click: _vm.actualizar }
                       },
@@ -32223,7 +32229,7 @@ exports = module.exports = __webpack_require__(10)(false);
 
 
 // module
-exports.push([module.i, "\n.modal-xl{\n    width: 95%;\n    max-width: 1250px;\n}\n", ""]);
+exports.push([module.i, "\n.modal-xl{\n    width: 95%;\n    max-width: 1250px;\n}\n.btn-default:hover{\n    background-color: #002F6C;\n    width: auto;\n    text-align: center;\n}\n.btn-default .active{\n    background-color: #002F6C;\n    width: auto;\n    text-align: center;\n}\n.btn-default{\n    width: auto;\n    text-align: center;\n    background-color: #004299;\n}\n", ""]);
 
 // exports
 
@@ -32366,7 +32372,8 @@ var render = function() {
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-default",
+                        staticClass:
+                          "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
                         attrs: { type: "button", "data-dismiss": "modal" },
                         on: { click: _vm.actualizar }
                       },

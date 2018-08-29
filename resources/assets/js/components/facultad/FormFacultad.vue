@@ -73,24 +73,26 @@
           <div class="modal-dialog modal-xl">
 
             <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Agregar a comisión</h4>
-              </div>
-              <div class="modal-body"></div>
-              <agregar-usuario
-              v-bind:id_comision="id_comision"
-              v-bind:tipo_usuario="this.tipo_usuario"
-              v-bind:id_entidad="this.element.id"
-              v-bind:tipo_entidad="1"
-              ></agregar-usuario>
-              <br/>
-              <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"
-                    v-on:click="actualizar">Cerrar</button>
-              </div>
-            </div>
+            <div class="container">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Agregar a comisión</h4>
+                  </div>
+                  <div class="modal-body"></div>
+                  <agregar-usuario
+                  v-bind:id_comision="id_comision"
+                  v-bind:tipo_usuario="this.tipo_usuario"
+                  v-bind:id_entidad="this.element.id"
+                  v-bind:tipo_entidad="1"
+                  ></agregar-usuario>
+                  <br/>
 
+                  <div class="modal-footer">
+                        <button type="button" class="btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2"  data-dismiss="modal"
+                        v-on:click="actualizar">Cerrar</button>
+                  </div>
+                </div>
+            </div>
           </div>
         </div>
     </div>
@@ -203,5 +205,20 @@
     .modal-xl{
         width: 95%;
         max-width: 1250px;
+    }
+    .btn-default:hover{
+        background-color: #002F6C;
+        width: auto;
+        text-align: center;
+    }
+    .btn-default .active{
+        background-color: #002F6C;
+        width: auto;
+        text-align: center;
+    }
+    .btn-default{
+        width: auto;
+        text-align: center;
+        background-color: #004299;
     }
 </style>
