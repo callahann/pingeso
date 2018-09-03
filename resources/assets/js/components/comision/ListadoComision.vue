@@ -15,8 +15,9 @@
                 <tr v-for = "user in users">
                     <td>{{user.nombres}} {{user.apellido_paterno}}</td>
                     <td>{{user.email}}</td>
-                    <td v-if="user.rol_comision === 1"> Fijo </td>
-                    <td v-else> Suplente </td>
+                    <td v-if="user.rol_comision === 0"> Fijo </td>
+                    <td v-else-if="user.rol_comision === 1"> Suplente </td>
+                    <td v-else> Externo </td>
                     <td>{{user.departamento.nombre}}</td>
                     <td><button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true">Quitar</span>
@@ -26,15 +27,18 @@
             </tbody>
         </table>
         <div class="panel-footer">
-                <!--<router-link class="btn btn-success" :to="{ name: 'usuarios-comision-superior'}">     
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Usuario
-                </router-link>-->
-                <button v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar">Agregar Fijo</button>
-                 <button v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar">Agregar Suplente</button>
-                 <button  v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar">Agregar Externo</button>
+                    <button v-if="cantidad_usuarios[0] < 7" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
+                     data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                     >Agregar Fijo</button>
+                     <button v-else type="button" class="btn btn-default disabled"
+                     >Agregar Fijo</button>
+                     <button type="button" class="btn btn-default disabled"
+                     >Agregar Suplente</button>
+                     <button  v-if="cantidad_usuarios[2] < 2" v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
+                     data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                     >Agregar Externo</button>
+                     <button v-else type="button" class="btn btn-default disabled"
+                     >Agregar Externo</button>
         </div>
         <!-- Modal -->
         <div v-if="abierto" id="agregar" class="modal fade" role="dialog">
@@ -45,14 +49,15 @@
               <div class="modal-header">
                 <h4 class="modal-title">Agregar a comisión</h4>
               </div>
-              <div class="modal-body"></div>
-              <agregar-usuario
-              v-bind:id_comision="1"
-              v-bind:tipo_usuario="this.tipo_usuario"
-              v-bind:id_entidad="0"
-              v-bind:tipo_entidad="0"
-              ></agregar-usuario>
-              <br/>
+              <div class="modal-body">
+                  <agregar-usuario
+                  v-bind:id_comision="1"
+                  v-bind:tipo_usuario="this.tipo_usuario"
+                  v-bind:id_entidad="0"
+                  v-bind:tipo_entidad="0"
+                  ></agregar-usuario>
+                  <br/>
+              </div>
               <div class="modal-footer">
                     <button type="button" class="btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2"  data-dismiss="modal"
                     v-on:click="actualizar">Cerrar</button>
@@ -72,6 +77,7 @@
             axios.get('/api/comisiones/superior')
             .then(response => {
                 this.users = response.data.usuarios;
+                this.actualizarBotones(this.users);
             });
         },
         methods: {
@@ -86,10 +92,10 @@
                         axios.get('/api/comisiones/superior')
                         .then(response => {
                             this.users = response.data.usuarios;
+                            this.actualizarBotones(this.users);
                         });
                     });
-                });      
-
+                });
             },
             agregarFijo: function(){
             this.abierto = true;
@@ -109,13 +115,32 @@
             cerrar: function(){
                 this.abierto = false;
             },
+            actualizarBotones: function(users){
+                this.cantidad_usuarios[0] = 0;
+                this.cantidad_usuarios[1] = 0;
+                this.cantidad_usuarios[2] = 0;
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i].rol_comision == 0) {
+                        this.cantidad_usuarios[0] +=1;
+                    }
+                    else if (users[i].rol_comision == 1) {
+                        this.cantidad_usuarios[1] +=1;
+                    }
+                    else {
+                        this.cantidad_usuarios[2] +=1;
+                    }
+                }
+
+            },
             actualizar: function(){
                 axios.get('/api/comisiones/superior')
                 .then(response => {
                     this.users = response.data.usuarios;
+                    this.actualizarBotones(this.users);
                 });
                 this.abierto = false;
             }
+            
         },
         components: {
         'agregar-usuario': ListadoUsuarios,
@@ -125,7 +150,8 @@
             users: [],
             seleccionado: {},
             abierto: false,
-            tipo_usuario: {}
+            tipo_usuario: {},
+            cantidad_usuarios: []
             }
         }
   }

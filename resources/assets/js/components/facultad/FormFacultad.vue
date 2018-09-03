@@ -57,15 +57,21 @@
                 <button type="button" class="btn btn-success" v-on:click="addElem">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span> {{this.accion}}
                 </button>
-                <!--<router-link class="btn btn-success" :to="{ name: 'usuarios-comision-facultad', params: { id: id_comision }}">     
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Usuario
-                </router-link>-->
-                <button v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar">Agregar Fijo</button>
-                 <button v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar">Agregar Suplente</button>
-                 <button  v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar">Agregar Externo</button>
+                <button v-if="cantidad_usuarios[0] < 2" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                 >Agregar Fijo</button>
+                 <button v-else type="button" class="btn btn-default disabled"
+                 >Agregar Fijo</button> 
+                 <button v-if="cantidad_usuarios[1] < 1" v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                 >Agregar Suplente</button>
+                 <button v-else type="button" class="btn btn-default disabled"
+                 >Agregar Suplente</button>
+                 <button  v-if="cantidad_usuarios[2] < 3" v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                 >Agregar Externo</button>
+                 <button v-else type="button" class="btn btn-default disabled"
+                 >Agregar Externo</button>
             </div>
         </div>
         <!-- Modal -->
@@ -78,14 +84,15 @@
                   <div class="modal-header">
                     <h4 class="modal-title">Agregar a comisión</h4>
                   </div>
-                  <div class="modal-body"></div>
-                  <agregar-usuario
-                  v-bind:id_comision="id_comision"
-                  v-bind:tipo_usuario="this.tipo_usuario"
-                  v-bind:id_entidad="this.element.id"
-                  v-bind:tipo_entidad="1"
-                  ></agregar-usuario>
-                  <br/>
+                  <div class="modal-body">
+                      <agregar-usuario
+                      v-bind:id_comision="id_comision"
+                      v-bind:tipo_usuario="this.tipo_usuario"
+                      v-bind:id_entidad="this.element.id"
+                      v-bind:tipo_entidad="1"
+                      ></agregar-usuario>
+                      <br/>
+                  </div>
 
                   <div class="modal-footer">
                         <button type="button" class="btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2"  data-dismiss="modal"
@@ -125,6 +132,7 @@
         .then(response => {
             this.id_comision = response.data.id;
             this.users = response.data.usuarios;
+            this.actualizarBotones(this.users);
         });
     },
     data () {
@@ -135,7 +143,8 @@
         id_comision: {},
         seleccionado: {},
         abierto: false,
-        tipo_usuario: {}
+        tipo_usuario: {},
+        cantidad_usuarios: []
         }
     },
     components: {
@@ -167,6 +176,7 @@
                         axios.get('/api/comisiones/facultad/'+ this.element.id)
                         .then(response => {
                             this.users = response.data.usuarios;
+                            this.actualizarBotones(this.users);
                         });
                     });
                 });      
@@ -190,11 +200,29 @@
         cerrar: function(){
             this.abierto = false;
         },
+        actualizarBotones: function(users){
+            this.cantidad_usuarios[0] = 0;
+            this.cantidad_usuarios[1] = 0;
+            this.cantidad_usuarios[2] = 0;
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].rol_comision == 0) {
+                    this.cantidad_usuarios[0] +=1;
+                }
+                else if (users[i].rol_comision == 1) {
+                    this.cantidad_usuarios[1] +=1;
+                }
+                else {
+                    this.cantidad_usuarios[2] +=1;
+                }
+            }
+
+        },
         actualizar: function(){
             axios.get('/api/comisiones/facultad/' + this.element.id)
             .then(response => {
                 this.id_comision = response.data.id;
                 this.users = response.data.usuarios;
+                this.actualizarBotones(this.users);
             });
             this.abierto = false;
         }

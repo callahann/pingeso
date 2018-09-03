@@ -16071,6 +16071,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -16096,6 +16103,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/facultad/' + this.element.id).then(function (response) {
             _this.id_comision = response.data.id;
             _this.users = response.data.usuarios;
+            _this.actualizarBotones(_this.users);
         });
     },
     data: function data() {
@@ -16106,7 +16114,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             id_comision: {},
             seleccionado: {},
             abierto: false,
-            tipo_usuario: {}
+            tipo_usuario: {},
+            cantidad_usuarios: []
         };
     },
 
@@ -16140,6 +16149,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this2.seleccionado).then(function (response) {
                     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/facultad/' + _this2.element.id).then(function (response) {
                         _this2.users = response.data.usuarios;
+                        _this2.actualizarBotones(_this2.users);
                     });
                 });
             });
@@ -16160,12 +16170,27 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         cerrar: function cerrar() {
             this.abierto = false;
         },
+        actualizarBotones: function actualizarBotones(users) {
+            this.cantidad_usuarios[0] = 0;
+            this.cantidad_usuarios[1] = 0;
+            this.cantidad_usuarios[2] = 0;
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].rol_comision == 0) {
+                    this.cantidad_usuarios[0] += 1;
+                } else if (users[i].rol_comision == 1) {
+                    this.cantidad_usuarios[1] += 1;
+                } else {
+                    this.cantidad_usuarios[2] += 1;
+                }
+            }
+        },
         actualizar: function actualizar() {
             var _this3 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/facultad/' + this.element.id).then(function (response) {
                 _this3.id_comision = response.data.id;
                 _this3.users = response.data.usuarios;
+                _this3.actualizarBotones(_this3.users);
             });
             this.abierto = false;
         }
@@ -16468,6 +16493,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -16492,6 +16524,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             _this.id_comision = response.data.id;
             _this.users = response.data.usuarios;
             console.log(_this.users);
+            _this.actualizarBotones(_this.users);
         });
     },
     data: function data() {
@@ -16501,7 +16534,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             id_comision: {},
             seleccionado: {},
             abierto: false,
-            tipo_usuario: {}
+            tipo_usuario: {},
+            cantidad_usuarios: []
         };
     },
     components: {
@@ -16543,6 +16577,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this2.seleccionado).then(function (response) {
                     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/departamento/' + _this2.departamento.id).then(function (response) {
                         _this2.users = response.data.usuarios;
+                        _this2.actualizarBotones(_this2.users);
                     });
                 });
             });
@@ -16562,13 +16597,30 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         cerrar: function cerrar() {
             this.abierto = false;
         },
+        actualizarBotones: function actualizarBotones(users) {
+            this.cantidad_usuarios[0] = 0;
+            this.cantidad_usuarios[1] = 0;
+            this.cantidad_usuarios[2] = 0;
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].rol_comision == 0) {
+                    this.cantidad_usuarios[0] += 1;
+                } else if (users[i].rol_comision == 1) {
+                    this.cantidad_usuarios[1] += 1;
+                } else {
+                    this.cantidad_usuarios[2] += 1;
+                }
+            }
+            console.log('fijos', this.cantidad_usuarios[0]);
+            console.log('suplentes', this.cantidad_usuarios[1]);
+            console.log('externos', this.cantidad_usuarios[2]);
+        },
         actualizar: function actualizar() {
             var _this3 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/departamento/' + this.departamento.id).then(function (response) {
                 _this3.id_comision = response.data.id;
                 _this3.users = response.data.usuarios;
-                console.log(_this3.users);
+                _this3.actualizarBotones(_this3.users);
             });
             this.abierto = false;
         }
@@ -17610,6 +17662,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -17619,6 +17676,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
         __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/superior').then(function (response) {
             _this.users = response.data.usuarios;
+            _this.actualizarBotones(_this.users);
         });
     },
     methods: {
@@ -17632,6 +17690,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + id, _this2.seleccionado).then(function (response) {
                     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/superior').then(function (response) {
                         _this2.users = response.data.usuarios;
+                        _this2.actualizarBotones(_this2.users);
                     });
                 });
             });
@@ -17652,14 +17711,30 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         cerrar: function cerrar() {
             this.abierto = false;
         },
+        actualizarBotones: function actualizarBotones(users) {
+            this.cantidad_usuarios[0] = 0;
+            this.cantidad_usuarios[1] = 0;
+            this.cantidad_usuarios[2] = 0;
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].rol_comision == 0) {
+                    this.cantidad_usuarios[0] += 1;
+                } else if (users[i].rol_comision == 1) {
+                    this.cantidad_usuarios[1] += 1;
+                } else {
+                    this.cantidad_usuarios[2] += 1;
+                }
+            }
+        },
         actualizar: function actualizar() {
             var _this3 = this;
 
             __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/comisiones/superior').then(function (response) {
                 _this3.users = response.data.usuarios;
+                _this3.actualizarBotones(_this3.users);
             });
             this.abierto = false;
         }
+
     },
     components: {
         'agregar-usuario': __WEBPACK_IMPORTED_MODULE_1__comision_ListadoUsuarios__["a" /* default */]
@@ -17669,7 +17744,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             users: [],
             seleccionado: {},
             abierto: false,
-            tipo_usuario: {}
+            tipo_usuario: {},
+            cantidad_usuarios: []
         };
     }
 });
@@ -29144,47 +29220,80 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-default",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#agregar"
-            },
-            on: { click: _vm.agregarFijo }
-          },
-          [_vm._v("Agregar Fijo")]
-        ),
+        _vm.cantidad_usuarios[0] < 2
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#agregar",
+                  "data-backdrop": "static",
+                  "data-keyboard": "false"
+                },
+                on: { click: _vm.agregarFijo }
+              },
+              [_vm._v("Agregar Fijo")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass: "btn btn-default disabled",
+                attrs: { type: "button" }
+              },
+              [_vm._v("Agregar Fijo")]
+            ),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-default",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#agregar"
-            },
-            on: { click: _vm.agregarSuplente }
-          },
-          [_vm._v("Agregar Suplente")]
-        ),
+        _vm.cantidad_usuarios[1] < 1
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#agregar",
+                  "data-backdrop": "static",
+                  "data-keyboard": "false"
+                },
+                on: { click: _vm.agregarSuplente }
+              },
+              [_vm._v("Agregar Suplente")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass: "btn btn-default disabled",
+                attrs: { type: "button" }
+              },
+              [_vm._v("Agregar Suplente")]
+            ),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-default",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#agregar"
-            },
-            on: { click: _vm.agregarExterno }
-          },
-          [_vm._v("Agregar Externo")]
-        )
+        _vm.cantidad_usuarios[2] < 3
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#agregar",
+                  "data-backdrop": "static",
+                  "data-keyboard": "false"
+                },
+                on: { click: _vm.agregarExterno }
+              },
+              [_vm._v("Agregar Externo")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass: "btn btn-default disabled",
+                attrs: { type: "button" }
+              },
+              [_vm._v("Agregar Externo")]
+            )
       ])
     ]),
     _vm._v(" "),
@@ -29198,40 +29307,40 @@ var render = function() {
           [
             _c("div", { staticClass: "modal-dialog modal-xl" }, [
               _c("div", { staticClass: "container" }, [
-                _c(
-                  "div",
-                  { staticClass: "modal-content" },
-                  [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "modal-body" }),
-                    _vm._v(" "),
-                    _c("agregar-usuario", {
-                      attrs: {
-                        id_comision: _vm.id_comision,
-                        tipo_usuario: this.tipo_usuario,
-                        id_entidad: this.element.id,
-                        tipo_entidad: 1
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "modal-footer" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
-                          attrs: { type: "button", "data-dismiss": "modal" },
-                          on: { click: _vm.actualizar }
-                        },
-                        [_vm._v("Cerrar")]
-                      )
-                    ])
-                  ],
-                  1
-                )
+                _c("div", { staticClass: "modal-content" }, [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "modal-body" },
+                    [
+                      _c("agregar-usuario", {
+                        attrs: {
+                          id_comision: _vm.id_comision,
+                          tipo_usuario: this.tipo_usuario,
+                          id_entidad: this.element.id,
+                          tipo_entidad: 1
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("br")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass:
+                          "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
+                        attrs: { type: "button", "data-dismiss": "modal" },
+                        on: { click: _vm.actualizar }
+                      },
+                      [_vm._v("Cerrar")]
+                    )
+                  ])
+                ])
               ])
             ])
           ]
@@ -29799,51 +29908,84 @@ var render = function() {
               staticClass: "glyphicon glyphicon-send",
               attrs: { "aria-hidden": "true" }
             }),
-            _vm._v(" " + _vm._s(this.accion) + "\n            ")
+            _vm._v(_vm._s(this.accion) + "\n            ")
           ]
         ),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-default",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#agregar"
-            },
-            on: { click: _vm.agregarFijo }
-          },
-          [_vm._v("Agregar Fijo")]
-        ),
+        _vm.cantidad_usuarios[0] < 1
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#agregar",
+                  "data-backdrop": "static",
+                  "data-keyboard": "false"
+                },
+                on: { click: _vm.agregarFijo }
+              },
+              [_vm._v("Agregar Fijo")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass: "btn btn-default disabled",
+                attrs: { type: "button" }
+              },
+              [_vm._v("Agregar Fijo")]
+            ),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-default",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#agregar"
-            },
-            on: { click: _vm.agregarSuplente }
-          },
-          [_vm._v("Agregar Suplente")]
-        ),
+        _vm.cantidad_usuarios[1] < 1
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#agregar",
+                  "data-backdrop": "static",
+                  "data-keyboard": "false"
+                },
+                on: { click: _vm.agregarSuplente }
+              },
+              [_vm._v("Agregar Suplente")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass: "btn btn-default disabled",
+                attrs: { type: "button" }
+              },
+              [_vm._v("Agregar Suplente")]
+            ),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-default",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#agregar"
-            },
-            on: { click: _vm.agregarExterno }
-          },
-          [_vm._v("Agregar Externo")]
-        )
+        _vm.cantidad_usuarios[2] < 1
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "modal",
+                  "data-target": "#agregar",
+                  "data-backdrop": "static",
+                  "data-keyboard": "false"
+                },
+                on: { click: _vm.agregarExterno }
+              },
+              [_vm._v("Agregar Externo")]
+            )
+          : _c(
+              "button",
+              {
+                staticClass: "btn btn-default disabled",
+                attrs: { type: "button" }
+              },
+              [_vm._v("Agregar Externo")]
+            )
       ])
     ]),
     _vm._v(" "),
@@ -29856,40 +29998,40 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-dialog modal-xl" }, [
-              _c(
-                "div",
-                { staticClass: "modal-content" },
-                [
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-body" }),
-                  _vm._v(" "),
-                  _c("agregar-usuario", {
-                    attrs: {
-                      id_comision: _vm.id_comision,
-                      tipo_usuario: this.tipo_usuario,
-                      id_entidad: this.departamento.id,
-                      tipo_entidad: 2
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-footer" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass:
-                          "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
-                        attrs: { type: "button", "data-dismiss": "modal" },
-                        on: { click: _vm.actualizar }
-                      },
-                      [_vm._v("Cerrar")]
-                    )
-                  ])
-                ],
-                1
-              )
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "modal-body" },
+                  [
+                    _c("agregar-usuario", {
+                      attrs: {
+                        id_comision: _vm.id_comision,
+                        tipo_usuario: this.tipo_usuario,
+                        id_entidad: this.departamento.id,
+                        tipo_entidad: 2
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("br")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: { click: _vm.actualizar }
+                    },
+                    [_vm._v("Cerrar")]
+                  )
+                ])
+              ])
             ])
           ]
         )
@@ -32261,9 +32403,11 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(user.email))]),
             _vm._v(" "),
-            user.rol_comision === 1
+            user.rol_comision === 0
               ? _c("td", [_vm._v(" Fijo ")])
-              : _c("td", [_vm._v(" Suplente ")]),
+              : user.rol_comision === 1
+                ? _c("td", [_vm._v(" Suplente ")])
+                : _c("td", [_vm._v(" Externo ")]),
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(user.departamento.nombre))]),
             _vm._v(" "),
@@ -32297,47 +32441,61 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "panel-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-default",
-          attrs: {
-            type: "button",
-            "data-toggle": "modal",
-            "data-target": "#agregar"
-          },
-          on: { click: _vm.agregarFijo }
-        },
-        [_vm._v("Agregar Fijo")]
-      ),
+      _vm.cantidad_usuarios[0] < 7
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-default",
+              attrs: {
+                type: "button",
+                "data-toggle": "modal",
+                "data-target": "#agregar",
+                "data-backdrop": "static",
+                "data-keyboard": "false"
+              },
+              on: { click: _vm.agregarFijo }
+            },
+            [_vm._v("Agregar Fijo")]
+          )
+        : _c(
+            "button",
+            {
+              staticClass: "btn btn-default disabled",
+              attrs: { type: "button" }
+            },
+            [_vm._v("Agregar Fijo")]
+          ),
       _vm._v(" "),
       _c(
         "button",
-        {
-          staticClass: "btn btn-default",
-          attrs: {
-            type: "button",
-            "data-toggle": "modal",
-            "data-target": "#agregar"
-          },
-          on: { click: _vm.agregarSuplente }
-        },
+        { staticClass: "btn btn-default disabled", attrs: { type: "button" } },
         [_vm._v("Agregar Suplente")]
       ),
       _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-default",
-          attrs: {
-            type: "button",
-            "data-toggle": "modal",
-            "data-target": "#agregar"
-          },
-          on: { click: _vm.agregarExterno }
-        },
-        [_vm._v("Agregar Externo")]
-      )
+      _vm.cantidad_usuarios[2] < 2
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-default",
+              attrs: {
+                type: "button",
+                "data-toggle": "modal",
+                "data-target": "#agregar",
+                "data-backdrop": "static",
+                "data-keyboard": "false"
+              },
+              on: { click: _vm.agregarExterno }
+            },
+            [_vm._v("Agregar Externo")]
+          )
+        : _c(
+            "button",
+            {
+              staticClass: "btn btn-default disabled",
+              attrs: { type: "button" }
+            },
+            [_vm._v("Agregar Externo")]
+          )
     ]),
     _vm._v(" "),
     _vm.abierto
@@ -32349,40 +32507,40 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-dialog modal-xl" }, [
-              _c(
-                "div",
-                { staticClass: "modal-content" },
-                [
-                  _vm._m(1),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-body" }),
-                  _vm._v(" "),
-                  _c("agregar-usuario", {
-                    attrs: {
-                      id_comision: 1,
-                      tipo_usuario: this.tipo_usuario,
-                      id_entidad: 0,
-                      tipo_entidad: 0
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "modal-footer" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass:
-                          "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
-                        attrs: { type: "button", "data-dismiss": "modal" },
-                        on: { click: _vm.actualizar }
-                      },
-                      [_vm._v("Cerrar")]
-                    )
-                  ])
-                ],
-                1
-              )
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "modal-body" },
+                  [
+                    _c("agregar-usuario", {
+                      attrs: {
+                        id_comision: 1,
+                        tipo_usuario: this.tipo_usuario,
+                        id_entidad: 0,
+                        tipo_entidad: 0
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("br")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "btn btn-default col-xs-2 col-lg-2 col-sm-2 col-md-2",
+                      attrs: { type: "button", "data-dismiss": "modal" },
+                      on: { click: _vm.actualizar }
+                    },
+                    [_vm._v("Cerrar")]
+                  )
+                ])
+              ])
             ])
           ]
         )
