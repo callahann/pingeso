@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facultad;
+use App\Comision;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -41,8 +42,12 @@ class FacultadController extends Controller
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
-
-        $facultad = Facultad::create($request->all());
+        $comision = new Comision;
+        $comision->tipo = 3;
+        $comision->save();
+        $facultad = new Facultad($request->all());
+        $facultad->id_comision = $comision->id;
+        $facultad->save();
 
         return $facultad;
     }

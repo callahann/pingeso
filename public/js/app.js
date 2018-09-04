@@ -16273,7 +16273,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 _this3.seleccionado = response.data;
                 _this3.seleccionado.id_comision = _this3.id_comision;
                 _this3.seleccionado.rol_comision = _this3.tipo_usuario;
-                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/' + user_id, _this3.seleccionado).then(function (response) {
+                __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put('/api/usuarios/comision/agregar/' + user_id, _this3.seleccionado).then(function (response) {
                     __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/usuarios/comision/' + _this3.tipo_usuario + '/' + _this3.id_entidad + '/' + _this3.tipo_entidad).then(function (response) {
                         _this3.users = response.data;
                         _this3.desactivar = true;
@@ -29912,7 +29912,7 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm.cantidad_usuarios[0] < 1
+        _vm.cantidad_usuarios[0] < 3
           ? _c(
               "button",
               {
