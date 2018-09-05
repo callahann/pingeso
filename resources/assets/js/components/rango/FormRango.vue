@@ -1,6 +1,5 @@
 <template>  
-
-    <div>
+    <div class="col-md-6 col-md-offset-3">
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
             <li><router-link :to="{ name: 'rangos'}">Listado</router-link></li>
@@ -18,7 +17,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label for="nombres">Leyenda:</label>
                         <input v-if="editable" type="text" class="form-control" id="nombres"
                             v-model="element.leyenda">
@@ -40,7 +39,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label for="nombres">Color:</label>
                         <input v-if="editable" type="color" class="form-control" id="color"
                             v-model="element.color">

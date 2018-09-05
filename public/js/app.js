@@ -15457,6 +15457,21 @@ if (false) {(function () {
                 actividad.descripcion = '';
                 actividad.otra = true;
             }
+        },
+        /**
+         * Revisa que los campos numéricos de las actividades no sean vacíos.
+         * @param index Índice de la actividad que se revisará.
+         */
+        notNull: function notNull(index) {
+            var _this2 = this;
+
+            ['comprometido', 'realizado'].forEach(function (tipo) {
+                ['primero', 'segundo'].forEach(function (semestre) {
+                    ['horasSemana', 'horasSemestre'].forEach(function (hora) {
+                        _this2.actividades[index][tipo][semestre][hora] = _this2.actividades[index][tipo][semestre][hora] === '' ? 0 : _this2.actividades[index][tipo][semestre][hora];
+                    });
+                });
+            });
         }
     },
     watch: {
@@ -16078,6 +16093,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -16500,6 +16519,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
 
 
 
@@ -16782,7 +16804,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
 
 
 
@@ -16925,7 +16946,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
-//
 //
 //
 //
@@ -17141,9 +17161,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
 
 
 
@@ -17282,7 +17299,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__vuex_actions__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
-//
 //
 //
 //
@@ -25817,11 +25833,11 @@ var render = function() {
                           }
                         }
                       },
-                      _vm._l(_vm.roles, function(rol) {
+                      _vm._l(_vm.rol, function(r) {
                         return _c(
                           "option",
-                          { key: rol, domProps: { value: rol } },
-                          [_vm._v(_vm._s(_vm.etiquetas.rol[rol]))]
+                          { key: r, domProps: { value: r } },
+                          [_vm._v(_vm._s(_vm.etiquetas.rol[r]))]
                         )
                       })
                     )
@@ -26100,21 +26116,26 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0", required: "" },
+                            attrs: { type: "number", min: "0" },
                             domProps: {
                               value: actividad.comprometido.primero.horasSemana
                             },
                             on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                              input: [
+                                function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    actividad.comprometido.primero,
+                                    "horasSemana",
+                                    _vm._n($event.target.value)
+                                  )
+                                },
+                                function($event) {
+                                  _vm.notNull(index)
                                 }
-                                _vm.$set(
-                                  actividad.comprometido.primero,
-                                  "horasSemana",
-                                  _vm._n($event.target.value)
-                                )
-                              },
+                              ],
                               blur: function($event) {
                                 _vm.$forceUpdate()
                               }
@@ -26136,22 +26157,27 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0", required: "" },
+                            attrs: { type: "number", min: "0" },
                             domProps: {
                               value:
                                 actividad.comprometido.primero.horasSemestre
                             },
                             on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                              input: [
+                                function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    actividad.comprometido.primero,
+                                    "horasSemestre",
+                                    _vm._n($event.target.value)
+                                  )
+                                },
+                                function($event) {
+                                  _vm.notNull(index)
                                 }
-                                _vm.$set(
-                                  actividad.comprometido.primero,
-                                  "horasSemestre",
-                                  _vm._n($event.target.value)
-                                )
-                              },
+                              ],
                               blur: function($event) {
                                 _vm.$forceUpdate()
                               }
@@ -26173,21 +26199,26 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0", required: "" },
+                            attrs: { type: "number", min: "0" },
                             domProps: {
                               value: actividad.comprometido.segundo.horasSemana
                             },
                             on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                              input: [
+                                function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    actividad.comprometido.segundo,
+                                    "horasSemana",
+                                    _vm._n($event.target.value)
+                                  )
+                                },
+                                function($event) {
+                                  _vm.notNull(index)
                                 }
-                                _vm.$set(
-                                  actividad.comprometido.segundo,
-                                  "horasSemana",
-                                  _vm._n($event.target.value)
-                                )
-                              },
+                              ],
                               blur: function($event) {
                                 _vm.$forceUpdate()
                               }
@@ -26209,22 +26240,27 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: { type: "number", min: "0", required: "" },
+                            attrs: { type: "number", min: "0" },
                             domProps: {
                               value:
                                 actividad.comprometido.segundo.horasSemestre
                             },
                             on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                              input: [
+                                function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    actividad.comprometido.segundo,
+                                    "horasSemestre",
+                                    _vm._n($event.target.value)
+                                  )
+                                },
+                                function($event) {
+                                  _vm.notNull(index)
                                 }
-                                _vm.$set(
-                                  actividad.comprometido.segundo,
-                                  "horasSemestre",
-                                  _vm._n($event.target.value)
-                                )
-                              },
+                              ],
                               blur: function($event) {
                                 _vm.$forceUpdate()
                               }
@@ -26675,25 +26711,26 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: {
-                                  type: "number",
-                                  min: "0",
-                                  required: ""
-                                },
+                                attrs: { type: "number", min: "0" },
                                 domProps: {
                                   value: actividad.realizado.primero.horasSemana
                                 },
                                 on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                  input: [
+                                    function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        actividad.realizado.primero,
+                                        "horasSemana",
+                                        _vm._n($event.target.value)
+                                      )
+                                    },
+                                    function($event) {
+                                      _vm.notNull(index)
                                     }
-                                    _vm.$set(
-                                      actividad.realizado.primero,
-                                      "horasSemana",
-                                      _vm._n($event.target.value)
-                                    )
-                                  },
+                                  ],
                                   blur: function($event) {
                                     _vm.$forceUpdate()
                                   }
@@ -26725,26 +26762,27 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: {
-                                  type: "number",
-                                  min: "0",
-                                  required: ""
-                                },
+                                attrs: { type: "number", min: "0" },
                                 domProps: {
                                   value:
                                     actividad.realizado.primero.horasSemestre
                                 },
                                 on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                  input: [
+                                    function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        actividad.realizado.primero,
+                                        "horasSemestre",
+                                        _vm._n($event.target.value)
+                                      )
+                                    },
+                                    function($event) {
+                                      _vm.notNull(index)
                                     }
-                                    _vm.$set(
-                                      actividad.realizado.primero,
-                                      "horasSemestre",
-                                      _vm._n($event.target.value)
-                                    )
-                                  },
+                                  ],
                                   blur: function($event) {
                                     _vm.$forceUpdate()
                                   }
@@ -26776,25 +26814,26 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: {
-                                  type: "number",
-                                  min: "0",
-                                  required: ""
-                                },
+                                attrs: { type: "number", min: "0" },
                                 domProps: {
                                   value: actividad.realizado.segundo.horasSemana
                                 },
                                 on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                  input: [
+                                    function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        actividad.realizado.segundo,
+                                        "horasSemana",
+                                        _vm._n($event.target.value)
+                                      )
+                                    },
+                                    function($event) {
+                                      _vm.notNull(index)
                                     }
-                                    _vm.$set(
-                                      actividad.realizado.segundo,
-                                      "horasSemana",
-                                      _vm._n($event.target.value)
-                                    )
-                                  },
+                                  ],
                                   blur: function($event) {
                                     _vm.$forceUpdate()
                                   }
@@ -26826,26 +26865,27 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
-                                attrs: {
-                                  type: "number",
-                                  min: "0",
-                                  required: ""
-                                },
+                                attrs: { type: "number", min: "0" },
                                 domProps: {
                                   value:
                                     actividad.realizado.segundo.horasSemestre
                                 },
                                 on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
+                                  input: [
+                                    function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        actividad.realizado.segundo,
+                                        "horasSemestre",
+                                        _vm._n($event.target.value)
+                                      )
+                                    },
+                                    function($event) {
+                                      _vm.notNull(index)
                                     }
-                                    _vm.$set(
-                                      actividad.realizado.segundo,
-                                      "horasSemestre",
-                                      _vm._n($event.target.value)
-                                    )
-                                  },
+                                  ],
                                   blur: function($event) {
                                     _vm.$forceUpdate()
                                   }
@@ -28637,125 +28677,116 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
-      }
-    },
-    [
-      _vm.mensaje
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = undefined
-                  }
-                }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-          _vm._v("\n              Administración de facultades\n          ")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
+    _vm.mensaje
+      ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.facultades, function(facu, index) {
-              return _c("tr", { key: facu.id }, [
-                _c("td", [_vm._v(_vm._s(facu.nombre))]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  { staticClass: "col-md-2" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-info",
-                        attrs: {
-                          to: {
-                            name: "editar-facultad",
-                            params: {
-                              accion: "Editar",
-                              elemento: Object.assign({}, facu, {})
-                            }
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-pencil",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            _vm.deleteElem(facu.id, index, facu.nombre)
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-trash",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    )
-                  ],
-                  1
-                )
-              ])
-            })
-          )
-        ]),
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = undefined
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n              Administración de facultades\n          ")
+      ]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
         _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "panel-footer" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-success",
-                attrs: {
-                  to: { name: "crear-facultad", params: { accion: "Crear" } }
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "glyphicon glyphicon-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
-                _vm._v(" Facultad\n              ")
-              ]
-            )
-          ],
-          1
+          "tbody",
+          _vm._l(_vm.facultades, function(facu, index) {
+            return _c("tr", { key: facu.id }, [
+              _c("td", [_vm._v(_vm._s(facu.nombre))]),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "col-md-2" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "editar-facultad",
+                          params: {
+                            accion: "Editar",
+                            elemento: Object.assign({}, facu, {})
+                          }
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-pencil",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteElem(facu.id, index, facu.nombre)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-trash",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          })
         )
-      ])
-    ]
-  )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: { name: "crear-facultad", params: { accion: "Crear" } }
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Facultad\n              ")
+            ]
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -28850,7 +28881,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = __webpack_require__(11).default
-var update = add("4b1c2d9c", content, false, {});
+var update = add("24576892", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -29060,7 +29091,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
     _vm.editable
       ? _c("ol", { staticClass: "breadcrumb" }, [
           _c(
@@ -29117,7 +29148,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "panel-body" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "form-group col-md-6" }, [
+          _c("div", { staticClass: "form-group col-md-12" }, [
             _c("label", { attrs: { for: "nombres" } }, [_vm._v("Nombre:")]),
             _vm._v(" "),
             _vm.editable
@@ -29144,62 +29175,145 @@ var render = function() {
                 })
               : _c("p", [_vm._v(_vm._s(_vm.element.nombre))])
           ])
-        ]),
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "panel-body" }, [
+        _vm._m(0),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("label", { attrs: { for: "facultad" } }, [
-            _vm._v("Comisión de Facultad")
-          ]),
-          _vm._v(" "),
-          _c("table", { staticClass: "table table-striped" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.users, function(user) {
-                return _c("tr", { key: user.id }, [
-                  _c("td", [
-                    _vm._v(
-                      _vm._s(user.nombres) + " " + _vm._s(user.apellido_paterno)
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(user.email))]),
-                  _vm._v(" "),
-                  user.rol_comision === 1
-                    ? _c("td", [_vm._v(" Fijo ")])
-                    : _c("td", [_vm._v(" Suplente ")]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(user.departamento.nombre))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            _vm.eliminarUsuario(user.id)
+        _vm.users.length > 0
+          ? _c("table", { staticClass: "table table-striped" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.users, function(user) {
+                  return _c("tr", { key: user.id }, [
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(user.nombres) +
+                          " " +
+                          _vm._s(user.apellido_paterno)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.email))]),
+                    _vm._v(" "),
+                    user.rol_comision === 1
+                      ? _c("td", [_vm._v(" Fijo ")])
+                      : _c("td", [_vm._v(" Suplente ")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.departamento.nombre))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-xs btn-danger",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              _vm.eliminarUsuario(user.id)
+                            }
                           }
-                        }
-                      },
-                      [
-                        _c(
-                          "span",
-                          {
-                            staticClass: "glyphicon glyphicon-remove",
-                            attrs: { "aria-hidden": "true" }
-                          },
-                          [_vm._v("Quitar")]
-                        )
-                      ]
-                    )
+                        },
+                        [
+                          _c(
+                            "span",
+                            {
+                              staticClass: "glyphicon glyphicon-remove",
+                              attrs: { "aria-hidden": "true" }
+                            },
+                            [_vm._v("Quitar")]
+                          )
+                        ]
+                      )
+                    ])
                   ])
-                ])
-              })
-            )
-          ])
+                })
+              )
+            ])
+          : _c("h4", { staticClass: "text-center" }, [
+              _vm._v("Aún no se ha agregado usuarios a esta comisión")
+            ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "panel-body" }, [
+        _c("div", { staticClass: "pull-right" }, [
+          _vm.cantidad_usuarios[0] < 2
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-default",
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "modal",
+                    "data-target": "#agregar",
+                    "data-backdrop": "static",
+                    "data-keyboard": "false"
+                  },
+                  on: { click: _vm.agregarFijo }
+                },
+                [_vm._v("Agregar Fijo")]
+              )
+            : _c(
+                "button",
+                {
+                  staticClass: "btn btn-default disabled",
+                  attrs: { type: "button" }
+                },
+                [_vm._v("Agregar Fijo")]
+              ),
+          _vm._v(" "),
+          _vm.cantidad_usuarios[1] < 1
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-default",
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "modal",
+                    "data-target": "#agregar",
+                    "data-backdrop": "static",
+                    "data-keyboard": "false"
+                  },
+                  on: { click: _vm.agregarSuplente }
+                },
+                [_vm._v("Agregar Suplente")]
+              )
+            : _c(
+                "button",
+                {
+                  staticClass: "btn btn-default disabled",
+                  attrs: { type: "button" }
+                },
+                [_vm._v("Agregar Suplente")]
+              ),
+          _vm._v(" "),
+          _vm.cantidad_usuarios[2] < 3
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-default",
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "modal",
+                    "data-target": "#agregar",
+                    "data-backdrop": "static",
+                    "data-keyboard": "false"
+                  },
+                  on: { click: _vm.agregarExterno }
+                },
+                [_vm._v("Agregar Externo")]
+              )
+            : _c(
+                "button",
+                {
+                  staticClass: "btn btn-default disabled",
+                  attrs: { type: "button" }
+                },
+                [_vm._v("Agregar Externo")]
+              )
         ])
       ]),
       _vm._v(" "),
@@ -29218,82 +29332,7 @@ var render = function() {
             }),
             _vm._v(" " + _vm._s(this.accion) + "\n            ")
           ]
-        ),
-        _vm._v(" "),
-        _vm.cantidad_usuarios[0] < 2
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-default",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#agregar",
-                  "data-backdrop": "static",
-                  "data-keyboard": "false"
-                },
-                on: { click: _vm.agregarFijo }
-              },
-              [_vm._v("Agregar Fijo")]
-            )
-          : _c(
-              "button",
-              {
-                staticClass: "btn btn-default disabled",
-                attrs: { type: "button" }
-              },
-              [_vm._v("Agregar Fijo")]
-            ),
-        _vm._v(" "),
-        _vm.cantidad_usuarios[1] < 1
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-default",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#agregar",
-                  "data-backdrop": "static",
-                  "data-keyboard": "false"
-                },
-                on: { click: _vm.agregarSuplente }
-              },
-              [_vm._v("Agregar Suplente")]
-            )
-          : _c(
-              "button",
-              {
-                staticClass: "btn btn-default disabled",
-                attrs: { type: "button" }
-              },
-              [_vm._v("Agregar Suplente")]
-            ),
-        _vm._v(" "),
-        _vm.cantidad_usuarios[2] < 3
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-default",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#agregar",
-                  "data-backdrop": "static",
-                  "data-keyboard": "false"
-                },
-                on: { click: _vm.agregarExterno }
-              },
-              [_vm._v("Agregar Externo")]
-            )
-          : _c(
-              "button",
-              {
-                staticClass: "btn btn-default disabled",
-                attrs: { type: "button" }
-              },
-              [_vm._v("Agregar Externo")]
-            )
+        )
       ])
     ]),
     _vm._v(" "),
@@ -29308,7 +29347,7 @@ var render = function() {
             _c("div", { staticClass: "modal-dialog modal-xl" }, [
               _c("div", { staticClass: "container" }, [
                 _c("div", { staticClass: "modal-content" }, [
-                  _vm._m(1),
+                  _vm._m(2),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -29349,6 +29388,12 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", [_c("b", [_vm._v("Comisión de Facultad")])])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -29450,134 +29495,122 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
-      }
-    },
-    [
-      _vm.mensaje
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = undefined
-                  }
-                }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-          _vm._v("\n              Administración de departamentos\n          ")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+  return _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+    _vm.mensaje
+      ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.departamentos, function(departamento, index) {
-              return _c("tr", { key: departamento.id }, [
-                _c("td", [_vm._v(_vm._s(departamento.nombre))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(departamento.facultad.nombre))]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  { staticClass: "col-md-2" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-info",
-                        attrs: {
-                          to: {
-                            name: "editar-departamento",
-                            params: {
-                              accion: "Editar",
-                              elemento: _vm.copy(departamento)
-                            }
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-pencil",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            _vm.deleteElem(
-                              departamento.id,
-                              index,
-                              departamento.nombre
-                            )
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-trash",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    )
-                  ],
-                  1
-                )
-              ])
-            })
-          )
-        ]),
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = undefined
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n              Administración de departamentos\n          ")
+      ]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
         _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "panel-footer" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-success",
-                attrs: {
-                  to: {
-                    name: "crear-departamento",
-                    params: { accion: "Crear" }
-                  }
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "glyphicon glyphicon-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
-                _vm._v(" Departamento\n              ")
-              ]
-            )
-          ],
-          1
+          "tbody",
+          _vm._l(_vm.departamentos, function(departamento, index) {
+            return _c("tr", { key: departamento.id }, [
+              _c("td", [_vm._v(_vm._s(departamento.nombre))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(departamento.facultad.nombre))]),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "col-md-2" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "editar-departamento",
+                          params: {
+                            accion: "Editar",
+                            elemento: _vm.copy(departamento)
+                          }
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-pencil",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteElem(
+                            departamento.id,
+                            index,
+                            departamento.nombre
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-trash",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          })
         )
-      ])
-    ]
-  )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: { name: "crear-departamento", params: { accion: "Crear" } }
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Agregar departamento\n              ")
+            ]
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -29676,7 +29709,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = __webpack_require__(11).default
-var update = add("0feef374", content, false, {});
+var update = add("3d1e44a6", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -29831,17 +29864,16 @@ var render = function() {
                 )
               : _c("p", [_vm._v(_vm._s(_vm.departamento.facultad.nombre))])
           ])
-        ]),
-        _vm._v(" "),
-        _vm.auth.rol === _vm.rol.director
-          ? _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "form-group col-md-12" }, [
-                _c("label", { attrs: { for: "facultad" } }, [
-                  _vm._v("Comisión Departamental")
-                ]),
-                _vm._v(" "),
-                _c("table", { staticClass: "table table-striped" }, [
-                  _vm._m(0),
+        ])
+      ]),
+      _vm._v(" "),
+      _vm.auth.rol === _vm.rol.director
+        ? _c("div", { staticClass: "panel-body" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm.users.length > 0
+              ? _c("table", { staticClass: "table table-striped" }, [
+                  _vm._m(1),
                   _vm._v(" "),
                   _c(
                     "tbody",
@@ -29880,9 +29912,7 @@ var render = function() {
                                 staticClass: "glyphicon glyphicon-remove",
                                 attrs: { "aria-hidden": "true" }
                               }),
-                              _vm._v(
-                                " Quitar\n                                    "
-                              )
+                              _vm._v(" Quitar\n                            ")
                             ]
                           )
                         ])
@@ -29890,10 +29920,92 @@ var render = function() {
                     })
                   )
                 ])
-              ])
+              : _c("h4", { staticClass: "text-center" }, [
+                  _vm._v("Aún no se ha agregado usuarios a esta comisión")
+                ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.auth.rol === _vm.rol.director
+        ? _c("div", { staticClass: "panel-body" }, [
+            _c("div", { staticClass: "pull-right" }, [
+              _vm.cantidad_usuarios[0] < 1
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#agregar",
+                        "data-backdrop": "static",
+                        "data-keyboard": "false"
+                      },
+                      on: { click: _vm.agregarFijo }
+                    },
+                    [_vm._v("Agregar Fijo")]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default disabled",
+                      attrs: { type: "button" }
+                    },
+                    [_vm._v("Agregar Fijo")]
+                  ),
+              _vm._v(" "),
+              _vm.cantidad_usuarios[1] < 1
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#agregar",
+                        "data-backdrop": "static",
+                        "data-keyboard": "false"
+                      },
+                      on: { click: _vm.agregarSuplente }
+                    },
+                    [_vm._v("Agregar Suplente")]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default disabled",
+                      attrs: { type: "button" }
+                    },
+                    [_vm._v("Agregar Suplente")]
+                  ),
+              _vm._v(" "),
+              _vm.cantidad_usuarios[2] < 1
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#agregar",
+                        "data-backdrop": "static",
+                        "data-keyboard": "false"
+                      },
+                      on: { click: _vm.agregarExterno }
+                    },
+                    [_vm._v("Agregar Externo")]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default disabled",
+                      attrs: { type: "button" }
+                    },
+                    [_vm._v("Agregar Externo")]
+                  )
             ])
-          : _vm._e()
-      ]),
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "panel-footer" }, [
         _c(
@@ -29910,82 +30022,7 @@ var render = function() {
             }),
             _vm._v(_vm._s(this.accion) + "\n            ")
           ]
-        ),
-        _vm._v(" "),
-        _vm.cantidad_usuarios[0] < 1
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-default",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#agregar",
-                  "data-backdrop": "static",
-                  "data-keyboard": "false"
-                },
-                on: { click: _vm.agregarFijo }
-              },
-              [_vm._v("Agregar Fijo")]
-            )
-          : _c(
-              "button",
-              {
-                staticClass: "btn btn-default disabled",
-                attrs: { type: "button" }
-              },
-              [_vm._v("Agregar Fijo")]
-            ),
-        _vm._v(" "),
-        _vm.cantidad_usuarios[1] < 1
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-default",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#agregar",
-                  "data-backdrop": "static",
-                  "data-keyboard": "false"
-                },
-                on: { click: _vm.agregarSuplente }
-              },
-              [_vm._v("Agregar Suplente")]
-            )
-          : _c(
-              "button",
-              {
-                staticClass: "btn btn-default disabled",
-                attrs: { type: "button" }
-              },
-              [_vm._v("Agregar Suplente")]
-            ),
-        _vm._v(" "),
-        _vm.cantidad_usuarios[2] < 1
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-default",
-                attrs: {
-                  type: "button",
-                  "data-toggle": "modal",
-                  "data-target": "#agregar",
-                  "data-backdrop": "static",
-                  "data-keyboard": "false"
-                },
-                on: { click: _vm.agregarExterno }
-              },
-              [_vm._v("Agregar Externo")]
-            )
-          : _c(
-              "button",
-              {
-                staticClass: "btn btn-default disabled",
-                attrs: { type: "button" }
-              },
-              [_vm._v("Agregar Externo")]
-            )
+        )
       ])
     ]),
     _vm._v(" "),
@@ -29999,7 +30036,7 @@ var render = function() {
           [
             _c("div", { staticClass: "modal-dialog modal-xl" }, [
               _c("div", { staticClass: "modal-content" }, [
-                _vm._m(1),
+                _vm._m(2),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -30039,6 +30076,12 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", [_c("b", [_vm._v("Comisión de Departamento")])])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -30144,133 +30187,124 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
-      }
-    },
-    [
-      _vm.mensaje
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = undefined
-                  }
-                }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-          _vm._v("\n              Administración de rangos\n          ")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+  return _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+    _vm.mensaje
+      ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.rangos, function(rango, index) {
-              return _c("tr", { key: rango.id }, [
-                _c("td", [_vm._v(_vm._s(rango.leyenda))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(rango.base))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(rango.tope))]),
-                _vm._v(" "),
-                _c("td", { style: { color: rango.color } }, [
-                  _vm._v(_vm._s(rango.color))
-                ]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  { staticClass: "col-md-2" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-info",
-                        attrs: {
-                          to: {
-                            name: "editar-rango",
-                            params: {
-                              accion: "Editar",
-                              elemento: Object.assign({}, rango, {})
-                            }
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-pencil",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            _vm.deleteElem(rango.id, index, rango.leyenda)
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-trash",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    )
-                  ],
-                  1
-                )
-              ])
-            })
-          )
-        ]),
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = undefined
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n              Administración de rangos\n          ")
+      ]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
         _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "panel-footer" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-success",
-                attrs: {
-                  to: { name: "crear-rango", params: { accion: "Crear" } }
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "glyphicon glyphicon-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
-                _vm._v(" Rango\n              ")
-              ]
-            )
-          ],
-          1
+          "tbody",
+          _vm._l(_vm.rangos, function(rango, index) {
+            return _c("tr", { key: rango.id }, [
+              _c("td", [_vm._v(_vm._s(rango.leyenda))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(rango.base))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(rango.tope))]),
+              _vm._v(" "),
+              _c("td", { style: { color: rango.color } }, [
+                _vm._v(_vm._s(rango.color))
+              ]),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "col-md-2" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "editar-rango",
+                          params: {
+                            accion: "Editar",
+                            elemento: Object.assign({}, rango, {})
+                          }
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-pencil",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteElem(rango.id, index, rango.leyenda)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-trash",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          })
         )
-      ])
-    ]
-  )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: { name: "crear-rango", params: { accion: "Crear" } }
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Rango\n              ")
+            ]
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -30366,7 +30400,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
     _vm.editable
       ? _c("ol", { staticClass: "breadcrumb" }, [
           _c(
@@ -30423,7 +30457,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "panel-body" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "form-group col-md-6" }, [
+          _c("div", { staticClass: "form-group col-md-12" }, [
             _c("label", { attrs: { for: "nombres" } }, [_vm._v("Leyenda:")]),
             _vm._v(" "),
             _vm.editable
@@ -30511,7 +30545,7 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "form-group col-md-6" }, [
+          _c("div", { staticClass: "form-group col-md-12" }, [
             _c("label", { attrs: { for: "nombres" } }, [_vm._v("Color:")]),
             _vm._v(" "),
             _vm.editable
@@ -30636,129 +30670,116 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
-      }
-    },
-    [
-      _vm.mensaje
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = undefined
-                  }
-                }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-          _vm._v("\n              Administración de jerarquias\n          ")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
+    _vm.mensaje
+      ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.jerarquias, function(jerarquia, index) {
-              return _c("tr", { key: jerarquia.id }, [
-                _c("td", [_vm._v(_vm._s(jerarquia.nombre))]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  { staticClass: "col-md-2" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-info",
-                        attrs: {
-                          to: {
-                            name: "editar-jerarquia",
-                            params: {
-                              accion: "Editar",
-                              elemento: Object.assign({}, jerarquia, {})
-                            }
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-pencil",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            _vm.deleteElem(
-                              jerarquia.id,
-                              index,
-                              jerarquia.nombre
-                            )
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-trash",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    )
-                  ],
-                  1
-                )
-              ])
-            })
-          )
-        ]),
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = undefined
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n              Administración de jerarquias\n          ")
+      ]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
         _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "panel-footer" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-success",
-                attrs: {
-                  to: { name: "crear-jerarquia", params: { accion: "Crear" } }
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "glyphicon glyphicon-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
-                _vm._v(" Jerarquia\n              ")
-              ]
-            )
-          ],
-          1
+          "tbody",
+          _vm._l(_vm.jerarquias, function(jerarquia, index) {
+            return _c("tr", { key: jerarquia.id }, [
+              _c("td", [_vm._v(_vm._s(jerarquia.nombre))]),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "col-md-2" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "editar-jerarquia",
+                          params: {
+                            accion: "Editar",
+                            elemento: Object.assign({}, jerarquia, {})
+                          }
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-pencil",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteElem(jerarquia.id, index, jerarquia.nombre)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-trash",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          })
         )
-      ])
-    ]
-  )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: { name: "crear-jerarquia", params: { accion: "Crear" } }
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Jerarquia\n              ")
+            ]
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -30848,7 +30869,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
     _vm.editable
       ? _c("ol", { staticClass: "breadcrumb" }, [
           _c(
@@ -30905,7 +30926,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "panel-body" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "form-group col-md-6" }, [
+          _c("div", { staticClass: "form-group col-md-12" }, [
             _c("label", { attrs: { for: "nombres" } }, [_vm._v("Nombre:")]),
             _vm._v(" "),
             _vm.editable
@@ -31030,125 +31051,116 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
-      }
-    },
-    [
-      _vm.mensaje
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = undefined
-                  }
-                }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-          _vm._v("\n              Administración de jornadas\n          ")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
+    _vm.mensaje
+      ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.jornadas, function(jornada, index) {
-              return _c("tr", { key: jornada.id }, [
-                _c("td", [_vm._v(_vm._s(jornada.nombre))]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  { staticClass: "col-md-2" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-info",
-                        attrs: {
-                          to: {
-                            name: "editar-jornada",
-                            params: {
-                              accion: "Editar",
-                              elemento: Object.assign({}, jornada, {})
-                            }
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-pencil",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            _vm.deleteElem(jornada.id, index, jornada.nombre)
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-trash",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    )
-                  ],
-                  1
-                )
-              ])
-            })
-          )
-        ]),
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = undefined
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n              Administración de jornadas\n          ")
+      ]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
         _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "panel-footer" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-success",
-                attrs: {
-                  to: { name: "crear-jornada", params: { accion: "Crear" } }
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "glyphicon glyphicon-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
-                _vm._v(" Jornada\n              ")
-              ]
-            )
-          ],
-          1
+          "tbody",
+          _vm._l(_vm.jornadas, function(jornada, index) {
+            return _c("tr", { key: jornada.id }, [
+              _c("td", [_vm._v(_vm._s(jornada.nombre))]),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "col-md-2" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "editar-jornada",
+                          params: {
+                            accion: "Editar",
+                            elemento: Object.assign({}, jornada, {})
+                          }
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-pencil",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteElem(jornada.id, index, jornada.nombre)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-trash",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          })
         )
-      ])
-    ]
-  )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: { name: "crear-jornada", params: { accion: "Crear" } }
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Jornada\n              ")
+            ]
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -31238,7 +31250,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
     _vm.editable
       ? _c("ol", { staticClass: "breadcrumb" }, [
           _c(
@@ -31321,10 +31333,8 @@ var render = function() {
                   }
                 })
               : _c("p", [_vm._v(_vm._s(_vm.element.nombre))])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
+          ]),
+          _vm._v(" "),
           _c("div", { staticClass: "form-group col-md-6" }, [
             _c("label", { attrs: { for: "horas" } }, [_vm._v("Horas:")]),
             _vm._v(" "),
@@ -31450,127 +31460,118 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      class: {
-        "col-md-12": _vm.auth.rol.id >= 3,
-        "col-md-8 col-md-offset-2": _vm.auth.rol.id <= 2
-      }
-    },
-    [
-      _vm.mensaje
-        ? _c("div", { staticClass: "alert alert-success" }, [
-            _c(
-              "a",
-              {
-                staticClass: "close",
-                attrs: { href: "#", "aria-label": "close" },
-                on: {
-                  click: function($event) {
-                    _vm.mensaje = undefined
-                  }
-                }
-              },
-              [_vm._v("×")]
-            ),
-            _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "panel panel-default" }, [
-        _c("div", { staticClass: "panel-heading panel-title text-center" }, [
-          _vm._v("\n              Administración de factores\n          ")
-        ]),
-        _vm._v(" "),
-        _c("table", { staticClass: "table table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
+    _vm.mensaje
+      ? _c("div", { staticClass: "alert alert-success" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.factores, function(factor, index) {
-              return _c("tr", { key: factor.id }, [
-                _c("td", [_vm._v(_vm._s(factor.diferencia))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(factor.factor))]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  { staticClass: "col-md-2" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-info",
-                        attrs: {
-                          to: {
-                            name: "editar-factor",
-                            params: {
-                              accion: "Editar",
-                              elemento: Object.assign({}, factor, {})
-                            }
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-pencil",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        on: {
-                          click: function($event) {
-                            _vm.deleteElem(factor.id, index, factor.diferencia)
-                          }
-                        }
-                      },
-                      [
-                        _c("span", {
-                          staticClass: "glyphicon glyphicon-trash",
-                          attrs: { "aria-hidden": "true" }
-                        })
-                      ]
-                    )
-                  ],
-                  1
-                )
-              ])
-            })
-          )
-        ]),
+            "a",
+            {
+              staticClass: "close",
+              attrs: { href: "#", "aria-label": "close" },
+              on: {
+                click: function($event) {
+                  _vm.mensaje = undefined
+                }
+              }
+            },
+            [_vm._v("×")]
+          ),
+          _vm._v("\n          " + _vm._s(_vm.mensaje) + "\n      ")
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "panel panel-default" }, [
+      _c("div", { staticClass: "panel-heading panel-title text-center" }, [
+        _vm._v("\n              Administración de factores\n          ")
+      ]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
         _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "panel-footer" },
-          [
-            _c(
-              "router-link",
-              {
-                staticClass: "btn btn-success",
-                attrs: {
-                  to: { name: "crear-factor", params: { accion: "Crear" } }
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "glyphicon glyphicon-plus",
-                  attrs: { "aria-hidden": "true" }
-                }),
-                _vm._v(" Rango\n              ")
-              ]
-            )
-          ],
-          1
+          "tbody",
+          _vm._l(_vm.factores, function(factor, index) {
+            return _c("tr", { key: factor.id }, [
+              _c("td", [_vm._v(_vm._s(factor.diferencia))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(factor.factor))]),
+              _vm._v(" "),
+              _c(
+                "td",
+                { staticClass: "col-md-2" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "editar-factor",
+                          params: {
+                            accion: "Editar",
+                            elemento: Object.assign({}, factor, {})
+                          }
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-pencil",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-danger",
+                      on: {
+                        click: function($event) {
+                          _vm.deleteElem(factor.id, index, factor.diferencia)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "glyphicon glyphicon-trash",
+                        attrs: { "aria-hidden": "true" }
+                      })
+                    ]
+                  )
+                ],
+                1
+              )
+            ])
+          })
         )
-      ])
-    ]
-  )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "panel-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: { name: "crear-factor", params: { accion: "Crear" } }
+              }
+            },
+            [
+              _c("span", {
+                staticClass: "glyphicon glyphicon-plus",
+                attrs: { "aria-hidden": "true" }
+              }),
+              _vm._v(" Agregar factor\n              ")
+            ]
+          )
+        ],
+        1
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -31662,7 +31663,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
     _vm.editable
       ? _c("ol", { staticClass: "breadcrumb" }, [
           _c(
@@ -32347,7 +32348,7 @@ if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
 var add = __webpack_require__(11).default
-var update = add("4171e2d5", content, false, {});
+var update = add("2d90c896", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags

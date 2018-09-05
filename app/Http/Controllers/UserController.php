@@ -105,7 +105,7 @@ class UserController extends Controller
         $user->id_jornada = $request->jornada['id'];
         $user->id_rol = $request->rol['id'];
         $user->save();
-        return $user;
+        return $user->load('departamento.facultad');
     }
 
     /**
@@ -133,7 +133,7 @@ class UserController extends Controller
         $user->rol = $request->rol;
         $user->save();
 
-        return $user;
+        return $user->load('departamento.facultad');
     }
 
     /**

@@ -29,59 +29,62 @@
                         <p v-else>{{ departamento.facultad.nombre }}</p>
                     </div>
                 </div>
-                <div class="row" v-if="auth.rol === rol.director">
-                    <div class="form-group col-md-12">
-                        <label for="facultad">Comisión Departamental</label>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">Apellido paterno</th>
-                                    <th class="text-center">Apellido materno</th>
-                                    <th class="text-center">Nombres</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Cargo</th>
-                                    <th class="text-center">Departamento</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="user in users" :key="user.id">
-                                    <td>{{ user.apellido_paterno }}</td>
-                                    <td>{{ user.apellido_materno }}</td>
-                                    <td>{{ user.nombres }}</td>
-                                    <td>{{ user.email}}</td>
-                                    <td>{{ etiquetas.rolComision[user.rol_comision] }}</td>
-                                    <td>{{ user.departamento.nombre }}</td>
-                                    <td>
-                                        <button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
-                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&ensp;Quitar
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            </div>
+            <div class="panel-body" v-if="auth.rol === rol.director">
+                <h4><b>Comisión de Departamento</b></h4>
+                <table class="table table-striped" v-if="users.length > 0">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Apellido paterno</th>
+                            <th class="text-center">Apellido materno</th>
+                            <th class="text-center">Nombres</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Cargo</th>
+                            <th class="text-center">Departamento</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in users" :key="user.id">
+                            <td>{{ user.apellido_paterno }}</td>
+                            <td>{{ user.apellido_materno }}</td>
+                            <td>{{ user.nombres }}</td>
+                            <td>{{ user.email}}</td>
+                            <td>{{ etiquetas.rolComision[user.rol_comision] }}</td>
+                            <td>{{ user.departamento.nombre }}</td>
+                            <td>
+                                <button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&ensp;Quitar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4 class="text-center" v-else>Aún no se ha agregado usuarios a esta comisión</h4>
+            </div>
+            <div class="panel-body" v-if="auth.rol === rol.director">
+                <div class="pull-right">
+                    <button v-if="cantidad_usuarios[0] < 1" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                    >Agregar Fijo</button>
+                    <button v-else type="button" class="btn btn-default disabled"
+                    >Agregar Fijo</button> 
+                    <button v-if="cantidad_usuarios[1] < 1" v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                    >Agregar Suplente</button>
+                    <button v-else type="button" class="btn btn-default disabled"
+                    >Agregar Suplente</button>
+                    <button  v-if="cantidad_usuarios[2] < 1" v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                    >Agregar Externo</button>
+                    <button v-else type="button" class="btn btn-default disabled"
+                    >Agregar Externo</button>
                 </div>
             </div>
             <div class="panel-footer">
                 <button type="button" class="btn btn-success" v-on:click="addElem">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span>{{this.accion}}
                 </button>
-                <button v-if="cantidad_usuarios[0] < 1" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
-                 >Agregar Fijo</button>
-                 <button v-else type="button" class="btn btn-default disabled"
-                 >Agregar Fijo</button> 
-                 <button v-if="cantidad_usuarios[1] < 1" v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
-                 >Agregar Suplente</button>
-                 <button v-else type="button" class="btn btn-default disabled"
-                 >Agregar Suplente</button>
-                 <button  v-if="cantidad_usuarios[2] < 1" v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
-                 >Agregar Externo</button>
-                 <button v-else type="button" class="btn btn-default disabled"
-                 >Agregar Externo</button>
             </div>
         </div>
     

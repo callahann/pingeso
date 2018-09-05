@@ -1,6 +1,5 @@
 <template>  
-
-    <div>
+    <div class="col-md-6 col-md-offset-3">
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
             <li><router-link :to="{ name: 'factores'}">Listado</router-link></li>

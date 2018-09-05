@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'col-md-12': auth.rol.id >= 3, 'col-md-8 col-md-offset-2': auth.rol.id <= 2 }">
+  <div class="col-md-6 col-md-offset-3">
         <div v-if="mensaje" class="alert alert-success">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = undefined">&times;</a>
             {{ mensaje }}
@@ -33,7 +33,7 @@
             </table>
             <div class="panel-footer">
                 <router-link class="btn btn-success" :to="{ name: 'crear-factor', params: {accion: 'Crear'}}">     
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Rango
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar factor
                 </router-link>
             </div>
         </div>

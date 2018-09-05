@@ -1,6 +1,5 @@
 <template>  
-
-    <div>
+    <div class="col-md-6 col-md-offset-3">
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
             <li><router-link :to="{ name: 'jornadas'}">Listado</router-link></li>
@@ -24,8 +23,6 @@
                             v-model="element.nombre">
                         <p v-else>{{ element.nombre }}</p>
                     </div>
-                </div>
-                <div class="row">
                     <div class="form-group col-md-6">
                         <label for="horas">Horas:</label>
                         <input v-if="editable" type="number" class="form-control" id="horas"

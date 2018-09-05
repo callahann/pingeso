@@ -1,6 +1,5 @@
 <template>  
-
-    <div>
+    <div class="col-md-8 col-md-offset-2">
         <ol class="breadcrumb" v-if="editable">
             <li><router-link :to="{ name: 'inicio'}">Inicio</router-link></li>
             <li><router-link :to="{ name: 'facultades'}">Listado</router-link></li>
@@ -18,60 +17,65 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-12">
                         <label for="nombres">Nombre:</label>
                         <input v-if="editable" type="text" class="form-control" id="nombres"
                             v-model="element.nombre">
                         <p v-else>{{ element.nombre }}</p>
                     </div>
                 </div>
-                <div class="row">
-                        <label for="facultad">Comisión de Facultad</label>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Email</th>
-                                    <th>Cargo</th>
-                                    <th>Departamento</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="user in users" :key="user.id">
-                                    <td>{{user.nombres}} {{user.apellido_paterno}}</td>
-                                    <td>{{user.email}}</td>
-                                    <td v-if="user.rol_comision === 1"> Fijo </td>
-                                    <td v-else> Suplente </td>
-                                    <td>{{user.departamento.nombre}}</td>
-                                    <td><button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
-                                            <span class="glyphicon glyphicon-remove" aria-hidden="true">Quitar</span>
-                                          </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            </div>
+            <div class="panel-body">
+                <h4><b>Comisión de Facultad</b></h4>
+                <table class="table table-striped" v-if="users.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Cargo</th>
+                            <th>Departamento</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="user in users" :key="user.id">
+                            <td>{{user.nombres}} {{user.apellido_paterno}}</td>
+                            <td>{{user.email}}</td>
+                            <td v-if="user.rol_comision === 1"> Fijo </td>
+                            <td v-else> Suplente </td>
+                            <td>{{user.departamento.nombre}}</td>
+                            <td><button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true">Quitar</span>
+                                    </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4 class="text-center" v-else>Aún no se ha agregado usuarios a esta comisión</h4>
+            </div>
+            <div class="panel-body">
+                <div class="pull-right">
+                    <button v-if="cantidad_usuarios[0] < 2" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                    >Agregar Fijo</button>
+                    <button v-else type="button" class="btn btn-default disabled"
+                    >Agregar Fijo</button> 
+                    <button v-if="cantidad_usuarios[1] < 1" v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                    >Agregar Suplente</button>
+                    <button v-else type="button" class="btn btn-default disabled"
+                    >Agregar Suplente</button>
+                    <button  v-if="cantidad_usuarios[2] < 3" v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
+                    data-target="#agregar" data-backdrop="static" data-keyboard="false"
+                    >Agregar Externo</button>
+                    <button v-else type="button" class="btn btn-default disabled"
+                    >Agregar Externo</button>
                 </div>
             </div>
             <div class="panel-footer">
                 <button type="button" class="btn btn-success" v-on:click="addElem">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span> {{this.accion}}
                 </button>
-                <button v-if="cantidad_usuarios[0] < 2" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
-                 >Agregar Fijo</button>
-                 <button v-else type="button" class="btn btn-default disabled"
-                 >Agregar Fijo</button> 
-                 <button v-if="cantidad_usuarios[1] < 1" v-on:click="agregarSuplente" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
-                 >Agregar Suplente</button>
-                 <button v-else type="button" class="btn btn-default disabled"
-                 >Agregar Suplente</button>
-                 <button  v-if="cantidad_usuarios[2] < 3" v-on:click="agregarExterno" type="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#agregar" data-backdrop="static" data-keyboard="false"
-                 >Agregar Externo</button>
-                 <button v-else type="button" class="btn btn-default disabled"
-                 >Agregar Externo</button>
             </div>
         </div>
         <!-- Modal -->

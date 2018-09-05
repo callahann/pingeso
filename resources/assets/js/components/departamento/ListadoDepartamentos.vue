@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'col-md-12': auth.rol.id >= 3, 'col-md-8 col-md-offset-2': auth.rol.id <= 2 }">
+  <div class="col-md-8 col-md-offset-2">
         <div v-if="mensaje" class="alert alert-success">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = undefined">&times;</a>
             {{ mensaje }}
@@ -33,7 +33,7 @@
             </table>
             <div class="panel-footer">
                 <router-link class="btn btn-success" :to="{ name: 'crear-departamento', params: {accion: 'Crear'}}">     
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Departamento
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar departamento
                 </router-link>
             </div>
         </div>

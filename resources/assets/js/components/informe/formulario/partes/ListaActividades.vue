@@ -54,16 +54,16 @@
                             </div>
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemana" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemana" v-on:input="notNull(index)">
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemestre" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.primero.horasSemestre" v-on:input="notNull(index)">
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemana" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemana" v-on:input="notNull(index)">
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemestre" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.comprometido.segundo.horasSemestre" v-on:input="notNull(index)">
                         </td>
                         <td class="col-md-4">
                             <p v-if="actividad.observaciones.director.length > 0"><b>Director: </b>{{ actividad.observaciones.director }}</p>
@@ -185,25 +185,25 @@
                             {{ actividad.comprometido.primero.horasSemana }}
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemana" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemana" v-on:input="notNull(index)">
                         </td>
                         <td class="col-md-1 text-center">
                             {{ actividad.comprometido.primero.horasSemestre }}
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemestre" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.primero.horasSemestre" v-on:input="notNull(index)">
                         </td>
                         <td class="col-md-1 text-center">
                             {{ actividad.comprometido.segundo.horasSemana }}
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemana" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemana" v-on:input="notNull(index)">
                         </td>
                         <td class="col-md-1 text-center">
                             {{ actividad.comprometido.segundo.horasSemestre }}
                         </td>
                         <td class="col-md-1 input">
-                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemestre" required>
+                            <input type="number" class="form-control" min=0 v-model.number="actividad.realizado.segundo.horasSemestre" v-on:input="notNull(index)">
                         </td>
                         <td v-if="actividades.length > cuenta">
                             <button type="button" class="btn btn-block btn-danger"
@@ -396,6 +396,19 @@
                     actividad.descripcion = ''
                     actividad.otra = true
                 }
+            },
+            /**
+             * Revisa que los campos numéricos de las actividades no sean vacíos.
+             * @param index Índice de la actividad que se revisará.
+             */
+            notNull: function(index) {
+                ['comprometido', 'realizado'].forEach(tipo => {
+                    ['primero', 'segundo'].forEach(semestre => {
+                        ['horasSemana', 'horasSemestre'].forEach(hora => {
+                            this.actividades[index][tipo][semestre][hora] = this.actividades[index][tipo][semestre][hora] === '' ? 0 : this.actividades[index][tipo][semestre][hora]
+                        })
+                    })
+                })
             }
         },
         watch: {

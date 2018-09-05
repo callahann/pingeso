@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'col-md-12': auth.rol.id >= 3, 'col-md-8 col-md-offset-2': auth.rol.id <= 2 }">
+  <div class="col-md-6 col-md-offset-3">
         <div v-if="mensaje" class="alert alert-success">
             <a href="#" class="close" aria-label="close" v-on:click="mensaje = undefined">&times;</a>
             {{ mensaje }}
