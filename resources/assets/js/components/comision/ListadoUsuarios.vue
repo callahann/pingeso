@@ -65,7 +65,7 @@
                     this.seleccionado = response.data;
                     this.seleccionado.id_comision = this.id_comision;
                     this.seleccionado.rol_comision = this.tipo_usuario;
-                    axios.put('/api/usuarios/' + user_id, this.seleccionado)
+                    axios.put('/api/usuarios/comision/agregar/' + user_id, this.seleccionado)
                     .then(response => {
                         axios.get('/api/usuarios/comision/'
                         + this.tipo_usuario+'/'+this.id_entidad+'/'+ this.tipo_entidad)

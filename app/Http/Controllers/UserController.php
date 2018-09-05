@@ -125,6 +125,25 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->fill($request->all());
+        $user->id_departamento = $request->departamento['id'];
+        $user->id_jerarquia = $request->jerarquia['id'];
+        $user->id_jornada = $request->jornada['id'];
+        $user->rol = $request->rol;
+        $user->save();
+
+        return $user;
+    }
+
+    public function agregarComision(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), $this->rules($id));
+
+        if ($validator->fails()) {
+           return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::find($id);
+        $user->fill($request->all());
         $user->id_comision = $request->id_comision;
         $user->rol_comision = $request->rol_comision;
         $user->id_departamento = $request->departamento['id'];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Departamento;
+use App\Comision;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -31,8 +32,13 @@ class DepartamentoController extends Controller
         if ($validator->fails()) {
            return response()->json($validator->errors(), 422);
         }
+        $comision = new Comision;
+        $comision->tipo = 3;
+        $comision->save();
+        $departamento = new Departamento($request->all());
+        $departamento->id_comision = $comision->id;
+        $departamento->save();
 
-        $departamento = Departamento::create($request->all());
 
         return $departamento->load('facultad');
     }
