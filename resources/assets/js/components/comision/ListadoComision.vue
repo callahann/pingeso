@@ -87,7 +87,7 @@
                     this.seleccionado = response.data;
                     this.seleccionado.comision = null;
                     this.seleccionado.rol_comision = null;
-                    axios.put('/api/usuarios/' + id, this.seleccionado)
+                    axios.put('/api/usuarios/comision/agregar/' + id, this.seleccionado)
                     .then(response => {
                         axios.get('/api/comisiones/superior')
                         .then(response => {

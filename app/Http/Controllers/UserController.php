@@ -33,6 +33,7 @@ class UserController extends Controller
         if($tipo_usuario == 0 or $tipo_usuario == 1){
             if ($tipo_entidad == 0) {
                 return User::whereNull('id_comision')
+                    ->where('rol', '!=', 2)
                     ->orderBy('rol_comision', 'asc')
                     ->get()
                     ->load('departamento.facultad');                    
@@ -41,6 +42,7 @@ class UserController extends Controller
                 return User::whereNull('id_comision')
                     ->whereHas('departamento', function($q) use($id_entidad){
                     $q->where('id_facultad', $id_entidad);})
+                    ->where('rol', '!=', 2)
                     ->orderBy('rol_comision', 'asc')
                     ->get()
                     ->load('departamento.facultad');   
@@ -48,6 +50,7 @@ class UserController extends Controller
             else{
                 return User::whereNull('id_comision')
                     ->where('id_departamento', $id_entidad)
+                    ->where('rol', '!=', 2)
                     ->orderBy('rol_comision', 'asc')
                     ->get()
                     ->load('departamento.facultad'); 
@@ -56,6 +59,7 @@ class UserController extends Controller
         else{
             if ($tipo_entidad == 0) {
                 return User::whereNull('id_comision')
+                    ->where('rol', '!=', 2)
                     ->orderBy('rol_comision', 'asc')
                     ->get()
                     ->load('departamento.facultad');                    
@@ -64,6 +68,7 @@ class UserController extends Controller
                 return User::whereNull('id_comision')
                     ->whereHas('departamento', function($q) use($id_entidad){
                     $q->where('id_facultad', '!=', $id_entidad);})
+                    ->where('rol', '!=', 2)
                     ->orderBy('rol_comision', 'asc')
                     ->get()
                     ->load('departamento.facultad');   
@@ -71,6 +76,7 @@ class UserController extends Controller
             else{
                 return User::whereNull('id_comision')
                     ->where('id_departamento', '!=', $id_entidad)
+                    ->where('rol', '!=', 2)
                     ->orderBy('rol_comision', 'asc')
                     ->get()
                     ->load('departamento.facultad'); 
