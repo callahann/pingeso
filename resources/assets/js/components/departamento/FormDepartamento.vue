@@ -50,7 +50,9 @@
                             <td>{{ user.apellido_materno }}</td>
                             <td>{{ user.nombres }}</td>
                             <td>{{ user.email}}</td>
-                            <td>{{ etiquetas.rolComision[user.rol_comision] }}</td>
+                            <td v-if="user.rol_comision === 0"> Fijo </td>
+                            <td v-else-if="user.rol_comision === 1"> Suplente </td>
+                            <td v-else> Externo </td>
                             <td>{{ user.departamento.nombre }}</td>
                             <td>
                                 <button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
@@ -192,7 +194,7 @@
                     this.seleccionado = response.data;
                     this.seleccionado.comision = null;
                     this.seleccionado.rol_comision = null;
-                    axios.put('/api/usuarios/' + id, this.seleccionado)
+                    axios.put('/api/usuarios/comision/agregar/' + id, this.seleccionado)
                     .then(response => {
                         axios.get('/api/comisiones/departamento/'+ this.departamento.id)
                         .then(response => {

@@ -66,7 +66,8 @@
 </template>
 <script>
     import { SEND_DECLARACION } from '../../vuex/actions'
-
+    import axios from 'axios'
+    
     export default {
         props: ['declarar', 'informes'],
         methods: {

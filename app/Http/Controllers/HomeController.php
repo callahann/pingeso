@@ -51,6 +51,7 @@ class HomeController extends Controller
             'director' => $director,
             'cantidad' => $qtd
         ];
+        //dd($data["declaracion"]["resumenes"]);
         //dd($data["declaracion"]["item_docencia"]["actividades"][0]);
         //dd($data["rango"]);
         //return view('pdf.vista', compact(['data']));

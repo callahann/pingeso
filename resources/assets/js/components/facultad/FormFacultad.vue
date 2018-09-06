@@ -41,8 +41,9 @@
                         <tr v-for="user in users" :key="user.id">
                             <td>{{user.nombres}} {{user.apellido_paterno}}</td>
                             <td>{{user.email}}</td>
-                            <td v-if="user.rol_comision === 1"> Fijo </td>
-                            <td v-else> Suplente </td>
+                            <td v-if="user.rol_comision === 0"> Fijo </td>
+                            <td v-else-if="user.rol_comision === 1"> Suplente </td>
+                            <td v-else> Externo </td>
                             <td>{{user.departamento.nombre}}</td>
                             <td><button v-on:click.prevent="eliminarUsuario(user.id)" class="btn btn-xs btn-danger">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true">Quitar</span>
@@ -175,7 +176,7 @@
                     this.seleccionado = response.data;
                     this.seleccionado.comision = null;
                     this.seleccionado.rol_comision = null;
-                    axios.put('/api/usuarios/' + id, this.seleccionado)
+                    axios.put('/api/usuarios/comision/agregar/' + id, this.seleccionado)
                     .then(response => {
                         axios.get('/api/comisiones/facultad/'+ this.element.id)
                         .then(response => {
