@@ -403,7 +403,9 @@ class BaseSeeder extends Seeder
                 'apellido_materno' => 'Mora',
                 'nombres' => 'Matías José',
                 'email' => 'matias.vargasm@usach.cl',
-                'rol' => 2,
+                'rol' => 1,
+                'rol_comision' => 0,
+                'id_comision' => 5,
                 'id_departamento' => 3,
                 'id_jerarquia' => 5,
                 'id_jornada' => 1
@@ -496,8 +498,8 @@ class BaseSeeder extends Seeder
         $periodos = [
             [
                 'nombre' => '2018',
-                'desde' => '2018-08-01 00:00:00',
-                'hasta' => '2018-08-30 23:59:59',
+                'desde' => '2018-09-01 00:00:00',
+                'hasta' => '2018-09-30 23:59:59',
                 'id_departamento' => 3
             ]
         ];
