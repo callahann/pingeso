@@ -92,6 +92,7 @@
 					<th>Hrs/Año</th>
 					<th>CALIFICACION PARCIAL</th>
 				</tr>
+				@if($data["declaracion"]["resumenes"])
 				@foreach ($data["declaracion"]["resumenes"] as $elemento)
 				<tr>
 					@if($elemento["comprometido"]["horasSemana"] > 0 || $elemento["comprometido"]["horasAnio"] > 0 || $elemento["realizado"]["horasSemana"] > 0 || $elemento["realizado"]["horasAnio"] > 0)
@@ -167,6 +168,7 @@
 					@endif
 				</tr>
 				@endforeach
+				@endif
 				<tr>
 					<th colspan=6></th>
 					<th>CALIFICACION FINAL</th>
