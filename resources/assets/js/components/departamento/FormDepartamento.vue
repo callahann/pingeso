@@ -66,7 +66,7 @@
             </div>
             <div class="panel-body" v-if="auth.rol === rol.director">
                 <div class="pull-right">
-                    <button v-if="cantidad_usuarios[0] < 1" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
+                    <button v-if="cantidad_usuarios[0] < 3" v-on:click="agregarFijo" type="button" class="btn btn-default" data-toggle="modal"
                     data-target="#agregar" data-backdrop="static" data-keyboard="false"
                     >Agregar Fijo</button>
                     <button v-else type="button" class="btn btn-default disabled"
